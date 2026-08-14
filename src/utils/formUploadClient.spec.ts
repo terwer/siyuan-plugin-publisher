@@ -20,7 +20,6 @@ const publicUrl = "https://upload.example.com/api"
 const localUrl = "http://127.0.0.1:8090/upload"
 
 const baseResolveCtx = {
-  url: publicUrl,
   forceProxy: false,
   isInSiyuanOrSiyuanNewWin: true,
   isUseSiyuanProxy: true,
@@ -48,21 +47,19 @@ describe("resolveFormUploadTransport", () => {
     ).toBe("plugin-node-fetch")
   })
 
-  it("never uses forwardProxy for loopback without plugin", () => {
+  it("uses forwardProxy for loopback without plugin when proxy flags set", () => {
     expect(
       resolveFormUploadTransport({
-        url: localUrl,
         forceProxy: true,
         isInSiyuanOrSiyuanNewWin: false,
         isUseSiyuanProxy: true,
         canUsePluginFetch: false,
       })
-    ).toBe("middleware-fetch")
+    ).toBe("siyuan-forward-proxy")
   })
 
-  it("loopback without plugin does not return plugin-node-fetch", () => {
+  it("loopback without plugin and without proxy flags falls back to middleware-fetch", () => {
     const transport = resolveFormUploadTransport({
-      url: localUrl,
       forceProxy: false,
       isInSiyuanOrSiyuanNewWin: true,
       isUseSiyuanProxy: false,
@@ -75,7 +72,6 @@ describe("resolveFormUploadTransport", () => {
   it("uses forwardProxy for public host without plugin when proxy flags set", () => {
     expect(
       resolveFormUploadTransport({
-        url: publicUrl,
         forceProxy: true,
         isInSiyuanOrSiyuanNewWin: false,
         isUseSiyuanProxy: false,
@@ -87,7 +83,6 @@ describe("resolveFormUploadTransport", () => {
   it("uses middleware-fetch in siyuan without plugin and without proxy flags", () => {
     expect(
       resolveFormUploadTransport({
-        url: publicUrl,
         forceProxy: false,
         isInSiyuanOrSiyuanNewWin: true,
         isUseSiyuanProxy: false,

@@ -14,8 +14,6 @@ import { normalizeXmlrpcResponseText } from "~/src/utils/xmlrpcResponseUtil.ts"
 type XmlrpcTransport = "plugin-node-fetch" | "siyuan-forward-proxy" | "middleware-fetch"
 
 interface XmlrpcTransportContext {
-  /** XML-RPC 端点 URL */
-  url: string
   /** 平台适配器要求强制代理（如 WordPress.com） */
   forceProxy: boolean
   /** 外链浏览器等场景经思源 API 存储 */
@@ -41,10 +39,10 @@ interface XmlrpcTransportHandlers {
  *
  * 优先级（与 {@link createFormUploadClient} 共用 publishTransport 规则）：
  * 1. **plugin-node-fetch** — 有插件直传能力时一律直连，禁止套思源 forwardProxy（Electron/V2、本地 WP、公网博客园均适用）
- * 2. **siyuan-forward-proxy** — 无直传能力且需跨域/外链访问思源时
- * 3. **middleware-fetch** — 浏览器 + CORS 中间件回退
+ * 2. **siyuan-forward-proxy** — 无直传能力且 `isUseSiyuanProxy || forceProxy` 时（loopback/私网目标也可：思源内核默认模式允许访问本机）
+ * 3. **middleware-fetch** — 浏览器 + CORS 中间件回退（无代理条件时）
  *
- * 回环/私网目标永不走 forwardProxy（内核禁止 [::1] 等）。
+ * SSRF 防护由内核 `SSRFSafeDialer` 兜底（`--safe-mode` 时内核拒绝 loopback/私网并返回错误）。
  */
 function resolveXmlrpcTransport(ctx: XmlrpcTransportContext): XmlrpcTransport {
   if (ctx.canUsePluginFetch) {
@@ -52,7 +50,6 @@ function resolveXmlrpcTransport(ctx: XmlrpcTransportContext): XmlrpcTransport {
   }
   if (
     shouldUseSiyuanForwardProxy({
-      url: ctx.url,
       forceProxy: ctx.forceProxy,
       isUseSiyuanProxy: ctx.isUseSiyuanProxy,
       canUsePluginFetch: ctx.canUsePluginFetch,

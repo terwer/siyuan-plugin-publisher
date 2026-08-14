@@ -11,14 +11,12 @@ import { describe, expect, it, vi } from "vitest"
 import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlrpcTransport.ts"
 
 const publicUrl = "https://rpc.cnblogs.com/metaweblog/"
-const localUrl = "http://localhost:8090/xmlrpc.php"
 const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
 
 describe("resolveXmlrpcTransport", () => {
   it("prefers plugin-node-fetch when plugin can direct fetch", () => {
     expect(
       resolveXmlrpcTransport({
-        url: publicUrl,
         forceProxy: true,
         isUseSiyuanProxy: true,
         canUsePluginFetch: true,
@@ -29,7 +27,6 @@ describe("resolveXmlrpcTransport", () => {
   it("uses forward-proxy outside plugin when proxy flags set", () => {
     expect(
       resolveXmlrpcTransport({
-        url: publicUrl,
         forceProxy: false,
         isUseSiyuanProxy: true,
         canUsePluginFetch: false,
@@ -37,12 +34,21 @@ describe("resolveXmlrpcTransport", () => {
     ).toBe("siyuan-forward-proxy")
   })
 
-  it("never uses forward-proxy for loopback targets", () => {
+  it("uses forward-proxy for loopback targets when proxy flags set", () => {
     expect(
       resolveXmlrpcTransport({
-        url: localUrl,
         forceProxy: true,
         isUseSiyuanProxy: true,
+        canUsePluginFetch: false,
+      })
+    ).toBe("siyuan-forward-proxy")
+  })
+
+  it("falls back to middleware-fetch for loopback without proxy flags", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
         canUsePluginFetch: false,
       })
     ).toBe("middleware-fetch")
@@ -51,7 +57,6 @@ describe("resolveXmlrpcTransport", () => {
   it("falls back to middleware-fetch in plain browser without proxy flags", () => {
     expect(
       resolveXmlrpcTransport({
-        url: publicUrl,
         forceProxy: false,
         isUseSiyuanProxy: false,
         canUsePluginFetch: false,

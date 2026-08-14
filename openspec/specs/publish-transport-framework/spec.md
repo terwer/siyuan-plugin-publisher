@@ -38,7 +38,7 @@ V2 主干 MUST NOT 保留：deprecated re-export、`FormDataUtils` 垫片、基�
 
 ### Requirement: 传输解析优先级 SHALL 在顶层单点定义
 
-plugin-first、loopback 禁 forwardProxy 等规则 SHALL 在 `publishTransport/resolveRules` 定义，由 `xmlrpcTransport` 与 **`formUploadClient` 内部** 共同遵守。
+plugin-first、代理条件判定（`isUseSiyuanProxy || forceProxy` 时 loopback/私网目标亦可走 forwardProxy）等规则 SHALL 在 `publishTransport/resolveRules` 定义，由 `xmlrpcTransport` 与 **`formUploadClient` 内部** 共同遵守。
 
 #### Scenario: Electron 插件宿主同时发 XML-RPC 与 multipart
 

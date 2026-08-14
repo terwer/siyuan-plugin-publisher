@@ -32,13 +32,22 @@
 - **THEN** 通道 SHALL 为 `plugin-node-fetch`
 - **AND** 日志 MUST NOT 对该请求显示 `siyuan-forward-proxy`
 
-### Requirement: 本机与私网目标 SHALL 禁止 forwardProxy
+### Requirement: 本机与私网目标 SHALL 优先 forwardProxy（有代理条件时）
 
-loopback/私网目标（`publishTargetUtil.isLoopbackOrLocalTargetUrl`）时，facade MUST NOT 选择 `siyuan-forward-proxy`。无 `canUsePluginFetch` 时 MUST NOT 返回 `plugin-node-fetch`，SHALL 选择可执行的 `middleware-fetch`。
+loopback/私网目标（`publishTargetUtil.isLoopbackOrLocalTargetUrl`）在有代理条件（`isUseSiyuanProxy` 或 `forceProxy`）且无 `canUsePluginFetch` 时，facade SHALL 选择 `siyuan-forward-proxy`：思源内核默认模式（非 `--safe-mode`）允许 forwardProxy 访问本机服务，SSRF 防护由内核 `SSRFSafeDialer` 兜底；middleware-fetch 为远端 CORS 代理，无法访问 localhost/私网目标。无代理条件时 SHALL 回退 `middleware-fetch`。
 
-#### Scenario: 上传到 localhost 且无插件 fetch
+#### Scenario: 上传到 localhost 且无插件 fetch、有代理条件
 
 - **GIVEN** 目标为 loopback/私网且 `canUsePluginFetch` 为 false
+- **AND** `isUseSiyuanProxy` 或 `forceProxy` 为 true
+- **WHEN** facade 解析通道
+- **THEN** 通道 SHALL 为 `siyuan-forward-proxy`
+- **AND** MUST NOT 为 `plugin-node-fetch` 或 `middleware-fetch`
+
+#### Scenario: 上传到 localhost 且无插件 fetch、无代理条件
+
+- **GIVEN** 目标为 loopback/私网且 `canUsePluginFetch` 为 false
+- **AND** `isUseSiyuanProxy` 与 `forceProxy` 均为 false
 - **WHEN** facade 解析通道
 - **THEN** 通道 SHALL 为 `middleware-fetch`
 - **AND** MUST NOT 为 `plugin-node-fetch` 或 `siyuan-forward-proxy`
@@ -50,7 +59,7 @@ loopback/私网目标（`publishTargetUtil.isLoopbackOrLocalTargetUrl`）时，f
 #### Scenario: 外部浏览器且无 canUsePluginFetch
 
 - **GIVEN** `canUsePluginFetch` 为 false
-- **AND** 代理谓词满足且目标非 loopback/私网
+- **AND** 代理谓词满足（loopback/私网目标亦可）
 - **WHEN** `postJson` 执行
 - **THEN** 通道 SHALL 为 `siyuan-forward-proxy`
 

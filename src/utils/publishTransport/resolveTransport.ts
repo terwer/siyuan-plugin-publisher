@@ -7,13 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { isLoopbackOrLocalTargetUrl } from "~/src/utils/publishTransport/publishTargetUtil.ts"
 import { shouldUseSiyuanForwardProxy } from "~/src/utils/publishTransport/resolveRules.ts"
 
 type PublishTransportChannel = "plugin-node-fetch" | "siyuan-forward-proxy" | "middleware-fetch"
 
 interface PublishTransportResolveContext {
-  url: string
   forceProxy: boolean
   isInSiyuanOrSiyuanNewWin: boolean
   isUseSiyuanProxy: boolean
@@ -21,18 +19,19 @@ interface PublishTransportResolveContext {
 }
 
 /**
- * XML / multipart / JSON 共用的传输通道解析（plugin-first；loopback 禁 forwardProxy）。
+ * XML / multipart / JSON 共用的传输通道解析（plugin-first）。
+ *
+ * loopback/私网目标在有代理条件（`isUseSiyuanProxy || forceProxy`）时走
+ * `siyuan-forward-proxy`：思源内核默认模式允许 forwardProxy 访问本机服务，
+ * 而 middleware-fetch 是远端 CORS 代理，无法访问 localhost/私网目标。
+ * 无代理条件时回退 `middleware-fetch`。
  */
 function resolvePublishTransport(ctx: PublishTransportResolveContext): PublishTransportChannel {
   if (ctx.canUsePluginFetch) {
     return "plugin-node-fetch"
   }
-  if (isLoopbackOrLocalTargetUrl(ctx.url)) {
-    return "middleware-fetch"
-  }
   if (
     shouldUseSiyuanForwardProxy({
-      url: ctx.url,
       forceProxy: ctx.forceProxy,
       isUseSiyuanProxy: ctx.isUseSiyuanProxy,
       canUsePluginFetch: false,

@@ -16,7 +16,7 @@ V2 JSON/API 发布请求 SHALL 经 `publishTransport` 下的统一 JSON 传输 f
 
 ### Requirement: JSON 传输 SHALL 复用 publishTransport 共用规则
 
-JSON 传输解析 SHALL 复用 `publishTransport/resolveRules` 与 `publishTargetUtil` 的共用规则，包括 plugin-first 与 loopback/private 禁用 `siyuan-forward-proxy`。
+JSON 传输解析 SHALL 复用 `publishTransport/resolveRules` 与 `publishTargetUtil` 的共用规则，包括 plugin-first 与代理条件判定。
 
 #### Scenario: Electron 插件宿主发起 JSON 请求
 
@@ -29,8 +29,9 @@ JSON 传输解析 SHALL 复用 `publishTransport/resolveRules` 与 `publishTarge
 
 - **GIVEN** JSON 请求目标为 loopback 或私网地址
 - **WHEN** 插件宿主直连不可用
-- **THEN** 传输 MUST NOT 选择 `siyuan-forward-proxy`
-- **AND** SHALL 选择可执行的本地/middleware 回退路径
+- **AND** `isUseSiyuanProxy` 或 `forceProxy` 为 true
+- **THEN** 传输 SHALL 选择 `siyuan-forward-proxy`（思源内核默认模式允许 forwardProxy 访问本机服务，SSRF 由内核 `SSRFSafeDialer` 兜底）
+- **AND** 无代理条件时 SHALL 选择可执行的 middleware 回退路径
 
 ### Requirement: useProxy SHALL NOT 增长第四套传输解析树
 

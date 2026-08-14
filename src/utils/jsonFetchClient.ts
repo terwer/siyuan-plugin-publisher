@@ -51,7 +51,6 @@ function resolveJsonFetchTransport(
   request: JsonFetchRequest
 ): JsonFetchTransport {
   return resolvePublishTransport({
-    url: request.url,
     forceProxy: request.forceProxy ?? false,
     isInSiyuanOrSiyuanNewWin: deps.isInSiyuanOrSiyuanNewWin(),
     isUseSiyuanProxy: deps.isUseSiyuanProxy,

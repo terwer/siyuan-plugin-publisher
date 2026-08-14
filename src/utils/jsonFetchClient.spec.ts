@@ -116,12 +116,22 @@ describe("resolveJsonFetchTransport", () => {
     ).toBe("plugin-node-fetch")
   })
 
-  it("never uses forwardProxy for loopback without plugin", () => {
+  it("uses forwardProxy for loopback without plugin when proxy flags set", () => {
     vi.spyOn(PluginFetchUtil, "canUsePluginFetch").mockReturnValue(false)
     expect(
       resolveJsonFetchTransport(
-        { ...baseDeps, isInSiyuanOrSiyuanNewWin: () => false },
+        { ...baseDeps, isInSiyuanOrSiyuanNewWin: () => false, isUseSiyuanProxy: true },
         { url: localUrl, headers: [{}], forceProxy: true }
+      )
+    ).toBe("siyuan-forward-proxy")
+  })
+
+  it("falls back to middleware-fetch for loopback without proxy flags", () => {
+    vi.spyOn(PluginFetchUtil, "canUsePluginFetch").mockReturnValue(false)
+    expect(
+      resolveJsonFetchTransport(
+        { ...baseDeps, isInSiyuanOrSiyuanNewWin: () => true, isUseSiyuanProxy: false },
+        { url: localUrl, headers: [{}], forceProxy: false }
       )
     ).toBe("middleware-fetch")
   })

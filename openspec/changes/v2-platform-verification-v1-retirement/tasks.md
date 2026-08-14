@@ -25,8 +25,10 @@
   - [x] 1.6a #25 Wordpress `wordpress_Wordpress` — T1 全链路 ✅（2026-05-21，本地 WP，用户手测）
   - [ ] 1.6b #26 Wordpress.com
 - [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（V2C/Pub/Upd/Del/Img 已验通过）
-- [ ] 1.7b #28 Halo网页版
-  - [x] 1.7b.1 修复 Halo 网页版 V2C 配置页初始化失败：预置 `authUrl=/login` 不能在未配置站点时直接 `new URL()`；保留 Cookie 授权入口，未填 `home/apiUrl` 时点击登录/读取只提示先填站点地址，填入后由 Web Cookie 共用解析生成真实登录 URL，待用户手验
+- [x] 1.7b #28 Halo网页版
+  - [x] 1.7b.1 修复 Halo 网页版 V2C 配置页初始化失败：预置 `authUrl=/login` 不能在未配置站点时直接 `new URL()`；保留 Cookie 授权入口，未填 `home/apiUrl` 时点击登录/读取只提示先填站点地址，填入后由 Web Cookie 共用解析生成真实登录 URL
+  - [x] 1.7b.2 2026-08-14 修 transport 规则：loopback/私网目标有代理条件时走 `siyuan-forward-proxy`（内核 3.7.3 默认允许本机访问，SSRF 由 `SSRFSafeDialer` 兜底）；单测 64 绿、build:v2 通过
+  - [x] 1.7b.3 2026-08-14 本地 Docker Halo 2.20（localhost:8090）devtools 全链路手验：**V2C（forwardProxy 200 + 账号运行中）/ Pub / Upd / Del / Img 五格全部 ✅**
   - [x] 1.7c #30 知乎 `custom_Zhihu` — V2 Bridge 全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
   - [x] 1.7d #31 CSDN `custom_Csdn` — V2 Bridge 全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
   - [ ] 1.7e #32–#35 简书、掘金、微信公众号、哔哩哔哩 V2 Bridge 全链路

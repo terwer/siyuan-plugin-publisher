@@ -26,7 +26,7 @@
 ## 用户偏好（已学习）
 
 - 助手回复使用**简体中文**；Git 提交说明使用**英文**。
-- V2 宿主开发/验证：使用 `pnpm dev:v2` 与 `pnpm makeLink:v2`。
+- V2 宿主开发/验证核心三命令：`pnpm dev:v2`（调试/watch）、`pnpm build:v2`（构建）、`pnpm makeLink:v2`（软链到思源）。
 - 清 diff 时直接删除文件并清理引用。
 - 非琐碎代码改动前写 `.planning/` 或 OpenSpec 规划。
 - OpenSpec archive 前严格审计：**根本修复**（非 mock）、**最佳实践**、**不破坏底层设计**、**不影响无关模式**，四项全部达标才 archive。
@@ -37,7 +37,7 @@
   - JSON/API → `createJsonFetchClient(...).fetch(...)`（`jsonFetchClient.ts`）；`BaseWebApi.webFetch` / `BaseBlogApi.apiFetch` 仅委托 facade
   - FormData 构造 → `FormDataHostUtil`
   - V2 允许 break change，直接重构到位
-- V2 平台验证：**高频优先**（当前批次 #21→#25→#3→#28，可与 `tasks.md` 表号不同）；每站五格 **V2C / Pub / Upd / Del / Img**；通过/失败均记入 checklist SSOT。
+- V2 平台验证：**按 checklist 表从上到下顺序推进**（SSOT：`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`，AGENTS.md 不另记批次顺序）；每站五格 **V2C / Pub / Upd / Del / Img**；通过/失败均记入 checklist SSOT。
 
 ## Hermes / Agent 项目隔离
 
@@ -48,13 +48,13 @@
 
 ## 工作区事实（已学习）
 
-- **V2 宿主**：`pnpm dev:v2`（watch）、`pnpm makeLink:v2`（软链到思源）；产物在 `dist-v2/`。
+- **V2 宿主**：`pnpm dev:v2`（调试/watch）、`pnpm build:v2`（构建入口）、`pnpm makeLink:v2`（软链到思源）；产物在 `dist-v2/`。调试由用户自行进行。
 - **V1**：`pnpm dev -p siyuan`、`pnpm makeLink -p siyuan`；产物在 `dist/`。该链路**不会**启动 V2 的 Vite 配置。
 - `PicbedServiceTypeEnum.None` 是用户明确选择「无图床」，视为有效值，不是未设置。
 - MetaWeblog 类平台（如博客园）在平台 `*Config` 构造函数里设图床为 `Bundled`（参考 `YuquewebConfig`）。
 - Agent Skills：项目 `.cursor/skills/` 或 `.claude/skills/`；全局 `~/.cursor/skills/` 或 `~/.claude/skills/`。
 - V2 平台配置校验失败通过 `SypErrorDetailsPanel`（及行内摘要）展示 `errorMessage`。
-- **发布传输**（XML-RPC / multipart / JSON）：插件宿主优先 `plugin-node-fetch`；本机/回环不走 forwardProxy；multipart 经 `formUploadClient`、JSON 经 `jsonFetchClient`；语雀 Web 不在请求前预设 transport（由 facade 解析后写入 diagnostic）；日志：`[form-upload-transport]`、`[json-fetch-transport]`。
+- **发布传输**（XML-RPC / multipart / JSON）：插件宿主优先 `plugin-node-fetch`；有代理条件（`isUseSiyuanProxy || forceProxy`）时 loopback/私网目标亦走 forwardProxy（思源内核默认模式允许访问本机，SSRF 由内核 `SSRFSafeDialer` 兜底），无代理条件才回退 middleware-fetch；multipart 经 `formUploadClient`、JSON 经 `jsonFetchClient`；语雀 Web 不在请求前预设 transport（由 facade 解析后写入 diagnostic）；日志：`[form-upload-transport]`、`[json-fetch-transport]`。
 - V2 平台验证 SSOT：`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`。
 - **Halo**：`common_Halo`（API）与 `custom_Haloweb`（网页 Cookie）是两套适配器，须分别验收。
 - **`refactor-form-upload-transport`**：归档前须在 V2 宿主手验 checklist **#27、#28 的 Img**（见 checklist 修订记录）。

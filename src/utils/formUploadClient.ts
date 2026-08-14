@@ -45,7 +45,6 @@ interface FormUploadJsonRequest {
 }
 
 interface FormUploadResolveContext {
-  url: string
   forceProxy: boolean
   isInSiyuanOrSiyuanNewWin: boolean
   isUseSiyuanProxy: boolean
@@ -138,7 +137,6 @@ function createFormUploadClient(deps: FormUploadClientDeps) {
   return {
     async postJson(request: FormUploadJsonRequest): Promise<Record<string, unknown>> {
       const transport = resolveFormUploadTransport({
-        url: request.url,
         forceProxy: request.forceProxy ?? false,
         isInSiyuanOrSiyuanNewWin: deps.isInSiyuanOrSiyuanNewWin(),
         isUseSiyuanProxy: deps.isUseSiyuanProxy,

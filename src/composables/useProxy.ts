@@ -116,7 +116,6 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
     const xmlBody = serializer.serializeMethodCall(reqMethod, reqParams)
     const transport = resolveXmlrpcTransport({
-      url,
       forceProxy,
       isUseSiyuanProxy,
       canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
