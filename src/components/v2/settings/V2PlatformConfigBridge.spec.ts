@@ -70,6 +70,10 @@ vi.mock("element-plus", () => ({
     props: ["content", "disabled"],
     template: `<span class="tooltip-stub" :data-content="content" :data-disabled="String(disabled)"><slot /></span>`,
   },
+  ElButton: {
+    props: ["icon", "circle", "size", "type", "class"],
+    template: `<button class="el-button-stub" :data-type="type" :data-icon="String(icon)"><slot /></button>`,
+  },
 }))
 
 const InjectOnlyBridgeChild = defineComponent({
@@ -130,7 +134,7 @@ const createDynCfg = (overrides: Partial<DynamicConfig> = {}) =>
     isAuth: false,
     isSys: false,
     ...overrides,
-  }) as DynamicConfig
+  } as DynamicConfig)
 
 const mountBridge = async () => {
   const wrapper = mount(V2PlatformConfigBridge, {

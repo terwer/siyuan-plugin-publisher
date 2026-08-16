@@ -9,7 +9,7 @@
 
 import { describe, it } from "vitest"
 import { BilibiliUtils } from "~/src/adaptors/web/bilibili/bilibiliUtils.ts"
-import path from "path";
+import path from "path"
 
 describe("BilibiliUtils", () => {
   it("genUploadId", () => {
@@ -18,7 +18,8 @@ describe("BilibiliUtils", () => {
   })
 
   it("parseMd", () => {
-    const moduleBase = path.resolve(__dirname, "../../../..")
+    // Vitest 4 下 __dirname 不再指向 spec 所在目录；path.resolve() 在测试运行时即仓库根目录
+    const moduleBase = path.resolve()
     // lute
     require(path.join(moduleBase, "public/libs/lute/lute-1.7.5-20230410.min.js"))
 
