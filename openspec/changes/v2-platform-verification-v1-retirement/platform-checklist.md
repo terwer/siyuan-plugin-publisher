@@ -91,7 +91,7 @@
 | 28 | Halo网页版 | `custom_Haloweb` | `Custom_Haloweb` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-05-26/27 修复 V2C 配置页 `Invalid URL`。2026-08-14 修 transport 规则（loopback 有代理条件时走 siyuan-forward-proxy）。2026-08-15 Electron 宿主（test 工作空间）全链路实测：V2C（Cookie 授权→验证通过）、Pub（文章 `/archives/hangtestdoc-z138hrs` 前台 200 含标题+图片）、Upd（更新成功）、Del（文章 404 Post not found）、Img（带图发布图片上传成功）；另补 help 引导（tour 5 步）+ Cookie 失效友好错误 |
 | 30 | 知乎 | `custom_Zhihu` | `Custom_Zhihu` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；OSS SDK 显式加载修复 |
 | 31 | CSDN | `custom_Csdn` | `Custom_CSDN` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；默认 Bundled 图床修复 |
-| 32 | 简书 | `custom_Jianshu` | `Custom_Jianshu` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
+| 32 | 简书 | `custom_Jianshu` | `Custom_Jianshu` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-16 V2 全链路验证：V2C（Cookie 授权通过，笔记本=随笔）；Pub `https://www.jianshu.com/p/e9b6b9da4f9c`；Upd 更新成功；Del 删除成功；Img 带图更新返回明确的 `success_with_warnings`（图片未同步：`简书图片上传失败 =>icon-*.png`，平台图床 qiniu 响应缺 `url`，待修） |
 | 33 | 掘金 | `custom_Juejin` | `Custom_Juejin` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
 | 34 | 微信公众号 | `custom_Wechat` | `Custom_Wechat` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
 | 35 | 哔哩哔哩 | `custom_Bilibili` | `Custom_Bilibili` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `8`（#1 #21 #25 #27 #28 #29 #30 #31）· 进行中 `0` · 阻塞 `0` · 未测 `27`
+**T1 小结**：35 项 · 全链路 ✅ `9`（#1 #21 #25 #27 #28 #29 #30 #31 #32）· 进行中 `0` · 阻塞 `0` · 未测 `26`
 
 ---
 
@@ -155,5 +155,6 @@
 | 2026-08-15 | #28 Halo网页版补 help 引导：`custom-haloweb.ts` 补 tour（5 步）+ cookie/pageType/picbedService 字段 + 4 条 faq；`registry.spec.ts` verifiedConfigs 补全到 8 平台强制约束；Electron 宿主实测 HelpPanel + TourGuide 正常展示 |
 | 2026-08-15 | 8 个已验证平台 help/文档盘点完成：全部有 helpUrl/summary/fields/faq/tour（Halo网页版本次补齐）。文档草稿落地 `docs/draft/platforms/*.md`（8 份）+ `docs/draft/platform-verification-sop.md`（全覆盖测试 SOP）；helpUrl 多个平台误用博客园链接，待用户提供真实链接后替换 |
 | 2026-08-15 | #28 Halo网页版 **Electron 宿主全链路实测**（补上此前仅 devtools std 环境的缺口）：Pub（前台 200 含标题+图片）/ Upd / Del（404 Post not found）/ Img 均真实验证通过，回写 #28 备注 |
+| 2026-08-16 | #32 简书 V2 全链路验证：V2C（Cookie 授权通过，笔记本=随笔）；Pub `https://www.jianshu.com/p/e9b6b9da4f9c`；Upd 成功；Del 成功；Img 返回明确的 `success_with_warnings`（平台图床 qiniu 响应缺 `url`，`JianshuWebAdaptor.uploadFile` 待修）。发现并记录：简书默认 picbed 未设为 Bundled（本次已在 UI 手动改为“当前平台 推荐”） |
 
 
