@@ -30,6 +30,7 @@ import { halowebHelpConfig } from "./platform-config/custom-haloweb"
 import { localSystemHelpConfig } from "./platform-config/fs-local-system"
 import { zhihuHelpConfig } from "./platform-config/custom-zhihu"
 import { csdnHelpConfig } from "./platform-config/custom-csdn"
+import { jianshuHelpConfig } from "./platform-config/custom-jianshu"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -59,6 +60,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(localSystemHelpConfig)
   helpRegistry.register(zhihuHelpConfig)
   helpRegistry.register(csdnHelpConfig)
+  helpRegistry.register(jianshuHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {

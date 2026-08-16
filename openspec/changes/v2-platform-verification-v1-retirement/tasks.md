@@ -58,5 +58,5 @@
 _验收中发现的问题在此登记，完成后勾选并回写 checklist。_
 
 - [x] **#21 博客园 V2C**：MetaWeblog XML-RPC — `indexOf` / `non-text response`；`zhi-blog-api@1.79.0` + `proxyXmlrpc` 专用层（见 `.planning/2026-05-21-cnblogs-xmlrpc-response-text/`）
-- [ ] **#32 简书 Img**：`JianshuWebAdaptor.uploadFile` 平台图床上传失败——qiniu 响应缺 `url` 字段，需确认正确 URL 拼接并修复；同时评估 `JianshuConfig` 默认图床应设为 `PicbedServiceTypeEnum.Bundled`（对齐知乎/CSDN）
+- [x] **#32 简书 Img/默认图床**：`JianshuConfig` 默认图床已设为 `PicbedServiceTypeEnum.Bundled`（新增账号默认选中“当前平台 推荐”，spec 已覆盖）；`uploadFile` 增加 qiniu 错误详情；完整 help 配置已补齐（fields/faq/tour 4 步）。真实 PNG 带图发布验证通过；此前失败是测试图片 `icon.png` 实为 WebP 伪装 PNG
 

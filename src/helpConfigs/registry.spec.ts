@@ -17,6 +17,7 @@ import { halowebHelpConfig } from "~/src/helpConfigs/pages/platform-config/custo
 import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
 import { zhihuHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-zhihu"
 import { csdnHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-csdn"
+import { jianshuHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-jianshu"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
@@ -161,6 +162,7 @@ describe("verified platform help configs", () => {
     localSystemHelpConfig,
     zhihuHelpConfig,
     csdnHelpConfig,
+    jianshuHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {

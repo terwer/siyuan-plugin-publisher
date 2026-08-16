@@ -199,7 +199,8 @@ class JianshuWebAdaptor extends BaseWebApi {
       const resJson = await this.jianshuFormFetch(uploadUrl, formData)
       this.logger.debug("jianshu upload success, resJson =>", resJson)
       if (!resJson.url) {
-        throw new Error("简书图片上传失败 =>" + filename)
+        const detail = resJson?.error ? ` (${resJson.error})` : ""
+        throw new Error(`简书图片上传失败 =>${filename}${detail}`)
       }
 
       const url = resJson.url
