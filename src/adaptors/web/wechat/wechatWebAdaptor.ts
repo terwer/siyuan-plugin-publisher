@@ -438,7 +438,17 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
-    const token = this.cfg.metadata.token
+    // 公众号会话 token 会轮换；用过期 token 打开草稿编辑页会被判为未登录并跳「请重新登录」。
+    // 因此打开前用当前 cookie 刷新一次 token，保证链接可用。
+    let token = this.cfg.metadata?.token
+    try {
+      const meta = await this.getMetaData()
+      if (meta?.token) {
+        token = meta.token
+      }
+    } catch (e) {
+      this.logger.warn("wechat refresh token for preview url failed =>", e)
+    }
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
   }
 
