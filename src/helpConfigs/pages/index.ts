@@ -32,6 +32,7 @@ import { zhihuHelpConfig } from "./platform-config/custom-zhihu"
 import { csdnHelpConfig } from "./platform-config/custom-csdn"
 import { jianshuHelpConfig } from "./platform-config/custom-jianshu"
 import { juejinHelpConfig } from "./platform-config/custom-juejin"
+import { wechatHelpConfig } from "./platform-config/custom-wechat"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -63,6 +64,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(csdnHelpConfig)
   helpRegistry.register(jianshuHelpConfig)
   helpRegistry.register(juejinHelpConfig)
+  helpRegistry.register(wechatHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {

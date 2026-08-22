@@ -14,6 +14,7 @@ import { CsdnConfig } from "~/src/adaptors/web/csdn/csdnConfig.ts"
 import { JianshuConfig } from "~/src/adaptors/web/jianshu/jianshuConfig.ts"
 import { JuejinConfig } from "~/src/adaptors/web/juejin/juejinConfig.ts"
 import { ZhihuConfig } from "~/src/adaptors/web/zhihu/zhihuConfig.ts"
+import { WechatConfig } from "~/src/adaptors/web/wechat/wechatConfig.ts"
 
 describe("web platform bundled picbed defaults", () => {
   it("uses platform bundled picbed for a newly created Zhihu config", () => {
@@ -45,6 +46,14 @@ describe("web platform bundled picbed defaults", () => {
 
     // 掘金双通道：原生直传 + 外链（PicGo）均支持，默认平台图床
     expect(cfg.picgoPicbedSupported).toBe(true)
+    expect(cfg.bundledPicbedSupported).toBe(true)
+    expect(cfg.picbedService).toBe(PicbedServiceTypeEnum.Bundled)
+  })
+
+  it("uses platform bundled picbed for a newly created Wechat config", () => {
+    const cfg = safeMergeConfig<WechatConfig>("{}", WechatConfig, ["", "", ""])
+
+    expect(cfg.picgoPicbedSupported).toBe(false)
     expect(cfg.bundledPicbedSupported).toBe(true)
     expect(cfg.picbedService).toBe(PicbedServiceTypeEnum.Bundled)
   })
