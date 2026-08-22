@@ -296,7 +296,8 @@ export const useV2QuickPublish = () => {
         // 会话绑定的查看链接（如公众号草稿编辑页）需在授权会话窗口内打开，否则会跳「请重新登录」。
         // 打开方式由适配器声明（默认 ExternalUrl/ExternalFile → 走统一打开），扩展点：适配器声明 previewOpenMode。
         if (api.previewOpenMode === PreviewOpenModeEnum.AppSession) {
-          openBrowserWindow(previewUrl)
+          // forceElectronWindow=true：在 Electron 默认 session 窗口中打开（带授权 cookie），避免落到系统浏览器
+          openBrowserWindow(previewUrl, undefined, undefined, undefined, false, true)
         } else {
           await openPathOrUrl(previewUrl, kernelApi)
         }
