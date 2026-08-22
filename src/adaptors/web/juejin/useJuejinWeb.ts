@@ -78,8 +78,9 @@ const useJuejinWeb = async (key?: string, newCfg?: JuejinConfig) => {
   // 退出登录
   cfg.logoutUrl = "https://juejin.cn/passport/web/logout"
   // picbed service
-  cfg.picgoPicbedSupported = true
-  cfg.bundledPicbedSupported = false
+  // 掘金已支持原生图片上传（字节 veImageX 直传），与知乎/CSDN/简书一致默认平台图床
+  cfg.picgoPicbedSupported = false
+  cfg.bundledPicbedSupported = true
 
   const webApi = new JuejinWebAdaptor(appInstance, cfg)
   return {

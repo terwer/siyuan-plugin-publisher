@@ -92,7 +92,7 @@
 | 30 | 知乎 | `custom_Zhihu` | `Custom_Zhihu` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；OSS SDK 显式加载修复 |
 | 31 | CSDN | `custom_Csdn` | `Custom_CSDN` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；默认 Bundled 图床修复 |
 | 32 | 简书 | `custom_Jianshu` | `Custom_Jianshu` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-16 V2 全链路验证：V2C（Cookie 授权通过，笔记本=随笔；新增账号默认图床已修正为“当前平台 推荐/Bundled”）；Pub `https://www.jianshu.com/p/9654472734f3`；Upd 更新成功；Del 删除成功；Img 带真实 PNG 发布成功，图片上传为 `https://upload-images.jianshu.io/upload_images/16941800-0b988068785ce608.png`；HelpPanel/tour（4 步）验证通过 |
-| 33 | 掘金 | `custom_Juejin` | `Custom_Juejin` | ✅ | ✅ | ✅ | ✅ | ⬜ | 2026-08-22 V2 全链路验证。Pub 文章 `https://juejin.cn/post/7676406157015531560`，Upd 更新成功，Del 删除成功。修复两处：① `jsonFetchClient.buildPluginRequestHeaders` / `PluginFetchUtil.postText` / `useProxy` 发送重复 `Content-Type`+`content-type` 头，致掘金建空草稿（category/title/content 全空）→ 发布参数错误；改单一 `Content-Type`。② `juejinWebAdaptor.editPost` 缺标签/摘要默认回退（addPost 有）→ 更新失败 `必须选择一个标签`、空摘要 `参数错误`；与 addPost 一致补齐。Img 需先配图床（当前 `picbedService=none`），未测 |
+| 33 | 掘金 | `custom_Juejin` | `Custom_Juejin` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-22 V2 全链路验证。Pub 文章 `https://juejin.cn/post/7676406157015531560`，Upd 更新成功，Del 删除成功。修复两处：① `jsonFetchClient.buildPluginRequestHeaders` / `PluginFetchUtil.postText` / `useProxy` 发送重复 `Content-Type`+`content-type` 头，致掘金建空草稿（category/title/content 全空）→ 发布参数错误；改单一 `Content-Type`。② `juejinWebAdaptor.editPost` 缺标签/摘要默认回退（addPost 有）→ 更新失败 `必须选择一个标签`、空摘要 `参数错误`；与 addPost 一致补齐。Img（2026-08-22 傍晚）：原生 veImageX 直传落地——新增 `vendors/byteimagex/imagexClient.ts`（SigV4+CRC32 五步链）与 `utils/rawHeaderFetch.ts`（大小写保真通道，内置 undici 引擎），`juejinWebAdaptor.uploadFile` 接入，掘金默认图床改 Bundled（对齐知乎/CSDN 先例）。根因：SigV4 的 amzDate 必须剥冒号（`[-:]\|\.\d{3}`）。宿主实测：GUI 发布带两图文档 → 草稿 mark_content 均为裸 `![](tos-cn-i-73owjymdk6/<32hex>)`（官方契约，无签名 URL），文章 `https://juejin.cn/post/7676404118950395938` 审核通过（audit=2）且匿名可访问含图 |
 | 34 | 微信公众号 | `custom_Wechat` | `Custom_Wechat` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
 | 35 | 哔哩哔哩 | `custom_Bilibili` | `Custom_Bilibili` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
 
@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `9`（#1 #21 #25 #27 #28 #29 #30 #31 #32）· 进行中 `0` · 阻塞 `0` · 未测 `26`
+**T1 小结**：35 项 · 全链路 ✅ `10`（#1 #21 #25 #27 #28 #29 #30 #31 #32 #33）· 进行中 `0` · 阻塞 `0` · 未测 `25`
 
 ---
 
@@ -156,5 +156,6 @@
 | 2026-08-15 | 8 个已验证平台 help/文档盘点完成：全部有 helpUrl/summary/fields/faq/tour（Halo网页版本次补齐）。文档草稿落地 `docs/draft/platforms/*.md`（8 份）+ `docs/draft/platform-verification-sop.md`（全覆盖测试 SOP）；helpUrl 多个平台误用博客园链接，待用户提供真实链接后替换 |
 | 2026-08-15 | #28 Halo网页版 **Electron 宿主全链路实测**（补上此前仅 devtools std 环境的缺口）：Pub（前台 200 含标题+图片）/ Upd / Del（404 Post not found）/ Img 均真实验证通过，回写 #28 备注 |
 | 2026-08-16 | #32 简书 V2 全链路验证：V2C（Cookie 授权通过，笔记本=随笔）；Pub `https://www.jianshu.com/p/9654472734f3`；Upd 成功；Del 成功；Img 带真实 PNG 发布成功（`https://upload-images.jianshu.io/upload_images/16941800-0b988068785ce608.png`）。修复：`JianshuConfig` 默认图床改为 Bundled（新增账号默认选中“当前平台 推荐”）；新增 `custom-jianshu` 完整 help 配置（fields/faq/tour 4 步）并移出 remaining-t1；`uploadFile` 增加 qiniu 错误详情。此前 Img 失败是测试图片 `icon.png` 实为 WebP 伪装 PNG，非简书适配器缺陷 |
+| 2026-08-22 | #33 掘金 **Img ✅ 收官**：原生 veImageX 五步直传（gen_token→ApplyImageUpload→TOS 裸字节 PUT+CRC32→CommitImageUpload→get_img_url）落地 `vendors/byteimagex/imagexClient.ts` + `utils/rawHeaderFetch.ts`（undici 引擎）；掘金默认图床改 Bundled。**根因**：SigV4 amzDate 必须剥冒号（ISO 串 `[-:]|\.\d{3}` 全替换），带冒号即 100024 InvalidAuthorization——与传输层/头大小写无关（排查中曾误判）。Electron 宿主 GUI 实测：配置页切「当前平台」→ 文档贴图 → 发布面板更新 → 草稿 mark_content 两图均为裸 `![](tos-cn-i-73owjymdk6/<32hex>)`（官方契约），文章 `https://juejin.cn/post/7676404118950395938` audit=2 匿名可访问含图。T1 全链路 ✅ 更新为 10 个 |
 
 

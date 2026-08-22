@@ -8,9 +8,11 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo, Post, TagInfo, UserBlog } from "zhi-blog-api"
-import { StrUtil } from "zhi-common"
+import { CategoryInfo, MediaObject, Post, TagInfo, UserBlog } from "zhi-blog-api"
+import { JsonUtil, StrUtil } from "zhi-common"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { createByteImagexClient } from "~/src/vendors/byteimagex/imagexClient.ts"
+import { createCasePreservingNodeFetch } from "~/src/utils/rawHeaderFetch.ts"
 
 /**
  * 掘金网页授权适配器
@@ -70,6 +72,88 @@ class JuejinWebAdaptor extends BaseWebApi {
 
     this.logger.debug("getUsersBlogs=>", result)
     return result
+  }
+
+  /**
+   * 掘金原生图片上传（字节 veImageX 直传）
+   *
+   * 链路：gen_token(STS) → ApplyImageUpload(SigV4) → TOS 裸字节直传(CRC32 强制)
+   *       → CommitImageUpload → get_img_url(预览用)
+   * 正文契约：markdown 只嵌裸 StoreUri（`![](tos-cn-i-73owjymdk6/<32hex>)`），
+   * 签名 URL 由掘金读取端动态重签，持久层不存任何域名与签名。
+   */
+  public async uploadFile(mediaObject: MediaObject): Promise<any> {
+    const filename = mediaObject.name
+    const rawBits: any = mediaObject.bits
+    const bytes = rawBits instanceof Uint8Array ? rawBits : new Uint8Array(rawBits)
+    this.logger.info(`juejin start uploadFile ${filename}, bytes => ${bytes.length}`)
+
+    // 1. STS 临时凭证。uuid 为字节 tea 追踪 web_id，实测服务端不校验，随机生成即可
+    const teaUuid = String(Math.floor(Math.random() * 9e18))
+    const genTokenUrl = `https://api.juejin.cn/imagex/v2/gen_token?aid=2608&uuid=${teaUuid}&client=web`
+    const tokenRes = await this.juejinFetch(genTokenUrl, undefined, "GET")
+    if (tokenRes.err_no !== 0 || !tokenRes.data?.token) {
+      throw new Error("掘金图片上传失败：获取上传凭证错误 =>" + tokenRes.err_msg)
+    }
+
+    // 2-4. Apply → TOS 直传 → Commit（SigV4 签名、CRC32 校验在 imagex 客户端内完成）
+    // imagex/TOS 为签名敏感外部主机：volcengine 网关对 x-amz-* 头名大小写敏感，
+    // 统一 facade 各通道写出时会小写化头名（100024 InvalidAuthorization），
+    // 因此宿主内优先走大小写保真的 node:https 通道，不可用时回退 webFetch。
+    const casePreservingFetch = createCasePreservingNodeFetch(this.appInstance)
+    const client = createByteImagexClient({
+      logger: this.logger,
+      requestJson: async (req) => {
+        if (casePreservingFetch) {
+          this.logger.debug(`[byte-imagex] via case-preserving node:https => ${req.method} ${req.url.slice(0, 80)}`)
+          const raw = await casePreservingFetch({
+            url: req.url,
+            method: req.method,
+            headers: req.headers,
+            params: req.method === "GET" ? undefined : (req.params as string | Uint8Array) ?? "",
+          })
+          if (!(raw.status >= 200 && raw.status < 300)) {
+            throw new Error(`HTTP request failed (${raw.status}): ${raw.text.slice(0, 500)}`)
+          }
+          return JsonUtil.safeParse<any>(raw.text, {} as any)
+        }
+        this.logger.warn("[byte-imagex] case-preserving fetch unavailable, fallback to webFetch")
+        return await this.webFetch(
+          req.url,
+          [req.headers ?? {}],
+          req.method === "GET" ? undefined : req.params ?? "",
+          req.method,
+          req.contentType ?? "application/json",
+          false
+        )
+      },
+    })
+    const result = await client.uploadImage({
+      stsToken: tokenRes.data.token,
+      serviceId: "73owjymdk6",
+      bytes,
+    })
+
+    // 5. 预览地址（仅日志/附件记录用；正文嵌入只认裸 StoreUri，此处失败不影响上传结果）
+    let previewUrl = ""
+    try {
+      const imgUrlRes = await this.juejinFetch(
+        `https://api.juejin.cn/imagex/v2/get_img_url?aid=2608&uuid=${teaUuid}&uri=${encodeURIComponent(result.storeUri)}&img_type=private`,
+        undefined,
+        "GET"
+      )
+      previewUrl = imgUrlRes?.data?.main_url ?? ""
+    } catch (e) {
+      this.logger.warn("juejin fetch image preview url failed (ignored) =>", e)
+    }
+    this.logger.debug("juejin uploadFile finished", { storeUri: result.storeUri, hasPreviewUrl: !!previewUrl })
+
+    return {
+      id: result.storeUri,
+      object_key: result.storeUri,
+      url: result.storeUri,
+      preview_url: previewUrl,
+    }
   }
 
   public async addPost(post: Post) {

@@ -8,7 +8,7 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * 掘金配置
@@ -33,5 +33,9 @@ export class JuejinConfig extends CommonWebConfig {
     this.knowledgeSpaceTitle = "分类"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
     this.allowKnowledgeSpaceChange = true
+    // 原生图片上传（字节 veImageX 直传）已支持，默认平台图床（对齐知乎/CSDN/简书先例）
+    this.picgoPicbedSupported = false
+    this.bundledPicbedSupported = true
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
