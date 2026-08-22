@@ -72,7 +72,7 @@
 
 ---
 
-## 附：已验证平台清单（10 个，含 help 配置状态）
+## 附：已验证平台清单（11 个，含 help 配置状态）
 
 | # | 平台 | platformKey | help 文件 | 文档草稿 |
 |---|------|-------------|-----------|---------|
@@ -86,3 +86,4 @@
 | 31 | CSDN | `custom_Csdn` | custom-csdn.ts | platforms/custom-csdn.md |
 | 32 | 简书 | `custom_Jianshu` | custom-jianshu.ts | platforms/custom-jianshu.md |
 | 33 | 掘金 | `custom_Juejin` | custom-juejin.ts | platforms/custom-juejin.md |
+| 34 | 微信公众号 | `custom_Wechat` | custom-wechat.ts | platforms/custom-wechat.md |

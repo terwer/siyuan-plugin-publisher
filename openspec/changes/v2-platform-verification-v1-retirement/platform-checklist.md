@@ -93,7 +93,7 @@
 | 31 | CSDN | `custom_Csdn` | `Custom_CSDN` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 Bridge 全链路已验（2026-05-24，用户手测）；平台图床 Img 通过；默认 Bundled 图床修复 |
 | 32 | 简书 | `custom_Jianshu` | `Custom_Jianshu` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-16 V2 全链路验证：V2C（Cookie 授权通过，笔记本=随笔；新增账号默认图床已修正为“当前平台 推荐/Bundled”）；Pub `https://www.jianshu.com/p/9654472734f3`；Upd 更新成功；Del 删除成功；Img 带真实 PNG 发布成功，图片上传为 `https://upload-images.jianshu.io/upload_images/16941800-0b988068785ce608.png`；HelpPanel/tour（4 步）验证通过 |
 | 33 | 掘金 | `custom_Juejin` | `Custom_Juejin` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-22 V2 全链路验证。Pub 文章 `https://juejin.cn/post/7676406157015531560`，Upd 更新成功，Del 删除成功。修复两处：① `jsonFetchClient.buildPluginRequestHeaders` / `PluginFetchUtil.postText` / `useProxy` 发送重复 `Content-Type`+`content-type` 头，致掘金建空草稿（category/title/content 全空）→ 发布参数错误；改单一 `Content-Type`。② `juejinWebAdaptor.editPost` 缺标签/摘要默认回退（addPost 有）→ 更新失败 `必须选择一个标签`、空摘要 `参数错误`；与 addPost 一致补齐。Img（2026-08-22 傍晚）：原生 veImageX 直传落地——新增 `vendors/byteimagex/imagexClient.ts`（SigV4+CRC32 五步链）与 `utils/rawHeaderFetch.ts`（大小写保真通道，内置 undici 引擎），`juejinWebAdaptor.uploadFile` 接入，掘金默认图床改 Bundled（对齐知乎/CSDN 先例）。根因：SigV4 的 amzDate 必须剥冒号（`[-:]\|\.\d{3}`）。宿主验证：GUI 发布带两图文档 → 草稿 mark_content 均为裸 `![](tos-cn-i-73owjymdk6/<32hex>)`（官方契约，无签名 URL），文章 `https://juejin.cn/post/7676404118950395938` 审核通过（audit=2）且匿名可访问含图。外链图片原样保留不转存 → 放开 PicGo 双通道 |
-| 34 | 微信公众号 | `custom_Wechat` | `Custom_Wechat` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
+| 34 | 微信公众号 | `custom_Wechat` | `Custom_Wechat` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-23 V2 全链路（Electron 宿主）验证：V2C（配置页「去授权」→ mp.weixin.qq.com 扫码登录 → 关窗保存 cookie → 自动读取 Cookie → 验证通过，账号「运行中」）。Pub 草稿 `appmsgid=100000258`（`operate_appmsg?sub=create` 成功）；Upd `operate_appmsg?sub=update` 成功；Del `operate_appmsg?sub=del` 成功（发布信息已移除）；Img 带 cat 图经 `filetransfer?action=upload_material` 上传公众号素材库并替换 URL。修复：`WechatConfig` 默认图床改 Bundled（原为 None，会导致新账号不上传图片）；新增 `custom-wechat.ts` help 配置（helpUrl+summary+fields+faq+tour）并注册/移出 remaining-t1/纳入 verifiedConfigs；新增 `docs/draft/platforms/custom-wechat.md`。HostData HelpPanel/TourGuide 均验证通过 |
 | 35 | 哔哩哔哩 | `custom_Bilibili` | `Custom_Bilibili` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 已进入 V2 Bridge，待验 |
 
 ### Fs（1）
@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `10`（#1 #21 #25 #27 #28 #29 #30 #31 #32 #33）· 进行中 `0` · 阻塞 `0` · 未测 `25`
+**T1 小结**：35 项 · 全链路 ✅ `11`（#1 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34）· 进行中 `0` · 阻塞 `0` · 未测 `24`
 
 ---
 
@@ -160,5 +160,6 @@
 | 2026-08-22 | #33 掘金 **外链图片处理 + 放开 PicGo**：API 建草稿含百度 logo 外链 → 读回 mark_content URL **原样保留、未转存 tos-cn-i**；发布后审核放行且匿名页渲染外链。据此放开 `picgoPicbedSupported=true`（保留 Bundled 默认，双通道并存），spec 同步更新 |
 | 2026-08-22 | #33 掘金 **Img 修复（文章页相对链接）**：用户反馈上传不报错但文章页图片呈「相对链接」（`img src="tos-cn-i-…"` 无协议/域名 → 404）。宿主验证：发布带图文档 mark_content 为裸 `![](tos-cn-i-…)`（上传链路 OK、`get_img_url` 能重签出完整 URL）；读取文章页 HTML 见 `<img src="tos-cn-i-…">` → **推翻先前「编辑保存即存裸 URI + 读时重签」结论**。经核对掘金正文存储形态，mark_content 中为**完整签名 URL**（`https://p0-xtjj-private.juejin.cn/tos-cn-i-…~tplv-…&rk3s=…&x-orig-sign=…`），读取端按需重签至 ~+7d。修复：`juejinWebAdaptor.uploadFile` 返回 `get_img_url.main_url`（完整签名 URL）作为 `url`（原返回裸 storeUri），取不到 main_url 显式报错。**宿主验证**：更新后 mark_content 已是完整 URL，文章页图片渲染为 `<img src="https://p3-xtjj-sign.byteimg.com/tos-cn-i-…">`（bare count=0 / full count=1）。构建+build:v2 通过，单测 5 绿 |
 | 2026-08-22 | #33 掘金 **help/tour 宿主验证 + 文档补齐**：按 SOP 第三节补全帮助引导——新增 `src/helpConfigs/pages/platform-config/custom-juejin.ts`（helpUrl+summary+fields+faq 4 条+tour 4 步，target 用 `[data-syp-tour=…]`），注册进 `/pages/index.ts`、从 `remaining-t1` 移出、纳入 `registry.spec.ts` verifiedConfigs（registry 18 项绿）；新增 `docs/draft/platforms/custom-juejin.md`（占位 helpUrl 顶部标 TODO）。Electron 宿主验证：配置页 HelpPanel 弹层完整渲染 summary/查看完整帮助文档/FAQ；点「开始引导教程」TourGuide 4/4 步（Cookie 授权→分类→图床→验证并保存）全部正确定位。AGENTS.md 增补「每站验证必含帮助引导与文档，禁止遗漏」 |
+| 2026-08-23 | #34 微信公众号 **V2 全链路 ✅**：V2C（去授权→mp.weixin.qq.com 扫码→关窗保存 cookie→自动读取 Cookie→验证通过，账号「运行中」）；Pub 草稿 `100000258`；Upd 成功；Del 成功；Img cat 图经 `upload_material` 上传素材库。修复 `WechatConfig` 默认图床 Bundled（原 None 导致新账号不上图）；新增 `custom-wechat.ts` help 配置（summary/fields/faq 4/tour 4）并注册、移出 remaining-t1、纳入 verifiedConfigs；新增 `docs/draft/platforms/custom-wechat.md`。HelpPanel/TourGuide 宿主验证通过。T1 全链路 ✅ 更新为 11 个；AGENTS.md 固化 Cookie 授权平台 V2C 标准流程（含「检查填充其他字段」一步） |
 
 
