@@ -38,6 +38,7 @@
   - FormData 构造 → `FormDataHostUtil`
   - V2 允许 break change，直接重构到位
 - V2 平台验证：**按 checklist 表从上到下顺序推进**（SSOT：`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`，AGENTS.md 不另记批次顺序）；每站五格 **V2C / Pub / Upd / Del / Img**；通过/失败均记入 checklist SSOT。
+- **每站验证必须同时覆盖「帮助引导与文档」环节，禁止遗漏**（SOP 第三节，`docs/draft/platform-verification-sop.md`）：① 平台拆分/复用 help 配置（`src/helpConfigs/pages/platform-config/<platform>.ts`，须含 `helpUrl`+`summary`+`fields`+`faq`+`tour`，缺则补；已 `verifiedConfigs` 强制约束）并从 `remaining-t1` 移出；② `docs/draft/platforms/<platform>.md` 文档草稿（占位 helpUrl 顶部标 `TODO：待替换真实帮助文档链接`）；③ 宿主验证：该平台配置页 HelpPanel/TourGuide 正常展示。此三项与五格同等计入通过/失败，一并写回 checklist SSOT。
 
 ## Hermes / Agent 项目隔离
 
