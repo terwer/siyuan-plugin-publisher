@@ -134,25 +134,36 @@ class JuejinWebAdaptor extends BaseWebApi {
       bytes,
     })
 
-    // 5. 预览地址（仅日志/附件记录用；正文嵌入只认裸 StoreUri，此处失败不影响上传结果）
-    let previewUrl = ""
+    // 5. 换取可对外访问的完整签名 URL。掘金文章页 SSR 不重签裸 StoreUri，只认带签名/域名的
+    //    完整 URL；否则正文图片会渲染成「相对链接」。官方编辑器行为一致：把 get_img_url 的
+    //    main_url 直接插入 mark_content（读取端会动态重签延长有效期）。
+    let mainUrl = ""
+    let getImgUrlErr: any = null
     try {
       const imgUrlRes = await this.juejinFetch(
         `https://api.juejin.cn/imagex/v2/get_img_url?aid=2608&uuid=${teaUuid}&uri=${encodeURIComponent(result.storeUri)}&img_type=private`,
         undefined,
         "GET"
       )
-      previewUrl = imgUrlRes?.data?.main_url ?? ""
+      mainUrl = imgUrlRes?.data?.main_url ?? ""
     } catch (e) {
-      this.logger.warn("juejin fetch image preview url failed (ignored) =>", e)
+      getImgUrlErr = e
+      this.logger.warn("juejin fetch image main url failed =>", e)
     }
-    this.logger.debug("juejin uploadFile finished", { storeUri: result.storeUri, hasPreviewUrl: !!previewUrl })
+    if (!mainUrl) {
+      // 无法生成可访问 URL 时显式失败，避免静默写入裸 URI 导致文章页相对链接
+      throw new Error(
+        "掘金图片上传成功但获取可访问 URL 失败（get_img_url 未返回 main_url）：" +
+          (getImgUrlErr?.message ?? JSON.stringify(getImgUrlErr)?.slice(0, 300))
+      )
+    }
+    this.logger.debug("juejin uploadFile finished", { storeUri: result.storeUri, mainUrl })
 
     return {
       id: result.storeUri,
       object_key: result.storeUri,
-      url: result.storeUri,
-      preview_url: previewUrl,
+      url: mainUrl,
+      preview_url: mainUrl,
     }
   }
 

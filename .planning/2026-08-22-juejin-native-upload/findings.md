@@ -164,3 +164,53 @@ html: <img src="tos-cn-i-73owjymdk6/<32hex>">
 - 删探针文/草稿：article 7676436966323683328、drafts 7676405390204813327、7676405390205222927
 - 杀临时 Chrome（9223 jj_sig_truth）；%TEMP%\jj_*.{js,json,png} 可清
 
+## 2026-08-22 深夜 — 回归复现：文章页图片显示「相对链接」❌（pushback 推翻「存裸 URI 契约」）
+
+用户报告（已删全部旧文后重新从零验证）：上传/发布**均不报错**，但掘金**文章页**图片呈现「相对链接」，
+即 `img src` 是无协议/无域名的裸 StoreUri，浏览器按相对路径解析 → 404 不显示。
+
+### 复现证据（V2 宿主 GUI 真实发布，draft 7676498957653164032 / article 7676498957653180416）
+- 控制台：`article_draft/create` 与 `article/publish` 均 err 0；mark_content 内图片为
+  `![cat](tos-cn-i-73owjymdk6/de74f1c43bf54ceb9b5ee3458210e08a)`（裸 URI，**上传链路 OK**）。
+- `imagex/v2/get_img_url` 对同一 StoreUri 返回**完整签名 URL**：
+  `https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/...~tplv-...&x-orig-sign=...`
+  → **图片资源有效且可重签**，问题不在上传。
+- `article_draft/detail`（draft_id）读回 mark_content → **仍是裸 URI 未被重签**（与 2026-08-22 傍晚
+  结论「草稿 detail 会把裸 URI 重签」**相反**，该旧结论不可靠）。
+- ⭐ **命中根因**：`GET juejin.cn/spost/7676498957653180416`（带作者 cookie，200）返回 SSR HTML：
+  ```html
+  <img src="tos-cn-i-73owjymdk6/de74f1c43bf54ceb9b5ee3458210e08a" alt="cat" loading="lazy">
+  ```
+  掘金文章页 SSR **原样输出裸 StoreUri、没有重签** → 浏览器按相对路径 → 图片挂。
+
+### 结论（推翻先前「编辑保存即存裸 URI 契约」）
+先前 findings「编辑器保存 mark_content 为裸 StoreUri + 读时重签」在**文章页 SSR 场景不成立**：
+掘金 SSR 对 mark_content 里的 `![](tos-cn-i-...)` **不做重签**，因此纯裸 URI 必然渲染成相对链接。
+官方**编辑器**行为（upload 后把 `main_url` 完整签名 URL 插入正文，findings 实证）才是可渲染形态。
+→ 插件 `uploadFile` 应**返回并让发布链路嵌完整可访问 URL**（对齐官方编辑器），而非嵌裸 StoreUri。
+⚠️ 未决：get_img_url 返回的 main_url 是 24h 签名（x-orig-expires≈+24h），而文章页需长期可访问。
+   需用官方编辑器对照确认「正文库内存的是带何种签名/域名的 URL、如何避免过期」。
+
+## 2026-08-22 深夜（续）— 官方编辑器对照 + 修复验证 ✅
+
+### 官方编辑器对照（chrome-devtools 独立浏览器，已登录 terwer，draft 7676501851563212815）
+在新版 Markdown 编辑器中以 paste 事件上传 64x64 PNG：
+- 编辑器插入正文的 markdown 是**完整签名 URL**：
+  `![official-test.png](https://p0-xtjj-private.juejin.cn/tos-cn-i-73owjymdk6/…~tplv-…&rk3s=…&x-orig-sign=…)`。
+- `article_draft/detail` 读回 mark_content：仍是**完整签名 URL**，且服务端**读取时动态重签**
+  （x-orig-expires 由插入时的 ~+24h 变为读取时的 ~+7d；rk3s/sign 均变化）。
+- **结论**：掘金官方正文库存的不是裸 StoreUri，而是带签名的完整 URL；「读时重签」作用于完整 URL。
+  裸 StoreUri 服务端不识别、不重签 → 文章页 SSR 原样输出 → 相对链接。
+- 即先前「编辑保存即存裸 URI」是对「编辑器展示/预览形态」的误读；**持久化取完整 URL**。
+
+### 修复
+`juejinWebAdaptor.uploadFile`：`url` 由 `result.storeUri`（裸）改为 `get_img_url.main_url`（完整签名 URL）；
+`preview_url` 同步；取不到 `main_url` 时显式 throw（避免静默写坏图）。
+
+### 宿主验证（9222 直连，reload 后「更新」）
+- console：`mark_content` 图片已是完整签名 URL（`61a90eaba2fc432caaf3ba6834d73073~tplv-…`），「文章更新成功」。
+- 抓 `juejin.cn/spost/7676498957653180416`：`<img src="https://p3-xtjj-sign.byteimg.com/tos-cn-i-73owjymdk6/61a90eaba2fc432caaf3ba6834d73073~tplv-…">`，
+  **bare-storeUri-img count=0 / full-https-img count=1** → 「相对链接」修复确认。
+- build:v2 通过；webPicbedDefaults.spec 5/5 绿。
+
+
