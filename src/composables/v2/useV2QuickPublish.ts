@@ -18,6 +18,8 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
+import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
+import { PreviewOpenModeEnum } from "zhi-blog-api"
 
 export interface V2QuickPublishPlatformItem {
   platformKey: string
@@ -114,7 +116,8 @@ export const useV2QuickPublish = () => {
       throw new Error(t("v2.quickPublish.error.previewConfigMissing"))
     }
     const api = await getPublishApi(platformKey, publishCfg.cfg)
-    return await getPostPreviewUrl(api, state.pageId, publishCfg.cfg)
+    const previewUrl = await getPostPreviewUrl(api, state.pageId, publishCfg.cfg)
+    return { api, previewUrl }
   }
 
   const init = async () => {
@@ -274,7 +277,7 @@ export const useV2QuickPublish = () => {
     })
 
     try {
-      const previewUrl = await resolvePreviewUrl(item.platformKey)
+      const { api, previewUrl } = await resolvePreviewUrl(item.platformKey)
       if (!previewUrl) {
         throw new Error(t("v2.quickPublish.error.previewUrlMissing"))
       }
@@ -290,7 +293,13 @@ export const useV2QuickPublish = () => {
       emitPublishFeedback()
 
       if (openImmediately) {
-        await openPathOrUrl(previewUrl, kernelApi)
+        // 会话绑定的查看链接（如公众号草稿编辑页）需在授权会话窗口内打开，否则会跳「请重新登录」。
+        // 打开方式由适配器声明（默认 ExternalUrl/ExternalFile → 走统一打开），扩展点：适配器声明 previewOpenMode。
+        if (api.previewOpenMode === PreviewOpenModeEnum.AppSession) {
+          openBrowserWindow(previewUrl)
+        } else {
+          await openPathOrUrl(previewUrl, kernelApi)
+        }
       }
     } catch (error) {
       const errorText = buildV2QuickPublishCaughtErrorText(error, t("v2.quickPublish.error.previewUrlMissing"))

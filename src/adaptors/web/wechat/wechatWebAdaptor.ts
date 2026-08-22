@@ -10,7 +10,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import { BlogConfig, MediaObject, PageTypeEnum, Post, PreviewOpenModeEnum, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import * as _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
@@ -28,6 +28,8 @@ import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
  * @since 0.9.0
  */
 class WechatWebAdaptor extends BaseWebApi {
+  // 公众号草稿编辑页链接绑定授权会话，需在授权会话窗口内打开
+  public override previewOpenMode = PreviewOpenModeEnum.AppSession
   public async getMetaData(): Promise<any> {
     const res = await this.weChatFetch("https://mp.weixin.qq.com/", undefined, "GET", {}, "text/html")
     this.logger.debug("WechatWebAdaptor res=>", { res: res })
