@@ -8,7 +8,7 @@
 - （已确认）掘金 API 域 `api.juejin.cn`；`/content_api/v1/article_draft/create`、`/article/publish` 可用。
 - （已确认）发表文章后 URL 形如 `https://juejin.cn/post/<article_id>`。
 
-## 2026-08-22 下午（chrome-devtools MCP 独立浏览器实测，登录态抓包）— 原生上传链路完整确认 ✅
+## 2026-08-22 下午（chrome-devtools MCP 独立浏览器实测，登录态下观测上传流程）— 原生上传链路完整确认 ✅
 
 **结论：掘金编辑器原生图片上传 = 字节 veImageX（ByteDance ImageX）+ TOS 对象存储，
 STS 临时凭证 + AWS SigV4 签名。此前「无原生上传/端点猜不出来」的判断是错的——

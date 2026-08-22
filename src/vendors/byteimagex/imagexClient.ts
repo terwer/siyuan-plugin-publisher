@@ -13,7 +13,7 @@ import type { ILogger } from "~/src/utils/appLogger.ts"
 /**
  * 字节跳动 veImageX（ByteDance ImageX）直传客户端
  *
- * 底层机制（2026-08-22 对掘金编辑器实测逆向，证据见
+ * 底层机制（依据字节 veImageX 的公开上传调用流程整理，证据见
  * .planning/2026-08-22-juejin-native-upload/findings.md）：
  *
  *   cookie ──(平台网关 gen_token)──▶ STS 临时凭证(~2h，Policy 仅授权 Apply/Commit)
