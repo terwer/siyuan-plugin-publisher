@@ -43,7 +43,8 @@ describe("web platform bundled picbed defaults", () => {
   it("uses platform bundled picbed for a newly created Juejin config", () => {
     const cfg = safeMergeConfig<JuejinConfig>("{}", JuejinConfig, ["", "", ""])
 
-    expect(cfg.picgoPicbedSupported).toBe(false)
+    // 掘金双通道：原生直传 + 外链（PicGo）均支持，默认平台图床
+    expect(cfg.picgoPicbedSupported).toBe(true)
     expect(cfg.bundledPicbedSupported).toBe(true)
     expect(cfg.picbedService).toBe(PicbedServiceTypeEnum.Bundled)
   })
