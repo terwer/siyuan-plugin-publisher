@@ -120,14 +120,15 @@ function buildPluginRequestHeaders(
 ): Record<string, string> {
   const headers: Record<string, string> = {}
   for (const [key, value] of Object.entries(header)) {
-    if (value != null) {
+    // 只保留一个规范的 Content-Type：跳过调用方传入的任何大小写变体，
+    // 避免发出重复的 content-type 头导致严格服务端（如掘金）无法解析 JSON body。
+    if (value != null && key.toLowerCase() !== "content-type") {
       headers[key] = String(value)
     }
   }
   const skipContentType = typeof FormData !== "undefined" && body instanceof FormData
   if (!skipContentType && !StrUtil.isEmptyString(contentType)) {
     headers["Content-Type"] = contentType
-    headers["content-type"] = contentType
   }
   return headers
 }

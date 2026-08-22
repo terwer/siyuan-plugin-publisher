@@ -48,7 +48,6 @@ class PluginFetchUtil {
       method: "POST",
       headers: {
         "Content-Type": contentType,
-        "content-type": contentType,
       },
       body,
     })

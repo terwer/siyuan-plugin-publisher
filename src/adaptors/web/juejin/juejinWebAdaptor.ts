@@ -137,14 +137,34 @@ class JuejinWebAdaptor extends BaseWebApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    const cate_slug = post.cate_slugs?.[0] ?? this.cfg.blogid
+    let cate_slug = post.cate_slugs?.[0] ?? this.cfg.blogid
     if (StrUtil.isEmptyString(cate_slug)) {
-      throw new Error("掘金平台必须选择一个分类")
+      // 与 addPost 保持一致：默认分类「后端」
+      cate_slug = "6809637769959178254"
+      this.logger.error("掘金平台未选择分类，将使用默认分类：后端")
     }
 
-    const tag_slug = post.tags_slugs ?? ""
+    let tag_slug = post.tags_slugs ?? ""
     if (StrUtil.isEmptyString(tag_slug)) {
-      throw new Error("掘金平台必须选择一个标签")
+      // 与 addPost 保持一致：默认标签「程序员」
+      tag_slug = "6809640482725954000"
+      this.logger.error("掘金平台未选择标签，将使用默认标签：程序员")
+    }
+
+    // 与 addPost 保持一致：摘要为空或过短时使用默认摘要
+    const DEFAULT_DESC =
+      "由于掘金平台的摘要有强制字数要求，这里需要给一下默认文字作为摘要。这里是掘金平台的默认摘要，您可以稍后自行修改。"
+    if (StrUtil.isEmptyString(post.shortDesc) || post.shortDesc.length < DEFAULT_DESC.length) {
+      post.shortDesc = DEFAULT_DESC
+      this.logger.error("掘金平台未设置摘要或者摘要字数，将使用默认摘要")
+    }
+    if (post.shortDesc.length < 50) {
+      while (post.shortDesc.length < 50) {
+        post.shortDesc += post.shortDesc
+      }
+      post.shortDesc = post.shortDesc.slice(0, 100)
+    } else if (post.shortDesc.length > 100) {
+      post.shortDesc = post.shortDesc.slice(0, 100)
     }
 
     const juejinPostKey = this.getJuejinPostidKey(postid)

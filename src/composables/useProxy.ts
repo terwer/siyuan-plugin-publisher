@@ -85,13 +85,14 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     } else {
       logger.info("Using middleware proxy fetch")
       const header = headers.length > 0 ? headers[0] : {}
-      const fetchHeaders: Record<string, string> = {
-        ...header,
-        "Content-Type": contentType,
+      const fetchHeaders: Record<string, string> = {}
+      for (const [k, v] of Object.entries(header)) {
+        // 只保留一个规范的 Content-Type，避免重复头导致服务端无法解析 body
+        if (v != null && k.toLowerCase() !== "content-type") {
+          fetchHeaders[k] = String(v)
+        }
       }
-      if (contentType.toLowerCase().includes("xml")) {
-        fetchHeaders["content-type"] = contentType
-      }
+      fetchHeaders["Content-Type"] = contentType
       const fetchOptions = {
         method: method,
         headers: fetchHeaders,
