@@ -13,12 +13,11 @@ import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
 /**
  * 大小写保真的请求通道。
  *
- * 背景：volcengine（字节 ImageX/TOS）网关对签名请求的客户端形态极其挑剔，
- * 2026-08-22 实测矩阵（详见 .planning/2026-08-22-juejin-native-upload/findings.md）：
+ * 背景：volcengine（字节 ImageX/TOS）网关对签名请求的客户端形态较为严格，
  *   - node-fetch-cjs（plugin-node-fetch 底层）：头名小写化 → 100024 InvalidAuthorization
  *   - node:https 原始套接字（任意头组合/大小写/顺序，含手写 TLS 字节）：一律 100024
  *   - undici fetch（无论全局还是 vendored）：始终通过
- * 差异深达 TLS/HTTP 客户端栈本身，无法在 http 模块层面补救，因此本通道
+ * 差异源于客户端 HTTP 栈本身，无法在 http 模块层面补救，因此本通道
  * 首选插件内置的 undici（libs/undici），宿主不可用时回退 node:https，
  * 两者都不可用返回 undefined，由调用方回退统一 facade（webFetch/apiFetch）。
  */
@@ -65,7 +64,7 @@ const createCasePreservingNodeFetch = (appInstance?: PublisherAppInstance): Case
     return undefined
   }
 
-  // 1) 首选：插件内置 undici（实测唯一被 volcengine 网关接受的 Node 客户端栈）。
+  // 1) 首选：插件内置 undici（唯一的 Node 客户端栈可被 volcengine 网关接受）。
   //    注意必须用底层 request() 而非 fetch()：Electron renderer 下 undici fetch 的
   //    Response/WebStream 层与 Chromium 全局流类不兼容会永久挂起，request() 正常。
   try {

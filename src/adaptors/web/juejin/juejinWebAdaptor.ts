@@ -88,7 +88,7 @@ class JuejinWebAdaptor extends BaseWebApi {
     const bytes = rawBits instanceof Uint8Array ? rawBits : new Uint8Array(rawBits)
     this.logger.info(`juejin start uploadFile ${filename}, bytes => ${bytes.length}`)
 
-    // 1. STS 临时凭证。uuid 为字节 tea 追踪 web_id，实测服务端不校验，随机生成即可
+    // 1. STS 临时凭证。uuid 仅供上报，服务端不做校验，随机生成即可
     const teaUuid = String(Math.floor(Math.random() * 9e18))
     const genTokenUrl = `https://api.juejin.cn/imagex/v2/gen_token?aid=2608&uuid=${teaUuid}&client=web`
     const tokenRes = await this.juejinFetch(genTokenUrl, undefined, "GET")
@@ -134,9 +134,9 @@ class JuejinWebAdaptor extends BaseWebApi {
       bytes,
     })
 
-    // 5. 换取可对外访问的完整签名 URL。掘金文章页 SSR 不重签裸 StoreUri，只认带签名/域名的
-    //    完整 URL；否则正文图片会渲染成「相对链接」。官方编辑器行为一致：把 get_img_url 的
-    //    main_url 直接插入 mark_content（读取端会动态重签延长有效期）。
+    // 5. 换取可对外访问的完整签名 URL。掘金文章页渲染只认带签名/域名的完整 URL；
+    //    否则裸 StoreUri 会按相对路径解析导致图片不显示。此处用 get_img_url 的
+    //    main_url 作为正文图片地址（读取端会按需重新生成签名，延长有效期）。
     let mainUrl = ""
     let getImgUrlErr: any = null
     try {

@@ -33,7 +33,7 @@ export class JuejinConfig extends CommonWebConfig {
     this.knowledgeSpaceTitle = "分类"
     this.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
     this.allowKnowledgeSpaceChange = true
-    // 原生图片上传（字节 veImageX 直传）+ 外链图片（实测外链 URL 原样保留不转存）
+    // 原生图片上传（字节 veImageX 直传）+ 外链图片（外链 URL 原样保留，不转存）
     // 双通道均可用：PicGo 外链图床 / 平台图床，默认平台图床
     this.picgoPicbedSupported = true
     this.bundledPicbedSupported = true

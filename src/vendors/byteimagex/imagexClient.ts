@@ -13,8 +13,12 @@ import type { ILogger } from "~/src/utils/appLogger.ts"
 /**
  * 字节跳动 veImageX（ByteDance ImageX）直传客户端
  *
- * 底层机制（依据字节 veImageX 的公开上传调用流程整理，证据见
- * .planning/2026-08-22-juejin-native-upload/findings.md）：
+ * 本客户端封装对字节 veImageX 上传接口的调用，供掘金等平台集成图片上传：
+ *   gen_token 取得 STS 临时凭证 → ApplyImageUpload（SigV4 签名）
+ *   → TOS 直传（CRC32 校验）→ CommitImageUpload → 返回规范裸 StoreUri。
+ *
+ * 为便于定位问题，每层均记录独立日志；持久层只存裸 StoreUri，
+ * 签名 URL 由读取端按需生成。
  *
  *   cookie ──(平台网关 gen_token)──▶ STS 临时凭证(~2h，Policy 仅授权 Apply/Commit)
  *     │
