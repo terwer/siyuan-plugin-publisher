@@ -49,5 +49,5 @@ export const remainingT1HelpConfigs: PageHelpConfig[] = [
   { pageId: "platform-config/wordpress_Wordpressdotcom", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
 
   // === Custom V2 Bridge ===
-  { pageId: "platform-config/custom_Bilibili", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
+  // custom_Bilibili 已拆分为独立 help 配置 custom-bilibili.ts
 ]

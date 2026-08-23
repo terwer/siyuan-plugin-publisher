@@ -20,6 +20,7 @@ import { csdnHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-c
 import { jianshuHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-jianshu"
 import { juejinHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-juejin"
 import { wechatHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-wechat"
+import { bilibiliHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-bilibili"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
@@ -167,6 +168,7 @@ describe("verified platform help configs", () => {
     jianshuHelpConfig,
     juejinHelpConfig,
     wechatHelpConfig,
+    bilibiliHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {
