@@ -88,6 +88,9 @@ class BilibiliWebAdaptor extends BaseWebApi {
     const userId = this.bilibiliMetaDataCfg.metadata.uid
     this.logger.debug("get userId from preEditPost=>", userId)
     const upload_id = BilibiliUtils.genUploadId(userId)
+    // 文集：优先使用发布时选择的分类，否则回退到配置页选择的文集（blogid）
+    const listIdRaw = post.cate_slugs?.[0] ?? this.cfg.blogid ?? ""
+    const listId = StrUtil.isEmptyString(String(listIdRaw)) ? 0 : listIdRaw
     // 适配 B 站专门格式
     this.logger.debug("bilibili before parse, md=>", post.markdown)
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
@@ -105,7 +108,7 @@ class BilibiliWebAdaptor extends BaseWebApi {
           content: parsedBilibiliContent.content,
           article: {
             category_id: 15,
-            list_id: 0,
+            list_id: listId,
             originality: 0,
             reproduced: 0,
             biz_tags: [],
@@ -221,6 +224,9 @@ class BilibiliWebAdaptor extends BaseWebApi {
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
     const userId = this.bilibiliMetaDataCfg.metadata.uid
     const upload_id = BilibiliUtils.genUploadId(userId)
+    // 文集：优先使用发布时选择的分类，否则回退到配置页选择的文集（blogid）
+    const listIdRaw = post.cate_slugs?.[0] ?? this.cfg.blogid ?? ""
+    const listId = StrUtil.isEmptyString(String(listIdRaw)) ? 0 : listIdRaw
     // 适配 B 站专门格式
     this.logger.debug("bilibili before parse, md=>", post.markdown)
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
@@ -237,7 +243,7 @@ class BilibiliWebAdaptor extends BaseWebApi {
           content: parsedBilibiliContent.content,
           article: {
             category_id: 15,
-            list_id: 0,
+            list_id: listId,
             originality: 0,
             reproduced: 0,
             biz_tags: [],

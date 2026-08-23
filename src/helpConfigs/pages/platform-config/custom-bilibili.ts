@@ -13,12 +13,13 @@ export const bilibiliHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Bilibili",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary:
-    "通过 Cookie 授权发布到哔哩哔哩专栏（opus）。V2 已验证配置、发布、更新、删除与平台图片上传（Bundled）；以 Markdown 内容发布。",
+    "通过 Cookie 授权发布到哔哩哔哩专栏（opus）。V2 已验证配置、发布、更新、删除与平台图片上传（Bundled）；以 Markdown 内容发布，可选择文集。",
   fields: {
     home: { tip: "默认是哔哩哔哩专栏地址 https://www.bilibili.com/opus，通常保持默认。" },
     apiUrl: { tip: "默认是哔哩哔哩 API 地址 https://api.bilibili.com，通常保持默认。" },
     cookie: { tip: "先在浏览器登录哔哩哔哩，再自动读取或手动粘贴 Cookie。切换账号或登录过期后需重新读取。" },
     pageType: { tip: "哔哩哔哩 V2 默认使用 Markdown 发布。" },
+    knowledgeSpace: { tip: "哔哩哔哩文集（如“远方的灯塔”）。发布到所选文集；未选择时发布为独立专栏。" },
     picbedService: { tip: "哔哩哔哩 V2 使用平台图片上传，默认保持“当前平台 推荐”（Bundled），不依赖本机 PicGo。" },
   },
   faq: [
@@ -43,6 +44,12 @@ export const bilibiliHelpConfig: PageHelpConfig = {
       target: "[data-syp-tour='picbedService']",
       title: "图片发布",
       content: "哔哩哔哩 V2 使用平台图片上传，默认保持“当前平台 推荐”（Bundled）。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='knowledgeSpace']",
+      title: "文集",
+      content: "选择文章归入的哔哩哔哩文集（如“远方的灯塔”）；未选择时发布为独立专栏。",
       placement: "bottom",
     },
     {
