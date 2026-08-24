@@ -39,7 +39,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useV2I18n()
-const { publishToSinglePlatform, viewArticle, openPicgo } = useV2ArticleManage()
+const { viewArticle, openPicgo } = useV2ArticleManage()
 
 const isPicgoInstalled = ref(false)
 const isBlogInstalled = ref(false)
@@ -85,7 +85,7 @@ const handleAction = async (action: ArticleManageAction) => {
     }
     case "platform-single": {
       if (pageId && action.platformKey) {
-        await publishToSinglePlatform(action.platformKey, pageId)
+        emit("openSingle", pageId, action.platformKey, title)
       }
       break
     }

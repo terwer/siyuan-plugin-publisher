@@ -93,3 +93,9 @@
   - `doInitSinglePage` 编辑分支：`cate_slugs` 为空且 `cfg.knowledgeSpaceEnabled` 时回退到 `cfg.blogid`（配置默认专栏）。
   - `SingleKnowledgeSpace.initPage`：即便分类列表为空也回退 `cateSlugs[0] ?? cfg.blogid`（只读配置值始终显示）。
 - **验证**：`usePublish.spec.ts` 8 例过（含摘要回退、配置专栏回退各 1 例）；`pnpm build:v2`（vue-tsc noEmit + vite）✅。
+
+## 2026-08-24（文章管理展开区：点平台应进单发详情，非立即更新）
+- **用户反馈**：展开行点平台 chip 应打开**单发详情**（而非立即更新/发布）；且 hover 提示「点击进行『更新』/『发布』」语义错误。
+- **根因**：`ArticleManageList` 展开区平台 chip 发 `platform-single` 动作。V1 `Admin.vue` 落地为单发详情（`/publish/singlePublish/doPublish/{platformKey}/{postid}?method=edit`）；V2 `V2ArticleManage.handleAction` 却误走 `publishToSinglePlatform` → `publishOnePlatform` → `doSinglePublish`（立即发布更新）。与 AGENTS.md「点平台能正常进入单发」预期不符。
+- **修复**：① V2 `platform-single` 改为 `emit("openSingle", pageId, platformKey, title)`（进入`openManageSingle` 单发详情，平台预选）；不再使用 `publishToSinglePlatform`（从解构移除，函数保留作公共 API）。② 文案：`articleManage.extend.platformUpdate`（zh：已发布，点击进入单发 / en：Published, click to open single publish）、`platformPublish`（zh：未发布，点击进入单发 / en：Not published, click to open single publish）——V2 的 `siyuan/i18n/*.json` 无此键，走 `src/locales/*.ts`，V1/V2 同时生效。
+- **验证**：`pnpm build:v2`（vue-tsc noEmit + vite）✅。
