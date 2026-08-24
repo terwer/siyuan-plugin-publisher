@@ -10,18 +10,19 @@
 <script setup lang="ts">
 // uses
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useRoute, useRouter } from "vue-router"
-import { ref, computed } from "vue"
+import { inject, ref, computed } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 import { StrUtil } from "zhi-common"
+import { routeLocationKey, routerKey } from "vue-router"
 
 const logger = createAppLogger("back-page")
 const { t } = useVueI18n()
-const router = useRouter()
-const route = useRoute()
-const { query } = useRoute()
+
+// 容错获取 router：V1 有 vue-router，V2（无 vue-router 环境）安全返回 undefined，不抛错。
+const router = inject(routerKey, undefined)
+const route = inject(routeLocationKey, undefined)
 
 // props
 const props = defineProps({
@@ -37,21 +38,27 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  showBack: {
+    type: Boolean,
+    default: undefined,
+  },
 })
 
 // datas
-const showBack = ref(query.showBack === "true")
+const showBack = ref(props.showBack ?? route?.query?.showBack === "true")
 
 // emits
 const emit = defineEmits(["backEmit"])
 
 const onBack = () => {
-  if (emit && props.hasBackEmit) {
+  if (props.hasBackEmit) {
     logger.info("using backEmit do back")
     emit("backEmit")
-  } else {
-    logger.warn("no backEmit, using router handle back")
+  } else if (router) {
+    logger.info("using router handle back")
     router.back()
+  } else {
+    logger.warn("no backEmit and no router, cannot go back")
   }
 }
 

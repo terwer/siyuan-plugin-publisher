@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import SinglePublishSelectPlatform from "~/src/components/publish/SinglePublishSelectPlatform.vue"
+import QuickPublishSelectPlatform from "~/src/components/publish/QuickPublishSelectPlatform.vue"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
 import { useRoute, useRouter } from "vue-router"
 
@@ -16,18 +16,17 @@ const { query } = useRoute()
 const router = useRouter()
 const id = (query.id ?? getWidgetId()) as string
 
-const openSingleDoPublish = (key: string, pageId: string, method: string) => {
-  const path = `/publish/singlePublish/doPublish/${key}/${pageId}`
+const openQuickPublish = (key: string, pageId: string) => {
+  const path = `/workers/quickPublish/${key}/${pageId}`
   router.push({
     path: path,
     query: {
       showBack: "true",
-      method: method,
     },
   })
 }
 </script>
 
 <template>
-  <single-publish-select-platform :id="id" @open="openSingleDoPublish" />
+  <quick-publish-select-platform :id="id" @open="openQuickPublish" />
 </template>

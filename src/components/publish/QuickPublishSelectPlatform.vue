@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import { markRaw, onBeforeMount, reactive, ref } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useRoute, useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -44,14 +43,15 @@ const props = defineProps({
 
 // uses
 const { t } = useVueI18n()
-const { query } = useRoute()
-const router = useRouter()
 const { getSetting } = usePublishSettingStore()
+
+// emits
+const emit = defineEmits(["open"])
 
 // datas
 const formData = reactive({
   isInit: false,
-  pageId: (StrUtil.isEmptyString(query.id) ? props.id : query.id) as string,
+  pageId: props.id as string,
   enabledConfigArray: [] as DynamicConfig[],
 
   postInfo: {} as any,
@@ -65,15 +65,7 @@ const handleQuickDoPublish = (event: any, key: string) => {
   // 阻止事件冒泡
   event.stopPropagation()
 
-  const path = `/workers/quickPublish/${key}/${formData.pageId}`
-  logger.info("will go to =>", path)
-  const query = {
-    path: path,
-    query: {
-      showBack: "true",
-    },
-  }
-  router.push(query)
+  emit("open", key, formData.pageId)
 }
 
 const checkHasPublished = (key: string) => {
