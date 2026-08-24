@@ -99,3 +99,9 @@
 - **根因**：`ArticleManageList` 展开区平台 chip 发 `platform-single` 动作。V1 `Admin.vue` 落地为单发详情（`/publish/singlePublish/doPublish/{platformKey}/{postid}?method=edit`）；V2 `V2ArticleManage.handleAction` 却误走 `publishToSinglePlatform` → `publishOnePlatform` → `doSinglePublish`（立即发布更新）。与 AGENTS.md「点平台能正常进入单发」预期不符。
 - **修复**：① V2 `platform-single` 改为 `emit("openSingle", pageId, platformKey, title)`（进入`openManageSingle` 单发详情，平台预选）；不再使用 `publishToSinglePlatform`（从解构移除，函数保留作公共 API）。② 文案：`articleManage.extend.platformUpdate`（zh：已发布，点击进入单发 / en：Published, click to open single publish）、`platformPublish`（zh：未发布，点击进入单发 / en：Not published, click to open single publish）——V2 的 `siyuan/i18n/*.json` 无此键，走 `src/locales/*.ts`，V1/V2 同时生效。
 - **验证**：`pnpm build:v2`（vue-tsc noEmit + vite）✅。
+
+## 2026-08-24（单发详表单：预设平台时 method 竞态导致「未发布」/按钮文案错误）
+- **用户反馈**：文章管理展开区点平台 chip 进入单发详情，页面提示「未发布」且按钮是「发布」（应为「已发布/更新」）；但快捷卡片「详细发布」入口是对的。各平台都如此。
+- **根因**：`V2SinglePublish` 预设平台时 `selectedKey` 立即非空，`SinglePublishDoPublish` 在 mount 时以 `props.method=""` 初始化 `formData.method`，而 `resolveMethod(pageId,key)` 是**异步**（读 setting 里 `getDynPostidKey(key)` 判 add/edit），完成后再改 `selectedMethod` 也无法让已挂载的表单重新 init → 恒为「未发布/发布」。选平台入口走 `SinglePublishSelectPlatform` 同步传 method（`checkHasPublished→edit/add`），故正常。
+- **修复**（`V2SinglePublish.vue`）：新增 `methodReady` 门控——预设平台/选平台后先解析 method，`methodReady=true` 才渲染 `SinglePublishDoPublish`；未就绪显示 `el-skeleton` 加载态；返回时重置 `methodReady`。
+- **验证**：`pnpm build:v2`（vue-tsc noEmit + vite）✅。

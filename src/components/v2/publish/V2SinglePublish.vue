@@ -24,6 +24,11 @@
         @open="onSelectPlatform"
       />
 
+      <!-- 预设平台但 method 尚未解析：先加载，避免详表单以空 method 挂载导致「未发布/发布」判定错误 -->
+      <div v-else-if="!methodReady" class="syp-single-view__loading">
+        <el-skeleton :rows="4" animated />
+      </div>
+
       <!-- 第二步：详细发布表单（复用 V1 SinglePublishDoPublish） -->
       <SinglePublishDoPublish
         v-else
@@ -63,6 +68,7 @@ const { getSetting } = usePublishSettingStore()
 // 复用 V1 两步流程：预设平台 → 直接详表单；否则先选平台。
 const selectedKey = ref(props.presetPlatformKey ?? "")
 const selectedMethod = ref<string>(props.presetMethod ?? "")
+const methodReady = ref(false)
 
 const headTitle = computed(() => {
   return selectedKey.value ? t("v2.panel.singlePublish") : t("v2.singlePublish.selectPlatform.title")
@@ -86,6 +92,7 @@ const resolveMethod = async (key: string): Promise<string> => {
 const onSelectPlatform = async (key: string, _pageId: string, method: string) => {
   selectedKey.value = key
   selectedMethod.value = method || (await resolveMethod(key))
+  methodReady.value = true
 }
 
 const onPublishBack = () => {
@@ -93,6 +100,7 @@ const onPublishBack = () => {
   // 这里统一回到选平台步骤；更符合 V1 手风琴返回语义。
   selectedKey.value = ""
   selectedMethod.value = ""
+  methodReady.value = false
 }
 
 const goBack = () => {
@@ -107,7 +115,10 @@ const goBack = () => {
 if (props.presetPlatformKey) {
   void (async () => {
     selectedMethod.value = await resolveMethod(props.presetPlatformKey!)
+    methodReady.value = true
   })()
+} else {
+  methodReady.value = true
 }
 </script>
 
@@ -156,4 +167,7 @@ if (props.presetPlatformKey) {
   &__body
     display flex
     flex-direction column
+
+  &__loading
+    padding 8px 0
 </style>
