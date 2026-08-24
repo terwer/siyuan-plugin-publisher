@@ -37,7 +37,7 @@
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 1 | 语雀 | `common_Yuque` | `Common_Yuque` | ✅ | ✅ | ✅ | ✅ | ✅ | 需语雀专业会员；已验通过，非阻塞 |
-| 2 | Notion | `common_Notion` | `Common_Notion` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
+| 2 | Notion | `common_Notion` | `Common_Notion` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-24 Electron 宿主（test 工作空间）全链路实测：V2C（API token 验证通过，根页面「建造者模式」，「配置已保存并验证通过」）；Pub/Upd/Del 成功，**Upd postid 重映射**（`…b0890bb`→`…1b868`，editPost=删旧建新）；**Img** 带图发布——图床「PicGo 强烈推荐」用内置**阿里云 OSS**（bucket `static-rs-terwer`/area `oss-cn-beijing`/path `img/`），图片本地 URL 改写为 `…aliyuncs.com/img/photo-….jpg`（curl HTTP 200/AliyunOSS），Notion 页 `3c6da0ccbfca8125bdb1d41d4185d628` 含**外部 image 块**（external+aliyun 外链）；**查看 ✅** 链接 `https://www.notion.so/<postid>` 预览规则 `/[postid]` 已正确前置域名。**SOP §3 help/tour/doc ✅**：新增 `common-notion.ts`（helpUrl+summary+fields+faq 4+tour 6）+ `docs/draft/platforms/common-notion.md`，注册进 `/pages/index.ts`、从 `remaining-t1` 移出并纳入 `verifiedConfigs`（registry 18 项绿、build:v2 通过）；宿主实测 HelpPanel（summary+查看完整帮助文档+FAQ）+ TourGuide 6 步全部正确可达。**本格六格+帮助引导全部闭环** |
 | 3 | Halo29 | `common_Halo` | `Common_Halo` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 4 | Telegraph | `common_Telegraph` | `Common_Telegraph` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 5 | Confluence | `common_Confluence` | `Common_Confluence` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `12`（#1 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34 #35）· 进行中 `0` · 阻塞 `0` · 未测 `23`
+**T1 小结**：35 项 · 全链路 ✅ `13`（#1 #2 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34 #35）· 进行中 `0` · 阻塞 `0` · 未测 `22`
 
 ---
 
@@ -165,5 +165,7 @@
 | 2026-08-23 | #34 微信公众号 **查看（最终根因，HEAD `9c07f09c` 复验通过）**：会话绑定查看链接须在**授权会话窗口内**打开，不能落系统浏览器/`window.open`。`openBrowserWindow` 在非 widget 且无 cookieCb 时会回退 `window.open`，故按 `previewOpenMode=AppSession` 传 `forceElectronWindow=true` 强制用 Electron 默认 session 窗口（带授权 cookie）打开。Electron 宿主复验：应用内打开、不跳系统浏览器、不提示「请重新登录」，#34 六格闭环 |
 | 2026-08-24 | #35 哔哩哔哩 **V2 全链路六格 + 帮助引导 ✅**（Electron 宿主）：V2C / Pub / Upd / Del 均通过（Upd 因 B 站「相同标题短时不能重复提交 20019」属平台节流，改标题后成功）。**Img 修复**：带 cat 图发布后正文图片空白——根因 `bilibiliMdUtil.processParagraphNode` 把图片段 `para_type` 写死为 1（B 站图片段应为 2），B 站按文本段解析 `text.nodes` 为空 → 图片空白；修复为 `para_type: hasPic ? 2 : 1`，并补单测断言图片段 `para_type=2`。修复后正文图片段 `para_type=2` 且含 `i0.hdslb.com/bfs/new_dyn/...jpg` 图床 URL（HTTP 200 / image/jpeg）。**查看 ✅**：`https://www.bilibili.com/opus/<dyn_id>` 公开链接可访问含图。新增 `custom-bilibili.ts` help 配置 + `docs/draft/platforms/custom-bilibili.md`，HelpPanel/TourGuide（4 步）宿主验证通过。T1 全链路 ✅ 更新为 12 个 |
 | 2026-08-24 | #35 哔哩哔哩 **「文集」字段生效**：用户关注配置页「文集」是否需要引导，调研发现该字段**根本没生效**——`addPost`/`editPost` 把 `article.list_id`、`category_id` 硬编码（`list_id:0`），不读配置页所选文集，而配置页设为可改（`knowledgeSpaceEnabled`/`allowKnowledgeSpaceChange=true`），形成「可改但无效」。修复：`addPost`/`editPost` 改为 `list_id = post.cate_slugs?.[0] ?? cfg.blogid ?? 0`（与掘金分类/知乎专栏一致），空值仍回退 0（独立专栏）；补齐 `knowledgeSpace` 字段 tip + tour 步骤（5 步）。宿主验证：配置存储 `blogid=898693`（远方的灯塔），发布「掘金V2验证测试-更新」后查账号专栏列表，新文章 `list.id=898693, list.name=远方的灯塔`（归入文集），对照旧文 `list:null`（即原 `list_id:0` 结果）。Checklist SSOT 更新为 5 步；改动走通用模式、未影响无关平台 |
+| 2026-08-24 | #2 Notion **V2 全链路 ✅（Electron 宿主，test 工作空间 / dist-v2 / 9222）**：V2C 配置页填 API token（PasswordType_Token，无 Cookie 流）→「验证」通过，根页面「建造者模式」已选，「配置已保存并验证通过」，账号「运行中/已启用」。Pub 快发布→「发布成功」；Upd「更新成功」且 **postid 重映射**（`…b0890bb`→`…1b868`，验证 `editPost`=删旧建新）；Del 确认删除→「删除成功」；Img 带图发布——图床「PicGo 强烈推荐」+ 内置**阿里云 OSS**（dev 笔记取 bucket `static-rs-terwer`/area `oss-cn-beijing`/path `img/`/customUrl `…aliyuncs.com`），图片本地 URL 改写为阿里云 OSS 外链（curl HTTP 200/AliyunOSS 真实上传），Notion 页经 API 确认含 **外部 image 块**（external+aliyun 外链）；**查看 ✅** `https://www.notion.so/<postid>` 预览规则 `/[postid]` 已正确前置域名（非 bug）。T1 全链路 ✅ 更新为 13 个 |
+| 2026-08-24 | #2 Notion **SOP §3 帮助引导补齐 ✅**：新增 `src/helpConfigs/pages/platform-config/common-notion.ts`（pageId `common_Notion`，helpUrl+summary+fields（home/apiUrl/token/previewUrl/pageType/knowledgeSpace/picbedService）+faq 4 条+tour 6 步）+ `docs/draft/platforms/common-notion.md`（顶部 TODO:待替换真实帮助文档链接）；注册进 `/pages/index.ts`、从 `remaining-t1` 移出、纳入 `verifiedConfigs`；registry.spec 18 项绿、build:v2 通过。Electron 宿主实测 Notion 配置页：HelpPanel（summary+查看完整帮助文档+FAQ）、TourGuide 6 步（API Token→选择根页面→查看链接→发布格式→图片发布→验证并保存）全部正确可达。本格六格+帮助引导全部闭环 |
 
 
