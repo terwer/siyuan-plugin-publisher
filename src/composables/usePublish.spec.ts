@@ -353,4 +353,40 @@ describe("usePublish.doInitSinglePage", () => {
     expect(mergedPost.mt_keywords).toBe("思源标签")
     expect(mergedPost.categories).toEqual(["思源分类"])
   })
+
+  it("falls back to the siyuan summary when platform getPost returns an empty shortDesc/mt_excerpt", async () => {
+    // 思源侧文档：摘要（摘要表单绑定的 shortDesc，以及同步的 mt_excerpt）应有值
+    const siyuanPost = new Post()
+    siyuanPost.title = "思源标题"
+    siyuanPost.markdown = "# 正文"
+    siyuanPost.shortDesc = "思源摘要"
+    siyuanPost.mt_excerpt = "思源摘要"
+    mockSiyuanGetPost.mockResolvedValue(siyuanPost)
+
+    // 平台侧 getPost：模拟 web 平台，不返回摘要，只返回平台元数据
+    const platformPost = new Post()
+    platformPost.title = "平台标题"
+    mockGetPublishApi.mockResolvedValue({
+      getPost: vi.fn(async () => platformPost),
+      getPreviewUrl: vi.fn(async () => "https://platform.local/view/1"),
+    })
+
+    const { initPublishMethods } = usePublish()
+    const publishCfg = createPublishCfg({
+      "20260822111111-m260uak": { "custom-custom_Yuqueweb-post-id": "post-1" },
+    })
+    publishCfg.cfg.posidKey = "custom-custom_Yuqueweb-post-id"
+
+    const { mergedPost } = await initPublishMethods.doInitSinglePage(
+      "custom_Yuqueweb",
+      "20260822111111-m260uak",
+      MethodEnum.METHOD_EDIT,
+      publishCfg
+    )
+
+    // 平台未返回摘要时回退到思源笔记的摘要；标题平台有值则保留
+    expect(mergedPost.title).toBe("平台标题")
+    expect(mergedPost.shortDesc).toBe("思源摘要")
+    expect(mergedPost.mt_excerpt).toBe("思源摘要")
+  })
 })

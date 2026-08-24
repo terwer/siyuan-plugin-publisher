@@ -553,7 +553,17 @@ const usePublish = () => {
         logger.debug("get init platformPost ok =>", mergedPost)
         // 标题以思源笔记为准（思源是权威源）。web 平台适配器的 getPost 通常不返回标题，
         // 若直接使用 platformPost.title 会得到空字符串，导致编辑表单标题丢失。
-        mergedPost.title = platformPost.title || siyuanPost.title
+        if (StrUtil.isEmptyString(mergedPost.title)) {
+          mergedPost.title = siyuanPost.title
+        }
+        // 摘要（shortDesc/mt_excerpt）：平台未返回时回退到思源笔记（思源仍是权威源）。
+        // web 平台 getPost 可能不返回或返回为空，直接保留会清空编辑表单的摘要。
+        if (StrUtil.isEmptyString(mergedPost.shortDesc)) {
+          mergedPost.shortDesc = siyuanPost.shortDesc
+        }
+        if (StrUtil.isEmptyString(mergedPost.mt_excerpt)) {
+          mergedPost.mt_excerpt = siyuanPost.mt_excerpt
+        }
         // 标签/分类：平台未返回时回退到思源笔记（思源仍是权威源）。
         // web 平台 getPost 可能不返回或返回为空，直接覆盖会清空编辑表单的标签/分类。
         if (StrUtil.isEmptyString(mergedPost.mt_keywords)) {
