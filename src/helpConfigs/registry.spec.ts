@@ -11,6 +11,7 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 import { yuqueHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-yuque"
+import { notionHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-notion"
 import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
 import { yuquewebHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-yuqueweb"
 import { halowebHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-haloweb"
@@ -158,6 +159,7 @@ describe("HelpRegistry", () => {
 describe("verified platform help configs", () => {
   const verifiedConfigs = [
     yuqueHelpConfig,
+    notionHelpConfig,
     cnblogsHelpConfig,
     wordpressHelpConfig,
     yuquewebHelpConfig,

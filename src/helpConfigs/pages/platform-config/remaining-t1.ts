@@ -17,7 +17,6 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
  */
 export const remainingT1HelpConfigs: PageHelpConfig[] = [
   // === Common ===
-  { pageId: "platform-config/common_Notion", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
   { pageId: "platform-config/common_Telegraph", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
   { pageId: "platform-config/common_Confluence", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
 

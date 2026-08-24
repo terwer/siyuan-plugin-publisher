@@ -24,6 +24,7 @@ import { platformConfigDefaultHelpConfig } from "./platform-config/_default"
 import { cnblogsHelpConfig } from "./platform-config/metaweblog-cnblogs"
 import { wordpressHelpConfig } from "./platform-config/wordpress-wordpress"
 import { yuqueHelpConfig } from "./platform-config/common-yuque"
+import { notionHelpConfig } from "./platform-config/common-notion"
 import { haloHelpConfig } from "./platform-config/common-halo"
 import { yuquewebHelpConfig } from "./platform-config/custom-yuqueweb"
 import { halowebHelpConfig } from "./platform-config/custom-haloweb"
@@ -57,6 +58,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(cnblogsHelpConfig)
   helpRegistry.register(wordpressHelpConfig)
   helpRegistry.register(yuqueHelpConfig)
+  helpRegistry.register(notionHelpConfig)
   helpRegistry.register(haloHelpConfig)
   helpRegistry.register(yuquewebHelpConfig)
   helpRegistry.register(halowebHelpConfig)
