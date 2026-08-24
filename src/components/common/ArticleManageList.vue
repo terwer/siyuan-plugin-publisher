@@ -147,7 +147,10 @@ onMounted(async () => {
                     :key="key"
                     class="article-manage-extend__platform-item"
                   >
-                    <a @click="dispatchPlatform('platform-single', props.row, props.row.dynCfgs[key]?.platformKey ?? key)">
+                    <a
+                      class="article-manage-extend__platform-link"
+                      @click="dispatchPlatform('platform-single', props.row, props.row.dynCfgs[key]?.platformKey ?? key)"
+                    >
                       <el-text>
                         <i class="el-icon">
                           <span
@@ -158,6 +161,13 @@ onMounted(async () => {
                         </i>
                         {{ props.row.dynCfgs[key]?.platformName ?? t("articleManage.platformDeleted") }}
                       </el-text>
+                      <span class="article-manage-extend__platform-hint">
+                        {{
+                          props.row.yamlAttrs[key]
+                            ? t("articleManage.extend.platformUpdate")
+                            : t("articleManage.extend.platformPublish")
+                        }}
+                      </span>
                     </a>
                   </span>
                 </span>
@@ -301,6 +311,31 @@ onMounted(async () => {
   a
     cursor pointer
     color var(--el-color-primary, #409eff)
+
+.article-manage-extend__platform-link
+  position relative
+  display inline-flex
+  align-items center
+  gap 4px
+
+.article-manage-extend__platform-hint
+  position absolute
+  top -24px
+  left 0
+  background #303133
+  color #fff
+  font-size 11px
+  line-height 1
+  padding 3px 8px
+  border-radius 4px
+  white-space nowrap
+  opacity 0
+  pointer-events none
+  transition opacity 0.12s
+  z-index 6
+
+.article-manage-extend__platform-link:hover .article-manage-extend__platform-hint
+  opacity 1
 
 .article-manage-tooltip
   cursor default

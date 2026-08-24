@@ -948,4 +948,6 @@ export default {
   "articleManage.tooltip.publishedTo": "Published to: ",
   "articleManage.tooltip.notPublished": "Not published",
   "articleManage.platformDeleted": "[deleted]",
+  "articleManage.extend.platformUpdate": "Click to update",
+  "articleManage.extend.platformPublish": "Click to publish",
 }

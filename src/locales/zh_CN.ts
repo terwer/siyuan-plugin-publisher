@@ -908,4 +908,6 @@ export default {
   "articleManage.tooltip.publishedTo": "文章已发布到：",
   "articleManage.tooltip.notPublished": "尚未发布",
   "articleManage.platformDeleted": "[已删除]",
+  "articleManage.extend.platformUpdate": "点击进行「更新」",
+  "articleManage.extend.platformPublish": "点击进行「发布」",
 }
