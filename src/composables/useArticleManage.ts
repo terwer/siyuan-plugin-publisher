@@ -186,17 +186,25 @@ export const useArticleManage = () => {
           }
         }
       } else {
+        // 浏览器/插件环境：与 V1 挂件模式一致，走 kernel 数据路径，不用 getRecentPosts（易错）。
         state.mode = "list"
         state.pageId = ""
         state.hasSubdoc = false
-        postCount = await blogApi.getRecentPostsCount(state.keyword, state.showPublished, state.selectedNotebookIds)
-        postList = await blogApi.getRecentPosts(
-          state.pageSize,
+        postCount = await kernelApi.getRootBlocksCount(state.keyword, state.showPublished, state.selectedNotebookIds)
+        const rootBlocks = await kernelApi.getRootBlocks(
           state.currentPage - 1,
+          state.pageSize,
           state.keyword,
           state.showPublished,
           state.selectedNotebookIds
         )
+        for (const rb of rootBlocks) {
+          // getRootBlocks 返回的字段是 docId，以 docId 逐条挂载 getPost（与挂件模式一致）
+          const post = await blogApi.getPost(rb.docId)
+          if (post?.postid) {
+            postList.push(post)
+          }
+        }
       }
 
       state.total = postCount
