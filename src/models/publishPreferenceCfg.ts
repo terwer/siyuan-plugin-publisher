@@ -81,6 +81,9 @@ class PublishPreferenceCfg extends PreferenceConfig {
   // V2 UI 开关
   public useV2UI?: boolean
 
+  // 发布源笔记本（issue #2044）：按笔记本限定发布来源；空=不限制（向后兼容）
+  public publishSourceNotebooks?: string[]
+
   constructor() {
     super()
     this.experimentalUseSiyuanNoteAIConfig = true
@@ -99,6 +102,8 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.allowChangeSlug = false
 
     this.useV2UI = false
+
+    this.publishSourceNotebooks = []
   }
 }
 

@@ -2,7 +2,8 @@
 
 > 目标：让内核文档查询支持**按笔记本集合过滤**，用于「文章管理按笔记本隔离」（issue #2044）。
 > 仓库：`terwer/zhi` → `libs/zhi-siyuan-api`。改动需**向后兼容**：`notebookIds` 为空/缺省时不追加任何条件，行为与现在完全一致。
-> 结论契约已完成，待 terwer 在 zhi 仓库实施并发布，之后本仓库 bump 并对接。
+> 【已实施（未提交）】在 zhi 工作区 `libs/zhi-siyuan-api` 完成：`buildNotebookIdsWhere` 白名单消毒 + `getRootBlocks/getRootBlocksCount/getSubdocs/getSubdocCount` 加可选尾参 `notebookIds` + `getRecentPosts/getRecentPostsCount` 透传 + 单测 12 用例 + changeset(minor)。
+> 基线已对齐 **origin/dev(2.36.0)**（此前本地落后 21 提交，经 `git reset --hard origin/dev` 拉齐，落后的提交未动这两个源码文件，无冲突）。**提交/push/发版由你负责**；本仓库待 bump 到含该特性的新版后再对接。
 
 ## 背景（已确认事实）
 

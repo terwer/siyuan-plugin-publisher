@@ -22,25 +22,45 @@
               <div class="syp-settings-form-desc">{{ item.description }}</div>
             </div>
 
-            <div class="syp-settings-form-control">
-              <span v-if="saveStateMap[item.key] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("v2.common.saved") }}</span>
-              <span v-else-if="saveStateMap[item.key] === 'failed'" class="syp-settings-status-text is-error">{{ t("v2.common.saveFailed") }}</span>
-              <span v-else-if="saveStateMap[item.key] === 'saving'" class="syp-settings-status-text is-saving">{{ t("v2.common.saving") }}</span>
-              <span v-else class="syp-settings-status-text">{{ getBooleanValue(item.key) ? t("v2.common.enabled") : t("v2.common.disabled") }}</span>
-              <SypTooltip
-                tag="label"
-                :content="getBooleanValue(item.key) ? t('v2.preference.toggle.disableHint') : t('v2.preference.toggle.enableHint')"
-                inline-flex
-                trigger-class="syp-toggle"
-              >
-                <input
-                  type="checkbox"
-                  :checked="getBooleanValue(item.key)"
+            <div class="syp-settings-form-control" :class="{ 'is-notebooks': item.kind === 'notebooks' }">
+              <template v-if="item.kind === 'notebooks'">
+                <el-select
+                  v-model="preferenceForm.publishSourceNotebooks"
+                  multiple
+                  collapse-tags
+                  collapse-tags-tooltip
+                  clearable
+                  class="syp-settings-notebooks-select"
+                  :placeholder="t('v2.preference.item.publishSourceNotebooks.placeholder')"
                   :aria-label="item.label"
-                  @change="handleToggle(item.key, $event)"
-                />
-                <span class="syp-toggle-slider"></span>
-              </SypTooltip>
+                  @change="handleNotebooksChange"
+                >
+                  <el-option v-for="nb in notebookOptions" :key="nb.id" :label="nb.name" :value="nb.id" />
+                </el-select>
+                <span v-if="saveStateMap['publishSourceNotebooks'] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("v2.common.saved") }}</span>
+                <span v-else-if="saveStateMap['publishSourceNotebooks'] === 'failed'" class="syp-settings-status-text is-error">{{ t("v2.common.saveFailed") }}</span>
+                <span v-else class="syp-settings-status-text">{{ getNotebooksText() }}</span>
+              </template>
+              <template v-else>
+                <span v-if="saveStateMap[item.key] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("v2.common.saved") }}</span>
+                <span v-else-if="saveStateMap[item.key] === 'failed'" class="syp-settings-status-text is-error">{{ t("v2.common.saveFailed") }}</span>
+                <span v-else-if="saveStateMap[item.key] === 'saving'" class="syp-settings-status-text is-saving">{{ t("v2.common.saving") }}</span>
+                <span v-else class="syp-settings-status-text">{{ getBooleanValue(item.key) ? t("v2.common.enabled") : t("v2.common.disabled") }}</span>
+                <SypTooltip
+                  tag="label"
+                  :content="getBooleanValue(item.key) ? t('v2.preference.toggle.disableHint') : t('v2.preference.toggle.enableHint')"
+                  inline-flex
+                  trigger-class="syp-toggle"
+                >
+                  <input
+                    type="checkbox"
+                    :checked="getBooleanValue(item.key)"
+                    :aria-label="item.label"
+                    @change="handleToggle(item.key, $event)"
+                  />
+                  <span class="syp-toggle-slider"></span>
+                </SypTooltip>
+              </template>
             </div>
           </div>
         </div>
@@ -51,10 +71,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 import { StrUtil } from "zhi-common"
 import { sypConfirm } from "~/src/components/v2/common/SypMessageBox.ts"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
+import { useNotebookOptions } from "~/src/composables/useNotebookOptions.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -75,12 +96,14 @@ type PreferenceKey =
   | "ignoreBlockRef"
   | "allowChangeSlug"
   | "useV2UI"
+  | "publishSourceNotebooks"
 
 interface PreferenceItem {
   key: PreferenceKey
   label: string
   description: string
   pluginOnly?: boolean
+  kind?: "toggle" | "notebooks"
 }
 
 interface PreferenceGroup {
@@ -96,6 +119,11 @@ const preferenceForm = getPublishPreferenceSetting()
 
 const saveStateMap = reactive<Record<PreferenceKey, "idle" | "saving" | "saved" | "failed">>({} as any)
 const allowChangeSlugConfirming = ref(false)
+const { options: notebookOptions, load: loadNotebookOptions } = useNotebookOptions()
+
+onMounted(() => {
+  void loadNotebookOptions()
+})
 
 const isSiyuanPlugin = computed(() => {
   return isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
@@ -189,6 +217,18 @@ const groups: PreferenceGroup[] = [
     ],
   },
   {
+    title: t("v2.preference.group.notebook.title"),
+    description: t("v2.preference.group.notebook.desc"),
+    items: [
+      {
+        key: "publishSourceNotebooks",
+        label: t("v2.preference.item.publishSourceNotebooks.label"),
+        description: t("v2.preference.item.publishSourceNotebooks.desc"),
+        kind: "notebooks",
+      },
+    ],
+  },
+  {
     title: t("v2.preference.group.experimental.title"),
     description: t("v2.preference.group.experimental.desc"),
     items: [
@@ -213,6 +253,32 @@ const visibleGroups = computed(() => {
 
 function getBooleanValue(key: PreferenceKey) {
   return preferenceForm.value[key] === true
+}
+
+function getNotebooksText() {
+  const ids = preferenceForm.value.publishSourceNotebooks ?? []
+  if (ids.length === 0) {
+    return t("v2.preference.item.publishSourceNotebooks.unrestricted")
+  }
+  return notebookOptions.value
+    .filter((nb) => ids.includes(nb.id))
+    .map((nb) => nb.name)
+    .join(", ")
+}
+
+async function handleNotebooksChange(ids: string[]) {
+  saveStateMap["publishSourceNotebooks"] = "saving"
+  try {
+    preferenceForm.value.publishSourceNotebooks = Array.isArray(ids) ? [...ids] : []
+    saveStateMap["publishSourceNotebooks"] = "saved"
+    setTimeout(() => {
+      if (saveStateMap["publishSourceNotebooks"] === "saved") {
+        saveStateMap["publishSourceNotebooks"] = "idle"
+      }
+    }, 2000)
+  } catch {
+    saveStateMap["publishSourceNotebooks"] = "failed"
+  }
 }
 
 async function handleToggle(key: PreferenceKey, event: Event) {

@@ -11,6 +11,33 @@
         </div>
         <div class="syp-header-actions">
           <SypTooltip
+            v-if="!isSettingsView && !isManageView"
+            :content="t('v2.app.action.openManage')"
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-quiet"
+            type="button"
+            :aria-label="t('v2.app.action.openManage')"
+            @click.stop="openManage"
+          >
+            <LucideHouse />
+          </SypTooltip>
+          <SypTooltip
+            v-if="isManageView"
+            :content="t('v2.app.back.manage')"
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-back"
+            type="button"
+            :aria-label="t('v2.app.back.manage')"
+            @click.stop="backFromManage"
+          >
+            <LucideChevronLeft />
+            <span class="syp-btn-back__label">{{ t("v2.app.back.manage") }}</span>
+          </SypTooltip>
+          <SypTooltip
             v-if="!isSettingsView"
             :content="t('v2.app.action.openSettings')"
             ellipsis
@@ -62,11 +89,13 @@
           <span>{{ t("main.loading") }}</span>
         </div>
 
-        <div v-if="initError && !isSettingsView" class="syp-publish-status is-failed">
+        <div v-if="initError && !isSettingsView && !isManageView" class="syp-publish-status is-failed">
           <div class="syp-publish-status__title">{{ t("v2.quickPublish.error.initFailed") }}</div>
           <div class="syp-publish-status__desc">{{ initError }}</div>
           <button type="button" class="syp-btn syp-btn-primary" @click="retryInit">{{ t("v2.common.retry") }}</button>
         </div>
+
+        <V2ArticleManage v-else-if="isManageView" @open-publish="openManagePublish" />
 
         <section v-else-if="!isSettingsView" class="syp-quick-shell">
           <div class="syp-quick-shell__eyebrow">{{ t("v2.quickPublish.currentDocument") }}</div>
@@ -204,6 +233,7 @@ import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPane
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
+import V2ArticleManage from "~/src/components/v2/V2ArticleManage.vue"
 import { type V2PlatformConfigValidationResult } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
 import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
@@ -219,6 +249,7 @@ import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/compos
 import LucideChevronLeft from "~icons/lucide/chevron-left"
 import LucideSend from "~icons/lucide/send"
 import LucideSettings from "~icons/lucide/settings"
+import LucideHouse from "~icons/lucide/house"
 import LucideX from "~icons/lucide/x"
 
 const props = defineProps<{
@@ -226,8 +257,9 @@ const props = defineProps<{
   onClose?: () => void
 }>()
 
-const currentView = ref<"quick_publish" | "settings">(props.initialView ?? "quick_publish")
+const currentView = ref<"quick_publish" | "settings" | "manage">(props.initialView ?? "quick_publish")
 const isSettingsView = computed(() => currentView.value === "settings")
+const isManageView = computed(() => currentView.value === "manage")
 const initError = ref("")
 const quickPublish = useV2QuickPublish()
 const settings = useV2Settings()
@@ -243,6 +275,9 @@ const settingsSwitchLoading = ref(false)
 let settingsSwitchLoadingTimer: number | undefined
 
 const panelTitle = computed(() => {
+  if (isManageView.value) {
+    return t("v2.app.panel.manage")
+  }
   return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
 })
 
@@ -392,6 +427,27 @@ async function openSettings() {
 async function backToQuickPublish() {
   currentView.value = "quick_publish"
   await quickPublish.init()
+}
+
+async function openManage() {
+  currentView.value = "manage"
+}
+
+async function backFromManage() {
+  await backToQuickPublish()
+}
+
+/**
+ * 管理页「闪发/单发」：以指定文档（而非当前文档）进入 V2 快发流程。
+ *
+ * @param pageId - 思源源文档 id
+ */
+async function openManagePublish(pageId: string) {
+  if (!pageId) {
+    return
+  }
+  await quickPublish.init(pageId)
+  currentView.value = "quick_publish"
 }
 
 async function changeSettingsSection(section: "account" | "picbed" | "preference") {

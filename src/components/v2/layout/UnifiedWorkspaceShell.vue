@@ -28,7 +28,7 @@ type V2SettingsSection = "account" | "picbed" | "preference"
 const { t } = useV2I18n()
 
 const props = defineProps<{
-  currentView?: "quick_publish" | "settings"
+  currentView?: "quick_publish" | "settings" | "manage"
   activeSection?: V2SettingsSection
 }>()
 

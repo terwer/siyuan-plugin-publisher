@@ -26,6 +26,14 @@ vi.mock("~/src/stores/usePreferenceSettingStore.ts", () => ({
   }),
 }))
 
+vi.mock("~/src/composables/useNotebookOptions.ts", () => ({
+  useNotebookOptions: () => ({
+    options: { value: [] },
+    isLoading: { value: false },
+    load: vi.fn(),
+  }),
+}))
+
 vi.mock("~/src/composables/useSiyuanDevice.ts", () => ({
   useSiyuanDevice: () => ({
     isInSiyuanWin: () => true,

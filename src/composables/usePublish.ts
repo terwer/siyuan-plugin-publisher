@@ -29,6 +29,7 @@ import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -51,6 +52,7 @@ const usePublish = () => {
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi } = usePublishConfig()
   const { updatePlatformMetadata } = usePlatformMetadataStore()
+  const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
   // datas
   const singleFormData = reactive({
@@ -59,6 +61,38 @@ const usePublish = () => {
     isAdd: true,
     errMsg: "",
   })
+
+  /**
+   * 发布源笔记本硬校验（issue #2044）。
+   *
+   * 仅当配置了授权笔记本集合（`publishSourceNotebooks` 非空）时拦截：
+   * 取源文档的 `blocks.box`，若不在授权集合内则抛出清晰错误。
+   * 取不到 `box` 视为「未限定」，放行并记录日志（避免误拦）。
+   *
+   * @param id - 思源源文档 id
+   */
+  const assertNotebookAllowed = async (id: string) => {
+    const allowed = getReadOnlyPublishPreferenceSetting().value.publishSourceNotebooks ?? []
+    if (allowed.length === 0) {
+      return
+    }
+
+    let box: string | undefined
+    try {
+      const block = await kernelApi.getBlockByID(id)
+      box = block?.box
+    } catch (e) {
+      logger.warn(`getBlockByID for notebook validation failed id=${id}=>`, e)
+    }
+
+    if (box && !allowed.includes(box)) {
+      throw new Error(`该文档所属笔记本（${box}）不在发布的授权笔记本集合内，无法发布。`)
+    }
+
+    if (!box) {
+      logger.warn(`未获取到文档 ${id} 的笔记本信息，按未限定处理（放过）。`)
+    }
+  }
 
   /**
    * 统一的发布操作
@@ -80,6 +114,9 @@ const usePublish = () => {
     singleFormData.errMsg = ""
     singleFormData.publishProcessStatus = false
     try {
+      // 发布源笔记本硬校验（issue #2044）：仅在配置了授权笔记本集合时拦截
+      await assertNotebookAllowed(id)
+
       // 系统内置
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
       logger.info(`isSys=>${isSys}`)

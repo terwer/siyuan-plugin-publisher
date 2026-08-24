@@ -11,8 +11,9 @@
 <script setup lang="ts">
 import { WarnTriangleFilled } from "@element-plus/icons-vue"
 import { ElMessageBox } from "element-plus"
-import { markRaw } from "vue"
+import { markRaw, onMounted } from "vue"
 import { StrUtil } from "zhi-common"
+import { useNotebookOptions } from "~/src/composables/useNotebookOptions.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -23,6 +24,7 @@ const logger = createAppLogger("preference-setting")
 const { t } = useVueI18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
+const { options: notebookOptions, load: loadNotebookOptions } = useNotebookOptions()
 
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
 const isSiyuanPlugin = isInSiyuanWin() || (isInSiyuanWidget() && StrUtil.isEmptyString(getSiyuanWidgetId()))
@@ -46,6 +48,10 @@ const doBeforeChangeForAllowChangeSlug = async (): Promise<boolean> => {
   }
   return true
 }
+
+onMounted(async () => {
+  await loadNotebookOptions()
+})
 </script>
 
 <template>
@@ -61,6 +67,23 @@ const doBeforeChangeForAllowChangeSlug = async (): Promise<boolean> => {
     </el-form-item>
     <el-form-item :label="t('preference.setting.removeWidgetTag')">
       <el-switch v-model="publishPreferenceSettingForm.removeMdWidgetTag"></el-switch>
+    </el-form-item>
+
+    <el-form-item :label="t('preference.setting.publishSourceNotebooks')">
+      <el-select
+        v-model="publishPreferenceSettingForm.publishSourceNotebooks"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
+        clearable
+        :placeholder="t('preference.setting.publishSourceNotebooks.placeholder')"
+        style="width: 360px"
+      >
+        <el-option v-for="nb in notebookOptions" :key="nb.id" :label="nb.name" :value="nb.id" />
+      </el-select>
+      <div style="font-size: 12px; color: #999; margin-top: 4px;">
+        {{ t("preference.setting.publishSourceNotebooks.desc") }}
+      </div>
     </el-form-item>
 
     <div v-if="isSiyuanPlugin">

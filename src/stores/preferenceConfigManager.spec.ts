@@ -31,4 +31,20 @@ describe("preferenceConfigManager", () => {
     expect(normalized.showSingleMenu).toBe(true)
     expect(normalized.showBatchMenu).toBe(true)
   })
+
+  it("normalizes publishSourceNotebooks to an empty array by default", () => {
+    const normalized = normalizePreferenceConfig()
+    expect(Array.isArray(normalized.publishSourceNotebooks)).toBe(true)
+    expect(normalized.publishSourceNotebooks).toEqual([])
+  })
+
+  it("keeps valid publishSourceNotebooks and drops invalid entries", () => {
+    const normalized = normalizePreferenceConfig(
+      parsePreferenceStorageValue({
+        publishSourceNotebooks: ["20220718062546-2nbmy21", "", 42, "  "],
+      })
+    )
+
+    expect(normalized.publishSourceNotebooks).toEqual(["20220718062546-2nbmy21"])
+  })
 })

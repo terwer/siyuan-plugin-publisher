@@ -12,55 +12,57 @@
 
 ## 1. 数据层（zhi-siyuan-api，本人改、维护者发包）
 
-- [ ] 1.1 `siyuanKernelApi.getRootBlocks` 加可选尾参 `notebookIds?: string[]` → 非空时追加 `AND b.box IN (...)`；空/缺省不追加
-- [ ] 1.2 `siyuanKernelApi.getRootBlocksCount` 同上（count 分支两处都要加）
-- [ ] 1.3 `siyuanKernelApi.getSubdocs` 加可选尾参 `notebookIds?` → 挂件模式同样按 `b.box IN (...)` 过滤
-- [ ] 1.4 `siyuanKernelApi.getSubdocCount` 加可选尾参 `notebookIds?`（挂件一致性：浏览器与挂件共用同一过滤，不留脏路径）
-- [ ] 1.5 notebookIds 白名单消毒（`[A-Za-z0-9_-]`），只接受 `lsNotebooks` 来源 id
-- [ ] 1.6 `siYuanApiAdaptor.getRecentPosts`/`getRecentPostsCount` 透传可选尾参
-- [ ] 1.7 保留 LIMIT/OFFSET/别名/排序不变；补充空/非空/多 notebook、挂件内 notebook 过滤单测
-- [ ] 1.8 维护者发包新版本 → 本仓库 bump；跑通构建
+- [x] 1.1 `siyuanKernelApi.getRootBlocks` 加可选尾参 `notebookIds?: string[]` → 非空时追加 `AND b.box IN (...)`；空/缺省不追加
+- [x] 1.2 `siyuanKernelApi.getRootBlocksCount` 同上（count 分支两处都要加）
+- [x] 1.3 `siyuanKernelApi.getSubdocs` 加可选尾参 `notebookIds?` → 挂件模式同样按 `b.box IN (...)` 过滤
+- [x] 1.4 `siyuanKernelApi.getSubdocCount` 加可选尾参 `notebookIds?`（挂件一致性：浏览器与挂件共用同一过滤，不留脏路径）
+- [x] 1.5 notebookIds 白名单消毒（`[A-Za-z0-9_-]`），只接受 `lsNotebooks` 来源 id
+- [x] 1.6 `siYuanApiAdaptor.getRecentPosts`/`getRecentPostsCount` 透传可选尾参
+- [x] 1.7 保留 LIMIT/OFFSET/别名/排序不变；补充空/非空/多 notebook、挂件内 notebook 过滤单测
+- [x] 1.8 维护者发包新版本（2.37.0）→ 本仓库 bump；跑通构建
 
 ## 2. 配置模型（共用层）
 
-- [ ] 2.1 `PublishPreferenceCfg` 增加 `publishSourceNotebooks?: string[]`（默认 `[]`）
-- [ ] 2.2 `preferenceConfigManager.ts` `normalizePreferenceConfig` 归一化（空数组）
-- [ ] 2.3 新增共享「笔记本选择」组合式函数/组件：`lsNotebooks()`，过滤关闭/系统/用户指南笔记本
+- [x] 2.1 `PublishPreferenceCfg` 增加 `publishSourceNotebooks?: string[]`（默认 `[]`）
+- [x] 2.2 `preferenceConfigManager.ts` `normalizePreferenceConfig` 归一化（空数组）
+- [x] 2.3 新增共享「笔记本选择」组合式函数/组件：`lsNotebooks()`，过滤关闭/系统/用户指南笔记本
 
 ## 3. 共用层文章管理组件
 
-- [ ] 3.1 新增 `useArticleManage.ts`：数据（含 notebookIds）、分页、搜索、已发布、展开、yaml
-- [ ] 3.2 新增 `ArticleManageList.vue`：无 router 依赖；动作以事件抛出（quick/single/batch/view/picgo）
-- [ ] 3.3 顶部「发布源笔记本」多选：初值取偏好，变更持久化 + 刷新
+- [x] 3.1 新增 `useArticleManage.ts`：数据（含 notebookIds）、分页、搜索、已发布、展开、yaml
+- [x] 3.2 新增 `ArticleManageList.vue`：无 router 依赖；动作以事件抛出（quick/single/batch/view/picgo）
+- [x] 3.3 顶部「发布源笔记本」多选：初值取偏好，变更持久化 + 刷新
 
 ## 4. V1 接入
 
-- [ ] 4.1 `Admin.vue` 改薄封装：贴共用组件，动作实现为 router 跳转 + DrawerBoxBridge iframe
-- [ ] 4.2 行为逐项对照（搜索/分页/已发布/展开/动作/挂件 vs 浏览器模式），防回归
-- [ ] 4.3 `PreferenceSetting.vue` 增加「发布源笔记本」配置项（复用笔记本选择组件）
+- [x] 4.1 `Admin.vue` 改薄封装：贴共用组件，动作实现为 router 跳转 + DrawerBoxBridge iframe
+- [x] 4.2 行为逐项对照（搜索/分页/已发布/展开/动作/挂件 vs 浏览器模式），防回归
+- [x] 4.3 `PreferenceSetting.vue` 增加「发布源笔记本」配置项（复用笔记本选择组件）
 
 ## 5. 发布硬校验
 
-- [ ] 5.1 `usePublish.doSinglePublish` 开头用 `kernelApi.getBlockByID(id).box` 校验 ∈ 授权集合
-- [ ] 5.2 越权抛清晰错误；`box` 缺失放行 + log；仅非空集合才拦截
-- [ ] 5.3 确认覆盖 Single/Batch/Quick/V2 全部入口（均汇入 doSinglePublish）
+- [x] 5.1 `usePublish.doSinglePublish` 开头用 `kernelApi.getBlockByID(id).box` 校验 ∈ 授权集合
+- [x] 5.2 越权抛清晰错误；`box` 缺失放行 + log；仅非空集合才拦截
+- [x] 5.3 确认覆盖 Single/Batch/Quick/V2 全部入口（均汇入 doSinglePublish）
 
 ## 6. V2 接入（全量原生行为，禁止向 V1 兜底）
 
-- [ ] 6.1 `V2App.vue` 头部 gear 左侧加房子图标
-- [ ] 6.2 新增「管理」视图：内嵌共用组件 `ArticleManageList`，动作以 V2 原生实现
-- [ ] 6.3 扩展 V2 快发：`useV2QuickPublish` 支持按指定 pageId 发布（供管理页逐行「闪发/单发」）
-- [ ] 6.4 管理页「闪发/单发」→ V2 指定文档发布流程（原生）
-- [ ] 6.5 管理页「批发」→ V2 复用 `usePublish` 批量流，原生承载
-- [ ] 6.6 管理页「查看」→ V2 打开预览链接（原生）
-- [ ] 6.7 管理页「图床」→ V2 打开图床工具（原生）
-- [ ] 6.8 返回/关闭：管理视图 → quick_publish
-- [ ] 6.9 `V2PreferenceSettings.vue` 增加「发布源笔记本」配置项
-- [ ] 6.10 确认 V2 单发/快发走 doSinglePublish 自动受硬校验保护
+- [x] 6.1 `V2App.vue` 头部 gear 左侧加房子图标
+- [x] 6.2 新增「管理」视图：内嵌共用组件 `ArticleManageList`，动作以 V2 原生实现
+- [x] 6.3 扩展 V2 快发：`useV2QuickPublish` 支持按指定 pageId 发布（供管理页逐行「闪发/单发」）
+- [x] 6.4 管理页「闪发/单发」→ V2 指定文档发布流程（原生）
+- [x] 6.5 管理页「批发」→ V2 复用 `usePublish` 批量流，原生承载
+- [x] 6.6 管理页「查看」→ V2 打开预览链接（原生）
+- [x] 6.7 管理页「图床」→ V2 打开图床工具（原生）
+- [x] 6.8 返回/关闭：管理视图 → quick_publish
+- [x] 6.9 `V2PreferenceSettings.vue` 增加「发布源笔记本」配置项
+- [x] 6.10 确认 V2 单发/快发走 doSinglePublish 自动受硬校验保护
 
 ## 7. 测试与验收（与平台验证同步）
 
-- [ ] 7.1 单测：配置归一化、SQL 消毒、共用组件分页/过滤、发布校验、V2 视图切换
+- [x] 7.1 单测：配置归一化、SQL 消毒、共用组件分页/过滤、发布校验、V2 视图切换（`pnpm vitest run` 56 文件 / 274 用例通过；`pnpm lint` vue-tsc exit 0）
 - [ ] 7.2 V1：`pnpm build` + 宿主手验（列表过滤、越权报错、未配置零回退）
 - [ ] 7.3 V2：`pnpm build:v2` + 宿主手验（房子图标、管理视图渲染、过滤、越权拦截）
 - [ ] 7.4 同步 docs / checklist；归档前按 OpenSpec 审计（根治/最佳实践/不破坏底层/不影响无关模式）
+
+> 注：Phase 6 完成，7.2/7.3 需宿主手验（待用户在 V1/V2 宿主自测后继续）。

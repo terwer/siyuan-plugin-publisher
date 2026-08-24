@@ -120,11 +120,20 @@ export const useV2QuickPublish = () => {
     return { api, previewUrl }
   }
 
-  const init = async () => {
+  /**
+   * 初始化快发视图。
+   *
+   * @param overridePageId - 可选的指定文档 id：管理页按行发布时传入，
+   *   覆盖「当前文档」的默认来源；缺省仍取活动文档（`WidgetPageUtils.getPageId()`）。
+   *   状态机中 `state.pageId` 为唯一发布维度，快发/单发均据此发布。
+   */
+  const init = async (overridePageId?: string) => {
     state.isLoading = true
 
     try {
-      const pageId = WidgetPageUtils.getPageId() ?? ""
+      const pageId = StrUtil.isEmptyString(overridePageId ?? "")
+        ? WidgetPageUtils.getPageId() ?? ""
+        : (overridePageId as string)
       state.pageId = pageId
       state.hasDocument = !StrUtil.isEmptyString(pageId)
 

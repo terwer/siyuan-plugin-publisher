@@ -79,3 +79,8 @@ R1-R9 均已列出消除手段；新增：
 
 ## 待授权
 - 用户确认方案定稿后，按「自底向上：先 zhi」启动 Phase 1。
+
+## 状态（2026-08-24）
+- **Phase 1（zhi）已实现并验证**（用户授权「立即开工」）。基线已拉齐到 origin/dev(2.36.0)，我的改动 + 单测 + changeset 留在 zhi 工作区**未提交**；提交/push/发版由用户负责。已发布 zhi-siyuan-api 2.37.0。
+- **Phase 2-6 已完成**：配置模型 + 归一化；共享笔记本选择；共用层 `ArticleManageList.vue` + `useArticleManage.ts`；V1 `Admin.vue` 薄封装 + `PreferenceSetting.vue` 配置项；发布硬校验 `assertNotebookAllowed`；V2 房子图标 + 管理视图 + 原生动作（quick/single/batch/view/picgo）+ `V2PreferenceSettings.vue` 配置项。`pnpm lint` exit 0；单测 56 文件 / 274 用例通过。
+- **待办（Phase 7）**：V1 `pnpm build`、V2 `pnpm build:v2` + 宿主手验（房子图标/管理视图/过滤/越权拦截）；docs/checklist 同步；OpenSpec 归档审计。**需用户先在 V1/V2 宿主自测后再继续。**
