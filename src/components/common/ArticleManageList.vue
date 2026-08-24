@@ -147,7 +147,7 @@ onMounted(async () => {
                     :key="key"
                     class="article-manage-extend__platform-item"
                   >
-                    <a @click="dispatchPlatform('platform-single', props.row, key.toString())">
+                    <a @click="dispatchPlatform('platform-single', props.row, props.row.dynCfgs[key]?.platformKey ?? key)">
                       <el-text>
                         <i class="el-icon">
                           <span

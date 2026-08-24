@@ -492,10 +492,32 @@ export function isDynamicKeyExists(dynamicConfigArray: DynamicConfig[], key: str
 
 /**
  * 通过平台key查询平台
+ *
+ * 匹配顺序：精确 → 大小写不敏感 → 规范化（忽略大小写、剥离实例 id），
+ * 以兼容历史数据（旧版插件写入的全小写 key、不带实例 id）与当前平台配置（混合大小写 platformKey、可能带实例 id）的差异，
+ * 避免文章管理「平台显示已删除」。
  */
 export function getDynCfgByKey(dynamicConfigArray: DynamicConfig[], key: string): DynamicConfig {
+  if (!key) {
+    return null
+  }
+  // 1. 精确匹配
   for (let i = 0; i < dynamicConfigArray.length; i++) {
     if (dynamicConfigArray[i].platformKey === key) {
+      return dynamicConfigArray[i]
+    }
+  }
+  // 2. 大小写不敏感匹配（保留实例 id）
+  const lowerKey = key.toLowerCase()
+  for (let i = 0; i < dynamicConfigArray.length; i++) {
+    if (dynamicConfigArray[i].platformKey.toLowerCase() === lowerKey) {
+      return dynamicConfigArray[i]
+    }
+  }
+  // 3. 规范化匹配（忽略大小写 + 剥离实例 id）
+  const normKey = normalizePlatformKey(key)
+  for (let i = 0; i < dynamicConfigArray.length; i++) {
+    if (normalizePlatformKey(dynamicConfigArray[i].platformKey) === normKey) {
       return dynamicConfigArray[i]
     }
   }
@@ -552,6 +574,27 @@ export function getDynPostidKey(platformKey: string): string {
  */
 export function getDynYamlKey(platformKey: string): string {
   return "custom-" + platformKey.replace(/_/g, "-") + "-yaml"
+}
+
+/**
+ * 规范化平台 key，用于消除「历史数据 key」与「当前平台配置 platformKey」的差异：
+ * - 剥离尾部实例 id（由 getNewPlatformKey 生成，格式 `-<短字母数字>`）
+ * - 统一分隔符 `-` 为 `_`
+ * - 全部转为小写
+ *
+ * 例如：
+ * - `fs_LocalSystem` / `fs-localsystem` -> `fs_localsystem`
+ * - `custom_Yuqueweb-z1awjla` / `custom-yuqueweb-z1awjla` -> `custom_yuqueweb`
+ * - `wordpress_Wordpressdotcom` -> `wordpress_wordpressdotcom`
+ *
+ * @since 1.41.1+
+ */
+export function normalizePlatformKey(key: string): string {
+  const normalized = key.replace(/-/g, "_").toLowerCase()
+  // 仅当剥离尾部 <id> 后剩余仍为 <type>_<subtype>（含 '_'）时才剥离，
+  // 以免把无实例 id 的纯 <type>-<subtype> 形态误判为 id 而过度剥离。
+  const stripped = normalized.replace(/_[a-z0-9]{4,}$/, "")
+  return stripped.includes("_") ? stripped : normalized
 }
 
 /**

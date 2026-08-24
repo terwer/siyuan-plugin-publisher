@@ -23,6 +23,21 @@
 
 ---
 
+## 警示：平台 key 只允许一种标准（issue #2045 归类）
+
+> 2026-08-24 版本 1.41.1：文章管理「平台列」把历史数据误显示为「已删除」（issue #2045 归类），该问题**持续约半个月**。根因是同一个平台 key 出现了**两种形态**却只做字符串全等比较。**今后只允许一种标准，禁止再出现第二种规则。**
+
+### 根因（一句话）
+旧版插件写入**全小写**属性 key（`custom-fs-localsystem-yaml` → 推导 `fs_localsystem`），而配置 `DynamicConfig.platformKey` 是**混合大小写**（`fs_LocalSystem`）；原 `getDynCfgByKey` 只做全等 → 返回 `null` → 显示「已删除」、图标回退 `iconOTRemove`。V1（`Admin.vue`）与 V2（`V2ArticleManage.vue`）共用的 `useArticleManage` / `ArticleManageList` 均受影响（仅显示与「点击平台单发」的 key 解析，不碰发布数据）。
+
+### 固化规则（必须遵守）
+1. **只允许一种标准**：平台 key 一律为 `type_subtype[-id]`（如 `fs_LocalSystem`、`custom_Yuqueweb-z1awjla`）；写侧只用 `getDynYamlKey(platformKey)` 生成属性 key。**新数据禁止再引入第二种 key 写法/规则。**
+2. **历史兼容只走一个入口**：统一用 `normalizePlatformKey()`（`type_subtype`，去尾部实例 id，转小写；`src/platforms/dynamicConfig.ts`）作为**唯一**规范化标准，`getDynCfgByKey` 以它为比较基准（精确/大小写命中只是同一标准下的优先命中，不构成第二种规则）。**不要**为旧数据维护多套并存规则、无限容忍各种形态。
+3. 需要把 key 传回发布/单发的动作，用**配置的真实 `platformKey`**（`dynCfgs[key]?.platformKey ?? key`），不要用大小写不一的推导 key。
+4. **回归验证**：任何改动 key 的生成/解析/匹配时，必须确认文章管理平台列**不再出现「已删除」**，且点平台能正常进入单发；V1 与 V2 都测。
+
+---
+
 ## 用户偏好（已学习）
 
 - 助手回复使用**简体中文**；Git 提交说明使用**英文**。
