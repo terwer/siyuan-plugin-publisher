@@ -17,7 +17,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
-export type V2SettingsSection = "account" | "picbed" | "preference"
+export type V2SettingsSection = "account" | "picbed" | "preference" | "ai"
 export type V2AccountView = "list" | "select" | "config"
 
 export interface V2AccountItem {

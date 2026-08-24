@@ -40,6 +40,7 @@
 - [x] 3.3 `V2QuickPublishGrid.vue`：闪发快速平台格（逐卡发布/更新），复用 `useV2QuickPublish`
 - [x] 3.4 回调内**绝不 `router.push`**（全程 `currentView` 状态机）
 - [x] 3.5 删除 V2 精简引擎 `useV2SinglePublish.ts`/`useV2BatchPublish.ts` 及其 spec（不再重写，改为复用 V1 资产）
+- [x] 3.6 思源 AI 配置重构适配 + V1/V2 共用 AI 设置组件：`usePreferenceSettingStore` 读 `config.ai.providers[]`（默认选 agent.modelId，提供方无 apiKey 则回退到带密钥的启用 provider）、`AiSetting.vue` 升级为共用组件（按 provider 分组的 `el-select` 模型选择器）、V2 设置新增同级 AI tab（`ai` section + nav），`PublishPreferenceCfg` 记录 `experimentalSisyuanAiActiveModelId`
 
 ## 4. Phase 4 — 入口接线
 

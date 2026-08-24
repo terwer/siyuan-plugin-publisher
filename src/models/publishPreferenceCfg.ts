@@ -10,6 +10,26 @@
 import { PreferenceConfig } from "zhi-blog-api"
 
 /**
+ * 思源笔记 AI 模型（对应 config.ai.providers[].models[]）
+ */
+export interface SiyuanAiModel {
+  id: string
+  name: string
+}
+
+/**
+ * 思源笔记 AI Provider（对应 config.ai.providers[]，仅保留启用且含可用模型的项）
+ */
+export interface SiyuanAiProvider {
+  id: string
+  displayName: string
+  baseURL: string
+  protocol: string
+  apiKey: string
+  models: SiyuanAiModel[]
+}
+
+/**
  * 发布偏好设置
  *
  * @author terwer
@@ -56,6 +76,12 @@ class PublishPreferenceCfg extends PreferenceConfig {
    * AI 温度
    */
   public experimentalAIApiTemperature?: number
+
+  /**
+   * 当前选中的思源笔记 AI 模型 id（对应 config.ai.providers[].models[].id）
+   * 用于 V1/V2 共用 AI 设置组件记住用户选择
+   */
+  public experimentalSisyuanAiActiveModelId?: string
 
   // 文档菜单
   /**

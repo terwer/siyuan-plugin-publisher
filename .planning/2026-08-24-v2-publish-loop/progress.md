@@ -76,3 +76,13 @@
 - 新增 i18n key `v2.singlePublish.selectPlatform.title`（zh_CN/en_US）。
 - **验证**：`pnpm build:v2`（vue-tsc noEmit + vite，2223 模块，index.js 6.63MB/gzip 2.03MB）✅；`pnpm build`（V1 + 打包）✅；`pnpm vitest run` **56 文件 / 276 用例**✅（删除 2 个精简引擎 spec 减 6 例，其余全绿，V1 回归无退化）。
 - 注：openspec `design.md`/`proposal.md` 中「V2 原生精简视图、非抽取复用」的描述已过时，需在归档审计前更新为「复用 V1 资产」。
+
+## 2026-08-24（思源 AI 配置重构适配 + V1/V2 共用 AI 设置组件）
+- **用户反馈 Bug**：思源笔记 AI 配置被重构（旧的 `config.ai.openAI` 已移除），插件读不到 → `useChatGPT` 报「OpenAI missing required apiKey」。用户要求修复读取逻辑，并让 V1/V2 **完全复用**一套 AI 设置组件，V2 设置加一个同级 AI tab。
+- **根因**：`win.siyuan.config.ai` 现为 `{ mcp, embedding, rerank, agent:{modelId,temperature,maxCompletionTokens}, editing:{...}, imageGeneration, providers:[{id,displayName,enabled,apiKey,baseURL,protocol,models:[{id,enabled,name}]}] }`；凭据在 `providers[]`，`agent.modelId` 引用当前模型。
+- **改动 1（模型/类型，`publishPreferenceCfg.ts`）**：新增 `SiyuanAiModel` / `SiyuanAiProvider` 类型；`PublishPreferenceCfg` 加 `experimentalSisyuanAiActiveModelId`（记录用户选择，避免多次调用覆盖）。
+- **改动 2（store，`usePreferenceSettingStore.ts`）**：`getSisyuanAiProviders()` 读启用 provider+启用模型；`getPublishPreferenceSetting` 兼容旧 `config.ai.openAI`，否则据 `agent.modelId`（无则第一个启用 provider/model）回填 `experimentalAICode/BaseUrl/ApiModel` 并置 `experimentalUseSiyuanNoteAIConfig=true`；若默认模型的 provider 无 apiKey，回退到第一个带密钥的启用 provider（宿主实测 agent.modelId 指向无密钥 provider，故此回退必要）；无启用 provider 则置 false；`selectSisyuanAiModel(modelId)` 回填；`prefConfig` 改为模块级单例（V1/V2 共用同一引用）。
+- **改动 3（共用组件，`AiSetting.vue`）**：升级为 V1/V2 共用组件——思源模式（`useSiyuanCfg`）时顶部显示按 provider 分组的 `el-select`（`el-option-group`）模型选择器，切换即回填 apiKey/baseURL/model，并显示当前 baseURL；手填项在思源模式禁用。V1 `GeneralSetting.vue` 仍 `<ai-setting />`（未改，自动复用）。
+- **改动 4（V2 AI tab）**：`V2SettingsSection`（`useV2Settings.ts` + `UnifiedWorkspaceShell.vue`）扩为 `"account"|"picbed"|"preference"|"ai"`；`navItems` 加 `ai`；`V2App.vue` 引入 `AiSetting`、`changeSettingsSection` 类型加 `"ai"`、渲染 `ai` section（`syp-settings-page` 头 + `<AiSetting/>`）。
+- **改动 5（i18n，`siyuan/i18n/{zh_CN,en_US}.json`）**：新增 `v2.nav.ai`、`v2.ai.eyebrow/title/desc`。
+- **验证**：新增 `usePreferenceSettingStore.spec.ts`（5 例：读启用 provider 并按 agent.modelId 回填、agent.modelId 缺失回退首个、无启用 provider 不启用思源配置、`selectSisyuanAiModel` 回填、未知模型返回 false）✅；`pnpm build:v2`（vue-tsc noEmit + vite，dist-v2）✅；`pnpm vitest run` 全量（57+ 文件）✅（仅 element-plus 弃用警告）。V1 与 V2 共用同一 `src`，`vue-tsc` 全量通过，无 V1 回归风险。

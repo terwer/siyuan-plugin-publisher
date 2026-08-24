@@ -286,6 +286,17 @@
 
         <V2PreferenceSettings v-else-if="settings.state.section === 'preference'" />
 
+        <section v-else-if="settings.state.section === 'ai'" class="syp-settings-page syp-settings-ai">
+          <div class="syp-settings-page__header">
+            <div>
+              <div class="syp-settings-page__eyebrow">{{ t("v2.ai.eyebrow") }}</div>
+              <h2 class="syp-settings-page__title">{{ t("v2.ai.title") }}</h2>
+              <p class="syp-settings-page__desc">{{ t("v2.ai.desc") }}</p>
+            </div>
+          </div>
+          <AiSetting />
+        </section>
+
         <V2PreferenceSettings v-else />
       </UnifiedWorkspaceShell>
 
@@ -322,6 +333,7 @@ import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
 import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
 import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
+import AiSetting from "~/src/components/set/preference/AiSetting.vue"
 import { useV2ErrorDetails } from "~/src/composables/v2/useV2ErrorDetails.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
@@ -631,7 +643,7 @@ function onBatchPublishBack() {
   void backFromBatchPublish()
 }
 
-async function changeSettingsSection(section: "account" | "picbed" | "preference") {
+async function changeSettingsSection(section: "account" | "picbed" | "preference" | "ai") {
   if (settings.state.section === section && settings.state.accountView === "list") {
     return
   }
