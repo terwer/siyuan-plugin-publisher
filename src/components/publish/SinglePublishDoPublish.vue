@@ -40,8 +40,9 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 const logger = createAppLogger("single-publish-do-publish")
 
 // props（已是无 vue-router 的解耦外壳；V1 路由页从 useRoute 取参传入，V2 直接传入）
+// 注意：不能用 `key` 作为 prop 名——`key` 是 Vue 保留属性，Vue 不会把它作为 prop 传入，会直接导致平台 key 丢失。
 const props = defineProps({
-  key: {
+  platformKey: {
     type: String,
     default: "",
   },
@@ -72,7 +73,7 @@ const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 const sysKeys = pre.systemCfg.map((item) => {
   return item.platformKey
 })
-const key = props.key as string
+const key = props.platformKey as string
 const id = props.id as string
 
 const formData = reactive({

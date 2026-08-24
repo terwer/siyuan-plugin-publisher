@@ -23,7 +23,7 @@ const showBack = route.query.showBack === "true"
 
 <template>
   <single-publish-do-publish
-    :key="key"
+    :platform-key="key"
     :id="id"
     :method="method"
     :show-back="showBack"

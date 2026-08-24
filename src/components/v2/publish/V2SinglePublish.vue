@@ -27,7 +27,7 @@
       <!-- 第二步：详细发布表单（复用 V1 SinglePublishDoPublish） -->
       <SinglePublishDoPublish
         v-else
-        :key="selectedKey"
+        :platform-key="selectedKey"
         :id="pageId"
         :method="selectedMethod"
         @back="onPublishBack"
