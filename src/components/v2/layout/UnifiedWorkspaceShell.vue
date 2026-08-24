@@ -25,10 +25,11 @@ import { computed } from "vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 type V2SettingsSection = "account" | "picbed" | "preference"
+export type V2CurrentView = "quick_publish" | "settings" | "manage" | "single_publish" | "batch_publish"
 const { t } = useV2I18n()
 
 const props = defineProps<{
-  currentView?: "quick_publish" | "settings" | "manage"
+  currentView?: V2CurrentView
   activeSection?: V2SettingsSection
 }>()
 

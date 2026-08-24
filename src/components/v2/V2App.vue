@@ -11,17 +11,32 @@
         </div>
         <div class="syp-header-actions">
           <SypTooltip
-            v-if="!isSettingsView && !isManageView"
-            :content="t('v2.app.action.openManage')"
+            v-if="isQuickPublishView && quickPublish.state.hasDocument"
+            content=""
             ellipsis
             inline-flex
             tag="button"
-            class="syp-btn syp-btn-quiet"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
+            type="button"
+            :aria-label="t('v2.panel.singlePublish')"
+            @click.stop="openSinglePublishForCurrent"
+          >
+            <LucidePenLine />
+            <span class="syp-btn-text-entry__label">{{ t("v2.panel.singlePublish") }}</span>
+          </SypTooltip>
+          <SypTooltip
+            v-if="!isSettingsView && !isManageView"
+            content=""
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
             type="button"
             :aria-label="t('v2.app.action.openManage')"
             @click.stop="openManage"
           >
             <LucideHouse />
+            <span class="syp-btn-text-entry__label">{{ t("v2.app.action.openManage") }}</span>
           </SypTooltip>
           <SypTooltip
             v-if="isManageView"
@@ -39,16 +54,17 @@
           </SypTooltip>
           <SypTooltip
             v-if="!isSettingsView"
-            :content="t('v2.app.action.openSettings')"
+            content=""
             ellipsis
             inline-flex
             tag="button"
-            class="syp-btn syp-btn-quiet"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
             type="button"
             :aria-label="t('v2.app.action.openSettings')"
             @click.stop="openSettings"
           >
             <LucideSettings />
+            <span class="syp-btn-text-entry__label">{{ t("v2.app.action.openSettings") }}</span>
           </SypTooltip>
           <SypTooltip
             v-else
@@ -95,7 +111,69 @@
           <button type="button" class="syp-btn syp-btn-primary" @click="retryInit">{{ t("v2.common.retry") }}</button>
         </div>
 
-        <V2ArticleManage v-else-if="isManageView" @open-publish="openManagePublish" />
+        <div v-else-if="isManageView" class="syp-manage-wrap">
+          <V2ArticleManage
+            @open-single="openManageSingle"
+            @open-batch="openManageBatch"
+            @open-flash="openManageFlash"
+          />
+
+          <!-- 管理页右侧滑入面板：列表仍在背后可见 -->
+          <div v-if="managePanel" class="syp-manage-panel-mask" @click="closeManagePanelOnMask"></div>
+          <aside
+            v-if="managePanel"
+            class="syp-manage-panel"
+            role="dialog"
+            :aria-label="panelTitle"
+            @keydown.esc="closeManagePanel"
+          >
+            <div class="syp-manage-panel__head">
+              <button
+                type="button"
+                class="syp-manage-panel__back"
+                :aria-label="t('v2.app.back.manage')"
+                @click="closeManagePanel"
+              >
+                <LucideChevronLeft />
+              </button>
+              <span class="syp-manage-panel__title">{{ panelTitle }}</span>
+            </div>
+            <div class="syp-manage-panel__body">
+              <V2SinglePublish
+                v-if="managePanel === 'single'"
+                :page-id="managePanelPageId"
+                :preset-platform-key="managePanelPlatformKey || undefined"
+                embedded
+                @back="closeManagePanel"
+              />
+              <V2BatchPublish
+                v-else-if="managePanel === 'batch'"
+                :page-id="managePanelPageId"
+                embedded
+                @back="closeManagePanel"
+              />
+              <template v-else>
+                <div class="syp-manage-panel__flashhint">{{ t("v2.singlePublish.status.previewHint") }}</div>
+                <V2QuickPublishGrid
+                  :page-id="managePanelPageId"
+                  @back="closeManagePanel"
+                />
+              </template>
+            </div>
+          </aside>
+        </div>
+
+        <V2SinglePublish
+          v-else-if="isSinglePublishView"
+          :page-id="quickPublish.state.pageId"
+          @back="onSinglePublishBack"
+        />
+
+        <V2BatchPublish
+          v-else-if="isBatchPublishView"
+          :page-id="quickPublish.state.pageId"
+          @back="onBatchPublishBack"
+        />
 
         <section v-else-if="!isSettingsView" class="syp-quick-shell">
           <div class="syp-quick-shell__eyebrow">{{ t("v2.quickPublish.currentDocument") }}</div>
@@ -227,12 +305,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, provide, ref } from "vue"
+import { computed, onBeforeUnmount, onMounted, provide, ref } from "vue"
 import "~/src/assets/v2/base.styl"
 import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
 import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
+import { type V2CurrentView } from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
 import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
+import V2SinglePublish from "~/src/components/v2/publish/V2SinglePublish.vue"
+import V2BatchPublish from "~/src/components/v2/publish/V2BatchPublish.vue"
+import V2QuickPublishGrid from "~/src/components/v2/publish/V2QuickPublishGrid.vue"
 import V2ArticleManage from "~/src/components/v2/V2ArticleManage.vue"
 import { type V2PlatformConfigValidationResult } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
@@ -251,15 +333,26 @@ import LucideSend from "~icons/lucide/send"
 import LucideSettings from "~icons/lucide/settings"
 import LucideHouse from "~icons/lucide/house"
 import LucideX from "~icons/lucide/x"
+import LucidePenLine from "~icons/lucide/pen-line"
 
 const props = defineProps<{
   initialView?: "quick_publish" | "settings"
   onClose?: () => void
 }>()
 
-const currentView = ref<"quick_publish" | "settings" | "manage">(props.initialView ?? "quick_publish")
+const currentView = ref<V2CurrentView>(props.initialView ?? "quick_publish")
 const isSettingsView = computed(() => currentView.value === "settings")
 const isManageView = computed(() => currentView.value === "manage")
+const isSinglePublishView = computed(() => currentView.value === "single_publish")
+const isBatchPublishView = computed(() => currentView.value === "batch_publish")
+const isQuickPublishView = computed(() => currentView.value === "quick_publish")
+
+// 管理页「单发/批发/闪发」的右侧滑入面板（列表仍在背后可见）
+type ManagePanel = "single" | "batch" | "flash"
+const managePanel = ref<ManagePanel | null>(null)
+const managePanelPageId = ref("")
+const managePanelPlatformKey = ref("")
+const managePanelTitle = ref("")
 const initError = ref("")
 const quickPublish = useV2QuickPublish()
 const settings = useV2Settings()
@@ -276,7 +369,22 @@ let settingsSwitchLoadingTimer: number | undefined
 
 const panelTitle = computed(() => {
   if (isManageView.value) {
+    if (managePanel.value === "single") {
+      return managePanelTitle.value || t("v2.panel.singlePublish")
+    }
+    if (managePanel.value === "batch") {
+      return t("v2.panel.batchPublish")
+    }
+    if (managePanel.value === "flash") {
+      return t("v2.panel.quickPublish")
+    }
     return t("v2.app.panel.manage")
+  }
+  if (isSinglePublishView.value) {
+    return t("v2.panel.singlePublish")
+  }
+  if (isBatchPublishView.value) {
+    return t("v2.panel.batchPublish")
   }
   return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
 })
@@ -407,6 +515,7 @@ const publishDescription = computed(() => {
 })
 
 onMounted(async () => {
+  window.addEventListener("keydown", handleWindowKeydown)
   try {
     await quickPublish.init()
   } catch (e) {
@@ -419,7 +528,21 @@ onMounted(async () => {
   }
 })
 
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleWindowKeydown)
+})
+
+function handleWindowKeydown(event: KeyboardEvent) {
+  if (event.key !== "Escape") {
+    return
+  }
+  if (managePanel.value) {
+    closeManagePanel()
+  }
+}
+
 async function openSettings() {
+  closeManagePanel()
   await settings.setSection("account")
   currentView.value = "settings"
 }
@@ -434,20 +557,78 @@ async function openManage() {
 }
 
 async function backFromManage() {
+  if (managePanel.value) {
+    closeManagePanel()
+    return
+  }
+  await backToQuickPublish()
+}
+
+function openManagePanel(panel: ManagePanel, pageId: string, platformKey = "") {
+  if (!pageId) {
+    return
+  }
+  managePanel.value = panel
+  managePanelPageId.value = pageId
+  managePanelPlatformKey.value = platformKey
+}
+
+function closeManagePanel() {
+  managePanel.value = null
+  managePanelPageId.value = ""
+  managePanelPlatformKey.value = ""
+}
+
+function closeManagePanelOnMask() {
+  if (managePanel.value !== null) {
+    closeManagePanel()
+  }
+}
+
+function openManageSingle(pageId: string, platformKey = "", title = "") {
+  managePanelTitle.value = title
+  openManagePanel("single", pageId, platformKey)
+}
+
+function openManageBatch(pageId: string, title = "") {
+  managePanelTitle.value = title
+  openManagePanel("batch", pageId)
+}
+
+function openManageFlash(pageId: string, title = "") {
+  managePanelTitle.value = title
+  openManagePanel("flash", pageId)
+}
+
+async function backFromSinglePublish() {
+  await backToQuickPublish()
+}
+
+async function backFromBatchPublish() {
   await backToQuickPublish()
 }
 
 /**
- * 管理页「闪发/单发」：以指定文档（而非当前文档）进入 V2 快发流程。
- *
- * @param pageId - 思源源文档 id
+ * quick_publish 卡片「详细发布」：以当前文档进入详细发布视图。
  */
-async function openManagePublish(pageId: string) {
-  if (!pageId) {
+async function openSinglePublishForCurrent() {
+  currentView.value = "single_publish"
+}
+
+function onSinglePublishBack() {
+  if (managePanel.value === "single") {
+    closeManagePanel()
     return
   }
-  await quickPublish.init(pageId)
-  currentView.value = "quick_publish"
+  void backFromSinglePublish()
+}
+
+function onBatchPublishBack() {
+  if (managePanel.value === "batch") {
+    closeManagePanel()
+    return
+  }
+  void backFromBatchPublish()
 }
 
 async function changeSettingsSection(section: "account" | "picbed" | "preference") {
@@ -673,6 +854,24 @@ async function retryInit() {
   &:hover
     color var(--b3-theme-primary, $syp-accent)
     background var(--b3-theme-surface-light, $syp-accent-hover-bg)
+
+.syp-btn-text-entry
+  display inline-flex
+  align-items center
+  padding 0 10px
+  font-size 13px
+  font-weight 500
+  white-space nowrap
+
+  svg
+    width 15px
+    height 15px
+    flex-shrink 0
+    margin-right 0
+
+  .syp-btn-text-entry__label
+    line-height 1
+    margin-left 7px
 
 .syp-btn-back
   display inline-flex
@@ -919,6 +1118,71 @@ async function retryInit() {
 .syp-empty-state__desc
   font-size 13px
   color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+.syp-manage-wrap
+  position relative
+  display flex
+  flex-direction column
+
+.syp-manage-panel-mask
+  position absolute
+  inset 0
+  background rgba(48, 49, 51, 0.28)
+  z-index 20
+  border-radius $syp-sm-card-radius
+
+.syp-manage-panel
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  width min(94%, 460px)
+  z-index 30
+  display flex
+  flex-direction column
+  background var(--b3-theme-surface, $syp-bg-primary)
+  border-left 1px solid var(--b3-border-color, $syp-border-primary)
+  border-radius 0 $syp-sm-card-radius $syp-sm-card-radius 0
+  box-shadow -8px 0 24px rgba(0, 0, 0, 0.12)
+
+.syp-manage-panel__head
+  display flex
+  align-items center
+  gap 8px
+  padding 10px 14px
+  border-bottom 1px solid var(--b3-border-color, $syp-border-primary)
+
+.syp-manage-panel__back
+  width 26px
+  height 26px
+  border-radius 6px
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+  cursor pointer
+  display inline-flex
+  align-items center
+  justify-content center
+
+  &:hover
+    color var(--b3-theme-primary, $syp-accent)
+    border-color var(--b3-theme-primary, $syp-accent)
+
+.syp-manage-panel__title
+  font-weight 600
+  font-size 14px
+  color var(--b3-theme-on-background, $syp-text-primary)
+
+.syp-manage-panel__body
+  flex 1
+  overflow-y auto
+  padding 14px
+
+.syp-manage-panel__flashhint
+  font-size 12px
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+  text-align center
+  padding 0 0 8px
 
 @media (max-width: 960px)
   .syp-v2

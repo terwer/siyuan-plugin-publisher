@@ -33,11 +33,13 @@ import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 
 const emit = defineEmits<{
-  openPublish: [pageId: string]
+  openSingle: [pageId: string, platformKey?: string, title?: string]
+  openBatch: [pageId: string, title?: string]
+  openFlash: [pageId: string, title?: string]
 }>()
 
 const { t } = useV2I18n()
-const { publishBatchToAll, publishToSinglePlatform, viewArticle, openPicgo } = useV2ArticleManage()
+const { publishToSinglePlatform, viewArticle, openPicgo } = useV2ArticleManage()
 
 const isPicgoInstalled = ref(false)
 const isBlogInstalled = ref(false)
@@ -49,17 +51,23 @@ onMounted(async () => {
 
 const handleAction = async (action: ArticleManageAction) => {
   const pageId = action.row?.postid ?? ""
+  const title = action.row?.title ?? ""
   switch (action.type) {
-    case "quick":
+    case "quick": {
+      if (pageId) {
+        emit("openFlash", pageId, title)
+      }
+      break
+    }
     case "single": {
       if (pageId) {
-        emit("openPublish", pageId)
+        emit("openSingle", pageId, undefined, title)
       }
       break
     }
     case "batch": {
       if (pageId) {
-        await publishBatchToAll(pageId)
+        emit("openBatch", pageId, title)
       }
       break
     }
@@ -84,7 +92,7 @@ const handleAction = async (action: ArticleManageAction) => {
     case "widget-empty": {
       const currentPageId = await getSiyuanPageId()
       if (currentPageId) {
-        emit("openPublish", currentPageId)
+        emit("openFlash", currentPageId, "")
       }
       break
     }
