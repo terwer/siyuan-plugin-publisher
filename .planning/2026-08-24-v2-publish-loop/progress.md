@@ -86,3 +86,10 @@
 - **改动 4（V2 AI tab）**：`V2SettingsSection`（`useV2Settings.ts` + `UnifiedWorkspaceShell.vue`）扩为 `"account"|"picbed"|"preference"|"ai"`；`navItems` 加 `ai`；`V2App.vue` 引入 `AiSetting`、`changeSettingsSection` 类型加 `"ai"`、渲染 `ai` section（`syp-settings-page` 头 + `<AiSetting/>`）。
 - **改动 5（i18n，`siyuan/i18n/{zh_CN,en_US}.json`）**：新增 `v2.nav.ai`、`v2.ai.eyebrow/title/desc`。
 - **验证**：新增 `usePreferenceSettingStore.spec.ts`（5 例：读启用 provider 并按 agent.modelId 回填、agent.modelId 缺失回退首个、无启用 provider 不启用思源配置、`selectSisyuanAiModel` 回填、未知模型返回 false）✅；`pnpm build:v2`（vue-tsc noEmit + vite，dist-v2）✅；`pnpm vitest run` 全量（57+ 文件）✅（仅 element-plus 弃用警告）。V1 与 V2 共用同一 `src`，`vue-tsc` 全量通过，无 V1 回归风险。
+
+## 2026-08-24（单发编辑回填：摘要 + 知乎专栏）
+- **摘要**：单发表单「摘要」绑定 `mergedPost.shortDesc`（同步 `mt_excerpt`），但 `doInitSinglePage` 编辑分支未对其回退；web 平台 getPost 不返回摘要时为空。补 `StrUtil.isEmptyString` 回退到 siyuanPost；标题由 `a || b` 改为 `isEmptyString` 判空回退。
+- **知乎专栏（用户纠正方向）**：专栏是**配置存进去的、编辑时只读**（`allowKnowledgeSpaceChange=false`），不是文档持久化数据。核实：web 平台 yaml 仅存 categories（zhi-blog-api `PostUtil.toYamlObj/fromYaml` 不处理 cate_slugs），zhihu 专栏 = 知识空间单选（`cate_slugs`），配置默认值在 `cfg.blogid`（`zhihuWebAdaptor` 用 `post.cate_slugs?.[0] ?? cfg.blogid`）。
+  - `doInitSinglePage` 编辑分支：`cate_slugs` 为空且 `cfg.knowledgeSpaceEnabled` 时回退到 `cfg.blogid`（配置默认专栏）。
+  - `SingleKnowledgeSpace.initPage`：即便分类列表为空也回退 `cateSlugs[0] ?? cfg.blogid`（只读配置值始终显示）。
+- **验证**：`usePublish.spec.ts` 8 例过（含摘要回退、配置专栏回退各 1 例）；`pnpm build:v2`（vue-tsc noEmit + vite）✅。

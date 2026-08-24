@@ -389,4 +389,37 @@ describe("usePublish.doInitSinglePage", () => {
     expect(mergedPost.shortDesc).toBe("思源摘要")
     expect(mergedPost.mt_excerpt).toBe("思源摘要")
   })
+
+  it("falls back to the config column (knowledge space) when platform getPost returns an empty cate_slugs", async () => {
+    // 思源侧文档：无专栏（专栏为配置存值、编辑只读，不在思源文档里）
+    const siyuanPost = new Post()
+    siyuanPost.title = "思源标题"
+    siyuanPost.markdown = "# 正文"
+    mockSiyuanGetPost.mockResolvedValue(siyuanPost)
+
+    // 平台侧 getPost：zhihu（web）不返回专栏
+    const platformPost = new Post()
+    mockGetPublishApi.mockResolvedValue({
+      getPost: vi.fn(async () => platformPost),
+      getPreviewUrl: vi.fn(async () => "https://platform.local/view/1"),
+    })
+
+    const { initPublishMethods } = usePublish()
+    const publishCfg = createPublishCfg({
+      "20260822111111-m260uak": { "custom-custom_zhihu-post-id": "post-1" },
+    })
+    publishCfg.cfg.posidKey = "custom-custom_zhihu-post-id"
+    publishCfg.cfg.knowledgeSpaceEnabled = true
+    publishCfg.cfg.blogid = "config-column-id"
+
+    const { mergedPost } = await initPublishMethods.doInitSinglePage(
+      "custom_Zhihu",
+      "20260822111111-m260uak",
+      MethodEnum.METHOD_EDIT,
+      publishCfg
+    )
+
+    // 专栏为空时回退到配置的默认专栏（配置存值、编辑只读）
+    expect(mergedPost.cate_slugs).toEqual(["config-column-id"])
+  })
 })

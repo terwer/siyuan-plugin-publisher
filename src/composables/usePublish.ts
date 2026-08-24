@@ -578,6 +578,10 @@ const usePublish = () => {
         if (!mergedPost.cate_slugs?.length) {
           mergedPost.cate_slugs = siyuanPost.cate_slugs ?? []
         }
+        // 知识空间（专栏）为配置存值、编辑时只读：平台未返回时回退到配置的默认专栏
+        if (!mergedPost.cate_slugs?.length && cfg.knowledgeSpaceEnabled) {
+          mergedPost.cate_slugs = StrUtil.isEmptyString(cfg.blogid) ? [] : [cfg.blogid]
+        }
         // 链接需要使用思源笔记的
         mergedPost.originalId = siyuanPost.originalId
         mergedPost.link = siyuanPost.link
