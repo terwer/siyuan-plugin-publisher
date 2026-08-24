@@ -9,7 +9,8 @@
 
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { HtmlUtil, StrUtil } from "zhi-common"
-import type { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
+import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from "chatgpt"
+import type { SendMessageOptions } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -32,7 +33,6 @@ const useChatGPT = () => {
   let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI = undefined
   const getAPI = async () => {
     if (api === undefined) {
-      const { ChatGPTAPI, ChatGPTUnofficialProxyAPI } = await import("chatgpt")
       try {
         // 设置了代理地址创建代理实例，否则使用官方实例
         if (!StrUtil.isEmptyString(pref.value.experimentalAIProxyUrl)) {
