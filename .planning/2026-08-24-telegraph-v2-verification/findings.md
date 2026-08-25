@@ -36,9 +36,79 @@
 - `checkAuth()`（base）恒 `return true`。
 
 ## 待实测/待确认（写方案前不确定项）
-- [ ] host 下匿名 V2C（点「验证」）是否能真实创建 telegra.ph 会话（取决公网 middleware 可达性）。
+- [x] host 下匿名 V2C（点「验证」）→ **实测失败**：`request to https://edit.telegra.ph/check failed, getaddrinfo ENOTFOUND edit.telegra.ph`。注意：请求直接打到 `apiUrl`（`edit.telegra.ph`），**未走公网 middleware**；宿主机 `edit.telegra.ph`/`telegra.ph` 均 DNS 解析失败（当前环境无代理/被墙）。`api.terwer.space/api/middleware` 可达但返回 **404**（路径疑失效）。→ 决策点 3 已获实证：**属外部网络依赖问题，非适配器逻辑错误**（当前无代理无法解析 telegra.ph 域名，V2C 必然失败）。
 - [ ] newPost 是否真实产出一篇 telegra.ph 文章（是否因 cookie/代理失败）。
 - [ ] 「查看」链接 `https://telegra.ph/<path>` 是否能打开。
 - [ ] Img：配置「PicGo」+ 公网图床后，发布含本地图文档，文章 `<img>` 是否为公网 URL 且可访问；若只用本地资产图，文章图片是否空白（预期会空白，验证「投机」坑属实）。
 - [ ] Upd：`editPost` 用 `page_id` 覆盖是否真更新同一篇。
 - [ ] Del：确认 `deletePost` 必然抛错（无法删除）——作为结论。
+
+---
+
+## 七、请求模式矩阵（彻底理清）
+
+### 7.0 前提结论（本次深挖已定论）
+- **根因**：思源宿主内 `isInSiyuanOrSiyuanNewWin=true` → `isUseSiyuanProxy=false`；`canUsePluginFetch=true`（`win.require` 存在）→ `resolvePublishTransport` 优先返回 **`plugin-node-fetch`**。故 Telegraph `/check` 走插件直连 `https://edit.telegra.ph/check` → DNS 失败（被墙）。**未走任何 CORS 代理。**
+- **新版可用 CORS 代理已实测通过**：`https://cors.terwer.space/`（见 7.5），正是 corsFetch 的 `corsProxyUrl` 落点。
+
+### 7.1 三类通道（XML-RPC / multipart / JSON 共用 `resolvePublishTransport`）
+| 通道 | 底层 | 谁发起 | 能否访问 loopback/私网 | 适用场景 | 不适用 |
+|------|------|--------|------------------------|----------|--------|
+| **plugin-node-fetch** | 插件宿主 bundled node-fetch（`win.require(libs/node-fetch-cjs)`） | 插件渲染进程 | ✅（Node 直达本机） | 内网/本地/同源/未被墙外网 | **被墙外网**（DNS/连接失败，如 telegra.ph）；无 CORS 概念 |
+| **siyuan-forward-proxy** | 思源内核 `forwardProxy` API | 思源内核 | ✅（SafeDialer 兜底 SSRF；`--safe-mode` 拒绝） | 无直传能力 + `isUseSiyuanProxy‖forceProxy`；loopback/私网目标 | 思源宿主内 `isUseSiyuanProxy=false` 不触发（除非 forceProxy） |
+| **middleware-fetch** | **远端 CORS 代理** | 远端代理服务器 | ❌（远端无法访问用户 localhost） | 浏览器跨域 + **被墙外网**（远端代访问） | 本地/私网目标 |
+
+### 7.2 通道选择（`resolvePublishTransport(ctx)`）
+```
+if canUsePluginFetch            -> plugin-node-fetch
+if shouldUseSiyuanForwardProxy  -> siyuan-forward-proxy   # = isUseSiyuanProxy || forceProxy
+else                            -> middleware-fetch
+```
+> `middleware` 落点在插件内**不一致**：JSON/multipart 走 `corsFetch`（`corsProxyUrl`=corsAnywhereUrl，新版协议）；XML-RPC 走 `proxyFetch`→`CommonFetchClient`（`middlewareUrl`=middlewareUrl，旧协议 `/fetch` POST 包裹）。两者代理地址不同（`cors.terwer.space` vs `api.terwer.space/api/middleware`）。
+
+### 7.3 middleware-fetch 的两种实现
+- **`corsFetch`（useProxy，新版）**：`fetch(corsProxyUrl + "/" + url, {headers})`，把 Origin/Referer/Cookie 等不安全头塞进 `x-cors-headers`，响应解析 `cors-received-headers`（含 `Set-Cookie-Array`）。**走 `cfg.corsAnywhereUrl`。**
+- **`CommonFetchClient.fetchCall`（旧版）**：`middlewareUrl + "/fetch"`，POST `{fetchParams:{apiUrl,fetchOptions}}`。**走 `cfg.middlewareUrl`**（默认 `api.terwer.space/api/middleware`→404）。
+
+### 7.4 配置字段现状
+- `BlogConfig.corsAnywhereUrl?: string`（zhi-blog-api 已有 SD 字段）——但 `commonBlogConfig` 中**被注释（默认空）**，全库无默认值。
+- `BlogConfig.middlewareUrl?: string`——部分 web 平台配置，默认 `LEGENCY_SHARED_PROXT_MIDDLEWARE`。
+- **`isCorsProxy` 不存在**（zhi-blog-api 无此字段，插件无此字段）——需新增。
+- **`cors.terwer.space` 在插件源码零出现**——新版代理未接入。
+
+### 7.5 `cors.terwer.space` 实测（验证方案根基，通过）
+- 根路径 `GET https://cors.terwer.space/` → **200**。
+- `GET https://cors.terwer.space/https://edit.telegra.ph/check`（无 x-cors-headers）→ `{"error":"Access denied"}`（需 x-cors-headers，代理本身通达）。
+- `POST https://cors.terwer.space/https://edit.telegra.ph/check` + `x-cors-headers: {"origin":"https://telegra.ph","referer":"https://telegra.ph/","Content-Type":"text/plain"}` + body `page_id=0` → **成功**：`set-cookie: tph_uuid=JLF1RqPJEqZOjownIIkVMh8chLS9ocH5Yk7NIUwliv`；body `{"save_hash":"a4452f34c3d32dad3138970160e541ae30be","can_edit":false}`；`cors-received-headers` 含 `Set-Cookie-Array:["tph_uuid=…","tph_auth_alert=DELETED"]`。
+- **结论**：`cors.terwer.space` + corsFetch 的协议完全匹配；匿名会话可创建，可自动填 Uuid/Hash → V2C 可通过。
+
+---
+
+## 八、安全边界（第一优先级）
+
+1. **SSRF/目标可达性**：`middleware-fetch`（远端代理）**不能**访问 loopback/私网目标，**不得**用于本地/私网平台（远端代理无法到达，且把「哪个目标是本机」泄露给代理）。`isCorsProxy` 仅适用于**公网被墙、需远端代理**的平台（如 Telegraph，目标是公网 telegra.ph）。
+2. **敏感头/凭证**：`corsFetch` 把 Origin/Referer/Cookie 塞进 `x-cors-headers` 发往远端代理 → **凭证（tph_uuid/save_hash 等）会经第三方代理**。cors.terwer.space 为作者自营（terwer.space），可信；但设计上必须**由平台适配器显式声明 isCorsProxy**（编码时决定），不得让用户随意开启，避免误把内网/敏感平台走远端代理。
+3. **强制 cors 的适用范围**：`isCorsProxy=true` 时应**跳过 plugin-node-fetch 和 siyuan-forward-proxy，直接 middleware-fetch**；但仅对该平台生效（Telegraph），不影响其它平台既有通道。
+4. **数据最小化**：Telegraph 匿名会话只用 tph_uuid（非用户真实账号），经代理风险面小；LOGIN_USER 模式的 accessToken 属更敏感凭证，走 cors.terwer.space 需谨慎（或仅匿名走 CORS 代理）。
+
+---
+
+## 九、Telegraph 方案（isCorsProxy）
+
+**目标**：让 Telegraph 走 `corsFetch`（新版 `cors.terwer.space` 代理），绕过 plugin-node-fetch 直连的 DNS 失败。
+
+### 需要改动
+1. **`BlogConfig` 加 `isCorsProxy?: boolean`**（zhi-blog-api 框架层；或插件侧扩展）——用于声明"此平台需强制走远端 CORS 代理"。
+2. **`resolvePublishTransport` 加 `isCorsProxy` 到 resolve context**：`if (isCorsProxy) return "middleware-fetch"`（置于 canUsePluginFetch 之前，强制走 cors）。
+3. **`TelegraphConfig` 设 `corsAnywhereUrl = "https://cors.terwer.space/"` + `isCorsProxy = true`**。
+4. **校验/发布走 cors**：`/check`(V2C)、`/save`(newPost/editPost)、`/upload` 均经 corsFetch。
+5. UI/i18n：`isCorsProxy` 提示 + `corsAnywhereUrl` 说明（若暴露给用户）；措辞用「科学上网/网络代理」，禁违禁词。
+
+### 安全默认
+- `isCorsProxy` **默认受限于平台适配器显式设置**（Telegraph），不开放给用户全局开关（避免误用走远端代理 + 凭证外泄）。
+- `cors.terwer.space` 为作者自营，可信；作为新版默认 CORS 代理。
+
+### 待确认
+- `isCorsProxy` 放 **zhi-blog-api 框架层**（发版）还是**插件侧扩展**（`TelegraphConfig` 自行声明 + 传输层感知）。
+- 是否把 `cors.terwer.space` 设为全局默认 `corsAnywhereUrl`（影响其它需 CORS 代理的平台），还是仅 Telegraph 用。
+- 是否需要在配置页暴露 `corsAnywhereUrl`/`isCorsProxy` 给用户（用户建议的方案 A「科学上网代理 URL 配置项」与之相关）。

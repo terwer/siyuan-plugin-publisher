@@ -23,10 +23,11 @@
 
 ## 三、验证步骤（探索确认后，分阶段）
 ### 阶段 0：环境与可达性确认
-- [ ] host 下打开 Telegraph「配置页」，确认字段（登录模式 / Access Token / Hash / 刷新授权）与 label。
-- [ ] `home`/`apiUrl` 默认值确认（home 是否 `https://telegra.ph`）。
-- [ ] 点「验证」（匿名）→ 观察 `/check` 是否成功（看日志/配置页状态），确认公网 middleware 是否可达。
-- [ ] 若公网 middleware 不通，尝试排查 siyuan 代理转发通道是否可行。
+- [x] host 下打开 Telegraph「配置页」，确认字段（登录模式 / API地址/作者/Uuid/Hash / 刷新授权 / 预览规则 / 发布格式 / 图床服务）与实际 label。
+- [x] `home`/`apiUrl` 确认：`home`(平台首页)**为空需手填** `https://telegra.ph`；`apiUrl=https://edit.telegra.ph`（默认）。
+- [x] 点「验证」（匿名）→ **失败**：`GET https://edit.telegra.ph/check → getaddrinfo ENOTFOUND edit.telegra.ph`（见 progress 二点七）。
+- [x] 宿主机验证：`edit.telegra.ph`/`telegra.ph` DNS 解析失败（无代理）；`api.terwer.space/api/middleware` 返回 404。
+- [ ] **待定**：是否启用代理（如 hiddify 127.0.0.1:12334）让宿主可访问 telegra.ph，以便继续真实验证（V2C/Pub/查看/Upd）；否则当前环境无法访问 telegra.ph，验证受阻。→ 已向用户确认。
 
 ### 阶段 1：V2C
 - [ ] 匿名模式点「验证」→ 若成功，账号「运行中/已授权」；`password` 被写为 `tph_uuid`，`saveHash` 记录 `save_hash`。
