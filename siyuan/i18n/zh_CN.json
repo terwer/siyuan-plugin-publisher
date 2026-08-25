@@ -604,5 +604,8 @@
   "v2.batchPublish.status.running": "正在批量分发…",
   "v2.batchPublish.status.success": "全部平台分发成功。",
   "v2.batchPublish.status.partial": "部分平台分发失败，请查看下方结果。",
-  "v2.batchPublish.result.running": "发布中…"
+  "v2.batchPublish.result.running": "发布中…",
+  "v2.card.action.forceDelete": "强制删除",
+  "v2.card.confirm.forceDeleteText": "强制删除将解除本文档与该平台的发布关联，但不会删除平台端的文章。确认强制删除？",
+  "v2.card.confirm.forceDelete": "强制删除"
 }

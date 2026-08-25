@@ -48,7 +48,7 @@ export const useV2QuickPublish = () => {
   const { blogApi } = useSiyuanApi()
   const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
   const { t } = useV2I18n()
-  const { doSinglePublish, doSingleDelete, initPublishMethods, getPostPreviewUrl } = usePublish()
+  const { doSinglePublish, doSingleDelete, doForceSingleDelete, initPublishMethods, getPostPreviewUrl } = usePublish()
   const { getPublishCfg, getPublishApi } = usePublishConfig()
   const publishValidation = useV2PublishValidation()
   const state = reactive({
@@ -69,6 +69,9 @@ export const useV2QuickPublish = () => {
       errDetails: "",
       isPublishing: false,
       lastAction: "" as V2PublishAction,
+      // 正常删除失败（如平台端文章已不存在）后置为 true，用于仅展示「强制删除」兜底按钮。
+      // 正常状态下保持 false，避免误导用户把「解除本地关联」当作常规删除。
+      canForceDelete: false,
     },
   })
 
@@ -207,6 +210,7 @@ export const useV2QuickPublish = () => {
       previewUrl: "",
       isPublishing: true,
       lastAction: item.isPublished ? "update" : "publish",
+      canForceDelete: false,
     })
 
     try {
@@ -283,6 +287,7 @@ export const useV2QuickPublish = () => {
       previewUrl: "",
       isPublishing: true,
       lastAction: "preview",
+      canForceDelete: false,
     })
 
     try {
@@ -366,6 +371,7 @@ export const useV2QuickPublish = () => {
           errMsg: "",
           errDetails: "",
           isPublishing: false,
+          canForceDelete: false,
         })
         emitPublishFeedback()
       } else {
@@ -380,6 +386,8 @@ export const useV2QuickPublish = () => {
           errDetails: errorText.details,
           previewUrl: "",
           isPublishing: false,
+          // 删除失败：平台端文章可能已不存在，需要「强制删除」清理本地残留关联。
+          canForceDelete: true,
         })
         emitPublishFeedback()
       }
@@ -391,6 +399,65 @@ export const useV2QuickPublish = () => {
         errDetails: errorText.details,
         previewUrl: "",
         isPublishing: false,
+        canForceDelete: true,
+      })
+      emitPublishFeedback()
+    }
+  }
+
+  /**
+   * 强制删除：仅清理本地发布关联（postid/属性/YAML），不调用平台 API。
+   *
+   * 用于正常删除失败的兜底场景——平台端文章已不存在（或 API 异常），
+   * 只剩本地残留数据。强制删除只解除本地关联，让文档回到「未发布」。
+   */
+  const forceDeletePlatform = async (item: V2QuickPublishPlatformItem) => {
+    if (!canPublish.value || !item.isAuthorized || !item.isPublished) {
+      return
+    }
+
+    setActivePlatform(item)
+    setPublishState({
+      status: "preparing",
+      errMsg: "",
+      errDetails: "",
+      previewUrl: "",
+      isPublishing: true,
+      lastAction: "delete",
+      canForceDelete: false,
+    })
+
+    try {
+      const publishCfg = await getPublishCfg(item.platformKey)
+      if (!publishCfg?.cfg || !publishCfg?.dynCfg) {
+        throw new Error(t("v2.quickPublish.error.deleteConfigMissing"))
+      }
+
+      const result = await doForceSingleDelete(item.platformKey, state.pageId, publishCfg)
+      if (!result) {
+        throw new Error(t("v2.quickPublish.error.deleteFailed"))
+      }
+
+      setPreviewLink(item.platformKey, "")
+      updatePlatformPublishFlag(item.platformKey, false)
+      setPublishState({
+        status: "success",
+        previewUrl: "",
+        errMsg: "",
+        errDetails: "",
+        isPublishing: false,
+        canForceDelete: false,
+      })
+      emitPublishFeedback()
+    } catch (error) {
+      const errorText = buildV2QuickPublishCaughtErrorText(error, t("v2.quickPublish.error.deleteFailed"))
+      setPublishState({
+        status: "failed",
+        errMsg: errorText.summary,
+        errDetails: errorText.details,
+        previewUrl: "",
+        isPublishing: false,
+        canForceDelete: true,
       })
       emitPublishFeedback()
     }
@@ -404,5 +471,6 @@ export const useV2QuickPublish = () => {
     previewPlatform,
     retryLastPublish,
     deletePlatform,
+    forceDeletePlatform,
   }
 }

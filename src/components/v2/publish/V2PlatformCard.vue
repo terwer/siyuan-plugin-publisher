@@ -71,6 +71,16 @@
         >
           {{ t("v2.card.action.delete") }}
         </button>
+        <!-- 仅当删除失败后才提供「强制删除」兜底，正常状态不出现，避免误导/误操作 -->
+        <button
+          v-if="isFailed && canForceDelete && isPublished"
+          type="button"
+          class="syp-platform-card__action syp-platform-card__action--danger syp-platform-card__action--force"
+          :disabled="isProcessing"
+          @click.stop="toggleForceDeleteConfirm"
+        >
+          {{ t("v2.card.action.forceDelete") }}
+        </button>
       </div>
 
       <SypConfirmBar
@@ -82,6 +92,16 @@
         :loading="isProcessing"
         @confirm="confirmDelete"
         @cancel="toggleDeleteConfirm"
+      />
+      <SypConfirmBar
+        ref="forceConfirmBarRef"
+        :visible="showForceDeleteConfirm"
+        :message="t('v2.card.confirm.forceDeleteText')"
+        :confirm-text="t('v2.card.confirm.forceDelete')"
+        :cancel-text="t('v2.card.confirm.cancel')"
+        :loading="isProcessing"
+        @confirm="confirmForceDelete"
+        @cancel="toggleForceDeleteConfirm"
       />
     </div>
   </article>
@@ -102,23 +122,32 @@ const props = defineProps<{
   isProcessing?: boolean
   previewLink?: string
   isFailed?: boolean
+  canForceDelete?: boolean
 }>()
 
 const emit = defineEmits<{
   (event: "primary"): void
   (event: "preview"): void
   (event: "delete"): void
+  (event: "forceDelete"): void
   (event: "configure"): void
 }>()
 const { t } = useV2I18n()
 
 const showDeleteConfirm = ref(false)
+const showForceDeleteConfirm = ref(false)
 const confirmBarRef = ref<InstanceType<typeof SypConfirmBar> | null>(null)
+const forceConfirmBarRef = ref<InstanceType<typeof SypConfirmBar> | null>(null)
 
-watch(showDeleteConfirm, async (visible) => {
-  if (visible) {
+watch([showDeleteConfirm, showForceDeleteConfirm], async ([delVisible, forceVisible]) => {
+  if (delVisible) {
     await nextTick()
     const el = confirmBarRef.value?.$el as HTMLElement | undefined
+    el?.scrollIntoView({ behavior: "smooth", block: "center" })
+  }
+  if (forceVisible) {
+    await nextTick()
+    const el = forceConfirmBarRef.value?.$el as HTMLElement | undefined
     el?.scrollIntoView({ behavior: "smooth", block: "center" })
   }
 })
@@ -145,6 +174,15 @@ const toggleDeleteConfirm = () => {
 const confirmDelete = () => {
   showDeleteConfirm.value = false
   emit("delete")
+}
+
+const toggleForceDeleteConfirm = () => {
+  showForceDeleteConfirm.value = !showForceDeleteConfirm.value
+}
+
+const confirmForceDelete = () => {
+  showForceDeleteConfirm.value = false
+  emit("forceDelete")
 }
 
 const primaryLabel = computed(() => {
@@ -258,6 +296,10 @@ const primaryLabel = computed(() => {
 
 .syp-platform-card__action--danger
   color $syp-action-danger
+
+.syp-platform-card__action--force
+  color $syp-action-danger
+  font-weight 600
 
 .syp-platform-card__action--primary
   padding 2px 8px

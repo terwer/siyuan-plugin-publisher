@@ -21,9 +21,11 @@
         :is-processing="quickPublish.state.publishState.isPublishing"
         :preview-link="previewLinkMap[item.platformKey]"
         :is-failed="isFailed(item)"
+        :can-force-delete="canForceDelete(item)"
         @primary="quickPublish.publishToPlatform(item)"
         @preview="quickPublish.previewPlatform(item, true)"
         @delete="quickPublish.deletePlatform(item)"
+        @force-delete="quickPublish.forceDeletePlatform(item)"
         @configure="onConfigure(item)"
       />
     </div>
@@ -54,6 +56,15 @@ const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state
 
 function isFailed(item: (typeof quickPublish.state.platformItems)[number]) {
   return quickPublish.state.publishState.status === "failed" && quickPublish.state.publishState.platformKey === item.platformKey
+}
+
+// 仅当该平台「删除失败」时提供「强制删除」兜底；正常状态始终为 false，避免误导/误操作。
+function canForceDelete(item: (typeof quickPublish.state.platformItems)[number]) {
+  return (
+    quickPublish.state.publishState.status === "failed" &&
+    quickPublish.state.publishState.platformKey === item.platformKey &&
+    quickPublish.state.publishState.canForceDelete === true
+  )
 }
 
 function onConfigure(_item: (typeof quickPublish.state.platformItems)[number]) {

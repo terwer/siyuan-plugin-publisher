@@ -351,7 +351,7 @@ const usePublish = () => {
    * @param id - 思源笔记的ID
    * @param publishCfg - 发布配置
    */
-  const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
+  const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg): Promise<boolean> => {
     try {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
@@ -362,29 +362,28 @@ const usePublish = () => {
       if (StrUtil.isEmptyString(posidKey)) {
         throw new Error("配置错误，posidKey不能为空，请检查配置")
       }
-      if (!StrUtil.isEmptyString(posidKey)) {
-        const postMeta = ObjectUtil.getProperty(setting, id, {})
-        const updatedPostMeta = { ...postMeta }
-        if (updatedPostMeta.hasOwnProperty(posidKey)) {
-          delete updatedPostMeta[posidKey]
-        }
-        // 别名不能删除，因为别的平台可能还用
-
-        setting[id] = updatedPostMeta
-        await updateSetting(setting)
-
-        // 清空属性
-        const yamlKey = getDynYamlKey(key)
-        await kernelApi.setSingleBlockAttr(id, yamlKey, "")
-        logger.info(`[${key}] [${id}] 属性已移除`)
-
-        await kernelApi.pushMsg({
-          msg: t("main.opt.ok"),
-          timeout: 2000,
-        })
-        logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
-        ElMessage.success(`[${key}] [${id}] 文章发布信息已强制移除`)
+      const postMeta = ObjectUtil.getProperty(setting, id, {})
+      const updatedPostMeta = { ...postMeta }
+      if (updatedPostMeta.hasOwnProperty(posidKey)) {
+        delete updatedPostMeta[posidKey]
       }
+      // 别名不能删除，因为别的平台可能还用
+
+      setting[id] = updatedPostMeta
+      await updateSetting(setting)
+
+      // 清空属性
+      const yamlKey = getDynYamlKey(key)
+      await kernelApi.setSingleBlockAttr(id, yamlKey, "")
+      logger.info(`[${key}] [${id}] 属性已移除`)
+
+      await kernelApi.pushMsg({
+        msg: t("main.opt.ok"),
+        timeout: 2000,
+      })
+      logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
+      ElMessage.success(`[${key}] [${id}] 文章发布信息已强制移除`)
+      return true
     } catch (e) {
       ElMessage.error(t("main.opt.failure") + "=>" + e)
       logger.error(t("main.opt.failure") + "=>", e)
@@ -392,6 +391,7 @@ const usePublish = () => {
         msg: t("main.opt.failure") + "=>" + e,
         timeout: 7000,
       })
+      return false
     }
   }
 

@@ -248,9 +248,11 @@
               :is-processing="publishState.isPublishing"
               :preview-link="previewLinkMap[item.platformKey]"
               :is-failed="isFailed(item)"
+              :can-force-delete="canForceDelete(item)"
               @primary="publishToPlatform(item)"
               @preview="previewPlatform(item)"
               @delete="deletePlatform(item)"
+              @force-delete="forceDeletePlatform(item)"
               @configure="configurePlatform(item)"
             />
           </div>
@@ -709,6 +711,19 @@ async function configurePlatform(item: (typeof quickPublish.state.platformItems)
 
 function isFailed(item: (typeof quickPublish.state.platformItems)[number]) {
   return publishState.value.status === "failed" && publishState.value.platformKey === item.platformKey
+}
+
+// 仅当该平台「删除失败」时才允许「强制删除」，正常状态下始终为 false，避免误导/误操作。
+function canForceDelete(item: (typeof quickPublish.state.platformItems)[number]) {
+  return (
+    publishState.value.status === "failed" &&
+    publishState.value.platformKey === item.platformKey &&
+    publishState.value.canForceDelete === true
+  )
+}
+
+function forceDeletePlatform(item: (typeof quickPublish.state.platformItems)[number]) {
+  quickPublish.forceDeletePlatform(item)
 }
 
 function showPublishErrorDetails() {

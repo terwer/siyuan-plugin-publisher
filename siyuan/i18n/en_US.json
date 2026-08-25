@@ -602,5 +602,8 @@
   "v2.batchPublish.status.running": "Batch publishing…",
   "v2.batchPublish.status.success": "All platforms published.",
   "v2.batchPublish.status.partial": "Some platforms failed, see results below.",
-  "v2.batchPublish.result.running": "Publishing…"
+  "v2.batchPublish.result.running": "Publishing…",
+  "v2.card.action.forceDelete": "Force delete",
+  "v2.card.confirm.forceDeleteText": "Force delete will only remove this document's publish link to the platform; it will NOT delete the article on the platform. Confirm force delete?",
+  "v2.card.confirm.forceDelete": "Force delete"
 }
