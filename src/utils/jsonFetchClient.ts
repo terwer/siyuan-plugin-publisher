@@ -41,6 +41,8 @@ interface JsonFetchClientDeps {
     params: any,
     method: JsonFetchMethod
   ) => Promise<unknown>
+  /** CORS 受限平台要求强制走新 CORS 代理 */
+  isCorsProxy?: boolean
   logger?: ILogger
   buildDiagnosticPreview?: (input: unknown) => string
   attachDiagnosticError?: (error: unknown, diagnostic?: PublishTransportDiagnostic) => void
@@ -55,6 +57,7 @@ function resolveJsonFetchTransport(
     isInSiyuanOrSiyuanNewWin: deps.isInSiyuanOrSiyuanNewWin(),
     isUseSiyuanProxy: deps.isUseSiyuanProxy,
     canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(deps.appInstance),
+    isCorsProxy: deps.isCorsProxy,
   })
 }
 

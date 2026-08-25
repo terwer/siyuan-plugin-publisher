@@ -36,6 +36,10 @@ class TelegraphConfig extends CommonBlogConfig {
     this.previewUrl = "/[postid]"
     this.allowPreviewUrlChange = false
     this.forceReAuth = false
+
+    // CORS 受限平台：声明 isCorsProxy，强制走 CORS 代理通道
+    // corsAnywhereUrl 由用户自行配置（不写死共享代理地址，防止滥用），UI 提供输入框
+    this.isCorsProxy = true
   }
 }
 

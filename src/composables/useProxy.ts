@@ -23,11 +23,12 @@ import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlr
  *
  * @param middlewareUrl - 可选，如果使用 CommonFetchClient 需要传递，否则可留空
  * @param corsProxyUrl - 可选，可留空
+ * @param isCorsProxy - 可选，CORS 受限平台要求强制走新 CORS 代理时传 true
  * @author terwer
  * @version 1.7.0
  * @since 1.7.0
  */
-const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
+const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: boolean) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
 
@@ -120,6 +121,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       forceProxy,
       isUseSiyuanProxy,
       canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
+      isCorsProxy,
     })
     logger.info(`XML-RPC transport => ${transport}`, url)
     let resText = await executeXmlrpcTransport(

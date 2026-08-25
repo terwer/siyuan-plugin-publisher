@@ -725,8 +725,13 @@ export default {
   "page.loading": "页面加载中...",
 
   "setting.blog.middlewareUrl.new": "新代理(推荐)",
+  "setting.blog.corsProxy.label": "跨域代理地址",
+  "setting.blog.corsProxy.placeholder": "例如：https://cors.example.com",
   "setting.blog.corsAnywhereUrl.tip":
     "1.20.0+ 全新CORS全局代理，优先级高，设置之后会忽略上面旧的代理地址。设置之后可彻底解决浏览器跨域、科学上网问题",
+  "setting.blog.corsProxy.pin.tip":
+    "该平台需要通过 CORS 代理访问。请在上方填写你的代理地址，留空则该平台不可用。",
+  "setting.blog.corsProxy.doc": "配置指引 →",
   "setting.blog.middlewareUrl.my.new.tip":
     "1.20.0+ 新版CORS代理，彻底解决「科学上网」、「CORS 跨域」两大问题，" +
     "支持全局跨域请求（支持绕过 header、请求体支持 FormData）。受限于 CORS 策略，「Docker 版本」必须设置 CORS 代理，" +

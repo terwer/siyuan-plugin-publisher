@@ -47,7 +47,10 @@ export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/mid
 /**
  * 新版通用 HTTP 代理，不再免费提供
  *
+ * 注意：不提供默认共享代理地址（防止滥用共享额度），corsAnywhereUrl 需用户自行配置。
+ * 配置指引文档：https://siyuan.wiki/s/20240312153728-paen10j
+ *
  * @since 1.20.2
  * @version 1.20.2
  */
-// export const CORS_PROXT_URL = ""
+export const CORS_PROXY_DOC_URL = "https://siyuan.wiki/s/20240312153728-paen10j"

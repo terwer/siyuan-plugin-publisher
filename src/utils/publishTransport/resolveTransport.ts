@@ -16,17 +16,26 @@ interface PublishTransportResolveContext {
   isInSiyuanOrSiyuanNewWin: boolean
   isUseSiyuanProxy: boolean
   canUsePluginFetch: boolean
+  /**
+   * 平台要求强制走新 CORS 代理（CORS 受限平台，如 Telegra.ph）。
+   * true 时优先级最高，绕过 plugin-node-fetch / siyuan-forward-proxy，一律走 middleware-fetch。
+   */
+  isCorsProxy?: boolean
 }
 
 /**
- * XML / multipart / JSON 共用的传输通道解析（plugin-first）。
+ * XML / multipart / JSON 共用的传输通道解析。
  *
- * loopback/私网目标在有代理条件（`isUseSiyuanProxy || forceProxy`）时走
- * `siyuan-forward-proxy`：思源内核默认模式允许 forwardProxy 访问本机服务，
- * 而 middleware-fetch 是远端 CORS 代理，无法访问 localhost/私网目标。
- * 无代理条件时回退 `middleware-fetch`。
+ * 优先级（isCorsProxy 最高，用于 CORS 受限平台）：
+ * 1. **middleware-fetch** — `isCorsProxy` 为 true（CORS 代理直连远端，不可达域名也必须走代理）
+ * 2. **plugin-node-fetch** — 有插件直传能力时直连
+ * 3. **siyuan-forward-proxy** — `isUseSiyuanProxy || forceProxy`（loopback/私网目标也可，内核默认模式允许访问本机）
+ * 4. **middleware-fetch** — 无代理条件回退
  */
 function resolvePublishTransport(ctx: PublishTransportResolveContext): PublishTransportChannel {
+  if (ctx.isCorsProxy) {
+    return "middleware-fetch"
+  }
   if (ctx.canUsePluginFetch) {
     return "plugin-node-fetch"
   }

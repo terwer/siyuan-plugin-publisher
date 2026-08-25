@@ -20,6 +20,8 @@ interface XmlrpcTransportContext {
   isUseSiyuanProxy: boolean
   /** 插件宿主是否具备 win.require + bundled node-fetch */
   canUsePluginFetch: boolean
+  /** CORS 受限平台要求强制走新 CORS 代理，优先级最高 */
+  isCorsProxy?: boolean
 }
 
 interface XmlrpcTransportRequest {
@@ -45,6 +47,9 @@ interface XmlrpcTransportHandlers {
  * SSRF 防护由内核 `SSRFSafeDialer` 兜底（`--safe-mode` 时内核拒绝 loopback/私网并返回错误）。
  */
 function resolveXmlrpcTransport(ctx: XmlrpcTransportContext): XmlrpcTransport {
+  if (ctx.isCorsProxy) {
+    return "middleware-fetch"
+  }
   if (ctx.canUsePluginFetch) {
     return "plugin-node-fetch"
   }

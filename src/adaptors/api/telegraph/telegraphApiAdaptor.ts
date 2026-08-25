@@ -46,6 +46,13 @@ class TelegraphApiAdaptor extends BaseBlogApi {
       const contentType = "text/plain"
       let xCorsHeaders: Record<any, any> = {}
 
+      // Telegraph 为 CORS 受限平台，必须通过 CORS 代理访问
+      if (StrUtil.isEmptyString(tgCfg.corsAnywhereUrl)) {
+        throw new Error(
+          "telegra.ph 需要配置 CORS 代理地址，请打开该平台的「跨域请求代理」配置项并填写你自己的 CORS 代理地址"
+        )
+      }
+
       // x-cors-headers
       xCorsHeaders["origin"] = "https://telegra.ph"
       xCorsHeaders["referer"] = "https://telegra.ph/"
@@ -290,8 +297,8 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     const postMeta = JsonUtil.safeParse<any>(postid, {})
     const purl = this.cfg.previewUrl ?? ""
     const postUrl = purl.replace("[postid]", postMeta?.path ?? "")
-    const useProxyPreview = false
-    if (useProxyPreview && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
+    // Telegraph 域名被墙，预览链接同样需走 CORS 代理，否则用户环境打不开
+    if (this.cfg.isCorsProxy && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
       const proxyHome = StrUtil.pathJoin(this.cfg.corsAnywhereUrl, this.cfg.home ?? "")
       return StrUtil.pathJoin(`${proxyHome}`, postUrl)
     }

@@ -763,8 +763,13 @@ export default {
   "page.loading": "Page is loading...",
 
   "setting.blog.middlewareUrl.new": "Fresh Proxy (Recommended)",
+  "setting.blog.corsProxy.label": "CORS Proxy URL",
+  "setting.blog.corsProxy.placeholder": "e.g. https://cors.example.com",
   "setting.blog.corsAnywhereUrl.tip":
     "CORS Global Proxy, once configured, helps alleviate browser common-origin issues.",
+  "setting.blog.corsProxy.pin.tip":
+    "This platform requires a CORS proxy to be reachable. Enter your proxy address above; leave blank to make it unavailable.",
+  "setting.blog.corsProxy.doc": "Config guide →",
   "setting.blog.middlewareUrl.my.new.tip":
     "Enhanced CORS proxy, enabling comprehensive common-origin requests. It is advisable to deploy independently. For deployment guidance, kindly refer to https://github.com/Zibri/cloudflare-cors-anywhere.",
   "setting.blog.middlewareUrl.my.warn.tip":

@@ -30,6 +30,8 @@ interface FormUploadClientDeps {
     forceProxy: boolean
   ) => Promise<{ body: string; status?: number }>
   middlewareFormPost: (url: string, headers: any[], formData: BodyInit) => Promise<unknown>
+  /** CORS 受限平台要求强制走新 CORS 代理 */
+  isCorsProxy?: boolean
   logger?: ILogger
   parseJson?: (text: string) => Record<string, unknown>
   buildDiagnosticPreview?: (input: unknown) => string
@@ -49,6 +51,7 @@ interface FormUploadResolveContext {
   isInSiyuanOrSiyuanNewWin: boolean
   isUseSiyuanProxy: boolean
   canUsePluginFetch: boolean
+  isCorsProxy?: boolean
 }
 
 function resolveFormUploadTransport(ctx: FormUploadResolveContext): FormUploadTransport {
@@ -141,6 +144,7 @@ function createFormUploadClient(deps: FormUploadClientDeps) {
         isInSiyuanOrSiyuanNewWin: deps.isInSiyuanOrSiyuanNewWin(),
         isUseSiyuanProxy: deps.isUseSiyuanProxy,
         canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(deps.appInstance),
+        isCorsProxy: deps.isCorsProxy,
       })
       const { json } = await runFormUploadTransport(transport, deps, request)
       return json

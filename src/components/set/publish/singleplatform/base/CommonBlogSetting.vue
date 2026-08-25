@@ -23,7 +23,7 @@ import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { CORS_PROXY_DOC_URL, DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { SypConfig } from "~/syp.config.ts"
 
@@ -348,7 +348,8 @@ onMounted(async () => {
   await initConf()
 
   // set proxy
-  const { isUseSiyuanProxy } = useProxy(formData.cfg.middlewareUrl, formData.cfg.corsAnywhereUrl)
+  // isCorsProxy 平台（如 Telegra.ph）声明强制走 CORS 代理，corsAnywhereUrl 由用户自行配置（不写死默认，防止滥用）
+  const { isUseSiyuanProxy } = useProxy(formData.cfg.middlewareUrl, formData.cfg.corsAnywhereUrl, formData.cfg.isCorsProxy)
   formData.proxy.useSiyuanProxy = isUseSiyuanProxy
   formData.proxy.useCorsAnywhere = !StrUtil.isEmptyString(formData.cfg.corsAnywhereUrl)
   formData.proxy.useMiddleware = !StrUtil.isEmptyString(formData.cfg.middlewareUrl)
@@ -539,6 +540,20 @@ onMounted(async () => {
         class="top-tip"
         type="warning"
       ></el-alert>
+    </el-form-item>
+    <!-- 平台强制 CORS 代理（如 Telegra.ph）：isCorsProxy 开启后显示，SiYuan 宿主内也可用 -->
+    <el-form-item
+      v-if="formData.cfg.isCorsProxy"
+      :label="t('setting.blog.corsProxy.label')"
+      data-syp-tour="corsProxy"
+    >
+      <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsProxy.placeholder')" />
+      <el-alert :closable="false" class="top-tip" type="info">
+        <template #title>
+          {{ t("setting.blog.corsProxy.pin.tip") }}
+          <a target="_blank" :href="CORS_PROXY_DOC_URL">{{ t("setting.blog.corsProxy.doc") }}</a>
+        </template>
+      </el-alert>
     </el-form-item>
     <el-form-item v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin()">
       <el-alert

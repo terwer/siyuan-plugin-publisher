@@ -50,7 +50,7 @@ export class BaseBlogApi extends BlogApi {
     this.logger = createAppLogger("base-blog-api")
     this.baseExtendApi = new BaseExtendApi(this, cfg)
 
-    const { isUseSiyuanProxy, proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
+    const { isUseSiyuanProxy, proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl, cfg.isCorsProxy)
     this.isUseSiyuanProxy = isUseSiyuanProxy
     this.proxyFetch = proxyFetch
     this.corsFetch = corsFetch
@@ -74,6 +74,7 @@ export class BaseBlogApi extends BlogApi {
         return { body: Base64.fromBase64(fetchResult.body) }
       },
       middlewareFormPost: (reqUrl, reqHeaders, body) => this.corsFetch(reqUrl, reqHeaders, body, "POST"),
+      isCorsProxy: cfg.isCorsProxy,
     })
     this.jsonFetchClient = createJsonFetchClient({
       appInstance: this.appInstance,
@@ -83,6 +84,7 @@ export class BaseBlogApi extends BlogApi {
         this.proxyFetch(reqUrl, reqHeaders, params, method, contentType, fp, pe, re),
       middlewareFetch: (reqUrl, reqHeaders, params, method) =>
         this.corsFetch(reqUrl, reqHeaders, params, method),
+      isCorsProxy: cfg.isCorsProxy,
     })
   }
 
