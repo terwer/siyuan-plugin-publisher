@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { PasswordType } from "zhi-blog-api"
+import { PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { StrUtil } from "zhi-common"
 
@@ -103,6 +103,8 @@ class CommonGithubConfig extends CommonBlogConfig {
     this.email = "youweics@163.com"
     this.site = StrUtil.pathJoin(this.home, "/" + this.username)
     this.mdFilenameRule = "[filename].md"
+    // Git 静态博客平台将图片提交到仓库（source/images），默认使用「当前平台」图床
+    this.picbedService = PicbedServiceTypeEnum.Bundled
 
     this.middlewareUrl = middlewareUrl
   }

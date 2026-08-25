@@ -31,5 +31,5 @@
 - **Del ✅**：删除 → repo 该 .md 移除（请求 404），提交 `3cc1abb`，UI 回「未发布」。
 
 ## 验证发现 / 待处理项
-1. **checkAuth 残留 `test.md`**：V2C 验证向 repo 根发布 `test.md`（"Hello, World!"），但清理删除未成功，残留 `test.md`（sha b45ef6f，提交 b34e0a1）。属通用 `CommonGithubApiAdaptor.checkAuth` 行为，待确认是否修复。
-2. **图床默认「不使用」时 Img 不完整**：Hexo 配置默认图床「不使用」，发布含图文档时图片**不**上传 repo（.md 留相对路径 `assets/...`）。切「当前平台」才上传 `source/images`。Git 平台合理默认应为「当前平台」，待确认是否需调整。
+1. **checkAuth 残留 `test.md`**：V2C 验证向 repo 根发布 `test.md`（"Hello, World!"），但清理删除未成功，残留 `test.md`（sha b45ef6f，提交 b34e0a1）。属通用 `CommonGithubApiAdaptor.checkAuth` 行为（`safeDeletePost` 吞错且 checkAuth 只看发布结果）。已**手动清理远程 test.md**（删除提交 10034d4e）；`safeDeletePost` 改用吞错需评估修复。
+2. **Git 平台图床默认「不使用」导致图片不生效（已修复）**：Hexo 配置默认图床「不使用」，发布含图文档时图片**不**上传 repo（.md 留相对路径 `assets/...`）。用户反馈「测试不通过图片不生效」。**修复**：`CommonGithubConfig` 构造器设 `picbedService = PicbedServiceTypeEnum.Bundled`（当前平台），使整个 Github/Gitlab 族默认上传 `source/images`；新增 `githubPicbedDefaults.spec.ts`（默认 Bundled、显式 None 不被覆盖），registry 默认图床逻辑与 Web 平台一致。加注：显式「不使用」仍视为有效选择，不被默认覆盖。
