@@ -369,7 +369,10 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     const url = `/rest/api/content/${pageId}`
     const result = await this.confluenceRequest(url, {}, "DELETE")
 
-    if (!result) {
+    // Confluence 的 DELETE 成功时返回 204 No Content（空响应体）。
+    // 这里仅当明确收到错误 body（带 statusCode）时才判定为失败，
+    // 空响应体视为删除成功。
+    if (result && typeof result === "object" && "statusCode" in result) {
       throw new Error("请求 Confluence API 异常")
     }
 
