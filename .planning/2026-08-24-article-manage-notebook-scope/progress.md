@@ -114,7 +114,11 @@
 - i18n：`siyuan/i18n/zh_CN.json`/`en_US.json` 加 `v2.app.action.openManage`、`v2.app.back.manage`、`v2.app.panel.manage`、`v2.articleManage.*`、`v2.preference.group.notebook.*`、`v2.preference.item.publishSourceNotebooks.*`（useV2I18n 不回退 TS，必须在 JSON）。
 - 单测：`useV2ArticleManage.spec.ts`（6 用例）；`V2PreferenceSettings.spec.ts` mock `useNotebookOptions` 后通过；`useV2QuickPublish.spec.ts` 通过。
 
-### Phase 7 测试与验收（进行中）
-- `pnpm lint`（vue-tsc）exit 0；`useV2QuickPublish` + `useNotebookOptions` + `preferenceConfigManager` + `V2PreferenceSettings` + `useV2ArticleManage` 单测通过。
-- 剩余：V1/V2 构建、宿主手验、docs/checklist 同步、OpenSpec 归档审计。
+### Phase 7 测试与验收（完成）
+- `pnpm lint`（vue-tsc）exit 0；`pnpm vitest run` 57 文件 / 287 用例通过。
+- V1 `pnpm build`（python shim）exit 0；V2 `pnpm build:v2` exit 0；`dist/`、`dist-v2/` i18n 均含 `publishSourceNotebooks`/`发布源笔记本`/`v2.app.action.openManage`。
+- V2 宿主手验（2026-08-24）：房子图标（gear 左侧）、管理视图渲染、笔记本过滤、越权拦截全部通过。
+- V1 宿主手验（2026-08-25）：列表过滤、越权报错、未配置零回退全部通过。
+- docs（文章管理/发布设置/常规发布/极速发布/批量分发/使用指南/分类体系/人工智能）已补齐并提交。
+- OpenSpec 归档审计四项（根治/最佳实践/不破坏底层/不影响无关模式）全部达标 → `openspec archive`（2026-08-25）。
 

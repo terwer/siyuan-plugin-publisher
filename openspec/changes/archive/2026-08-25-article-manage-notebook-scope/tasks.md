@@ -60,15 +60,16 @@
 
 ## 7. 测试与验收（与平台验证同步）
 
-- [x] 7.1 单测：配置归一化、SQL 消毒、共用组件分页/过滤、发布校验、V2 视图切换（`pnpm vitest run` 56 文件 / 274 用例通过；`pnpm lint` vue-tsc exit 0）
-- [ ] 7.2 V1：`pnpm build` + 宿主手验（列表过滤、越权报错、未配置零回退）
-- [x] 7.3 V2：`pnpm build:v2` + 宿主手验（房子图标、管理视图渲染、过滤、越权拦截）
+- [x] 7.1 单测：配置归一化、SQL 消毒、共用组件分页/过滤、发布校验、V2 视图切换（`pnpm vitest run` 57 文件 / 287 用例通过；`pnpm lint` vue-tsc exit 0）
+- [x] 7.2 V1：`pnpm build`（exit 0）+ 宿主手验（列表过滤、越权报错、未配置零回退）
+  - 2026-08-25 宿主手验通过：列表按「发布源笔记本」过滤生效；未授权笔记本文档发布被 `assertNotebookAllowed` 拦截并展示清晰错误；未配置时零行为回退。
+- [x] 7.3 V2：`pnpm build:v2`（exit 0）+ 宿主手验（房子图标、管理视图渲染、过滤、越权拦截）
   - 2026-08-24 宿主（思源 test 工作区，9222 直连）手验通过：
     - 房子图标（lucide `house`，aria `openManage`）位于 `.syp-header-actions` 首个按钮，在「设置」齿轮左侧 ✅
     - 点击进入「文章管理」视图：标题、说明文案、发布源笔记本多选、搜索、已发布勾选、表格、分页均渲染 ✅
     - 「发布源笔记本」下拉加载 `lsNotebooks()` 选项（测试笔记/导入专用/日记专用），选择「测试笔记」后 `publishSourceNotebooks` 持久化到 `storage/syp/publish-preference-cfg.json` ✅
     - 越权拦截：授权集合改为仅「日记专用」后，发布「测试笔记」文档被 `assertNotebookAllowed` 拦截，状态区显示「发布失败」+清晰错误（含 notebook id），`查看详情` 打开错误详情面板 ✅
   - 验证前置（本机首次：需先 `pnpm install` 拉取 `zhi-siyuan-api@2.37.0`，再 `pnpm build:v2` 重建 dist-v2，已 `makeLink` 到 test 工作区并刷新宿主）。
-- [ ] 7.4 同步 docs / checklist；归档前按 OpenSpec 审计（根治/最佳实践/不破坏底层/不影响无关模式）
+- [x] 7.4 同步 docs（文章管理/发布设置/常规发布/极速发布/批量分发/使用指南/分类体系/人工智能 已补齐）；归档前按 OpenSpec 审计（根治/最佳实践/不破坏底层/不影响无关模式）四项全部达标
 
-> 注：Phase 6 完成，7.2/7.3 需宿主手验（待用户在 V1/V2 宿主自测后继续）。
+> 注：Phase 7 全部完成。2026-08-25 归档（`openspec archive`），zhi 侧变更由维护者发包（2.37.0）并由本仓库 bump。
