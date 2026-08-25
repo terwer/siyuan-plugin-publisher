@@ -25,6 +25,7 @@ import { wechatHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom
 import { bilibiliHelpConfig } from "~/src/helpConfigs/pages/platform-config/custom-bilibili"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { telegraphHelpConfig } from "~/src/helpConfigs/pages/platform-config/telegraph"
+import { confluenceHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-confluence"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -175,6 +176,7 @@ describe("verified platform help configs", () => {
     wechatHelpConfig,
     bilibiliHelpConfig,
     telegraphHelpConfig,
+    confluenceHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {

@@ -16,9 +16,6 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
  * 后续各平台可单独拆分为独立文件，扩展 field/tour/faq。
  */
 export const remainingT1HelpConfigs: PageHelpConfig[] = [
-  // === Common ===
-  { pageId: "platform-config/common_Confluence", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-
   // === Github ===
   { pageId: "platform-config/github_Hexo", helpUrl: "https://siyuan.wiki/s/20230908182140-8riar0r" },
   { pageId: "platform-config/github_Hugo", helpUrl: "https://siyuan.wiki/s/20230908182946-itm4luf" },
