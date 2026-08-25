@@ -68,7 +68,9 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // [dd] 日
   // 推荐别名。但是不强制使用，默认调整为 [filename].md since 1.34.0
   // cfg.mdFilenameRule = "[slug].md"
+  // 图片提交到仓库 source/images，文章内链接使用 /images/...（Hexo 构建后 source/images 复制到站点根 /images）
   // cfg.imageStorePath = "source/images"
+  // cfg.imageLinkPath = "images"
   // 标签
   cfg.tagEnabled = true
   // 分类
