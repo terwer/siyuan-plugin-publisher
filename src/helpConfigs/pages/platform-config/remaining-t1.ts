@@ -17,7 +17,6 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
  */
 export const remainingT1HelpConfigs: PageHelpConfig[] = [
   // === Github ===
-  { pageId: "platform-config/github_Hexo", helpUrl: "https://siyuan.wiki/s/20230908182140-8riar0r" },
   { pageId: "platform-config/github_Hugo", helpUrl: "https://siyuan.wiki/s/20230908182946-itm4luf" },
   { pageId: "platform-config/github_Jekyll", helpUrl: "https://siyuan.wiki/s/20230908183451-fjs2nr0" },
   { pageId: "platform-config/github_Quartz", helpUrl: "https://siyuan.wiki/s/20230908182140-8riar0r" },

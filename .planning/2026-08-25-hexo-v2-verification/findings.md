@@ -21,3 +21,15 @@
 ## 登记状态
 - Github 族在 `src/platforms/pre.ts`（`githubCfg`）注册 8 项（#6-#13）；当前 checklist 表中全部 ⬜。
 - 下一篇（后续）可延伸：`src/adaptors/api/{hugo,jekyll,...}` 同构。
+
+## 宿主验证结果（2026-08-25，Electron test 工作区）
+- **V2C ✅**：`github_Hexo` 配置（username=terwer / repo=hexo-blog / branch=main / 存储目录=source/_posts / 发布目录=source/_posts），验证通过，「配置已保存并验证通过」，账号「运行中/已启用」。
+- **Pub ✅**：快速发布 → repo `source/_posts/掘金-V2-验证测试-更新.md`（frontmatter title/permalink + 正文），提交 `bdf5415`。
+- **Upd ✅**：点击「更新」→ 新提交（`3b9692e`），更新机制生效。（内容未变因源文档未改；已尝试 API 追加内容，较脆弱，未作主证据。）
+- **Img ✅**：图床切「**当前平台**」后重发 → cat 图上传 `source/images/cat-20260822153711-o2ho0mg.jpg`（13246B），.md 引用改写 `![cat](/source/images/cat-...jpg)`。
+- **查看 ✅**：`https://github.com/terwer/hexo-blog/blob/main/source/_posts/掘金-V2-验证测试-更新.md` HTTP 200；图片 blob URL 亦 HTTP 200。
+- **Del ✅**：删除 → repo 该 .md 移除（请求 404），提交 `3cc1abb`，UI 回「未发布」。
+
+## 验证发现 / 待处理项
+1. **checkAuth 残留 `test.md`**：V2C 验证向 repo 根发布 `test.md`（"Hello, World!"），但清理删除未成功，残留 `test.md`（sha b45ef6f，提交 b34e0a1）。属通用 `CommonGithubApiAdaptor.checkAuth` 行为，待确认是否修复。
+2. **图床默认「不使用」时 Img 不完整**：Hexo 配置默认图床「不使用」，发布含图文档时图片**不**上传 repo（.md 留相对路径 `assets/...`）。切「当前平台」才上传 `source/images`。Git 平台合理默认应为「当前平台」，待确认是否需调整。

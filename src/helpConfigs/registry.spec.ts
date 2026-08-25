@@ -26,6 +26,7 @@ import { bilibiliHelpConfig } from "~/src/helpConfigs/pages/platform-config/cust
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { telegraphHelpConfig } from "~/src/helpConfigs/pages/platform-config/telegraph"
 import { confluenceHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-confluence"
+import { hexoHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-github-hexo"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -177,6 +178,7 @@ describe("verified platform help configs", () => {
     bilibiliHelpConfig,
     telegraphHelpConfig,
     confluenceHelpConfig,
+    hexoHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {

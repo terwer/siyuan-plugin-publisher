@@ -46,7 +46,7 @@
 
 | # | 平台 | platformKey | subPlatformType | V2C | Pub | Upd | Del | Img | 备注 |
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
-| 6 | Hexo | `github_Hexo` | `Github_Hexo` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
+| 6 | Hexo | `github_Hexo` | `Github_Hexo` | ✅ | ✅ | ✅ | ✅ | ✅ | 2026-08-25 Electron 宿主（test 工作空间）全链路验证：V2C（username=`terwer`、repo=`hexo-blog`、branch=`main`、存储目录=`source/_posts`、PAT Token，「验证」通过，「配置已保存并验证通过」，账号「运行中/已启用」，发布目录自动拉取）；**Pub ✅** 快速发布 → repo `source/_posts/掘金-V2-验证测试-更新.md`（frontmatter title/permalink + 正文，提交 `bdf5415`）；**Upd ✅** 点「更新」→ 新提交（`3b9692e`），更新机制生效；**Img ✅** 图床切「**当前平台**」后重发 → cat 图上传 `source/images/…jpg`，.md 引用改写为 `/source/images/…jpg`；**查看 ✅** 预览规则 `/[user]/[repo]/blob/[branch]/[docpath]` → `https://github.com/terwer/hexo-blog/blob/main/source/_posts/掘金-V2-验证测试-更新.md`（HTTP 200），图片 blob URL 亦 HTTP 200；**Del ✅** 删除 → repo 该 .md 移除（请求 404），提交 `3cc1abb`，UI 回「未发布」。**SOP §3 help/tour/doc ✅**：新增 `common-github-hexo.ts`（helpUrl+summary+fields+faq4+tour8，字段与真实配置一致）+ `docs/draft/platforms/common-github-hexo.md`（顶部 TODO 占位），注册进 `/pages/index.ts`、从 `remaining-t1` 移出并纳入 `verifiedConfigs`（registry 18 项绿、build:v2 通过）；宿主验证 HelpPanel/TourGuide 正常。**本格六格+帮助引导全部闭环** |
 | 7 | Hugo | `github_Hugo` | `Github_Hugo` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 8 | Jekyll | `github_Jekyll` | `Github_Jekyll` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 9 | Quartz | `github_Quartz` | `Github_Quartz` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `16`（#1 #2 #3 #4 #5 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34 #35）· 进行中 `0` · 阻塞 `0` · 未测 `19`
+**T1 小结**：35 项 · 全链路 ✅ `17`（#1 #2 #3 #4 #5 #6 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34 #35）· 进行中 `0` · 阻塞 `0` · 未测 `18`
 
 ---
 
@@ -171,5 +171,6 @@
 | 2026-08-24 | #3 Halo29 `common_Halo` **SOP §3 帮助引导补齐 ✅**：补全 `src/helpConfigs/pages/platform-config/common-halo.ts`（pageId `common_Halo`，helpUrl+summary+fields（home/apiUrl/username/password/previewUrl/pageType/picbedService）+faq 4 条+tour 8 步；字段由原 token 修正为 username/password 与真实配置一致）+ 新增 `docs/draft/platforms/common-halo.md`（顶部 TODO:待替换真实帮助文档链接）；已注册进 `/pages/index.ts`、已从 `remaining-t1` 移出、纳入 `verifiedConfigs`；registry.spec 18 项绿、build:v2 通过。Electron 宿主实测 Halo 配置页：HelpPanel（summary+查看完整帮助文档+FAQ 4 条）、TourGuide（首页地址/API 地址等步）正常定位。本格六格+帮助引导全部闭环 |
 | 2026-08-24 | #4 Telegraph `common_Telegraph` **V2 全链路六格 + 帮助引导 ✅（Electron 宿主）**：升级 `zhi-blog-api@1.82.0`+`zhi-siyuan-api@2.38.0`；新增框架级 `BlogConfig.isCorsProxy`，resolveTransport 置顶优先 `middleware-fetch`（CORS 受限平台），CORS 代理地址用户自配；V2C 匿名 `/check` 经 CORS 代理返回 save_hash（运行中/已启用）；Pub/Upd 成功；查看 getPreviewUrl 走 CORS 代理前缀（预览规则 `/[postid]`）。**Del ⚠️**：Telegra.ph 无删除文章 API（contract 错误，属平台限制）；**Img ⚠️**：无图片上传（newMediaObject 失效）。新增 `telegraph.ts` help 配置 + `docs/draft/platforms/telegraph.md`，纳入 verifiedConfigs |
 | 2026-08-25 | #5 Confluence `common_Confluence` **V2 全链路六格 + 帮助引导 ✅（Electron 宿主）**：V2C 用 PAT 拉取空间（运行中/已启用）；Pub/Upd 成功（页面 version 递增）；Img 图片以 `ri:attachment` 附件挂页；查看预览规则 `/spaces/[spaceKey]/pages/[postid]`。**Del 修复**：`DELETE /rest/api/content/{id}` 返回 204 空响应体，原 `deletePage` 判空误报已修复（空响应视为成功）+ 新增快速发布「强制删除」兜底（删除失败仅本地清除关联并解除映射，带明确确认提示）。新增 `common-confluence.ts` help 配置 + `docs/draft/platforms/confluence.md`，纳入 verifiedConfigs |
+| 2026-08-25 | #6 Hexo `github_Hexo` **V2 全链路六格 + 帮助引导 ✅（Electron 宿主，test 工作空间/9222/terwer/hexo-blog）**：V2C（username/repo/branch/PAT Token，「验证」通过，「配置已保存并验证通过」，账号「运行中/已启用」）；Pub → repo `source/_posts/掘金-V2-验证测试-更新.md`（提交 `bdf5415`）；Upd 点「更新」→ 新提交 `3b9692e`；Img 图床切「**当前平台**」重发，cat 图上传 `source/images/…jpg`，.md 引用 `/source/images/…jpg`；查看 blob URL HTTP 200；Del 删除 → repo .md 移除（404），提交 `3cc1abb`。新增 `common-github-hexo.ts` help 配置 + `docs/draft/platforms/common-github-hexo.md`，注册进 `/pages/index.ts`、移出 `remaining-t1`、纳入 verifiedConfigs（registry 18 项绿）。**依赖修复**：`pnpm install` 将 `zhi-blog-api` 由 1.80.0 升到 **1.82.0**（此前 node_modules 落后，致 `BlogConfig.isCorsProxy` 类型缺失、`vue-tsc` 失败）；`build:v2` 通过。**验证发现（待确认）**：① `CommonGithubApiAdaptor.checkAuth` 向 repo 根发布 `test.md` 后未清理（残留）；② Git 平台图床默认「不使用」时含图发布不传图（须切「当前平台」）。T1 小结更新为 17 个全链路 ✅ |
 
 

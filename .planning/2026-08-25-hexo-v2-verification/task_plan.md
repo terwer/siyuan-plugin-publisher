@@ -15,8 +15,11 @@ Hexo 属 Github 平台族，全族共用共享基类 `commonGithubApiAdaptor` + 
 - 测试 repo（含 `source/_posts/` 目录），branch 如 `main`/`master`
 - 说明：`验证`(checkAuth) = 在 repo 发布再删除 `test.md`，需 repo 可写；「查看」走 GitHub blob 链接（`github.com/<user>/<repo>/blob/<branch>/<docpath>`），无需部署站点即可打开。
 
+## 测试凭据（本机，不落库）
+- 用户名 `terwer`；仓库 `terwer/hexo-blog`；分支 `main`；PAT 取思源笔记「通用账号汇总」（仅本机使用，不写库）。
+
 ## 当前阶段
-未开始（待用户提供测试 repo + PAT）
+PHASE 0 完成（凭据已核验：token 有效、repo push=True、分支 main）
 
 ## 关键步骤
 - [ ] PHASE 0：获取测试 repo + PAT（用户提供）
