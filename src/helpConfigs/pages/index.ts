@@ -35,6 +35,7 @@ import { jianshuHelpConfig } from "./platform-config/custom-jianshu"
 import { juejinHelpConfig } from "./platform-config/custom-juejin"
 import { wechatHelpConfig } from "./platform-config/custom-wechat"
 import { bilibiliHelpConfig } from "./platform-config/custom-bilibili"
+import { telegraphHelpConfig } from "./platform-config/telegraph"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -69,6 +70,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(juejinHelpConfig)
   helpRegistry.register(wechatHelpConfig)
   helpRegistry.register(bilibiliHelpConfig)
+  helpRegistry.register(telegraphHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {
