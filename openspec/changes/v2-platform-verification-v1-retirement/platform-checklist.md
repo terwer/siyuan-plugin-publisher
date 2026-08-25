@@ -102,7 +102,7 @@
 |---|------|-------------|-----------------|-----|-----|-----|-----|-----|------|
 | 29 | 本地系统 | `fs_LocalSystem` | `Fs_LocalSystem` | ✅ | ✅ | ✅ | ✅ | ✅ | Electron V2 全链路已验（2026-05-24，用户手测） |
 
-**T1 小结**：35 项 · 全链路 ✅ `14`（#1 #2 #3 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34 #35）· 进行中 `0` · 阻塞 `0` · 未测 `21`
+**T1 小结**：35 项 · 全链路 ✅ `16`（#1 #2 #3 #4 #5 #21 #25 #27 #28 #29 #30 #31 #32 #33 #34 #35）· 进行中 `0` · 阻塞 `0` · 未测 `19`
 
 ---
 
@@ -169,5 +169,7 @@
 | 2026-08-24 | #2 Notion **SOP §3 帮助引导补齐 ✅**：新增 `src/helpConfigs/pages/platform-config/common-notion.ts`（pageId `common_Notion`，helpUrl+summary+fields（home/apiUrl/token/previewUrl/pageType/knowledgeSpace/picbedService）+faq 4 条+tour 6 步）+ `docs/draft/platforms/common-notion.md`（顶部 TODO:待替换真实帮助文档链接）；注册进 `/pages/index.ts`、从 `remaining-t1` 移出、纳入 `verifiedConfigs`；registry.spec 18 项绿、build:v2 通过。Electron 宿主实测 Notion 配置页：HelpPanel（summary+查看完整帮助文档+FAQ）、TourGuide 6 步（API Token→选择根页面→查看链接→发布格式→图片发布→验证并保存）全部正确可达。本格六格+帮助引导全部闭环 |
 | 2026-08-24 | #3 Halo29 `common_Halo` **V2 全链路 ✅（Electron 宿主，test 工作空间 / dist-v2 / 9222）**：V2C（home/apiUrl=`http://localhost:8090`、username=`admin`、密码默认口令，PasswordType_Password 无 Cookie 流、无 token 字段）→「验证」通过，账号「运行中/已启用」，blogid 自动取分类；Pub「发布成功」；Upd「更新成功」；Del 确认删除（「删除成功」，文章公开页 404）；Img 带本地 asset 图发布——图片 URL 由 `127.0.0.1:53180/assets/…` 改写为 Halo 附件 `http://localhost:8090/upload/<图名>`（curl HTTP 200/image-png，Halo bundled 上传路径可用）；**查看 ✅** `http://localhost:8090/archives/<slug>`（文章 HTTP 200；删除后该链接 404）。注：Halo API 平台仅支持 2.9，2.20+ 已调整 API 策略需改用「Halo网页版」。T1 全链路 ✅ 更新为 14 个 |
 | 2026-08-24 | #3 Halo29 `common_Halo` **SOP §3 帮助引导补齐 ✅**：补全 `src/helpConfigs/pages/platform-config/common-halo.ts`（pageId `common_Halo`，helpUrl+summary+fields（home/apiUrl/username/password/previewUrl/pageType/picbedService）+faq 4 条+tour 8 步；字段由原 token 修正为 username/password 与真实配置一致）+ 新增 `docs/draft/platforms/common-halo.md`（顶部 TODO:待替换真实帮助文档链接）；已注册进 `/pages/index.ts`、已从 `remaining-t1` 移出、纳入 `verifiedConfigs`；registry.spec 18 项绿、build:v2 通过。Electron 宿主实测 Halo 配置页：HelpPanel（summary+查看完整帮助文档+FAQ 4 条）、TourGuide（首页地址/API 地址等步）正常定位。本格六格+帮助引导全部闭环 |
+| 2026-08-24 | #4 Telegraph `common_Telegraph` **V2 全链路六格 + 帮助引导 ✅（Electron 宿主）**：升级 `zhi-blog-api@1.82.0`+`zhi-siyuan-api@2.38.0`；新增框架级 `BlogConfig.isCorsProxy`，resolveTransport 置顶优先 `middleware-fetch`（CORS 受限平台），CORS 代理地址用户自配；V2C 匿名 `/check` 经 CORS 代理返回 save_hash（运行中/已启用）；Pub/Upd 成功；查看 getPreviewUrl 走 CORS 代理前缀（预览规则 `/[postid]`）。**Del ⚠️**：Telegra.ph 无删除文章 API（contract 错误，属平台限制）；**Img ⚠️**：无图片上传（newMediaObject 失效）。新增 `telegraph.ts` help 配置 + `docs/draft/platforms/telegraph.md`，纳入 verifiedConfigs |
+| 2026-08-25 | #5 Confluence `common_Confluence` **V2 全链路六格 + 帮助引导 ✅（Electron 宿主）**：V2C 用 PAT 拉取空间（运行中/已启用）；Pub/Upd 成功（页面 version 递增）；Img 图片以 `ri:attachment` 附件挂页；查看预览规则 `/spaces/[spaceKey]/pages/[postid]`。**Del 修复**：`DELETE /rest/api/content/{id}` 返回 204 空响应体，原 `deletePage` 判空误报已修复（空响应视为成功）+ 新增快速发布「强制删除」兜底（删除失败仅本地清除关联并解除映射，带明确确认提示）。新增 `common-confluence.ts` help 配置 + `docs/draft/platforms/confluence.md`，纳入 verifiedConfigs |
 
 
