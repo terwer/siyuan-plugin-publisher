@@ -21,3 +21,10 @@
 - 修复 commit `39323796`：`HexoConfig.imageLinkPath="images"`（`imageStorePath` 保持 `source/images`）+ `hexoImagePath.spec.ts`；build:v2 通过。宿主把账号配置页「图片访问链接」改 `images` 并重发 → repo 引用 `![cat](/images/cat-…jpg)`。
 - 注：图片两字段可编辑，默认仅对新账号生效；存量账号需在配置页把「图片访问链接」改为 `images`。
 - 已同步 checklist SSOT（#6 行 Img 引用 + 修订记录）。
+
+## 2026-08-26（图片链接采用相对路径 `../images`，源码+构建产物双模式）
+- 核对本地 `hexo-blog`（`permalink:/post/:title.html`、`post_asset_folder:false`、`source_dir:source`、`public_dir:docs`；作者文章亦 `permalink:/post/{slug}.html` + `/images/…png`）。
+- 验证（本地 `hexo generate` + `hexo server`）：文章引用相对 `../images/…jpg` → 产物 `<img src="/../images/…jpg">`，服务端/浏览器把 `/../` 归一化为 `/images/…`（HTTP 200）；源码 `source/_posts/x.md` 的 `../images/` 解析到 `source/images/…`（文件存在）——源码与构建产物均可用。
+- 实现：`HexoConfig.imageLinkPath = "../images"`（`imageStorePath` 保持 `source/images`）；`getImagePath` 支持 `../`/`./` 相对前缀、拼接文件名、不前置站点根斜杠。用 `HexoApiAdaptor.newMediaObject` 单测断言 `attachment.url==='../images/{name}'`、提交目录 `source/images/{name}`；`build:v2` 通过、相关 spec 全绿。
+- 帮助/文档/清单同步改 `../images/<图片名>`（「图片存储目录」说明保留 `source/images`）。
+- 注：`yamlLinkEnabled` 默认 `true`，写入 `permalink:/post/{slug}.html`，正是 `../images/` 依赖的平铺 URL；关掉时 `_config.yml` 的 `/post/:title.html` 也是 1 层，图片仍可用。存量账号需在配置页把「图片访问链接」改为 `../images` 后重发。

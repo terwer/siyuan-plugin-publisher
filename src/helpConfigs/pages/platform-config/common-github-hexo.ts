@@ -30,7 +30,7 @@ export const hexoHelpConfig: PageHelpConfig = {
     previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
     pageType: { tip: "Hexo 默认按 Markdown 内容发布。" },
-    picbedService: { tip: "Hexo 图片会提交到博客仓库。选择「当前平台」图床，图片上传到 source/images，文章中展示 /source/images/<图片名> 地址。" },
+    picbedService: { tip: "Hexo 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 source/images，文章中引用为相对路径 ../images/<图片名>（源码与构建产物均可显示）。" },
   },
   faq: [
     {
@@ -39,7 +39,7 @@ export const hexoHelpConfig: PageHelpConfig = {
     },
     {
       q: "图片要怎么发布？",
-      a: "选择「当前平台」图床，图片会上传到仓库的 source/images 目录（默认），文章中引用为 /source/images/<图片名> 地址。",
+      a: "选择「当前平台」图床，图片会上传到仓库的 source/images 目录（默认），文章中引用为相对路径 ../images/<图片名> 地址，保证源码与构建产物都能正确显示。",
     },
     {
       q: "查看链接打不开？",
@@ -90,7 +90,7 @@ export const hexoHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='picbedService']",
       title: "图片发布",
-      content: "选择「当前平台」图床，图片上传到仓库 source/images。",
+      content: "选择「当前平台」图床，图片上传到仓库 source/images，文章引用为相对路径 ../images/<图片名>（源码与构建产物均可显示）。",
       placement: "bottom",
     },
     {

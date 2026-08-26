@@ -320,10 +320,12 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const docPath = post.cate_slugs?.[0] ?? this.cfg.blogid
       const savePath = StrUtil.pathJoin(docPath, path.replace("[docpath]", ""))
       imagePath = StrUtil.pathJoin(savePath, mediaObject.name)
-    } else if (path.startsWith("./")) {
+    } else if (path.startsWith("./") || path.startsWith("../")) {
+      // 相对链接路径：保留相对前缀并拼接文件名，不前置站点根斜杠（如 ./images/… 或 ../images/…）
+      const relImgPath = StrUtil.pathJoin(path, mediaObject.name)
       return {
-        imagePath: path,
-        absImgPath: path,
+        imagePath: relImgPath,
+        absImgPath: relImgPath,
       }
     } else {
       const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
