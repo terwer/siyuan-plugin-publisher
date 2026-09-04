@@ -38,6 +38,7 @@ import { bilibiliHelpConfig } from "./platform-config/custom-bilibili"
 import { telegraphHelpConfig } from "./platform-config/telegraph"
 import { confluenceHelpConfig } from "./platform-config/common-confluence"
 import { hexoHelpConfig } from "./platform-config/common-github-hexo"
+import { hugoHelpConfig } from "./platform-config/github-hugo"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -75,6 +76,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(telegraphHelpConfig)
   helpRegistry.register(confluenceHelpConfig)
   helpRegistry.register(hexoHelpConfig)
+  helpRegistry.register(hugoHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {

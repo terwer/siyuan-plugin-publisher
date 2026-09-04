@@ -59,3 +59,5 @@ testdata
 
 # Cursor config
 .cursor
+# Workbuddy local memory
+.workbuddy
