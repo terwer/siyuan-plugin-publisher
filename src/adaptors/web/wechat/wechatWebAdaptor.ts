@@ -10,11 +10,12 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { BlogConfig, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import { BlogConfig, MediaObject, PageTypeEnum, Post, PreviewOpenModeEnum, UserBlog } from "zhi-blog-api"
 import { toRaw } from "vue"
 import * as _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import {MockBrowser} from "~/src/utils/MockBrowser.ts";
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 微信公众号网页授权适配器
@@ -27,6 +28,8 @@ import {MockBrowser} from "~/src/utils/MockBrowser.ts";
  * @since 0.9.0
  */
 class WechatWebAdaptor extends BaseWebApi {
+  // 公众号草稿编辑页链接绑定授权会话，需在授权会话窗口内打开
+  public override previewOpenMode = PreviewOpenModeEnum.AppSession
   public async getMetaData(): Promise<any> {
     const res = await this.weChatFetch("https://mp.weixin.qq.com/", undefined, "GET", {}, "text/html")
     this.logger.debug("WechatWebAdaptor res=>", { res: res })
@@ -408,7 +411,7 @@ class WechatWebAdaptor extends BaseWebApi {
     return post
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     let flag = false
 
     const url = "https://mp.weixin.qq.com/cgi-bin/operate_appmsg?sub=del&t=ajax-response"
@@ -437,7 +440,17 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   public async getPreviewUrl(postid: string): Promise<string> {
-    const token = this.cfg.metadata.token
+    // 公众号会话 token 会轮换；用过期 token 打开草稿编辑页会被判为未登录并跳「请重新登录」。
+    // 因此打开前用当前 cookie 刷新一次 token，保证链接可用。
+    let token = this.cfg.metadata?.token
+    try {
+      const meta = await this.getMetaData()
+      if (meta?.token) {
+        token = meta.token
+      }
+    } catch (e) {
+      this.logger.warn("wechat refresh token for preview url failed =>", e)
+    }
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
   }
 

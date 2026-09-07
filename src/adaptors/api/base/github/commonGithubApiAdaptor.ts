@@ -17,6 +17,7 @@ import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { ElMessage } from "element-plus"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Github API 适配器
@@ -209,7 +210,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     }
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const res = await this.githubClient.deleteGithubPage(postid)
     if (!res?.commit?.sha) {
       throw new Error("Github 调用API异常")
@@ -319,10 +320,12 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const docPath = post.cate_slugs?.[0] ?? this.cfg.blogid
       const savePath = StrUtil.pathJoin(docPath, path.replace("[docpath]", ""))
       imagePath = StrUtil.pathJoin(savePath, mediaObject.name)
-    } else if (path.startsWith("./")) {
+    } else if (path.startsWith("./") || path.startsWith("../")) {
+      // 相对链接路径：保留相对前缀并拼接文件名，不前置站点根斜杠（如 ./images/… 或 ../images/…）
+      const relImgPath = StrUtil.pathJoin(path, mediaObject.name)
       return {
-        imagePath: path,
-        absImgPath: path,
+        imagePath: relImgPath,
+        absImgPath: relImgPath,
       }
     } else {
       const savePath = StrUtil.isEmptyString(path) ? defaultPath : path

@@ -7,13 +7,11 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import Utf8 from "crypto-js/enc-utf8"
-import CryptoJS from "crypto-js"
-import Base64 from "crypto-js/enc-base64"
 import * as cheerio from "cheerio"
 import KatexUtils from "~/src/utils/katexUtils.ts"
 import { LEGENCY_SHARED_API } from "~/src/utils/constants.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
+import { hmacSha256Base64 } from "~/src/utils/cryptoUtils.ts"
 
 /**
  * CSDN工具类，用于生成UUID和签名
@@ -47,17 +45,14 @@ class CsdnUtils {
    * @param content_type - Content-Type
    * @returns 返回签名
    */
-  public static generateXCaSignature(
+  public static async generateXCaSignature(
     url: string,
     method: string,
     accept: string,
     uuid: string,
     content_type: string
-  ): string {
-    // https://github.com/brix/crypto-js/issues/189
-    // https://www.npmjs.com/package/crypto-js
+  ): Promise<string> {
     const s = new URL(url)
-    const ekey = Utf8.parse(CsdnUtils.APP_SECRET)
     let toEnc: string
     if (method === "GET") {
       const path = s.pathname + s.search
@@ -66,8 +61,7 @@ class CsdnUtils {
       const path = s.pathname
       toEnc = `POST\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY}\nx-ca-nonce:${uuid}\n${path}`
     }
-    const hmac = CryptoJS.HmacSHA256(toEnc, ekey)
-    const sign = Base64.stringify(hmac)
+    const sign = await hmacSha256Base64(CsdnUtils.APP_SECRET, toEnc)
     // console.log(uuid)
     // console.log(sign)
     return sign
@@ -84,18 +78,15 @@ class CsdnUtils {
    * @param timestamp - 时间戳
    * @returns 返回签名
    */
-  public static generateXCaSignatureForMedia(
+  public static async generateXCaSignatureForMedia(
     url: string,
     method: string,
     accept: string,
     uuid: string,
     content_type: string,
     timestamp: string
-  ): string {
-    // https://github.com/brix/crypto-js/issues/189
-    // https://www.npmjs.com/package/crypto-js
+  ): Promise<string> {
     const s = new URL(url)
-    const ekey = Utf8.parse(CsdnUtils.APP_SECRET_MEDIA)
     let toEnc: string
     if (method === "GET") {
       const path = s.pathname + s.search
@@ -104,8 +95,7 @@ class CsdnUtils {
       const path = s.pathname
       toEnc = `POST\n${accept}\n\n${content_type}\n\nx-ca-key:${CsdnUtils.X_CA_KEY_MEDIA}\nx-ca-nonce:${uuid}\nx-ca-timestamp:${timestamp}\n${path}`
     }
-    const hmac = CryptoJS.HmacSHA256(toEnc, ekey)
-    const sign = Base64.stringify(hmac)
+    const sign = await hmacSha256Base64(CsdnUtils.APP_SECRET_MEDIA, toEnc)
     // console.log(uuid)
     // console.log(sign)
     return sign

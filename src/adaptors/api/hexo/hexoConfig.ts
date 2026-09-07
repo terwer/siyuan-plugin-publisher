@@ -32,8 +32,11 @@ class HexoConfig extends CommonGithubConfig {
     this.previewUrl = "/[user]/[repo]/blob/[branch]/[docpath]"
     this.previewPostUrl = "/post/[postid].html"
     this.mdFilenameRule = "[filename].md"
+    // 图片提交到仓库 source/images；Hexo 构建后 source/images 会复制到站点根目录 /images
+    // 文章图片引用使用相对路径 ../images/<图片名>：源码 source/_posts/x.md 的 ../images/ 解析到 source/images/，
+    // 构建后文章 URL 恒为 /post/{slug}.html（站点根下 1 层）时 ../images/ 解析到站点根 /images/，源码与构建产物均能显示。
     this.imageStorePath = "source/images"
-    this.imageLinkPath = "source/images"
+    this.imageLinkPath = "../images"
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false

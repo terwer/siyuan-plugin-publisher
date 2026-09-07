@@ -36,9 +36,9 @@ if __name__ == "__main__":
     print(os.getcwd())
 
     URL = 'http://127.0.0.1:6806'
-    COOKIE = open('cookie.txt').read().strip()
-    TOKEN = open('token.txt').read().strip()
-    DEV_PAGE_ID = open('pageId.txt').read().strip()
+COOKIE = open('cookie.txt', encoding='utf-8').read().strip()
+TOKEN = open('token.txt', encoding='utf-8').read().strip()
+DEV_PAGE_ID = open('pageId.txt', encoding='utf-8').read().strip()
 
     # 设置环境变量
     os.environ['IS_SERVE'] = 'true'

@@ -8,6 +8,7 @@
  */
 
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { XiaohongshuWebAdaptor } from "./XiaohongshuWebAdaptor"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { Utils } from "~/src/utils/utils"
@@ -40,7 +41,7 @@ const useXiaohongshuWeb = async (key?: string, newCfg?: XiaohongshuConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<XiaohongshuConfig>(setting[key], {} as XiaohongshuConfig)
+    cfg = safeMergeConfig<XiaohongshuConfig>(setting[key], XiaohongshuConfig, ["", "", ""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取小红书的cookie

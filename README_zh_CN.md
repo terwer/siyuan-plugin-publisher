@@ -4,97 +4,65 @@
 
 <img alt="logo" width="160" height="160" src="./icon.png"/>
 
-将思源笔记的文章发布到语雀等平台，`开源`、`免费` 。
+> 把思源笔记里的文章发布到博客、知识库和静态站。
 
-> [猛击这里](https://siyuan.wiki/s/20230810132040-nn4q7vs)，查看最新帮助文档。
+发布工具是一款面向在思源写作、同时需要维护博客、知识库或静态站用户的思源笔记插件。配置一次平台账号后，打开文档即可发布；之后文章改了，也可以继续更新到已经发布过的平台。
 
-**遇到其他问题或者需求建议？1群已满，请加QQ2群讨论。**
+## 核心能力
 
-[![](https://img.shields.io/badge/QQ群-722632752-blue)](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8)
+- **快速发布**：打开思源文档，选择平台即可发布。
+- **持续更新**：文章发布后，后续修改可以继续更新到同一平台。
+- **图片处理**：发布时可按平台能力选择不上传、平台内置图床或 Publisher 内置的 PicGo 图床内核（`zhi-siyuan-picgo` headless lib）；使用 PicGo 图床内核不需要额外安装 `siyuan-plugin-picgo` 插件产品。
+- **一次配置**：平台账号验证并保存后，后续发布可直接复用。
+- **多平台发布**：支持博客、知识库、静态站仓库、网页登录平台和本地目录等场景。
+- **统一界面**：平台配置、快速发布、发布状态和错误详情集中在一个界面。
 
-## 快速上手
+## 特色功能
 
-1. 点击插件市场，搜索 `发布工具`，安装插件。
-2. 启用插件，然后在思源笔记窗口左上角工具栏有一个飞机按钮，点击，即可使用。
-   ![](./docs/images/publisher-icon.png) 
-3. 文档菜单（可选），参考 [帮助文档](https://siyuan.wiki/s/20230810132040-nn4q7vs) FAQ第12条，打开文档菜单，即可使用。
-    
+### 发布工作台
 
-## 更新历史
+**工作台是发布工具的新入口，围绕当前文档组织发布操作。**
 
-**重大更新：**
+1. 在 **发布设置** 中添加并验证平台账号。
+2. 打开要发布的思源文档。
+3. 在 **快速发布** 中选择平台，发布或更新文章。
 
-- `v1.41.0` 于 3/16/2026 发布，新增功能
-  - 支持 Astro 平台（支持 GitHub、Gitlab 以及本地系统） 😄
-- `v1.38.0` 于 2025/10/25 发布，新增功能
-  - 支持发布到`文件系统`了
-  - 一期已经支持本地系统，后续会陆续支持ftp、sftp、各种网盘等🎉
+发布成功后，可以在同一处查看发布状态、打开已发布文章，或删除不再需要的发布记录。配置或发布失败时，会尽量展示可读的错误详情。
 
-请直接查看 [CHANGELOG](https://github.com/terwer/siyuan-plugin-publisher/blob/main/CHANGELOG.md)
+## 快速开始
 
-## 彩蛋
+1. 在思源插件市场安装并启用 **发布工具**。
+2. 打开插件偏好，开启 **使用新版 UI**。
+3. 从思源工具栏打开发布工具。
+4. 在 **发布设置** 中添加平台账号，完成验证并保存。
+5. 打开要发布的文档，进入 **快速发布**，选择平台后发布。
 
-[作者开发的其他思源笔记插件](https://github.com/terwer/zhi/blob/main/README_zh_CN.md#%E6%8F%92%E4%BB%B6)
+![](./docs/images/publisher-icon.png)
 
-## 捐赠
+## 支持的平台
 
-如果您认可这个项目，请我喝一杯咖啡吧，这将鼓励我持续更新，并创作出更多好用的工具~
+- **内容平台 / 知识库**：语雀、Notion、Halo、Confluence 等。
+- **博客平台**：博客园、WordPress、Typecho、Jvue 等。
+- **静态站点仓库**：GitHub / GitLab，适合 Hexo、Hugo、Jekyll、Quartz、VuePress、VitePress、Astro 等站点。
+- **网页登录平台**：适合通过网页登录态发布的部分平台。
+- **本地目录**：在桌面端输出到本地文件夹，方便继续配合其他工具处理。
 
-### 微信
+具体平台能力会随版本持续完善，可在插件内的平台列表和使用文档中查看。
 
-<div>
-<img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/donate/wechat.jpg" alt="wechat" style="width:280px;height:375px;" />
-</div>
+## 使用文档
 
-### 支付宝
+[查看发布工具文档](https://siyuan.wiki/s/20230810132040-nn4q7vs)
 
-<div>
-<img src="https://static-rs-terwer.oss-cn-beijing.aliyuncs.com/donate/alipay.jpg" alt="alipay" style="width:280px;height:375px;" />
-</div>
+## 更新记录
 
-### 爱发电
+[CHANGELOG](CHANGELOG.md)
 
-https://afdian.com/a/terwer
+## 社区与历史
 
-# 感谢
+[QQ 群 722632752](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8) · [作者的其他思源插件](https://github.com/terwer/zhi/blob/main/README_zh_CN.md#%E6%8F%92%E4%BB%B6) · [历史 README 归档](docs/archive/README.md)
 
-感谢第三方框架对本项目底层的支持
+感谢思源笔记、Vue、Vite、TypeScript 等开源项目，以及所有反馈、测试和支持发布工具的用户。
 
-排名不分先后
+## 许可
 
-|    Name     | version |  vendor   |
-| :---------: | :-----: | :-------: |
-|    turbo    |  1.9+   |  Vercel   |
-|     Vue     | 3.3.4+  | Evan You  |
-|    Vite     |  4.2+   | Evan You  |
-| TypeScript  |  5.0+   | Microsoft |
-| siyuan-note | 2.9.0+  |    D,V    |
-
-- 感谢 [leolee9086](https://github.com/leolee9086) 和 [赐我一胖]() 提供的图标资源
-
-- 感谢以下热心用户的支持，我会坚持一直持续更新维护下去！
-
-    - 2024-03-31 *仁 捐赠到 [发布工具]
-    
-    - 2024-03-22 *铭 捐赠到 [发布工具]
-    - 2024-03-05 *ruler 捐赠到 [发布工具]
-    
-    - 2024-03-12 *? 捐赠到 [发布工具]
-    - 2024-03-04 *azar 捐赠到 [发布工具]
-    - 2024-02-28 *昭 捐赠到 [发布工具]
-    - 2024-01-15 自* 捐赠到 [发布工具]
-    - 2024-01-09 自* 捐赠到 [发布工具]
-    - 2023-11-12 S* 捐赠到 [发布工具]
-    - 2023-10-15 *线 捐赠到 [发布工具]
-    - 2023-09-04 \*霞 捐赠到 [发布工具]
-    - 2023-08-31 \*成 捐赠到 [发布工具] 感谢提供笔记发布工具，催更
-    - 2023-08-31 \*? 捐赠到 [发布工具] 感谢提供思源笔记发布工具
-    - 2023-08-14 \*? 捐赠到 [发布工具]
-    - 2023-08-10 \*f 捐赠到 [发布工具] 为发布插件点赞
-    - 2023-08-10 \*2 捐赠到 [发布工具] 支持开发思源发布插件
-    - 2023-07-13 \*亮 捐赠到 [文档别名] 有没有可能把功能扩展到 H1？
-    - 2023-07-09 \*z 捐赠到 [在线分享] 在线分享插件好用，感谢
-    - 2023-06-14 \*俊 捐赠到 [文档漫游] 感谢文档漫游这个功能
-    - 2023-01-16 \*站 捐赠到 [导入工具] 终于可以导入 epub 了
-    
-      如果您不想展示捐赠信息，可直接发邮件到 youweics@163.com 。
+[GPL-3.0](LICENSE)

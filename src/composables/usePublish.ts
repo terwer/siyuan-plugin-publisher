@@ -7,10 +7,9 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { ElMessage } from "element-plus"
+import * as _ from "lodash-es"
 import { reactive, toRaw } from "vue"
-import { SypConfig } from "~/syp.config.ts"
-import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import {
   BlogConfig,
   Post,
@@ -20,19 +19,22 @@ import {
   YamlFormatObj,
   YamlStrategy,
 } from "zhi-blog-api"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { AliasTranslator, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { SiyuanAttr } from "zhi-siyuan-api"
+import Adaptors from "~/src/adaptors"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { pre } from "~/src/platforms/pre.ts"
+import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
-import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
-import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
-import { ElMessage } from "element-plus"
-import { SiyuanAttr } from "zhi-siyuan-api"
-import * as _ from "lodash-es"
-import Adaptors from "~/src/adaptors"
+import { pre } from "~/src/platforms/pre.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { SypConfig } from "~/syp.config.ts"
 
 /**
  * 通用发布组件
@@ -50,6 +52,7 @@ const usePublish = () => {
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi } = usePublishConfig()
   const { updatePlatformMetadata } = usePlatformMetadataStore()
+  const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
   // datas
   const singleFormData = reactive({
@@ -58,6 +61,38 @@ const usePublish = () => {
     isAdd: true,
     errMsg: "",
   })
+
+  /**
+   * 发布源笔记本硬校验（issue #2044）。
+   *
+   * 仅当配置了授权笔记本集合（`publishSourceNotebooks` 非空）时拦截：
+   * 取源文档的 `blocks.box`，若不在授权集合内则抛出清晰错误。
+   * 取不到 `box` 视为「未限定」，放行并记录日志（避免误拦）。
+   *
+   * @param id - 思源源文档 id
+   */
+  const assertNotebookAllowed = async (id: string) => {
+    const allowed = getReadOnlyPublishPreferenceSetting().value.publishSourceNotebooks ?? []
+    if (allowed.length === 0) {
+      return
+    }
+
+    let box: string | undefined
+    try {
+      const block = await kernelApi.getBlockByID(id)
+      box = block?.box
+    } catch (e) {
+      logger.warn(`getBlockByID for notebook validation failed id=${id}=>`, e)
+    }
+
+    if (box && !allowed.includes(box)) {
+      throw new Error(`该文档所属笔记本（${box}）不在发布的授权笔记本集合内，无法发布。`)
+    }
+
+    if (!box) {
+      logger.warn(`未获取到文档 ${id} 的笔记本信息，按未限定处理（放过）。`)
+    }
+  }
 
   /**
    * 统一的发布操作
@@ -75,7 +110,13 @@ const usePublish = () => {
     // vars
     let postid: string
     let postPreviewUrl: string
+    let publishErrorDetails = ""
+    singleFormData.errMsg = ""
+    singleFormData.publishProcessStatus = false
     try {
+      // 发布源笔记本硬校验（issue #2044）：仅在配置了授权笔记本集合时拦截
+      await assertNotebookAllowed(id)
+
       // 系统内置
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
       logger.info(`isSys=>${isSys}`)
@@ -113,6 +154,14 @@ const usePublish = () => {
       const finalPost = await api.preEditPost(post, id, publishCfg)
       logger.info(`文章全部预处理完毕，id=${id},key=${key}`)
       logger.debug(`最终结果 =>`, { finalPost: toRaw(finalPost) })
+      // 检查图片上传错误（preEditPost内部图片上传失败时不抛异常，而是收集到post自定义属性上）
+      const imageErrors = (finalPost as any).imageUploadErrors as string[] | undefined
+      if (imageErrors && imageErrors.length > 0) {
+        singleFormData.errMsg = sanitizePublishText(imageErrors.join("\n"))
+        logger.warn(`图片上传存在${imageErrors.length}个错误，已记录到errMsg`)
+      }
+      const imageErrorDetails = (finalPost as any).imageUploadErrorDetails as string[] | undefined
+      publishErrorDetails = sanitizePublishText(imageErrorDetails?.join("\n\n") || singleFormData.errMsg)
       // ===================================
       // 文章预处理结束
       // ===================================
@@ -142,28 +191,37 @@ const usePublish = () => {
         const result = await api.editPost(postid, finalPost)
 
         // 写入属性到配置
-        // 这里更新 slug 的原因是历史文章有可能没有生成过别名
         const postMeta = ObjectUtil.getProperty(setting, id, {})
+        let shouldUpdateSetting = false
+
+        // 这里更新 slug 的原因是历史文章有可能没有生成过别名；如果用户在发布页修改了别名，也要以本次成功发布后的别名为准。
         // eslint-disable-next-line no-prototype-builtins
-        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug)) {
+        if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug) && !StrUtil.isEmptyString(finalPost.wp_slug)) {
           logger.info("检测到未生成过别名，准备更新别名")
           postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
-          setting[id] = postMeta
-          await updateSetting(setting)
-        } else {
-          // 确保别名不被修改
-          finalPost.wp_slug = postMeta[SiyuanAttr.Custom_slug]
+          shouldUpdateSetting = true
+        } else if (
+          !StrUtil.isEmptyString(finalPost.wp_slug) &&
+          postMeta[SiyuanAttr.Custom_slug] !== finalPost.wp_slug
+        ) {
+          logger.info(`检测到别名已更新，从 ${postMeta[SiyuanAttr.Custom_slug]} 更新为 ${finalPost.wp_slug}`)
+          postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
+          shouldUpdateSetting = true
         }
 
         // 检查是否因为目录变更导致postid变化
         if (finalPost.postid && finalPost.postid !== postid) {
           logger.info(`文章目录已更改，更新postid从 ${postid} 到 ${finalPost.postid}`)
           postMeta[cfg.posidKey] = finalPost.postid
-          setting[id] = postMeta
-          await updateSetting(setting)
+          shouldUpdateSetting = true
           // 更新当前使用的postid
           postid = finalPost.postid
           ElMessage.success(`文章目录已更改，发布信息已更新`)
+        }
+
+        if (shouldUpdateSetting) {
+          setting[id] = postMeta
+          await updateSetting(setting)
         }
 
         logger.info("edit post=>", result)
@@ -193,7 +251,8 @@ const usePublish = () => {
 
       singleFormData.publishProcessStatus = true
     } catch (e) {
-      singleFormData.errMsg = t("main.opt.failure") + "=>" + e
+      singleFormData.errMsg = sanitizePublishText(t("main.opt.failure") + "=>" + e)
+      publishErrorDetails = formatPublishDiagnosticError(e)
       // logger.error(t("main.opt.failure") + "=>", e)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
@@ -207,7 +266,8 @@ const usePublish = () => {
       status: singleFormData.publishProcessStatus,
       name: cfg?.blogName,
       previewUrl: postPreviewUrl,
-      errMsg: singleFormData.errMsg,
+      errMsg: sanitizePublishText(singleFormData.errMsg),
+      errDetails: sanitizePublishText(publishErrorDetails || singleFormData.errMsg),
     }
   }
 
@@ -222,6 +282,9 @@ const usePublish = () => {
     const setting: typeof SypConfig = publishCfg.setting
     const cfg: BlogConfig = publishCfg.cfg
     const dynCfg: DynamicConfig = publishCfg.dynCfg
+    let deleteErrorDetails = ""
+    singleFormData.errMsg = ""
+    singleFormData.publishProcessStatus = false
 
     try {
       // 检测是否发布
@@ -240,7 +303,7 @@ const usePublish = () => {
       const api = await getPublishApi(key, cfg)
 
       // 处理删除
-      singleFormData.publishProcessStatus = await api.deletePost(postid)
+      singleFormData.publishProcessStatus = await api.deletePost(postid, id, publishCfg)
 
       // 删除成功才去移除文章发布信息
       if (singleFormData.publishProcessStatus) {
@@ -264,6 +327,7 @@ const usePublish = () => {
       }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
+      deleteErrorDetails = formatPublishDiagnosticError(e)
       // logger.error(t("main.opt.failure") + "=>", e)
       // ElMessage.error(singleFormData.errMsg)
       await kernelApi.pushErrMsg({
@@ -275,7 +339,8 @@ const usePublish = () => {
     return {
       key: key,
       status: singleFormData.publishProcessStatus,
-      errMsg: singleFormData.errMsg,
+      errMsg: sanitizePublishText(singleFormData.errMsg),
+      errDetails: sanitizePublishText(deleteErrorDetails || singleFormData.errMsg),
     }
   }
 
@@ -286,7 +351,7 @@ const usePublish = () => {
    * @param id - 思源笔记的ID
    * @param publishCfg - 发布配置
    */
-  const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg) => {
+  const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg): Promise<boolean> => {
     try {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
@@ -297,29 +362,28 @@ const usePublish = () => {
       if (StrUtil.isEmptyString(posidKey)) {
         throw new Error("配置错误，posidKey不能为空，请检查配置")
       }
-      if (!StrUtil.isEmptyString(posidKey)) {
-        const postMeta = ObjectUtil.getProperty(setting, id, {})
-        const updatedPostMeta = { ...postMeta }
-        if (updatedPostMeta.hasOwnProperty(posidKey)) {
-          delete updatedPostMeta[posidKey]
-        }
-        // 别名不能删除，因为别的平台可能还用
-
-        setting[id] = updatedPostMeta
-        await updateSetting(setting)
-
-        // 清空属性
-        const yamlKey = getDynYamlKey(key)
-        await kernelApi.setSingleBlockAttr(id, yamlKey, "")
-        logger.info(`[${key}] [${id}] 属性已移除`)
-
-        await kernelApi.pushMsg({
-          msg: t("main.opt.ok"),
-          timeout: 2000,
-        })
-        logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
-        ElMessage.success(`[${key}] [${id}] 文章发布信息已强制移除`)
+      const postMeta = ObjectUtil.getProperty(setting, id, {})
+      const updatedPostMeta = { ...postMeta }
+      if (updatedPostMeta.hasOwnProperty(posidKey)) {
+        delete updatedPostMeta[posidKey]
       }
+      // 别名不能删除，因为别的平台可能还用
+
+      setting[id] = updatedPostMeta
+      await updateSetting(setting)
+
+      // 清空属性
+      const yamlKey = getDynYamlKey(key)
+      await kernelApi.setSingleBlockAttr(id, yamlKey, "")
+      logger.info(`[${key}] [${id}] 属性已移除`)
+
+      await kernelApi.pushMsg({
+        msg: t("main.opt.ok"),
+        timeout: 2000,
+      })
+      logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
+      ElMessage.success(`[${key}] [${id}] 文章发布信息已强制移除`)
+      return true
     } catch (e) {
       ElMessage.error(t("main.opt.failure") + "=>" + e)
       logger.error(t("main.opt.failure") + "=>", e)
@@ -327,6 +391,7 @@ const usePublish = () => {
         msg: t("main.opt.failure") + "=>" + e,
         timeout: 7000,
       })
+      return false
     }
   }
 
@@ -340,6 +405,19 @@ const usePublish = () => {
     let previewUrl = await api.getPreviewUrl(newPostid)
     const isAbsoluteUrl = /^[a-z]+:\/\//.test(previewUrl)
     return isAbsoluteUrl ? previewUrl : StrUtil.pathJoin(cfg?.home ?? "", previewUrl)
+  }
+
+  const sanitizePublishText = (input: any): string => {
+    const sanitized = sanitizeSensitiveForLog(input)
+    if (sanitized === null || sanitized === undefined) {
+      return ""
+    }
+    return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
+  }
+
+  const formatPublishDiagnosticError = (error: any): string => {
+    const diagnostic = error?.diagnosticMessage || error?.cause?.stack || error?.stack || error?.message || error
+    return sanitizePublishText(diagnostic)
   }
 
   /**
@@ -473,7 +551,37 @@ const usePublish = () => {
         const platformPost = await api.getPost(postid)
         mergedPost = _.cloneDeep(platformPost) as Post
         logger.debug("get init platformPost ok =>", mergedPost)
-        mergedPost.title = platformPost.title
+        // 标题以思源笔记为准（思源是权威源）。web 平台适配器的 getPost 通常不返回标题，
+        // 若直接使用 platformPost.title 会得到空字符串，导致编辑表单标题丢失。
+        if (StrUtil.isEmptyString(mergedPost.title)) {
+          mergedPost.title = siyuanPost.title
+        }
+        // 摘要（shortDesc/mt_excerpt）：平台未返回时回退到思源笔记（思源仍是权威源）。
+        // web 平台 getPost 可能不返回或返回为空，直接保留会清空编辑表单的摘要。
+        if (StrUtil.isEmptyString(mergedPost.shortDesc)) {
+          mergedPost.shortDesc = siyuanPost.shortDesc
+        }
+        if (StrUtil.isEmptyString(mergedPost.mt_excerpt)) {
+          mergedPost.mt_excerpt = siyuanPost.mt_excerpt
+        }
+        // 标签/分类：平台未返回时回退到思源笔记（思源仍是权威源）。
+        // web 平台 getPost 可能不返回或返回为空，直接覆盖会清空编辑表单的标签/分类。
+        if (StrUtil.isEmptyString(mergedPost.mt_keywords)) {
+          mergedPost.mt_keywords = siyuanPost.mt_keywords
+        }
+        if (!mergedPost.categories?.length) {
+          mergedPost.categories = siyuanPost.categories ?? []
+        }
+        if (StrUtil.isEmptyString(mergedPost.tags_slugs)) {
+          mergedPost.tags_slugs = siyuanPost.tags_slugs
+        }
+        if (!mergedPost.cate_slugs?.length) {
+          mergedPost.cate_slugs = siyuanPost.cate_slugs ?? []
+        }
+        // 知识空间（专栏）为配置存值、编辑时只读：平台未返回时回退到配置的默认专栏
+        if (!mergedPost.cate_slugs?.length && cfg.knowledgeSpaceEnabled) {
+          mergedPost.cate_slugs = StrUtil.isEmptyString(cfg.blogid) ? [] : [cfg.blogid]
+        }
         // 链接需要使用思源笔记的
         mergedPost.originalId = siyuanPost.originalId
         mergedPost.link = siyuanPost.link

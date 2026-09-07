@@ -53,5 +53,5 @@ const onHomeChange = (value: string, cfg: HaloConfig) => {
 
 <style scoped lang="stylus">
 .form-item-tip
-  margin-bottom 10px
+  margin-bottom 6px
 </style>

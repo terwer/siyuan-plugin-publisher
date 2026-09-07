@@ -69,7 +69,7 @@ if __name__ == "__main__":
         scriptutils.cp_file("./policy.md", dist_folder)
         print("复制挂件需要的其他文件.")
 
-        build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
+        build_cmd = "vue-tsc --noEmit && vite build --config vite.v1.app.config.ts --outDir " + dist_name
         print("构建命令:" + build_cmd)
         os.system(build_cmd)
         print("项目构建完成.")
