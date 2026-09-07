@@ -4,15 +4,14 @@
 按 openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md（SSOT）自上而下完成 T1 全部 35 个平台的 V2 验证（每站六格 V2C/Pub/Upd/Del/Img/查看 + SOP §3 help/tour/doc），通过/失败实时回写 checklist；全部完成后再归档 OpenSpec change。
 
 ## 当前阶段
-阶段 3（逐个平台宿主手验中）
+阶段 3（逐个平台宿主手验）**暂停中** —— 插入独立任务 `add-field-guide-tips`（字段级指引接线 + 已验证平台回填），见 `.planning/2026-09-07-add-field-guide-tips/`；该任务完成后回到本计划继续 #12。
 
 ## 大盘进度（换电脑先读这里）
-- **T1 共 35 项。当前全链路 ✅ = 18，未测 = 17，进行中 0，阻塞 0。**
-- 已全链路 ✅（六格 + 帮助引导）：
-  - #1 语雀（需专业会员，非阻塞）、#2 Notion、#3 Halo29、#4 Telegraph、#5 Confluence、#6 Hexo、#7 Hugo
-  - #21、#25、#27、#28、#29、#30、#31、#32、#33、#34、#35
-- **未测（下一步从 #8 自上而下）**：#8 Jekyll、#9 Quartz、#10 Vuepress、#11 Vuepress2、#12 Vitepress、#13 Astro、#14 Gitlabhexo、#15 Gitlabhugo、#16 Gitlabjekyll、#17 Gitlabvuepress、#18 Gitlabvuepress2、#19 Gitlabvitepress、#20 Gitlabastro、#22 Typecho、#23 Jvue、#24 Metaweblog、#26 Wordpress.com
-- **已拆分 help 配置平台的验证顺序**：Jekyll(8) → Quartz(9) → Vuepress(10) → Vuepress2(11) → Vitepress(12) → Astro(13)。
+- **T1 共 35 项。当前全链路 ✅ = 22，未测 = 13，进行中 0，阻塞 0。**
+- 已全链路 ✅（六格 + 帮助引导）：#1–#11（语雀、Notion、Halo29、Telegraph、Confluence、Hexo、Hugo、Jekyll、Quartz、Vuepress、Vuepress2）、#21、#25、#27–#35。
+- **未测（下一步自上而下）**：#12 Vitepress、#13 Astro、#14–#20 Gitlab 七站、#22 Typecho、#23 Jvue、#24 Metaweblog、#26 Wordpress.com。
+- **#12 目标仓库已查实**：`terwer/siyuan-developer-docs`（VitePress 1.0.0-beta.1，根 `package.json` + `docs/` 含 `.vitepress`，与插件 `defaultPath="docs"` 对齐）；#13 可用 `terwer/astro-blog`（astro + `@astrojs/mdx`）。
+- **验证点新增**：`add-field-guide-tips` 落地后，SOP §3 的「字段指引必须真实渲染」与五格、help/tour/doc 同等必过，后续每站一并核验。
 
 ## 各阶段
 
@@ -28,10 +27,7 @@
 
 ### 阶段 3：逐个平台宿主手验（当前在此）
 - [x] #7 Hugo 六格 + 帮助引导 ✅；图片策略：绝对 `/images`（content 与 `static/` 兄弟目录，无单一相对路径满足双模式，经用户确认）
-- [ ] #8 Jekyll
-- [ ] #9 Quartz
-- [ ] #10 Vuepress
-- [ ] #11 Vuepress2
+- [x] #8 Jekyll、#9 Quartz、#10 Vuepress、#11 Vuepress2 六格 + 帮助引导 ✅
 - [ ] #12 Vitepress
 - [ ] #13 Astro
 - [ ] #14-20 Gitlab 七站

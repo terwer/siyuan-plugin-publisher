@@ -15,6 +15,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
+import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
@@ -380,10 +381,12 @@ onMounted(async () => {
         :placeholder="props.cfg?.placeholder?.homePlaceholder || ''"
         @input="handleHomeChange"
       />
+      <field-guide field="home" />
     </el-form-item>
     <!-- API 地址 -->
     <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')" data-syp-tour="apiUrl">
       <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder?.apiUrlPlaceholder || ''" />
+      <field-guide field="apiUrl" />
     </el-form-item>
     <!-- 登录名 -->
     <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled" data-syp-tour="username">
@@ -392,6 +395,7 @@ onMounted(async () => {
         :placeholder="props.cfg?.placeholder?.usernamePlaceholder || ''"
         @input="handleUsernameChange"
       />
+      <field-guide field="username" />
     </el-form-item>
     <!-- 密码 -->
     <el-form-item
@@ -409,6 +413,7 @@ onMounted(async () => {
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.username.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
       >
+      <field-guide field="password" />
     </el-form-item>
     <!-- token -->
     <el-form-item
@@ -426,6 +431,7 @@ onMounted(async () => {
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.token.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
       >
+      <field-guide field="password" />
     </el-form-item>
     <!-- 平台cookie -->
     <el-form-item
@@ -461,6 +467,7 @@ onMounted(async () => {
           type="warning"
         />
       </template>
+      <field-guide field="password" />
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
@@ -470,12 +477,14 @@ onMounted(async () => {
         :placeholder="props.cfg?.placeholder?.previewUrlPlaceholder || ''"
         :disabled="!props.cfg.allowPreviewUrlChange"
       />
+      <field-guide field="previewUrl" />
     </el-form-item>
     <el-form-item :label="t('setting.blog.pageType')" data-syp-tour="pageType">
       <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
         <el-radio :value="PageTypeEnum.Markdown" size="small">Markdown</el-radio>
         <el-radio :value="PageTypeEnum.Html" size="small">HTML</el-radio>
       </el-radio-group>
+      <field-guide field="pageType" />
     </el-form-item>
     <!-- 知识空间 -->
     <el-form-item class="cate-input" :label="t('setting.blog.searchKeyword')" v-if="props.cfg?.cateSearchEnabled" data-syp-tour="knowledgeSpaceSearch">
@@ -497,6 +506,7 @@ onMounted(async () => {
       >
         <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
+      <field-guide field="blogid" />
     </el-form-item>
     <el-form-item :label="t('publisher.picbed.service')" data-syp-tour="picbedService">
       <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
@@ -514,6 +524,7 @@ onMounted(async () => {
           <sup>{{ t("publisher.picbed.recom2") }}</sup>
         </el-radio>
       </el-radio-group>
+      <field-guide field="picbedService" />
     </el-form-item>
     <!-- 跨域代理地址 -->
     <el-form-item
@@ -521,6 +532,7 @@ onMounted(async () => {
       :label="t('setting.blog.middlewareUrl')"
     >
       <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
+      <field-guide field="middlewareUrl" />
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.tip')"
@@ -534,6 +546,7 @@ onMounted(async () => {
       :label="t('setting.blog.middlewareUrl.new')"
     >
       <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
+      <field-guide field="corsAnywhereUrl" />
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.new.tip')"
@@ -548,6 +561,7 @@ onMounted(async () => {
       data-syp-tour="corsProxy"
     >
       <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsProxy.placeholder')" />
+      <field-guide field="corsAnywhereUrl" />
       <el-alert :closable="false" class="top-tip" type="info">
         <template #title>
           {{ t("setting.blog.corsProxy.pin.tip") }}

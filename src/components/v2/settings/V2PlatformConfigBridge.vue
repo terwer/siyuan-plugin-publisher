@@ -5,7 +5,7 @@
         <div class="syp-settings-page__eyebrow">{{ t("v2.platformConfig.eyebrow") }}</div>
         <h2 class="syp-settings-page__title">
           {{ platformName || t("v2.platformConfig.title") }}
-          <HelpButton :page-id="'platform-config/' + platformKey" :page-title="platformName" />
+          <HelpButton :page-id="helpPageId" :page-title="platformName" />
         </h2>
         <p class="syp-settings-page__desc">
           {{ t("v2.platformConfig.desc") }}
@@ -93,6 +93,7 @@ import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import HelpButton from "~/src/components/common/help/HelpButton.vue"
+import { SYP_HELP_PAGE_ID_KEY } from "~/src/components/common/help/helpPageIdKey.ts"
 
 // 确保 page configs 已注册
 import "~/src/helpConfigs/pages/index"
@@ -111,6 +112,10 @@ const emit = defineEmits<{
 
 const { t } = useV2I18n()
 const { getPublishCfg } = usePublishConfig()
+
+// 配置页帮助上下文的唯一来源：页面帮助入口与字段级指引共用同一个 pageId，不在子组件里另拼一份
+const helpPageId = computed(() => `platform-config/${props.platformKey}`)
+provide(SYP_HELP_PAGE_ID_KEY, helpPageId)
 
 provide(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, {
   onValidated: handleValidationResult,

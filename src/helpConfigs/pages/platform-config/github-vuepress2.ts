@@ -33,6 +33,24 @@ export const vuepress2HelpConfig: PageHelpConfig = {
     picbedService: {
       tip: "选择「当前平台」图床时，图片上传到文章所在目录的 images 子目录（存储规则 [docpath]/images，如 src/post/images/<图片名>），文章中引用为相对路径 ./images/<图片名>，构建时随页面一起输出。",
     },
+    blogid: {
+      tip: "发布目录，只读，与「存储目录」保持一致（当前 src/post）：决定 .md 提交到仓库的位置，也是图片就近目录 [docpath]/images 的解析基准。",
+    },
+    imageStorePath: {
+      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 [docpath]/images，即文章所在目录下的 images 子目录。",
+    },
+    imageLinkPath: {
+      tip: "文章内图片引用前缀，默认 ./images（相对文章所在目录），Vuepress2 构建时随页面一起输出。",
+    },
+    dynYamlCfg: {
+      tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter，用于补充主题需要的自定义字段。",
+    },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    site: {
+      tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Vuepress2 的文章 Front Matter 不含作者字段，此处仅作账号信息。",
+    },
   },
   faq: [
     {
