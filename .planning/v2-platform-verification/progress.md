@@ -1,5 +1,24 @@
 # 进度日志：V2 全平台验证
 
+## 会话：2026-09-07（Vuepress #10 验证）
+
+### 本次执行
+- 拉取远端：#9 Quartz 已全链路 ✅（远端 commit），#10 Vuepress 代码侧产物（help/docs/注册/verifiedConfigs）已随 `5393fbdb` 拉入；宿主六格未验，本次补验。
+- 目标仓库确认：用户指明 `D:\...\myproject\terwer.github.io` 即 Vuepress1（Vdoing，`vuepress@1.9.5`）博客 → GitHub `terwer/terwer.github.io` **main 分支**、存储目录 `docs`（与 #8 Jekyll 的 gh-pages 分支同仓不同分支互不冲突）。
+- #10 Vuepress 六格 + 帮助引导全链路 ✅（Electron test 工作空间 / dist-v2 / 9222）：
+  - V2C：新增账号 `github_Vuepress`（terwer/terwer.github.io/main/docs/[filename].md，PAT，图床「当前平台」），「验证」通过，「配置已保存并验证通过」，账号「运行中」，blogid=docs 自动拉取。
+  - Pub：`docs/掘金-V2-验证测试-更新.md`（frontmatter title/date/meta/tags/permalink `/post/nuggets-v2-verification-test---update-ztyowq.html`/author + `![cat](/images/cat-…jpg)`），提交 `7fe6740`。
+  - Upd：改正文「发布验证完成。（已更新 Vuepress 内容）」→ 新提交 `2cac735` 真实变更。
+  - Img：cat 图上传 `docs/.vuepress/public/images/`，引用绝对 `/images/<名>`（raw 200；站点域名当前部署 Jekyll，站点 `/images` 404 属部署口径）。
+  - 查看：UI blob 预览 → 200。
+  - Del：首次 422 sha 暂态（同 Quartz，非插件缺陷）→ sha 稳定重试成功，提交 `225cc85`，UI 回未发布。其他历史文件（Halo图片上传测试.md、photo-nested.png）保留未误删。
+- SOP §3：宿主实测 HelpPanel（summary+完整文档+FAQ+引导按钮）+ TourGuide 9 步全部可定位 ✅。
+- 清理：误建的 `vuepress-blog` 仓库已 DELETE（204）；test.md 残留 404 已清理。
+- checklist #10 六格 ✅ + T1 小结 21；registry+image spec 24 测试绿、build:v2 通过。
+
+### Commit（英文 Conventional）
+- `feat(vuepress)` 记录 #10 宿主全链路验证 + checklist 回写（见本次提交）
+
 ## 会话：2026-09-07（Quartz 验证）
 
 ### 本次执行
@@ -67,11 +86,11 @@
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 阶段 3（逐个平台宿主手验），#9 Quartz 已完成；#1–#9、#21、#25、#27–#35 已全链路 ✅ |
-| 我要去哪里？ | #10 Vuepress（自上而下），然后 Vuepress2/Vitepress/Astro/Gitlab 七站等 |
+| 我在哪里？ | 阶段 3（逐个平台宿主手验），#10 Vuepress 已完成；#1–#10、#21、#25、#27–#35 已全链路 ✅ |
+| 我要去哪里？ | #11 Vuepress2（目标仓库 `terwer/vuepress2-blog`，`src/.vuepress` Vuepress2 结构），然后 Vitepress/Astro/Gitlab 七站等 |
 | 目标是什么？ | 完成 T1 全部 35 平台 V2 验证（六格 + help/tour/doc），回写 checklist |
-| 我学到了什么？ | 见 findings.md（平台族共享基类、图片路径结构性差异、宿主交互）；Quartz 更新后 contents 接口 sha 暂态不一致 → 删除重试即恢复 |
-| 我做了什么？ | 完成 #9 Quartz 六格+help，checklist 更新（T1 小结 20），build:v2 通过 |
+| 我学到了什么？ | 见 findings.md；Quartz/Vuepress 更新后 contents 接口 sha 暂态不一致 → 删除重试即恢复（同类现象，非插件缺陷）；Vuepress1 目标=terwer.github.io main（Vdoing），Jekyll=同仓 gh-pages |
+| 我做了什么？ | 补验 #10 Vuepress 六格+help（远端已备好代码侧），checklist 更新（T1 小结 21），build:v2 通过 |
 
 ---
 *每个阶段完成后或遇到错误时更新此文件*
