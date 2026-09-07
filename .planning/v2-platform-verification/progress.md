@@ -1,5 +1,23 @@
 # 进度日志：V2 全平台验证
 
+## 会话：2026-09-07（Quartz 验证）
+
+### 本次执行
+- #9 Quartz 六格 + 帮助引导全链路 ✅（Electron test 工作空间 / dist-v2 / 9222）：
+  - V2C：新增账号 `github_Quartz`（terwer/quartz-blog/main/content/[filename].md，PAT，图床「当前平台 推荐」），「验证」通过，「配置已保存并验证通过」，账号「运行中/已启用」，发布目录自动拉取 content。
+  - Pub：`content/Halo图片上传测试.md`（frontmatter title/date/updated/permalink `/post/halo-image-upload-test-z9puw4.html`/enableToc/enableBackLinks + `![图](/assets/images/image-…png)`）。
+  - Upd：点「更新」→ 新提交，内容真实变更（`updated:2026-09-07 10:18:30`）。
+  - Img：图床「当前平台」cat 图上传 `assets/images/image-…png`，引用绝对 `/assets/images/<名>`。
+  - 查看：blob 预览规则 `[user]/[repo]/blob/[branch]/[docpath]` 指向真实存在的仓库文件；站点 `/post/<postid>.html` 需站点部署（无自动构建，平台限制非 bug）。
+  - Del：repo .md 移除（API 404），UI 回「未发布」。**首次删除报 GitHub 422 sha 不匹配**——`getPageSha`/`getPageData` 单独复现返回当前 sha（删除代码取当前 sha，非插件缺陷），为更新后 contents 接口 sha 暂态不一致，sha 稳定后重试成功。
+- 图片路径定论：Quartz 来源目录 `content/`；图上传仓库根 `assets/images/`，文章引用绝对 `/assets/images/<名>`；能否在构建产物显示取决于站点对 `/assets` 的处理（同 Hugo 口径）。
+- SOP §3 help/tour/doc ✅：`github-quartz.ts`（helpUrl+summary+fields+faq4+tour9）+ `github-quartz.md`（顶部 TODO 占位）+ 注册进 `/pages/index.ts` + 移出 remaining-t1 + 纳入 verifiedConfigs。宿主实测 HelpPanel（summary+「查看完整帮助文档」+FAQ）+ TourGuide 9 步全部可定位。
+- checklist #9 行六格 ✅ + T1 小结更新为 20 + 修订记录；build:v2 通过、registry+quartz 测试 20 绿。
+
+### Commit（英文 Conventional）
+- `8b66eeb1` feat(quartz): Quartz help 配置 + 文档 + 图片路径 spec
+- `d43b2c50` docs(checklist): Quartz 六格 ✅ + T1 小结 20
+
 ## 会话：2026-09-04（Hugo 验证 + 总进度锚点）
 
 ### 阶段 3：逐个平台宿主手验
@@ -49,11 +67,11 @@
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 阶段 3（逐个平台宿主手验），#7 Hugo 已完成 |
-| 我要去哪里？ | #8 Jekyll（自上而下），然后 Quartz/Vuepress/Vuepress2/Vitepress/Astro/Gitlab 七站等 |
+| 我在哪里？ | 阶段 3（逐个平台宿主手验），#9 Quartz 已完成；#1–#9、#21、#25、#27–#35 已全链路 ✅ |
+| 我要去哪里？ | #10 Vuepress（自上而下），然后 Vuepress2/Vitepress/Astro/Gitlab 七站等 |
 | 目标是什么？ | 完成 T1 全部 35 平台 V2 验证（六格 + help/tour/doc），回写 checklist |
-| 我学到了什么？ | 见 findings.md（平台族共享基类、图片路径结构性差异、宿主交互） |
-| 我做了什么？ | 完成 #7 Hugo 六格+help，checklist 更新，建立总进度锚点 |
+| 我学到了什么？ | 见 findings.md（平台族共享基类、图片路径结构性差异、宿主交互）；Quartz 更新后 contents 接口 sha 暂态不一致 → 删除重试即恢复 |
+| 我做了什么？ | 完成 #9 Quartz 六格+help，checklist 更新（T1 小结 20），build:v2 通过 |
 
 ---
 *每个阶段完成后或遇到错误时更新此文件*
