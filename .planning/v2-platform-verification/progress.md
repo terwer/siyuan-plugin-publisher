@@ -1,5 +1,23 @@
 # 进度日志：V2 全平台验证
 
+## 会话：2026-09-07（帮助产物文案口径 + YAML 永久链接能力位）
+
+### 本次执行
+1. 按用户纠正审计全部用户可见帮助产物：18 个 help 配置 + 22 篇 `docs/draft/platforms/*.md`，清除验证进度类叙述（「V2 已验证配置、发布、更新、删除…」「本次 V2 验证…」「V2 支持…」「V2 已在 Electron 环境验证…」）、写进文案的插件版本号限定（「掘金 V2 默认…」）、内部实现名（`plugin-node-fetch`、「本项目 converter」「本适配器」），并把一处删句遗留的悬空逗号补全。保留用户操作流程措辞（「点『验证』→通过后…」）与平台限制契约。
+2. SOP §3 增补第 4 条「文案口径」与 `tour.target` 锚点要求，使口径可被后续平台沿用。
+3. 修复 #11 记录过的死控件问题：Vuepress2/Vitepress/Astro/Docsify 的转换器不消费 `yamlLinkEnabled`，表单却展示「YAML永久链接」开关。依据构建器口径（blog2 依文件路径生成路由、其发布代码与类型无 `permalink`；Vitepress 官方 Front Matter 无 `permalink`；Astro 内容集合按文件路径；Docsify 哈希路由）选择**撤下开关**而非写入构建器不读的元数据：`CommonGithubConfig.yamlLinkSupported`（默认 true）+ 四平台置 false + `CommonGithubSetting.vue` 条件渲染。
+4. 新增 `src/adaptors/api/base/github/yamlLinkCapability.spec.ts`：GitHub 族 9 平台全枚举，用转换器真实输出反查能力位，并断言不支持平台在开关两个位置都不产生 `permalink`/`url`。
+
+### 验证
+- 全量 `pnpm vitest run`：65 文件 / 309 测试通过；`pnpm build:v2` 通过
+- 源文件与 `dist-v2` 产物双重残留扫描：目标措辞零命中；标点无破损
+- 宿主（9222 直连）复核：Vuepress2 表单已无「YAML永久链接」，其余 18 个字段项完好；Jekyll/Hexo 开关仍在（能力未退化）；Vuepress2 HelpPanel 呈现纯功能文案
+
+### Commit（英文 Conventional）
+- `94dc6d26` docs(help): keep platform help copy focused on configuration behavior
+- `376934d8` docs(help): describe publish behavior instead of plugin internals
+- 本次：`fix(github): gate YAML permalink switch on builder capability` + `docs(help)` 口径记录
+
 ## 会话：2026-09-07（Vuepress2 #11 验证 + 共用层修正）
 
 ### 本次执行
@@ -105,11 +123,11 @@
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 阶段 3（逐个平台宿主手验），#11 Vuepress2 已完成；#1–#11、#21、#25、#27–#35 已全链路 ✅ |
+| 我在哪里？ | 阶段 3（逐个平台宿主手验），#11 Vuepress2 已完成；#1–#11、#21、#25、#27–#35 已全链路 ✅；期间修正项：帮助产物文案口径、GitHub 族 YAML 永久链接能力位 |
 | 我要去哪里？ | #12 Vitepress（`github_Vitepress`，`imageStorePath=[docpath]/images` 同 Vuepress2 就近族），然后 Astro → Gitlab 七站 |
 | 目标是什么？ | 完成 T1 全部 35 平台 V2 验证（六格 + help/tour/doc），回写 checklist |
-| 我学到了什么？ | 见 findings.md；引导锚点必须来自设置组件真实 `data-syp-tour`（`password/token/cookie` 三选一 + `knowledgeSpace`，无 `defaultPath`）；`hasConfig()` 与 `get()` 必须同一条解析链；Vuepress2/Vitepress/Astro 转换器不读 `yamlLinkEnabled` |
-| 我做了什么？ | #11 Vuepress2 六格+help 全绿（含共用层锚点/回落修正 + 两组回归测试），checklist T1 小结 22 |
+| 我学到了什么？ | 见 findings.md；引导锚点必须来自设置组件真实 `data-syp-tour`（`password/token/cookie` 三选一 + `knowledgeSpace`，无 `defaultPath`）；`hasConfig()` 与 `get()` 必须同一条解析链；「YAML永久链接」只有 hexo/hugo/jekyll/quartz/vuepress 五个转换器消费，其余 GitHub 平台按 `yamlLinkSupported` 撤下开关；用户可见帮助文案只写功能与配置契约 |
+| 我做了什么？ | 18 help 配置 + 22 文档草稿口径归一（SOP §3 固化）；`yamlLinkSupported` 能力位 + 四平台关闭 + 条件渲染 + 9 平台契约测试；全量 309 测试与宿主复核通过，checklist T1 小结仍为 22 |
 
 ---
 *每个阶段完成后或遇到错误时更新此文件*
