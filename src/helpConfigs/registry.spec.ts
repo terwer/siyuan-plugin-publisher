@@ -29,6 +29,7 @@ import { confluenceHelpConfig } from "~/src/helpConfigs/pages/platform-config/co
 import { hexoHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-github-hexo"
 import { hugoHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-hugo"
 import { jekyllHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-jekyll"
+import { quartzHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-quartz"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -183,6 +184,7 @@ describe("verified platform help configs", () => {
     hexoHelpConfig,
     hugoHelpConfig,
     jekyllHelpConfig,
+    quartzHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {
