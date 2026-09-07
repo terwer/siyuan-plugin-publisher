@@ -41,6 +41,7 @@ import { hexoHelpConfig } from "./platform-config/common-github-hexo"
 import { hugoHelpConfig } from "./platform-config/github-hugo"
 import { jekyllHelpConfig } from "./platform-config/github-jekyll"
 import { quartzHelpConfig } from "./platform-config/github-quartz"
+import { vuepressHelpConfig } from "./platform-config/github-vuepress"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -81,6 +82,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(hugoHelpConfig)
   helpRegistry.register(jekyllHelpConfig)
   helpRegistry.register(quartzHelpConfig)
+  helpRegistry.register(vuepressHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {

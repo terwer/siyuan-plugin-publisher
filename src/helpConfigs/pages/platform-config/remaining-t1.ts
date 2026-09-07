@@ -17,8 +17,7 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
  */
 export const remainingT1HelpConfigs: PageHelpConfig[] = [
   // === Github ===
-  // github_Hugo / github_Jekyll / github_Quartz 已拆分为独立 help 配置 github-hugo.ts / github-jekyll.ts / github-quartz.ts
-  { pageId: "platform-config/github_Vuepress", helpUrl: "https://siyuan.wiki/s/20230908183534-29f49bz" },
+  // github_Hugo / github_Jekyll / github_Quartz / github_Vuepress 已拆分为独立 help 配置 github-hugo.ts / github-jekyll.ts / github-quartz.ts / github-vuepress.ts
   { pageId: "platform-config/github_Vuepress2", helpUrl: "https://siyuan.wiki/s/20230908183739-2x156oj" },
   { pageId: "platform-config/github_Vitepress", helpUrl: "https://siyuan.wiki/s/20230914173253-mx2gaxd" },
   { pageId: "platform-config/github_Astro", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
