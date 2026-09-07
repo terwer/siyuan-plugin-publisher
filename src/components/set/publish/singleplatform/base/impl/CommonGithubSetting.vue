@@ -61,41 +61,47 @@ const syncDefaultPath = (cfg: any) => {
     <template #main="main">
       <!-- Github仓库名 -->
       <el-form-item :label="t('setting.blog.type.github.repo')">
-        <el-input v-model="(main.cfg as any).githubRepo" :placeholder="t('setting.blog.type.github.repo.tip')" />
-        <field-guide field="githubRepo" />
+        <field-guide field="githubRepo">
+          <el-input v-model="(main.cfg as any).githubRepo" :placeholder="t('setting.blog.type.github.repo.tip')" />
+        </field-guide>
       </el-form-item>
       <!-- YAML永久链接：仅在转换器会写入 permalink 的平台展示 -->
       <el-form-item v-if="(main.cfg as any).yamlLinkSupported != false" :label="t('setting.blog.yamlLinkEnabled')">
-        <el-switch v-model="(main.cfg as any).yamlLinkEnabled" />
-        <field-guide field="yamlLinkEnabled" />
+        <field-guide field="yamlLinkEnabled" inline>
+          <el-switch v-model="(main.cfg as any).yamlLinkEnabled" />
+        </field-guide>
       </el-form-item>
       <!-- Github分支名 -->
       <el-form-item :label="t('setting.blog.type.github.default.branch')">
-        <el-input
-          v-model="(main.cfg as any).githubBranch"
-          :placeholder="t('setting.blog.type.github.default.branch.tip')"
-        />
-        <field-guide field="githubBranch" />
+        <field-guide field="githubBranch">
+          <el-input
+            v-model="(main.cfg as any).githubBranch"
+            :placeholder="t('setting.blog.type.github.default.branch.tip')"
+          />
+        </field-guide>
       </el-form-item>
       <!-- 存储路径 -->
       <el-form-item :label="t('setting.blog.type.github.default.path')">
-        <el-input
-          v-model="(main.cfg as any).defaultPath"
-          @input="syncDefaultPath(main.cfg)"
-          :placeholder="t('setting.blog.type.github.default.path.tip')"
-        />
-        <field-guide field="defaultPath" />
+        <field-guide field="defaultPath">
+          <el-input
+            v-model="(main.cfg as any).defaultPath"
+            @input="syncDefaultPath(main.cfg)"
+            :placeholder="t('setting.blog.type.github.default.path.tip')"
+          />
+        </field-guide>
       </el-form-item>
 
       <!-- 文件规则 -->
       <el-form-item :label="t('setting.blog.mdFilenameRule')">
-        <el-input v-model="(main.cfg as any).mdFilenameRule" :placeholder="t('setting.blog.mdFilenameRule.tip')" />
-        <field-guide field="mdFilenameRule" />
+        <field-guide field="mdFilenameRule">
+          <el-input v-model="(main.cfg as any).mdFilenameRule" :placeholder="t('setting.blog.mdFilenameRule.tip')" />
+        </field-guide>
       </el-form-item>
       <!-- 文章预览规则 -->
       <el-form-item :label="t('setting.blog.previewPostUrl')">
-        <el-input v-model="(main.cfg as any).previewPostUrl" :placeholder="t('setting.blog.previewPostUrl.tip')" />
-        <field-guide field="previewPostUrl" />
+        <field-guide field="previewPostUrl">
+          <el-input v-model="(main.cfg as any).previewPostUrl" :placeholder="t('setting.blog.previewPostUrl.tip')" />
+        </field-guide>
       </el-form-item>
       <el-form-item>
         <a href="javascript:;" @click="toggleAdvance">{{ formData.advanceBtnText }}</a>
@@ -103,56 +109,63 @@ const syncDefaultPath = (cfg: any) => {
       <div v-if="formData.showAdvancedConfig">
         <!-- 提交信息 -->
         <el-form-item :label="t('setting.blog.type.github.msg')">
-          <el-input v-model="(main.cfg as any).defaultMsg" :placeholder="t('setting.blog.type.github.msg.tip')" />
-          <field-guide field="defaultMsg" />
+          <field-guide field="defaultMsg">
+            <el-input v-model="(main.cfg as any).defaultMsg" :placeholder="t('setting.blog.type.github.msg.tip')" />
+          </field-guide>
         </el-form-item>
         <!-- 作者 -->
         <el-form-item :label="t('setting.blog.type.github.author')">
-          <el-input v-model="(main.cfg as any).author" :placeholder="t('setting.blog.type.github.author')" />
-          <field-guide field="author" />
+          <field-guide field="author">
+            <el-input v-model="(main.cfg as any).author" :placeholder="t('setting.blog.type.github.author')" />
+          </field-guide>
         </el-form-item>
         <!-- 邮箱 -->
         <el-form-item :label="t('setting.blog.type.github.email')">
-          <el-input v-model="(main.cfg as any).email" :placeholder="t('setting.blog.type.github.email.tip')" />
-          <field-guide field="email" />
+          <field-guide field="email">
+            <el-input v-model="(main.cfg as any).email" :placeholder="t('setting.blog.type.github.email.tip')" />
+          </field-guide>
         </el-form-item>
         <!-- 作者主页 -->
         <el-form-item :label="t('setting.blog.type.github.site')">
-          <el-input v-model="(main.cfg as any).site" :placeholder="t('setting.blog.type.github.site.tip')" />
-          <field-guide field="site" />
+          <field-guide field="site">
+            <el-input v-model="(main.cfg as any).site" :placeholder="t('setting.blog.type.github.site.tip')" />
+          </field-guide>
         </el-form-item>
       </div>
       <!-- YAML预设配置 -->
       <el-form-item :label="t('setting.blog.type.github.dyn.yaml')">
-        <el-input
-          :autosize="{ minRows: 4, maxRows: 16 }"
-          type="textarea"
-          v-model="(main.cfg as any).dynYamlCfg"
-          :placeholder="t('setting.blog.type.github.dyn.yaml.tip')"
-        />
-        <field-guide field="dynYamlCfg" />
+        <field-guide field="dynYamlCfg" tall>
+          <el-input
+            :autosize="{ minRows: 4, maxRows: 16 }"
+            type="textarea"
+            v-model="(main.cfg as any).dynYamlCfg"
+            :placeholder="t('setting.blog.type.github.dyn.yaml.tip')"
+          />
+        </field-guide>
       </el-form-item>
       <!-- 图片存储路径 -->
       <el-form-item
         v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
         :label="t('setting.blog.type.github.images.path')"
       >
-        <el-input
-          v-model="(main.cfg as any).imageStorePath"
-          :placeholder="t('setting.blog.type.github.images.path.tip')"
-        />
-        <field-guide field="imageStorePath" />
+        <field-guide field="imageStorePath">
+          <el-input
+            v-model="(main.cfg as any).imageStorePath"
+            :placeholder="t('setting.blog.type.github.images.path.tip')"
+          />
+        </field-guide>
       </el-form-item>
       <!-- 图片访问链接 -->
       <el-form-item
         v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
         :label="t('setting.blog.type.github.image.link.path')"
       >
-        <el-input
-          v-model="(main.cfg as any).imageLinkPath"
-          :placeholder="t('setting.blog.type.github.mage.link.path.tip')"
-        />
-        <field-guide field="imageLinkPath" />
+        <field-guide field="imageLinkPath">
+          <el-input
+            v-model="(main.cfg as any).imageLinkPath"
+            :placeholder="t('setting.blog.type.github.mage.link.path.tip')"
+          />
+        </field-guide>
       </el-form-item>
       <slot name="main" :cfg="main.cfg" />
     </template>

@@ -376,26 +376,29 @@ onMounted(async () => {
     <slot name="header" :cfg="formData.cfg"></slot>
     <!-- 首页 -->
     <el-form-item v-if="props.cfg?.homeEnabled != false" :label="t('setting.common.home')" data-syp-tour="home">
-      <el-input
-        v-model="formData.cfg.home"
-        :placeholder="props.cfg?.placeholder?.homePlaceholder || ''"
-        @input="handleHomeChange"
-      />
-      <field-guide field="home" />
+      <field-guide field="home">
+        <el-input
+          v-model="formData.cfg.home"
+          :placeholder="props.cfg?.placeholder?.homePlaceholder || ''"
+          @input="handleHomeChange"
+        />
+      </field-guide>
     </el-form-item>
     <!-- API 地址 -->
     <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')" data-syp-tour="apiUrl">
-      <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder?.apiUrlPlaceholder || ''" />
-      <field-guide field="apiUrl" />
+      <field-guide field="apiUrl">
+        <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder?.apiUrlPlaceholder || ''" />
+      </field-guide>
     </el-form-item>
     <!-- 登录名 -->
     <el-form-item :label="formData.cfg.usernameLabel ?? t('setting.common.username')" v-if="props.cfg.usernameEnabled" data-syp-tour="username">
-      <el-input
-        v-model="formData.cfg.username"
-        :placeholder="props.cfg?.placeholder?.usernamePlaceholder || ''"
-        @input="handleUsernameChange"
-      />
-      <field-guide field="username" />
+      <field-guide field="username">
+        <el-input
+          v-model="formData.cfg.username"
+          :placeholder="props.cfg?.placeholder?.usernamePlaceholder || ''"
+          @input="handleUsernameChange"
+        />
+      </field-guide>
     </el-form-item>
     <!-- 密码 -->
     <el-form-item
@@ -404,16 +407,17 @@ onMounted(async () => {
       required
       data-syp-tour="password"
     >
-      <el-input
-        type="password"
-        v-model="formData.cfg.password"
-        show-password
-        :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
-      />
+      <field-guide field="password">
+        <el-input
+          type="password"
+          v-model="formData.cfg.password"
+          show-password
+          :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
+        />
+      </field-guide>
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.username.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
       >
-      <field-guide field="password" />
     </el-form-item>
     <!-- token -->
     <el-form-item
@@ -422,16 +426,17 @@ onMounted(async () => {
       required
       data-syp-tour="token"
     >
-      <el-input
-        type="password"
-        v-model="formData.cfg.password"
-        show-password
-        :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
-      />
+      <field-guide field="password">
+        <el-input
+          type="password"
+          v-model="formData.cfg.password"
+          show-password
+          :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
+        />
+      </field-guide>
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
         >{{ t("setting.common.token.gen") }}：{{ formData.cfg.tokenSettingUrl }}</a
       >
-      <field-guide field="password" />
     </el-form-item>
     <!-- 平台cookie -->
     <el-form-item
@@ -453,13 +458,15 @@ onMounted(async () => {
         :expand-manual-editor="toggleCookieManualEditor"
       />
       <template v-if="isCookieManuallyExpanded || !$slots['cookie-actions']">
-        <el-input
-          v-model="formData.cfg.password"
-          class="cookie-textarea"
-          :placeholder="t('setting.blog.cookie.placeholder')"
-          type="textarea"
-          :rows="10"
-        />
+        <field-guide field="password" tall>
+          <el-input
+            v-model="formData.cfg.password"
+            class="cookie-textarea"
+            :placeholder="t('setting.blog.cookie.placeholder')"
+            type="textarea"
+            :rows="10"
+          />
+        </field-guide>
         <el-alert
           :closable="false"
           :title="t('setting.blog.cookie.editable.tip')"
@@ -467,24 +474,25 @@ onMounted(async () => {
           type="warning"
         />
       </template>
-      <field-guide field="password" />
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
     <el-form-item v-if="props.cfg?.previewUrlEnabled != false" :label="t('setting.blog.previewUrl')" data-syp-tour="previewUrl">
-      <el-input
-        v-model="formData.cfg.previewUrl"
-        :placeholder="props.cfg?.placeholder?.previewUrlPlaceholder || ''"
-        :disabled="!props.cfg.allowPreviewUrlChange"
-      />
-      <field-guide field="previewUrl" />
+      <field-guide field="previewUrl">
+        <el-input
+          v-model="formData.cfg.previewUrl"
+          :placeholder="props.cfg?.placeholder?.previewUrlPlaceholder || ''"
+          :disabled="!props.cfg.allowPreviewUrlChange"
+        />
+      </field-guide>
     </el-form-item>
     <el-form-item :label="t('setting.blog.pageType')" data-syp-tour="pageType">
-      <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
-        <el-radio :value="PageTypeEnum.Markdown" size="small">Markdown</el-radio>
-        <el-radio :value="PageTypeEnum.Html" size="small">HTML</el-radio>
-      </el-radio-group>
-      <field-guide field="pageType" />
+      <field-guide field="pageType" inline>
+        <el-radio-group v-model="formData.cfg.pageType" class="ml-4">
+          <el-radio :value="PageTypeEnum.Markdown" size="small">Markdown</el-radio>
+          <el-radio :value="PageTypeEnum.Html" size="small">HTML</el-radio>
+        </el-radio-group>
+      </field-guide>
     </el-form-item>
     <!-- 知识空间 -->
     <el-form-item class="cate-input" :label="t('setting.blog.searchKeyword')" v-if="props.cfg?.cateSearchEnabled" data-syp-tour="knowledgeSpaceSearch">
@@ -495,44 +503,47 @@ onMounted(async () => {
       />
     </el-form-item>
     <el-form-item :label="props.cfg?.knowledgeSpaceTitle || t('setting.blog.knowledge.space')" v-if="props.cfg?.knowledgeSpaceEnabled" data-syp-tour="knowledgeSpace">
-      <el-select
-        v-model="formData.cfg.blogid"
-        class="m-2"
-        :placeholder="t('main.opt.select')"
-        :no-data-text="t('main.data.empty')"
-        :loading="formData.isCateLoading"
-        :loading-text="t('main.loading')"
-        ref="singleCateSelect"
-      >
-        <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-      <field-guide field="blogid" />
+      <field-guide field="blogid">
+        <el-select
+          v-model="formData.cfg.blogid"
+          class="m-2"
+          :placeholder="t('main.opt.select')"
+          :no-data-text="t('main.data.empty')"
+          :loading="formData.isCateLoading"
+          :loading-text="t('main.loading')"
+          ref="singleCateSelect"
+        >
+          <el-option v-for="item in formData.kwSpaces" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </field-guide>
     </el-form-item>
     <el-form-item :label="t('publisher.picbed.service')" data-syp-tour="picbedService">
-      <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
-        <el-radio :value="PicbedServiceTypeEnum.None" size="small">{{ t("publisher.picbed.none") }}</el-radio>
-        <el-radio
-          v-if="formData.cfg.picgoPicbedSupported"
-          :value="PicbedServiceTypeEnum.PicGo"
-          size="small"
-        >
-          {{ t("publisher.picbed.picgo") }}
-          <sup>{{ t("publisher.picbed.recom1") }}</sup>
-        </el-radio>
-        <el-radio v-if="formData.cfg.bundledPicbedSupported" :value="PicbedServiceTypeEnum.Bundled" size="small">
-          {{ t("publisher.picbed.bundled") }}
-          <sup>{{ t("publisher.picbed.recom2") }}</sup>
-        </el-radio>
-      </el-radio-group>
-      <field-guide field="picbedService" />
+      <field-guide field="picbedService" inline>
+        <el-radio-group v-model="formData.cfg.picbedService" class="ml-4">
+          <el-radio :value="PicbedServiceTypeEnum.None" size="small">{{ t("publisher.picbed.none") }}</el-radio>
+          <el-radio
+            v-if="formData.cfg.picgoPicbedSupported"
+            :value="PicbedServiceTypeEnum.PicGo"
+            size="small"
+          >
+            {{ t("publisher.picbed.picgo") }}
+            <sup>{{ t("publisher.picbed.recom1") }}</sup>
+          </el-radio>
+          <el-radio v-if="formData.cfg.bundledPicbedSupported" :value="PicbedServiceTypeEnum.Bundled" size="small">
+            {{ t("publisher.picbed.bundled") }}
+            <sup>{{ t("publisher.picbed.recom2") }}</sup>
+          </el-radio>
+        </el-radio-group>
+      </field-guide>
     </el-form-item>
     <!-- 跨域代理地址 -->
     <el-form-item
       v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin() && !formData.proxy.useCorsAnywhere"
       :label="t('setting.blog.middlewareUrl')"
     >
-      <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
-      <field-guide field="middlewareUrl" />
+      <field-guide field="middlewareUrl">
+        <el-input v-model="formData.cfg.middlewareUrl" :placeholder="t('setting.blog.middlewareUrl.tip')" />
+      </field-guide>
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.tip')"
@@ -545,8 +556,9 @@ onMounted(async () => {
       v-if="!formData.proxy.useSiyuanProxy && !isInSiyuanOrSiyuanNewWin()"
       :label="t('setting.blog.middlewareUrl.new')"
     >
-      <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
-      <field-guide field="corsAnywhereUrl" />
+      <field-guide field="corsAnywhereUrl">
+        <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsAnywhereUrl.tip')" />
+      </field-guide>
       <el-alert
         :closable="false"
         :title="t('setting.blog.middlewareUrl.my.new.tip')"
@@ -560,8 +572,9 @@ onMounted(async () => {
       :label="t('setting.blog.corsProxy.label')"
       data-syp-tour="corsProxy"
     >
-      <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsProxy.placeholder')" />
-      <field-guide field="corsAnywhereUrl" />
+      <field-guide field="corsAnywhereUrl">
+        <el-input v-model="formData.cfg.corsAnywhereUrl" :placeholder="t('setting.blog.corsProxy.placeholder')" />
+      </field-guide>
       <el-alert :closable="false" class="top-tip" type="info">
         <template #title>
           {{ t("setting.blog.corsProxy.pin.tip") }}

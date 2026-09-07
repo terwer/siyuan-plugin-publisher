@@ -14,7 +14,7 @@
 ## 验收台账
 | 步骤 | 平台 | 共用层挂载 | fields 键改名/补全 | 宿主证据 | 用户验收 |
 |---|---|---|---|---|---|
-| A | #11 Vuepress2（试点） | CommonBlogSetting + CommonGithubSetting | 补 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项 | 待做 | ⬜ |
+| A | #11 Vuepress2（试点） | CommonBlogSetting + CommonGithubSetting（**包裹式同行**，26 处） | 补 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项 | 20 行同行、官方 InfoFilled 16px、弹层在面板内完整可见（两张截图） | ⬜ 第二轮待验收 |
 | B | #6 Hexo | 复用 A | 补 `yamlLinkEnabled` tip + 同 A 缺项 | | ⬜ |
 | B | #7 Hugo | 复用 A | 同上 | | ⬜ |
 | B | #8 Jekyll | 复用 A | 同上 | | ⬜ |
@@ -122,7 +122,16 @@
 ## 遇到的错误
 | 错误 | 尝试次数 | 解决方案 |
 |------|---------|---------|
-| （待记录） | | |
+| 首次宿主复核 `iconCount=0` | 1 | 页面仍跑旧 bundle，改 `dist-v2` 后必须 reload Electron 页面 |
+| **验收不通过：ⓘ 掉到控件下一行** | 1 | 根因 `el-form-item__content` 默认 `flex-wrap:wrap` + 控件宽 100% → FieldGuide 改为**包裹控件**的同行布局（26 处挂载全部改造），并加 `inline`/`tall` 两个变体 |
+| **验收不通过：图标看不清** | 1 | 手写 svg path + 浅灰色 → 换官方 `InfoFilled` 16px + `--el-text-color-regular` |
+
+## 已做决策（追加）
+| 决策 | 理由 |
+|------|------|
+| 指引必须与控件同行，禁止换行（用户硬性要求） | 换行后 ⓘ 与控件脱钩，读起来像另一行的东西 |
+| FieldGuide 采用包裹式（slot 包住控件）而非兄弟节点 | 只有包住才能保证同行；兄弟节点受 `flex-wrap:wrap` 与控件 100% 宽度支配 |
+| 图标用 `@element-plus/icons-vue` 官方组件 | 手写 path 不可靠且不可读；仓库既有 `QuestionFilled` 用法先例 |
 
 ## 关键问题
 1. （步骤 A.7 定稿）`:teleported="false"` 留在 `.syp-panel` 内 vs 默认传送 body：以宿主复核结论为准。
