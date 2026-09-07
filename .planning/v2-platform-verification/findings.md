@@ -42,6 +42,14 @@
 - 新增账号流程：账号设置 → 添加账号 → 平台分组（GITHUB/GITLAB/METAWEBLOG/WORDPRESS/网页平台/文件系统）→ 选平台 → 配置表单（含图床「当前平台推荐」默认选中）。
 - Hugo 配置表单字段与 `github-hugo.ts` help 完全一致，确认 help 渲染正确。
 
+## 2026-09-07 补充发现（GitHub 族引导锚点与配置解析）
+
+- **引导锚点唯一来源是设置组件的 `data-syp-tour`**：`CommonBlogSetting.vue` 提供 `home/apiUrl/username/previewUrl/pageType/knowledgeSpaceSearch/knowledgeSpace/picbedService/corsProxy/validate`，鉴权行按 `passwordType` 三选一渲染成 `password`/`token`/`cookie`；`LocalSystemSetting.vue` 另有 `storePath/imageStorePath/fsYamlType`。**不存在 `defaultPath` 锚点**（存储目录行是 `knowledgeSpace`，label 取 `knowledgeSpaceTitle`「发布目录」）。GitHub 族全为 `PasswordType_Token` → 引导须指向 `token`。
+- **`helpRegistry.get()` 与 `hasConfig()` 必须同一条解析链**：`get()` 会把 `platform-config/<key>-<实例后缀>` 回落到预置 `<key>`，`hasConfig()` 曾只做精确匹配，导致动态实例 key 账号既显示专属内容又误报「暂无专属帮助文档」。
+- **不写 permalink 的 GitHub 族**：`vuepress2`/`vitepress`/`astro` 的 YamlConverter 不消费 `cfg.yamlLinkEnabled`，表单「YAML永久链接」开关对它们无效果；help 文案不得照抄 vuepress1/jekyll 的永久链接说法。
+- **资源就近图片族（`[docpath]/images`）**：`CommonGithubApiAdaptor.getImagePath` 对 `[docpath]` 前缀取 `post.cate_slugs?.[0] ?? cfg.blogid` 作文章目录，图片落 `<文章目录>/images/<名>`；链接侧 `./` 前缀走相对分支不补站点根斜杠。真实链路 `baseExtendApi` 总会设置 `mediaObject.post`（单测需按此契约构造，否则读 `cate_slugs` 抛错）。
+- **`FieldGuide.vue` 目前无人引用**：平台 help 的 `fields` tip 尚未接入表单渲染，属独立待办，不计入本批验证缺陷。
+
 ---
 *每执行2次查看/浏览器/搜索操作后更新此文件*
 *防止视觉信息丢失*

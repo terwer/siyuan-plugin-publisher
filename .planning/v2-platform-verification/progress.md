@@ -1,5 +1,24 @@
 # 进度日志：V2 全平台验证
 
+## 会话：2026-09-07（Vuepress2 #11 验证 + 共用层修正）
+
+### 本次执行
+- #10 Vuepress 收尾：Del 在 sha 稳定后重试成功（提交 `225cc85`），六格 + help/tour 全绿，checklist 回写并推送 `944752b7`。
+- #11 Vuepress2 全链路 ✅（Electron test 工作空间 / dist-v2 / 9222，目标 `terwer/vuepress2-blog` main，`src/post`）：
+  - V2C：新建账号为动态实例 key `github_Vuepress2-ig1w6`（预置 key 已有空配置）→ 验证通过、运行中、`apiStatus=true`、发布目录自动拉取 `src/post`。
+  - Pub `11b01c5` / Upd `0009677`(blob `1f76bf55`) / Del `9f20441` 首次即成功；查看 blob 200。
+  - Img：资源就近契约实证——图片落 `src/post/images/`，正文 `./images/<名>`，raw 200。
+  - 该平台转换器不读 `yamlLinkEnabled`（不写 permalink），表单「YAML永久链接」对 Vuepress2 无效果。
+  - 仓库复核：368 篇真实文章、`src/.vuepress/config.ts`、就近图片均未被误删。
+- 代码侧产物（本站新建）：`github-vuepress2.ts` help 配置、`docs/draft/platforms/github-vuepress2.md`、注册/移出 remaining-t1/纳入 verifiedConfigs、`vuepress2ImagePath.spec.ts`。
+- **共用层缺陷两处（宿主引导复验时暴露，均已修）**：
+  1. 引导锚点写错：`defaultPath` 锚点根本不存在（真实为 `knowledgeSpace`）；Token 型平台鉴权行锚点是 `token` 不是 `password`。影响 hexo/hugo/jekyll/quartz/vuepress/vuepress2 六个配置（前五个此前记录为「9 步全部可定位」，实际第 4/5 步高亮框为空）→ 全部改正 + 新增 `tourAnchors.spec.ts` 回归。
+  2. `helpRegistry.hasConfig()` 只做精确匹配，而 `get()` 有预置平台回落 → 动态实例 key 账号面板误报「当前页面暂无专属帮助文档」→ `hasConfig()` 复用同一回落链 + `registry.spec.ts` 用例。
+- 记录：`FieldGuide.vue` 组件已实现但全仓库未被引用，平台 `fields` tip 目前不渲染 → 本次只做事实记录，未擅自接线（27 测试绿、build:v2 通过）。
+
+### Commit（英文 Conventional）
+- `fix(help-configs)` 锚点与实例 key 回落修正 + `feat(vuepress2)` 平台产物 + checklist/progress 回写
+
 ## 会话：2026-09-07（Vuepress #10 验证）
 
 ### 本次执行
@@ -86,11 +105,11 @@
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 阶段 3（逐个平台宿主手验），#10 Vuepress 已完成；#1–#10、#21、#25、#27–#35 已全链路 ✅ |
-| 我要去哪里？ | #11 Vuepress2（目标仓库 `terwer/vuepress2-blog`，`src/.vuepress` Vuepress2 结构），然后 Vitepress/Astro/Gitlab 七站等 |
+| 我在哪里？ | 阶段 3（逐个平台宿主手验），#11 Vuepress2 已完成；#1–#11、#21、#25、#27–#35 已全链路 ✅ |
+| 我要去哪里？ | #12 Vitepress（`github_Vitepress`，`imageStorePath=[docpath]/images` 同 Vuepress2 就近族），然后 Astro → Gitlab 七站 |
 | 目标是什么？ | 完成 T1 全部 35 平台 V2 验证（六格 + help/tour/doc），回写 checklist |
-| 我学到了什么？ | 见 findings.md；Quartz/Vuepress 更新后 contents 接口 sha 暂态不一致 → 删除重试即恢复（同类现象，非插件缺陷）；Vuepress1 目标=terwer.github.io main（Vdoing），Jekyll=同仓 gh-pages |
-| 我做了什么？ | 补验 #10 Vuepress 六格+help（远端已备好代码侧），checklist 更新（T1 小结 21），build:v2 通过 |
+| 我学到了什么？ | 见 findings.md；引导锚点必须来自设置组件真实 `data-syp-tour`（`password/token/cookie` 三选一 + `knowledgeSpace`，无 `defaultPath`）；`hasConfig()` 与 `get()` 必须同一条解析链；Vuepress2/Vitepress/Astro 转换器不读 `yamlLinkEnabled` |
+| 我做了什么？ | #11 Vuepress2 六格+help 全绿（含共用层锚点/回落修正 + 两组回归测试），checklist T1 小结 22 |
 
 ---
 *每个阶段完成后或遇到错误时更新此文件*
