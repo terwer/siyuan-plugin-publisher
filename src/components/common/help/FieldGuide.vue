@@ -44,7 +44,7 @@ const hasTip = computed(() => !!fieldConfig.value?.tip || !!fieldConfig.value?.l
     <div class="syp-field-guide__control">
       <slot />
     </div>
-    <el-tooltip v-if="hasTip" effect="light" placement="top" :teleported="false">
+    <el-tooltip v-if="hasTip" effect="light" placement="top" :teleported="false" :show-after="150">
       <template #content>
         <div class="syp-field-guide__tip">
           <p v-if="fieldConfig?.tip" class="syp-field-guide__tip-text">{{ fieldConfig.tip }}</p>
@@ -91,10 +91,11 @@ const hasTip = computed(() => !!fieldConfig.value?.tip || !!fieldConfig.value?.l
     .syp-field-guide__icon
       margin-top 7px
 
+  // 一行一个指引、一屏二十个：默认压到最弱档，只在悬停时提亮，不与输入内容争注意力
   &__icon
     flex 0 0 auto
-    font-size 16px
-    color var(--el-text-color-regular)
+    font-size 14px
+    color var(--el-text-color-placeholder)
     cursor help
     transition color 0.2s
     &:hover
