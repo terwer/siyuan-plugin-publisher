@@ -9,13 +9,13 @@
 3. 不做一次性大批量；每个增量小、可验证、可回退。
 
 ## 当前步骤
-步骤 A **已完成，停下等用户验收**。验收通过后进入步骤 B（#6 Hexo，每站一停）。
+步骤 A **已验收通过**（功能 + 呈现标准均已定稿，见下节）。步骤 B（#6 Hexo）**已排期、未开始**——用户指示先睡觉，开工清单见「下一站开工清单」。。
 
 ## 验收台账
 | 步骤 | 平台 | 共用层挂载 | fields 键改名/补全 | 宿主证据 | 用户验收 |
 |---|---|---|---|---|---|
 | A | #11 Vuepress2（试点） | CommonBlogSetting + CommonGithubSetting（**包裹式同行**，26 处） | 补 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项 | 20 行同行、官方 InfoFilled 16px、弹层在面板内完整可见（两张截图） | ⬜ 第二轮待验收 |
-| B | #6 Hexo | 复用 A | 补 `yamlLinkEnabled` tip + 同 A 缺项 | | ⬜ |
+| B | #6 Hexo | 复用 A | 补 `yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项（共 9 键，无需改名） | ⏸ 未开始（清单已备） | ⬜ |
 | B | #7 Hugo | 复用 A | 同上 | | ⬜ |
 | B | #8 Jekyll | 复用 A | 同上 | | ⬜ |
 | B | #9 Quartz | 复用 A | 同上 | | ⬜ |
@@ -75,6 +75,33 @@
 - [ ] F.5 checklist 为 22 站回写该点通过记录（不改六格结论）；勾选 change `tasks.md`；`openspec validate --strict`。
 - [ ] F.6 全量测试 + build:v2 + 英文 Conventional 提交推送，工作树干净。
 - **状态：** pending
+
+## 呈现标准（2026-09-08 用户定稿，后续 21 站统一照此，不再逐站讨论）
+1. **全行覆盖**：该平台配置页每一行真实渲染的控件都要有 `fields` 指引（含折叠高级区）；绑的不是配置属性的行（检索关键词、验证/保存按钮）不挂。
+2. **同行不换行**：一律用**包裹式**挂载 `<field-guide field="x"><控件/></field-guide>`；开关/单选组加 `inline`，文本域加 `tall`。
+3. **安静档**：官方 `InfoFilled` 14px、`--el-text-color-placeholder`、hover 主色、tooltip `show-after 150ms`、`:teleported="false"` 留在 `.syp-panel` 内。
+4. 未采用的更强档（默认隐藏、悬停才淡入 / 只给易错字段挂）已明确否决，保持全行 + 安静档。
+
+## 下一站开工清单：#6 Hexo（**只记录，未开始**）
+配置文件：`src/helpConfigs/pages/platform-config/common-github-hexo.ts`（`pageId: platform-config/github_Hexo`）；宿主账号行 key `github_Hexo`（无实例后缀）。
+
+现状：`fields` 已有 12 键且**全部已是配置属性名**（GitHub 族本来就干净，无需改名）——`home apiUrl username password githubRepo githubBranch defaultPath mdFilenameRule previewPostUrl previewUrl pageType picbedService`。
+
+需补 9 个键（均按代码事实写文案）：
+| 键 | 该行是否渲染（依据） | 文案要点（依据） |
+|---|---|---|
+| `yamlLinkEnabled` | 渲染：Hexo 属受支持集（`yamlLinkCapability.spec.ts`），`yamlLinkSupported` 默认 true | 开关会把永久链接写入 Front Matter，Hexo 构建器识别 `permalink` |
+| `blogid` | 渲染：`hexoConfig.ts:47` `knowledgeSpaceEnabled=true`、`:48` `allowKnowledgeSpaceChange=false` → 只读；设置页恒为 `el-select`（树/单选项切换只在 `PublishKnowledgeSpace.vue` 的发布页里） | 只读、随「存储目录」同步；`syncDefaultPath` 写回 `blogid` |
+| `imageStorePath` | 渲染：`commonGithubConfig.ts:117` 默认 `Bundled` | 默认 `source/images`（`hexoConfig.ts:38`） |
+| `imageLinkPath` | 同上 | 默认 `../images`（`hexoConfig.ts:39`），源码与构建产物均可显示 |
+| `dynYamlCfg` | 渲染（GitHub 族共用行） | JSON 片段逐键合并进 Front Matter（`hexoYamlConverterAdaptor.ts:95-104`） |
+| `defaultMsg` / `author` / `email` | 渲染（折叠高级） | commit message 与提交作者/邮箱（`commonGithubApiAdaptor.ts:39-41` → `zhi-github-middleware` 提交体） |
+| `site` | 渲染（折叠高级） | 默认由 `home + username` 拼出；Hexo 转换器不写作者字段，仅作账号信息 |
+
+预期宿主结果：基础 17 个 ⓘ（比 Vuepress2 多 `yamlLinkEnabled`），展开高级后共 **21** 个；逐行 `sameLine=true`、弹层在面板内完整可见；`defaultPath` 文案是 `source/_posts`、`mdFilenameRule` 是 `[filename].md`、`previewPostUrl` 是 `/post/[postid].html`。
+
+待办动作（届时执行）：改 `common-github-hexo.ts` 补 9 键 → `pnpm vitest run` + `pnpm build:v2` → 重载宿主 → 量测 + 截图 → **停下等验收**。
+遗留观察（不在本站处理）：`common-github-hexo.ts` 文件名与 `pageId` 大小写是族内孤例（其余为 `github-<x>.ts` + kebab pageId），registry 归一化可解析，改名会牵动 `verifiedConfigs`/`registry.spec.ts`，暂不动；Hexo 的 tour `content` 与 `fields` tip 有整句重复，归步骤 F.4 去重。
 
 ## 核心资产：行 → 配置属性键映射（来自代码，勿凭记忆改）
 
