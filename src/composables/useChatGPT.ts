@@ -118,7 +118,7 @@ const useChatGPT = () => {
    * const chatResponse = await chat('你好，ChatGPT！');
    * console.log(chatResponse); // ChatGPT 生成的响应
    */
-  const chat = async (q: string, opts?: SendMessageOptions): Promise<string | any> => {
+  const chat = async (q: string, opts?: SendMessageOptions & { silent?: boolean }): Promise<string | any> => {
     try {
       const api = await getAPI()
       // 使用 ChatGPTAPI 实例进行聊天操作
@@ -144,7 +144,10 @@ const useChatGPT = () => {
       }
     } catch (e) {
       logger.error("Chat encountered an error:", e)
-      ElMessage.error("Chat encountered an error:" + e)
+      // silent 模式（如摘要自动生成）由调用方负责兜底，避免弹出误导性错误
+      if (!opts?.silent) {
+        ElMessage.error("Chat encountered an error:" + e)
+      }
     }
   }
 
