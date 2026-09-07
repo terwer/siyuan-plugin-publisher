@@ -27,7 +27,7 @@ export const vuepress2HelpConfig: PageHelpConfig = {
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
     defaultPath: { tip: "Vuepress2 文章存储目录，默认 src/post。发布后的 .md 会写入该目录。" },
     mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md（文章别名），与 Vuepress2 主题路由约定一致。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。Vuepress2 转换器不写入 permalink，实际站点地址由主题路由决定，此规则仅作查看参考。" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。发布时不写入 permalink，实际站点地址由主题路由决定，此规则仅作查看参考。" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]，查看链接即该 .md 在仓库中的地址。" },
     pageType: { tip: "Vuepress2 默认按 Markdown 内容发布。" },
     picbedService: {
@@ -45,7 +45,7 @@ export const vuepress2HelpConfig: PageHelpConfig = {
     },
     {
       q: "查看链接打不开？",
-      a: "查看链接为仓库中该 .md 的 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），仓库中存在该文件即可打开。站点线上地址由 Vuepress2 主题路由决定（本项目 converter 不写 permalink），需站点已部署。",
+      a: "查看链接为仓库中该 .md 的 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），仓库中存在该文件即可打开。站点线上地址由 Vuepress2 主题路由决定（发布不写入 permalink），需站点已部署。",
     },
     {
       q: "更新与删除会怎样？",

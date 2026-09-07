@@ -8,7 +8,7 @@
 
 1. 在浏览器登录哔哩哔哩 `https://www.bilibili.com`（需可访问创作中心 `https://member.bilibili.com`）。
 2. 保持该浏览器会话登录状态（后续读取 Cookie 用）。
-3. 无需额外 Token（本适配器走网页 Cookie 通道）。
+3. 无需额外 Token（通过浏览器 Cookie 发布）。
 
 ## 二、配置
 

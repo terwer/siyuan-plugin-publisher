@@ -8,7 +8,7 @@
 
 1. 用**公众号管理员**的微信扫码登录公众号后台 `https://mp.weixin.qq.com`。
 2. 保持该浏览器会话登录状态（后续读取 Cookie 用）。
-3. 无需 AppID/AppSecret（本适配器走网页 Cookie 通道）。
+3. 无需 AppID/AppSecret（通过浏览器 Cookie 发布）。
 
 ## 二、配置
 
