@@ -70,13 +70,13 @@ export const jekyllHelpConfig: PageHelpConfig = {
       placement: "bottom",
     },
     {
-      target: "[data-syp-tour='password']",
+      target: "[data-syp-tour='token']",
       title: "Token",
       content: "GitHub 个人访问令牌（PAT），需对目标仓库有 push 权限。",
       placement: "bottom",
     },
     {
-      target: "[data-syp-tour='defaultPath']",
+      target: "[data-syp-tour='knowledgeSpace']",
       title: "文章目录",
       content: "Jekyll 文章默认存储目录 _posts，发布后的 .md 会写入该目录，文件名需带日期前缀。",
       placement: "bottom",

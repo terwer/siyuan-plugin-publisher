@@ -70,7 +70,7 @@ export const hexoHelpConfig: PageHelpConfig = {
       placement: "bottom",
     },
     {
-      target: "[data-syp-tour='password']",
+      target: "[data-syp-tour='token']",
       title: "Token",
       content: "GitHub 个人访问令牌（PAT），需对目标仓库有 push 权限。",
       placement: "bottom",

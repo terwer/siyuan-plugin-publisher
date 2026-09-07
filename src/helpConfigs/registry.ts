@@ -119,9 +119,15 @@ class HelpRegistry {
 
   /**
    * 检查是否有页面专属配置（非兜底）
+   *
+   * 与 get() 使用同一条解析链：动态实例 key（如 platform-config/github_Vuepress2-ig1w6）
+   * 回落到预置平台配置命中时，同样视为已配置，避免面板误报「暂无专属帮助文档」。
    */
   hasConfig(pageId: string): boolean {
-    return this.pageConfigs.has(pageId)
+    if (this.pageConfigs.has(pageId)) {
+      return true
+    }
+    return this.getPresetPlatformConfig(pageId) !== undefined
   }
 
   /**

@@ -31,6 +31,7 @@ import { hugoHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-h
 import { jekyllHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-jekyll"
 import { quartzHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-quartz"
 import { vuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress"
+import { vuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress2"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -158,6 +159,12 @@ describe("HelpRegistry", () => {
       expect(helpRegistry.hasConfig("test-page")).toBe(true)
     })
 
+    it("should return true for preset platform help on dynamic instance keys", () => {
+      helpRegistry.register(yuqueHelpConfig)
+
+      expect(helpRegistry.hasConfig("platform-config/common_Yuque-z2jom6d")).toBe(true)
+    })
+
     it("should return false for unregistered pageId", () => {
       expect(helpRegistry.hasConfig("unknown")).toBe(false)
     })
@@ -187,6 +194,7 @@ describe("verified platform help configs", () => {
     jekyllHelpConfig,
     quartzHelpConfig,
     vuepressHelpConfig,
+    vuepress2HelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {
