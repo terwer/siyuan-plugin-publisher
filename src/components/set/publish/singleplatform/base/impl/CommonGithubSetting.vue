@@ -62,7 +62,8 @@ const syncDefaultPath = (cfg: any) => {
       <el-form-item :label="t('setting.blog.type.github.repo')">
         <el-input v-model="(main.cfg as any).githubRepo" :placeholder="t('setting.blog.type.github.repo.tip')" />
       </el-form-item>
-      <el-form-item :label="t('setting.blog.yamlLinkEnabled')">
+      <!-- YAML永久链接：仅在转换器会写入 permalink 的平台展示 -->
+      <el-form-item v-if="(main.cfg as any).yamlLinkSupported != false" :label="t('setting.blog.yamlLinkEnabled')">
         <el-switch v-model="(main.cfg as any).yamlLinkEnabled" />
       </el-form-item>
       <!-- Github分支名 -->

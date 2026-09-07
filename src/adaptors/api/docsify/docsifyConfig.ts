@@ -37,6 +37,8 @@ class DocsifyConfig extends CommonGithubConfig {
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false
+    // Docsify 以文件路径与哈希路由寻址，Front Matter 无 permalink 字段可读
+    this.yamlLinkSupported = false
     this.tagEnabled = false
     this.cateEnabled = false
     this.allowCateChange = false

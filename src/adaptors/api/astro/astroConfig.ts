@@ -37,6 +37,8 @@ class AstroConfig extends CommonGithubConfig {
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false
+    // Astro 内容集合按文件路径生成路由，Front Matter 无 permalink 字段可读
+    this.yamlLinkSupported = false
     this.tagEnabled = true
     this.cateEnabled = true
     this.allowCateChange = true
