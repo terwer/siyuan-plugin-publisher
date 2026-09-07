@@ -42,12 +42,14 @@
 1. **help 配置**（代码层）：
    - 位置：`src/helpConfigs/pages/platform-config/<platform>.ts`
    - 必须含：`helpUrl` + `summary` + `fields`（关键字段提示）+ `faq`（≥1 条）+ `tour`（引导步骤，target 用 `[data-syp-tour='xxx']` 格式）
+   - `tour.target` 必须指向设置组件真实存在的锚点：鉴权行按 `passwordType` 只会渲染 `password`/`token`/`cookie` 之一，存储目录行是 `knowledgeSpace`（`LocalSystemSetting` 另有 `storePath`/`imageStorePath`/`fsYamlType`）；`src/helpConfigs/tourAnchors.spec.ts` 负责校验
    - 缺则补，并在 `src/helpConfigs/registry.spec.ts` 的 `verifiedConfigs` 里加入该平台（强制约束）
 2. **文档草稿**：
    - 位置：`docs/draft/platforms/<platform>.md`
    - 内容：用户友好、能落地的配置步骤（字段说明、Token/Cookie 获取、常见问题、图床选择）
    - helpUrl 若还是共享/占位链接，在草稿顶部标注 `TODO：待替换真实帮助文档链接`
 3. 后续用户维护文档并给出真实链接后，替换 help 配置里的 `helpUrl`。
+4. **文案口径（help 配置与文档草稿共用）**：只写平台功能与配置契约——字段含义、存储目录与文件名规则、图片存储/引用路径、平台限制与常见问题解法。验证进度类叙述（哪些环节已通过、批次结论、"V2 已验证配置、发布、更新、删除…"、插件版本号限定、内部传输实现名）属于验证记录，只写本 change 的 checklist SSOT，不得进入用户可见的 `summary`/`fields`/`faq`/`tour` 与文档草稿。
 
 ---
 

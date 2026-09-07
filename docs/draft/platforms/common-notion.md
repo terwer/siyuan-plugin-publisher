@@ -2,7 +2,7 @@
 
 > TODO：待替换真实帮助文档链接。
 
-通过 **Notion API Token** 发布到 Notion 页面。V2 已验证完整链路（配置、发布、更新、删除、带图发布、查看链接）。
+通过 **Notion API Token** 发布到 Notion 页面。
 
 ## 一、准备
 

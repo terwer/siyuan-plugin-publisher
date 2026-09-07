@@ -2,7 +2,7 @@
 
 > TODO：待替换真实帮助文档链接。
 
-通过 **Atlassian Confluence** 发布文档。V2 已验证完整链路（配置校验、发布、更新、删除、带图发布、查看链接）。
+通过 **Atlassian Confluence** 发布文档。
 
 Confluence 使用个人访问令牌（Personal Access Token, PAT）鉴权，按「空间」发布；可选择挂载到某个「父页面」下。
 

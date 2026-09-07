@@ -2,7 +2,7 @@
 
 > TODO：待替换真实帮助文档链接（当前 helpUrl 指向的短链需用户确认）。
 
-博客园通过 **MetaWeblog XML-RPC** 发布，V2 已验证完整链路（配置/发布/更新/删除/带图）。
+博客园通过 **MetaWeblog XML-RPC** 发布。
 
 ## 一、准备
 

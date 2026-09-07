@@ -13,7 +13,7 @@ export const notionHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Notion",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary:
-    "通过 API Token 发布到 Notion 页面。V2 已验证配置、发布、更新、删除、带图发布与查看链接。Notion 使用 API Token（非 Cookie），页面归属到所选根页面，图片以 PicGo 外部链接图床发布为外部图片块。",
+    "通过 API Token 发布到 Notion 页面。Notion 使用 API Token（非 Cookie），页面归属到所选根页面，图片以 PicGo 外部链接图床发布为外部图片块。",
   fields: {
     home: { tip: "Notion 平台首页，通常固定为 https://www.notion.so/，保持默认。" },
     apiUrl: { tip: "Notion API 地址，通常固定为 https://api.notion.com/v1，保持默认。" },
@@ -23,7 +23,7 @@ export const notionHelpConfig: PageHelpConfig = {
       linkText: "前往创建 Token",
     },
     previewUrl: { tip: "Notion 文章预览规则，固定为 /[postid]，不可修改；查看链接为 https://www.notion.so/<postid>。" },
-    pageType: { tip: "Notion V2 默认使用 Markdown 内容发布。" },
+    pageType: { tip: "Notion 默认使用 Markdown 内容发布。" },
     knowledgeSpace: { tip: "选择文章的根页面（父页面）。Notion 暂不支持修改已发布页面所属根页面。" },
     picbedService: { tip: "Notion 无内置图片上传，使用 PicGo 外部链接图床；图片以外部 image 块嵌入页面。" },
   },
@@ -67,7 +67,7 @@ export const notionHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='pageType']",
       title: "发布格式",
-      content: "Notion V2 默认按 Markdown 内容发布。",
+      content: "Notion 默认按 Markdown 内容发布。",
       placement: "bottom",
     },
     {

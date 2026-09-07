@@ -7,7 +7,7 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const wordpressHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpress",
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
-  summary: "发布到自建或托管的 WordPress 站点。V2 已验证配置、发布、更新、删除和图片链路；当前配置重点是站点地址、账号和应用程序密码。",
+  summary: "发布到自建或托管的 WordPress 站点。当前配置重点是站点地址、账号和应用程序密码。",
   fields: {
     home: { tip: "WordPress 站点首页地址，如 https://yourblog.com" },
     apiUrl: { tip: "WordPress XML-RPC 端点，通常会从首页自动推导为 https://yourblog.com/xmlrpc.php" },
@@ -16,13 +16,13 @@ export const wordpressHelpConfig: PageHelpConfig = {
       tip: "WordPress 应用程序密码（在用户 → 编辑 → 应用程序密码中生成）",
     },
     previewUrl: { tip: "默认使用 /?p=[postid] 预览格式。只有站点永久链接规则特殊时才需要调整。" },
-    pageType: { tip: "WordPress V2 验证使用 HTML 内容发布，通常保持默认即可。" },
-    picbedService: { tip: "本地 WordPress V2 图片链路已通过 plugin-node-fetch 验证。可按站点能力选择内置或外部图床。" },
+    pageType: { tip: "WordPress 按 HTML 内容发布，通常保持默认即可。" },
+    picbedService: { tip: "WordPress 图片发布到站点自身的媒体库，也可按站点能力选择外部图床。" },
   },
   faq: [
     { q: "XML-RPC 被禁用？", a: "检查 WordPress 是否开启了 XML-RPC，或确认安全插件没有拦截 /xmlrpc.php。" },
     { q: "Application Password 在哪？", a: "WordPress 后台 → 用户 → 编辑 → 滚动到「应用程序密码」 → 生成。" },
-    { q: "图片上传失败？", a: "先确认站点媒体库权限和网络连通性。本次 V2 验证已覆盖本地 WordPress 图片发布链路。" },
+    { q: "图片上传失败？", a: "先确认站点媒体库权限和网络连通性；WordPress 图片发布到站点自身的媒体库。" },
   ],
   tour: [
     {

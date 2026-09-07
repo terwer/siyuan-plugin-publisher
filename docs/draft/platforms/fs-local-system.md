@@ -2,7 +2,7 @@
 
 > TODO：待替换真实帮助文档链接。
 
-把文档导出为 Markdown 到本地文件系统，附带静态站点 Front Matter（YAML）。V2 已在 Electron 环境验证完整链路。
+把文档导出为 Markdown 到本地文件系统，附带静态站点 Front Matter（YAML）。仅在桌面端（Electron）环境可用。
 
 ## 一、适用场景
 

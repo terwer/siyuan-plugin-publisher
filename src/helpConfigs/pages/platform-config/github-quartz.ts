@@ -13,7 +13,7 @@ export const quartzHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Quartz",
   helpUrl: "https://siyuan.wiki/s/20230908182140-8riar0r",
   summary:
-    "通过 GitHub API 将文章发布到 Quartz 静态博客仓库。V2 已验证配置、发布、更新、删除、带图发布与查看链接。账号使用 GitHub Token（PAT）；文章写入仓库 content 目录（文件名 [filename].md），图片选「当前平台」图床上传到仓库 assets/images，文章内引用为绝对路径 /assets/images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]）或站点文章地址（/post/<postid>.html）。",
+    "通过 GitHub API 将文章发布到 Quartz 静态博客仓库。账号使用 GitHub Token（PAT）；文章写入仓库 content 目录（文件名 [filename].md），图片选「当前平台」图床上传到仓库 assets/images，文章内引用为绝对路径 /assets/images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]）或站点文章地址（/post/<postid>.html）。",
   fields: {
     home: { tip: "GitHub 首页地址，默认 https://github.com。" },
     apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },

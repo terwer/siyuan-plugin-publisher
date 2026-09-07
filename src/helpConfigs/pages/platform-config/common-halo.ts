@@ -13,7 +13,7 @@ export const haloHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Halo",
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
   summary:
-    "通过 Halo API 发布到 Halo 2.x 博客。V2 已验证配置、发布、更新、删除、带图发布与查看链接。Halo API 平台仅支持 Halo 2.9（2.20+ 已调整 API 策略，需改用「Halo网页版」）。账号使用用户名与密码，图片由内置图床上传到 Halo 附件，发布后文章地址形如 https://<host>/archives/<slug>。",
+    "通过 Halo API 发布到 Halo 2.x 博客。Halo API 平台仅支持 Halo 2.9（2.20+ 已调整 API 策略，需改用「Halo网页版」）。账号使用用户名与密码，图片由内置图床上传到 Halo 附件，发布后文章地址形如 https://<host>/archives/<slug>。",
   fields: {
     home: { tip: "Halo 站点首页地址，通常与 API 地址一致，如 https://yourhalo.com。" },
     apiUrl: { tip: "Halo 站点 API 地址，通常与首页地址相同，如 https://yourhalo.com。" },
@@ -23,7 +23,7 @@ export const haloHelpConfig: PageHelpConfig = {
       link: "https://siyuan.wiki/s/20230908183639-btcnnmj",
     },
     previewUrl: { tip: "Halo 文章预览规则，默认 /archives/{slug}；查看链接为 https://<host>/archives/<slug>，可修改。" },
-    pageType: { tip: "Halo V2 默认按 HTML 内容发布。" },
+    pageType: { tip: "Halo 默认按 HTML 内容发布。" },
     picbedService: { tip: "Halo 支持内置图床，选择「当前平台」可将图片上传到 Halo 附件（/upload/）。" },
   },
   faq: [
@@ -78,7 +78,7 @@ export const haloHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='pageType']",
       title: "发布格式",
-      content: "Halo V2 默认按 HTML 内容发布。",
+      content: "Halo 默认按 HTML 内容发布。",
       placement: "bottom",
     },
     {

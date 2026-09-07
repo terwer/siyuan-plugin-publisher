@@ -7,7 +7,7 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const yuqueHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Yuque",
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
-  summary: "发布到语雀知识库。V2 已验证配置、发布、更新、删除和图片链路；语雀 API 发布需要专业会员，这是平台策略限制。",
+  summary: "发布到语雀知识库；语雀 API 发布需要专业会员，这是平台策略限制。",
   fields: {
     home: { tip: "你的语雀主页地址，如 https://www.yuque.com/yourname" },
     apiUrl: { tip: "默认使用语雀 v2 API 地址。除非语雀官方接口变更，一般不需要修改。" },
@@ -18,7 +18,7 @@ export const yuqueHelpConfig: PageHelpConfig = {
       linkText: "前往生成 Token",
     },
     knowledgeSpace: { tip: "验证通过后会读取账号可写知识库。语雀 API 模式暂不支持编辑已发布文档所属知识库。" },
-    picbedService: { tip: "语雀 API 已验证图片链路。若使用外部图床，请确认目标知识库允许外链图片。" },
+    picbedService: { tip: "语雀使用内置图片链路。若使用外部图床，请确认目标知识库允许外链图片。" },
   },
   faq: [
     { q: "提示「权限不足」？", a: "语雀 API 发布需要专业会员。免费版可改用语雀网页版（Cookie 模式），不要把这类失败当作插件配置损坏。" },

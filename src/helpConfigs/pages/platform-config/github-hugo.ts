@@ -13,7 +13,7 @@ export const hugoHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Hugo",
   helpUrl: "https://siyuan.wiki/s/20230908182946-itm4luf",
   summary:
-    "通过 GitHub API 将文章发布到 Hugo 静态博客仓库。V2 已验证配置、发布、更新、删除、带图发布与查看链接。账号使用 GitHub Token（PAT）；图片选「当前平台」图床上传到仓库 static/images，文章内引用为绝对路径 /images/<图片名>（Hugo 构建时把 static/ 原样复制到站点根，构建产物即可正确显示，这是官方推荐的引用方式）；查看链接为站点文章地址（/post/<slug>.html）。",
+    "通过 GitHub API 将文章发布到 Hugo 静态博客仓库。账号使用 GitHub Token（PAT）；图片选「当前平台」图床上传到仓库 static/images，文章内引用为绝对路径 /images/<图片名>（Hugo 构建时把 static/ 原样复制到站点根，构建产物即可正确显示，这是官方推荐的引用方式）；查看链接为站点文章地址（/post/<slug>.html）。",
   fields: {
     home: { tip: "GitHub 首页地址，默认 https://github.com。" },
     apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },

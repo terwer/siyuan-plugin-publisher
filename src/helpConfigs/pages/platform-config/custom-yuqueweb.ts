@@ -7,12 +7,12 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const yuquewebHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Yuqueweb",
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
-  summary: "通过 Cookie 授权发布到语雀网页版。V2 已验证配置、发布、更新、删除和图片链路；适合没有语雀专业会员但已在浏览器登录的账号。",
+  summary: "通过 Cookie 授权发布到语雀网页版。适合没有语雀专业会员但已在浏览器登录的账号。",
   fields: {
     cookie: { tip: "自动从浏览器读取，也可手动粘贴。登录语雀后读取验证。" },
     knowledgeSpace: { tip: "选择要发布到的语雀知识库。Cookie 模式允许根据当前登录账号读取可写知识库。" },
     previewUrl: { tip: "语雀网页版预览地址默认使用 /{login}/{bookSlug}/{slug}，通常保持默认。" },
-    picbedService: { tip: "语雀网页版 V2 已验证内置图片链路。优先使用默认 Bundled 图床。" },
+    picbedService: { tip: "语雀网页版使用平台内置图片链路，优先使用默认 Bundled 图床。" },
   },
   faq: [
     { q: "Cookie 读取失败？", a: "确认已在浏览器中登录语雀，点击「自动读取」重新获取。" },
@@ -35,7 +35,7 @@ export const yuquewebHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='picbedService']",
       title: "图片发布",
-      content: "语雀网页版已验证内置图片链路。没有特殊图床需求时保持默认即可。",
+      content: "语雀网页版使用内置图片链路。没有特殊图床需求时保持默认即可。",
       placement: "bottom",
     },
     {

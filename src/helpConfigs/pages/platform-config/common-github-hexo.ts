@@ -13,7 +13,7 @@ export const hexoHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Hexo",
   helpUrl: "https://siyuan.wiki/s/20230908182140-8riar0r",
   summary:
-    "通过 GitHub API 将文章发布到 Hexo 静态博客仓库。V2 已验证配置、发布、更新、删除、带图发布与查看链接。账号使用 GitHub Token（PAT）；图片选「当前平台」图床会上传到仓库 source/images；发布后文章地址为 GitHub blob 预览链接（或按站点预览规则合成），查看链接形如 https://github.com/<user>/<repo>/blob/<branch>/<docpath>。",
+    "通过 GitHub API 将文章发布到 Hexo 静态博客仓库。账号使用 GitHub Token（PAT）；图片选「当前平台」图床会上传到仓库 source/images；发布后文章地址为 GitHub blob 预览链接（或按站点预览规则合成），查看链接形如 https://github.com/<user>/<repo>/blob/<branch>/<docpath>。",
   fields: {
     home: { tip: "GitHub 首页地址，默认 https://github.com。" },
     apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },

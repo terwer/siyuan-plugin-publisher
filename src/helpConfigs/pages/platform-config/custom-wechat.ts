@@ -13,13 +13,13 @@ export const wechatHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Wechat",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary:
-    "通过登录公众号后台的 Cookie 发布到微信公众号。V2 支持配置、发布、更新、删除与平台素材库图片上传（Bundled）；以 HTML 内容发布。",
+    "通过登录公众号后台的 Cookie 发布到微信公众号。以 HTML 内容发布，图片上传到公众号素材库（Bundled）。",
   fields: {
     home: { tip: "默认是公众号后台 https://mp.weixin.qq.com，通常保持默认。" },
     apiUrl: { tip: "默认是公众号后台接口地址，通常保持默认。" },
     cookie: { tip: "先在浏览器登录公众号后台（mp.weixin.qq.com），再自动读取或手动粘贴 Cookie。登录过期或切换账号后需重新读取。" },
     previewUrl: { tip: "公众号文章编辑页 URL 模板，一般保持默认。" },
-    pageType: { tip: "公众号 V2 通过 HTML 内容发布。" },
+    pageType: { tip: "公众号通过 HTML 内容发布。" },
     picbedService: { tip: "公众号默认使用平台素材库上传图片（当前平台 推荐）。" },
   },
   faq: [
@@ -43,7 +43,7 @@ export const wechatHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='picbedService']",
       title: "图片发布",
-      content: "公众号 V2 使用平台素材库上传图片，默认保持“当前平台 推荐”（Bundled）。",
+      content: "公众号使用平台素材库上传图片，默认保持“当前平台 推荐”（Bundled）。",
       placement: "bottom",
     },
     {

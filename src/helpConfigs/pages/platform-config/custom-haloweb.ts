@@ -15,13 +15,13 @@ export const halowebHelpConfig: PageHelpConfig = {
     apiUrl: { tip: "通常和首页地址相同。除非你的 Halo 后台使用了独立域名，否则保持默认。" },
     cookie: { tip: "先登录 Halo 后台，再自动读取或手动粘贴 Cookie。Cookie 过期或切换账号后需要重新读取。" },
     pageType: { tip: "Halo 网页版默认使用 HTML 发布，通常保持默认。" },
-    picbedService: { tip: "Halo 网页版 V2 已验证平台内置图片链路；默认使用 Bundled 图床即可。" },
+    picbedService: { tip: "Halo 网页版使用平台内置图片链路；默认使用 Bundled 图床即可。" },
   },
   faq: [
     { q: "提示「Invalid URL」？", a: "先填写站点地址（完整 URL），再点击登录或读取 Cookie。" },
     { q: "Halo 版本要求？", a: "需要 Halo 2.20 及以上版本。" },
     { q: "Cookie 验证失败？", a: "确认浏览器已登录 Halo 后台，或重新读取 Cookie。登录状态失效后接口会返回登录页，表现为配置验证异常。" },
-    { q: "图片该选什么图床？", a: "本次 V2 验证覆盖了 Halo 平台内置图片链路，默认 Bundled 即可。" },
+    { q: "图片该选什么图床？", a: "Halo 网页版使用平台内置图片链路，默认 Bundled 即可。" },
   ],
   tour: [
     {
@@ -45,7 +45,7 @@ export const halowebHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='picbedService']",
       title: "图片发布",
-      content: "Halo 网页版已验证平台内置图片上传，保持 Bundled 配置即可。",
+      content: "Halo 网页版使用平台内置图片上传，保持 Bundled 配置即可。",
       placement: "bottom",
     },
     {
