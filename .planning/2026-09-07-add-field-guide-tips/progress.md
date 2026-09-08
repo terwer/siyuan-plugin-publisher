@@ -49,14 +49,30 @@
 - 指示「同步 hexo 的计划，不开始」→ 已查实并写入 `task_plan.md`「下一站开工清单：#6 Hexo」：现有 12 键无需改名、需补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），每条文案依据都指到具体代码行；预期宿主 17→21 个 ⓘ。**未写任何代码、未构建、未开新平台。**
 - 目标保持 paused 状态（等用户回来点头再 resume 开 #6）。
 
+## 会话：2026-09-08（步骤 B：#6 Hexo）
+
+### 环境
+- 用户「拉取最新代码并继续」：`git pull --ff-only` 已是最新（本地 4 个提交即 HEAD），目标 resume 到 rev 4。
+- 思源未运行（9222 与内核端口均无监听）→ 自行以 `C:\Program Files\SiYuan\SiYuan.exe --workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222` 拉起，3 秒后 9222 就绪；本次内核端口 **62677**（每次随机，勿记死）。
+- 工作区核实：`test/data/plugins/siyuan-plugin-publisher -> .../siyuan-plugin-publisher/dist-v2`；`public` 工作区按规则不用于验证。
+
+### 执行
+- 按上轮清单改 `src/helpConfigs/pages/platform-config/common-github-hexo.ts`：新增 9 个 `fields` 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/`defaultMsg`/`author`/`email`/`site`），并给 `previewPostUrl` 补「开启 YAML永久链接时 permalink 也按此规则生成」。
+- 文案依据：`hexoYamlConverterAdaptor.ts:66-91`（`yamlLinkEnabled` → `permalink`，取自 `previewPostUrl`，支持 `[postid]/[yyyy]/[MM]/[dd]/[cats]`）、`:95-104`（`dynYamlCfg` 最后合并、同名覆盖）、`hexoConfig.ts:31/34/38/39/47/48`、`commonGithubConfig.ts:117`（默认 Bundled → 图片两行会渲染）。
+- 质量：`pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过。
+- 宿主复核（`github_Hexo`，无实例后缀）：基础 **17** 个 ⓘ、展开高级 **21** 个，与预测一致；`notSameLine=[]`；抽样 5 行（`yamlLinkEnabled`/`imageStorePath`/`site`/`blogid`/`dynYamlCfg`）tip 均为 Hexo 专属、`inPanel=true`、`fullyVisible=true`、与控件间距 4px（开关行 inline 紧贴）。证据 `tmp/field-guide-hexo-yamllink.png`。
+
+### 停下等验收
+- 未动其他平台、未加回归尺、未改 SOP/checklist。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 A 已验收通过并定稿标准；步骤 B（#6 Hexo）已排期未开工，等待用户指令 |
-| 我要去哪里？ | #6 Hexo（按「下一站开工清单」补 9 个 `fields` 键）→ #7 Hugo → #8 Jekyll → #9 Quartz → #10 Vuepress → C 组 Common 族 → D 组 Cookie 族 → E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 B 第一站 #6 Hexo 已完成并停下等验收；步骤 A（试点 #11 + 呈现标准）已验收通过 |
+| 我要去哪里？ | 验收后：#7 Hugo → #8 Jekyll → #9 Quartz → #10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 图标一律用官方组件不手写 path；`el-form-item__content` 会 wrap，指引必须包裹控件才同行；重复出现的行内提示要压到安静档（14px + placeholder 灰）；改 `dist-v2` 后宿主必须 reload |
-| 我做了什么？ | 试点 #11 三轮迭代到验收通过（`a77d5d4c` → `bed281c1` → `55fa6cfc`，均已推送，工作树干净），并备好 Hexo 开工清单 |
+| 我学到了什么？ | 图标只用官方组件；`el-form-item__content` 会 wrap，指引必须包裹控件才同行；重复行内提示压到安静档；改 `dist-v2` 后宿主必须 reload；思源可用 `--workspace=<test> --remote-debugging-port=9222` 自行拉起，内核端口每次随机 |
+| 我做了什么？ | `a77d5d4c`→`bed281c1`→`55fa6cfc`→`acfe4677`（试点三轮 + 标准冻结）+ 本轮 Hexo 一站（待提交），全部推送、工作树干净 |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*
