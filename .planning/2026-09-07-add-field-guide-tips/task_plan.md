@@ -15,8 +15,8 @@
 | 步骤 | 平台 | 共用层挂载 | fields 键改名/补全 | 宿主证据 | 用户验收 |
 |---|---|---|---|---|---|
 | A | #11 Vuepress2（试点） | CommonBlogSetting + CommonGithubSetting（**包裹式同行**，26 处） | 补 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项 | 20 行同行、官方 InfoFilled 14px 安静档、弹层在面板内完整可见 | ✅ 已验收（标准已冻结） |
-| B | #6 Hexo | 复用 A | 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），无需改名 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`，5 条 tip 均为 Hexo 专属且在面板内完整可见 | ⬜ 待验收 |
-| B | #7 Hugo | 复用 A | 同上 | | ⬜ |
+| B | #6 Hexo | 复用 A | 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），无需改名 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`，5 条 tip 均为 Hexo 专属且在面板内完整可见 | ✅ 已验收 |
+| B | #7 Hugo | 复用 A | 补同 9 键；**并纠正错误表述**：Hugo 写的是 `url` 且固定 `/post/<文章别名>.html`，不读「文章预览规则」（`hugoYamlConverterAdaptor.ts:37-38`） | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 复核为 Hugo 专属、面板内完整可见 | ⬜ 待验收 |
 | B | #8 Jekyll | 复用 A | 同上 | | ⬜ |
 | B | #9 Quartz | 复用 A | 同上 | | ⬜ |
 | B | #10 Vuepress | 复用 A | 同上 | | ⬜ |

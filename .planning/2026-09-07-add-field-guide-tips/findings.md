@@ -66,3 +66,14 @@
 - 一屏 16–20 个指引，若按 16px + `--el-text-color-regular`（#606266）会与输入内容争注意力；仓库既有的页面级帮助按钮 `HelpButton.vue` 用 `--el-color-info-light-3` + hover 变主色的弱化处理。
 - 定稿：`font-size 14px`、`color var(--el-text-color-placeholder)`（#a8abb2，EP 的「安静图标」语义 token）、hover 提亮为主色、`cursor: help`；tooltip 加 `:show-after="150"` 避免鼠标划过时闪烁。宿主实测 `14x14` / `rgb(168,171,178)`，弹层仍在面板内正常显示。
 - 可选更强档（未采用，等用户点头再加）：默认 `opacity 0`，仅 `.el-form-item:hover` 时淡入——更干净但牺牲可发现性。
+
+## #6 Hexo / #7 Hugo 复核出的事实（写文案的依据，勿凭记忆）
+- **Hexo**：`hexoYamlConverterAdaptor.ts:66-91` 在 `yamlLinkEnabled` 时写 `permalink`，取值**来自 `previewPostUrl`**（`[postid]`→`wp_slug`，支持 `[yyyy]/[MM]/[mm]/[dd]/[cats]`）；`:95-104` 的 `dynYamlCfg` 最后合并、同名覆盖。
+- **Hugo**：`hugoYamlConverterAdaptor.ts:37-38` 写的是 **`url`**，且取值**硬编码** `/post/<wp_slug>.html`，**不读 `previewPostUrl`**。原 help `previewPostUrl` tip 与 faq、以及 `docs/draft/platforms/github-hugo.md` 第 33/46 行都写成「与文章预览规则一致」——只是默认值恰好相同，规则一改就不成立，本次一并纠正。
+- **图片路径口径**（`commonGithubApiAdaptor.ts:257/315-343`）：`imageLinkPath` 以 `[docpath]` 开头→按文章目录解析；以 `./`、`../` 开头→保留相对前缀、不加站点根斜杠；否则→去前导斜杠后统一前置 `/`。所以 Hugo 的 `images` 实际引用为 `/images/<名>`，Hexo 的 `../images` 为相对引用——tip 文案按此区分。
+- 两站 `picbedService` 均默认 `Bundled`（`commonGithubConfig.ts:117`）→ 图片两行必然渲染；`knowledgeSpaceEnabled=true` + `allowKnowledgeSpaceChange=false` → 发布目录行只读且镜像 `defaultPath`（`syncDefaultPath` 写回 `blogid`）。
+- GitHub 族 `fields` 键**本来就是配置属性名**，这两站零改名，只补 9 键。
+
+## 宿主量测口径（避免误判）
+- 取 tip 时不能直接拿「最后一个可见 `.el-popper`」：上一个弹层可能还没隐藏，会把上一行的文案错记到本行（#7 复核时 `site` 一度显示成 `blogid` 的文案）。
+- 正确做法：每次探测前确认 `visible poppers === 0`（或先 `mouseleave` + 等待），再 hover、再取；本次已用该口径复测 `site` 通过。

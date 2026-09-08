@@ -65,14 +65,30 @@
 ### 停下等验收
 - 未动其他平台、未加回归尺、未改 SOP/checklist。
 
+## 会话：2026-09-08（#6 Hexo 验收通过 → #7 Hugo）
+
+### 执行
+- `github-hugo.ts` 补 9 键（同 Hexo 组），并**纠正一处错误表述**：Hugo 的 `yamlLinkEnabled` 写的是 `url` 且固定 `/post/<文章别名>.html`，**不读「文章预览规则」**（`hugoYamlConverterAdaptor.ts:37-38`）——原 `previewPostUrl` tip、faq、以及 `docs/draft/platforms/github-hugo.md` 第 33/46 行都写成「与预览规则一致」，已四处一并改准。
+- `imageLinkPath` 文案按 `commonGithubApiAdaptor.ts:315-343` 的三分支口径写（Hugo 的 `images` → 引用为 `/images/<名>` 绝对路径；`./`、`../` 前缀则保留相对）。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（Hugo）
+- test 工作区**没有 Hugo 账号**（早前验证的临时账号已不在）→ 走「添加账号 → GITHUB → Hugo」在当前窗口打开配置页做渲染核验；**未点保存/验证**，返回列表后确认 `github_Hugo` 未落库，无需清理。
+- 基础 **17** 个 ⓘ、展开高级 **21** 个；`notSameLine=[]`；抽样 tip 均为 Hugo 专属（`yamlLinkEnabled` 明确「固定值」、`blogid` 为 `content/post`、`imageLinkPath` 为 `static/images`→`/images/…`、`site` 为「不写作者字段」），`inPanel=true`、`fullyVisible=true`。
+- 量测踩坑：一次探测把上一行未消失的弹层错记给 `site`；改为「先确认无可见 popper 再 hover」后复测通过（口径已写进 findings）。
+- 证据：`tmp/field-guide-hugo-yamllink.png`。
+
+### 停下等验收
+- 未动 #8 Jekyll 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 B 第一站 #6 Hexo 已完成并停下等验收；步骤 A（试点 #11 + 呈现标准）已验收通过 |
-| 我要去哪里？ | 验收后：#7 Hugo → #8 Jekyll → #9 Quartz → #10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 B：#6 Hexo ✅ 已验收，#7 Hugo 已完成并停下等验收 |
+| 我要去哪里？ | 验收后：#8 Jekyll → #9 Quartz → #10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 图标只用官方组件；`el-form-item__content` 会 wrap，指引必须包裹控件才同行；重复行内提示压到安静档；改 `dist-v2` 后宿主必须 reload；思源可用 `--workspace=<test> --remote-debugging-port=9222` 自行拉起，内核端口每次随机 |
-| 我做了什么？ | `a77d5d4c`→`bed281c1`→`55fa6cfc`→`acfe4677`（试点三轮 + 标准冻结）+ 本轮 Hexo 一站（待提交），全部推送、工作树干净 |
+| 我学到了什么？ | 每站文案必须回到转换器读代码（Hexo 读 `previewPostUrl`、Hugo 硬编码 `url`，同族却不同）；探测 tip 前要等上一个弹层消失；缺账号可用「添加账号」开空表单核验且不落库 |
+| 我做了什么？ | 试点三轮 + 标准冻结（`a77d5d4c`…`acfe4677`）→ Hexo（`bf11170e`）→ Hugo（本轮，待提交），全部推送、工作树干净 |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

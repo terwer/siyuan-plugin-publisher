@@ -27,10 +27,31 @@ export const hugoHelpConfig: PageHelpConfig = {
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
     defaultPath: { tip: "Hugo 文章存储目录，默认 content/post。发布后的 .md 会写入该目录。" },
     mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。开启「YAML 永久链接」时会在 front matter 写入 url 以强制文章地址为该规则。" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。注意：「YAML永久链接」写入的 url 是固定的 /post/<文章别名>.html，不读这条规则。" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
     pageType: { tip: "Hugo 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Hugo 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 static/images，文章中引用为绝对路径 /images/<图片名>（Hugo 构建时 static/ 原样复制到站点根）。" },
+    yamlLinkEnabled: {
+      tip: "开启后在 Front Matter 写入 url 字段，取值固定为 /post/<文章别名>.html，用于锁定文章在站点的访问地址。关闭则不写 url，文章地址由主题的 permalink 配置与文件路径决定。",
+    },
+    blogid: {
+      tip: "发布目录，只读，与「存储目录」保持一致（当前 content/post）：文章 .md 提交到该目录。",
+    },
+    imageStorePath: {
+      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 static/images。",
+    },
+    imageLinkPath: {
+      tip: "文章内图片引用前缀，默认 images，即引用为 /images/<图片名> 的站点根绝对路径（Hugo 构建时把 static/ 原样复制到站点根）；填 ./images 或 ../images 则改为相对文章路径引用。",
+    },
+    dynYamlCfg: {
+      tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，用于补充主题需要的自定义字段；同名键会覆盖前面自动生成的字段。",
+    },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    site: {
+      tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Hugo 的文章 Front Matter 不写作者字段，此处仅作账号信息。",
+    },
   },
   faq: [
     {
@@ -43,7 +64,7 @@ export const hugoHelpConfig: PageHelpConfig = {
     },
     {
       q: "查看链接打不开？",
-      a: "查看链接为站点文章地址（默认 /post/<postid>.html）。开启「YAML 永久链接」会在 front matter 写入 url 强制文章地址为该规则；若关闭，则地址由文章在 content 下的目录与 slug 决定。确认预览规则与博客主题的 permalink 设置一致。",
+      a: "查看链接为站点文章地址（默认 /post/<postid>.html）。开启「YAML 永久链接」会在 front matter 写入 url 字段锁定地址，取值固定为 /post/<文章别名>.html，不跟随「文章预览规则」；若关闭，则地址由主题的 permalink 配置与文章在 content 下的路径决定。确认预览规则与主题实际生成的地址一致，不一致时按主题规则修改预览规则即可。",
     },
     {
       q: "更新与删除会怎样？",
