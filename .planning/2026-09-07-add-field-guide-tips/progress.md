@@ -193,14 +193,29 @@
 ### 停下等验收
 - 未动 #4 Telegraph 及之后平台。
 
+## 会话：2026-09-09（#3 Halo 放行 → C 组 #4 Telegraph，首次挂专有行）
+
+### 执行
+- `TelegraphSetting.vue`：4 个专有行全部按**包裹式**挂 ⓘ——登录模式（`postType`，`inline`）、Access Token（`accessToken`）、Hash（`saveHash`）、刷新授权（`forceReAuth`，`inline`）；`FieldGuide` 显式 import。
+- `telegraph.ts` 补 6 键：`postType`/`accessToken`/`forceReAuth`/`previewUrl`/`pageType`/`picbedService`（`saveHash`、`corsAnywhereUrl` 原已有）。文案依据：`telegraphConfig.ts:27-42`、`telegraphApiAdaptor.ts:34-37/106-115/168-174/296-306`、`useTelegraphApi.ts:53-60`。
+- 写错又改对的教训：初稿把模式写成「匿名用户 / 登录用户」，宿主实测单选项目实文案是「匿名发布 / 登录发布」→ 两处 tip 已按界面用词改回并重新构建复测。**tip 引用界面元素名必须抄宿主实测文本**。
+- 质量：65 文件 / 309 测试通过（改词后重跑）；`build:v2` 通过。
+
+### 宿主复核
+- 匿名模式 **11 行 = 11 个 ⓘ**；点「登录发布」后 `accessToken` 行出现 → **12 行 = 12 个 ⓘ**；`notSameLine=[]`。
+- 5 条新 tip 实测命中；图床 checked = 不使用（与 tip 一致）；核验完把模式切回「匿名发布」且**未点保存**，账号数前后 32。截图 `tmp/field-guide-telegraph-posttype.png`。
+
+### 停下等验收
+- 未动 #5 Confluence 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 C 进行中：#1 语雀 ✅、#2 Notion ✅、#3 Halo 已完成待验收（GitHub 族 6 站全通过） |
-| 我要去哪里？ | 验收后：#4 Telegraph（补 `picbedService`，且它是 CORS 代理平台，`corsAnywhereUrl`/`middlewareUrl` 行会渲染）→ #5 Confluence → D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 C 进行中：#1 语雀 ✅、#2 Notion ✅、#3 Halo ✅、#4 Telegraph 已完成待验收 |
+| 我要去哪里？ | 验收后：#5 Confluence（`knowledgeSpace`→`blogid`，保留 `parentPageId`）→ D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`，含 `CustomWebSetting.vue`/`CookieSetting.vue` 专有行挂载）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | Halo 证明「按族套键集」会错（它没有发布目录行）；每站仍以宿主实测的行集为准做双向核对（行→键、键→行）；默认值要看宿主上实际 checked，不能只看代码默认 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo（本轮，待提交） |
+| 我学到了什么？ | tip 里的界面用词必须抄宿主实测文本（匿名发布≠匿名用户）；条件渲染行（如 `accessToken`）要按两种状态分别数 ⓘ；切了模式/改了值必须切回且不点保存 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

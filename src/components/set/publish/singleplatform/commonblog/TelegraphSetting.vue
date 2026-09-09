@@ -13,6 +13,7 @@ import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph
 import { TelegraphPlaceholder } from "~/src/adaptors/api/telegraph/telegraphPlaceholder.ts"
 import { useTelegraphApi } from "~/src/adaptors/api/telegraph/useTelegraphApi.ts"
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
+import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 
 const props = defineProps({
@@ -46,22 +47,24 @@ const handlePostTypeChange = (val: UnwrapRef<TelegraphConfig>) => {
   <common-blog-setting :api-type="props.apiType" :cfg="telegraphCfg">
     <template #header="header">
       <el-form-item label="登录模式" required>
-        <el-radio-group
-          v-model="(header.cfg as TelegraphConfig).postType"
-          class="ml-4"
-          @change="
-            () => {
-              handlePostTypeChange(header.cfg as any)
-            }
-          "
-        >
-          <el-radio :value="TelegraphPostType.ANONYMOUS" size="small">
-            {{ t("setting.telegraph.login.anonymous") }}
-          </el-radio>
-          <el-radio :value="TelegraphPostType.LOGIN_USER" size="small">
-            {{ t("setting.telegraph.login.user") }}
-          </el-radio>
-        </el-radio-group>
+        <field-guide field="postType" inline>
+          <el-radio-group
+            v-model="(header.cfg as TelegraphConfig).postType"
+            class="ml-4"
+            @change="
+              () => {
+                handlePostTypeChange(header.cfg as any)
+              }
+            "
+          >
+            <el-radio :value="TelegraphPostType.ANONYMOUS" size="small">
+              {{ t("setting.telegraph.login.anonymous") }}
+            </el-radio>
+            <el-radio :value="TelegraphPostType.LOGIN_USER" size="small">
+              {{ t("setting.telegraph.login.user") }}
+            </el-radio>
+          </el-radio-group>
+        </field-guide>
       </el-form-item>
     </template>
     <template #main="main">
@@ -71,27 +74,33 @@ const handlePostTypeChange = (val: UnwrapRef<TelegraphConfig>) => {
         label="Access Token"
         required
       >
-        <el-input
-          v-model="(main.cfg as TelegraphConfig).accessToken"
-          :placeholder="t('setting.telegraph.accessToken.tip')"
-          type="password"
-          show-password
-        />
+        <field-guide field="accessToken">
+          <el-input
+            v-model="(main.cfg as TelegraphConfig).accessToken"
+            :placeholder="t('setting.telegraph.accessToken.tip')"
+            type="password"
+            show-password
+          />
+        </field-guide>
       </el-form-item>
       <!-- save hash -->
       <el-form-item label="Hash" required>
-        <el-input
-          v-model="(main.cfg as TelegraphConfig).saveHash"
-          :placeholder="t('setting.telegraph.saveHash.tip')"
-          type="password"
-          show-password
-        />
+        <field-guide field="saveHash">
+          <el-input
+            v-model="(main.cfg as TelegraphConfig).saveHash"
+            :placeholder="t('setting.telegraph.saveHash.tip')"
+            type="password"
+            show-password
+          />
+        </field-guide>
       </el-form-item>
       <el-form-item label="刷新授权">
-        <el-switch
-          v-model="(main.cfg as TelegraphConfig).forceReAuth"
-          :placeholder="t('setting.telegraph.forceReAuth.tip')"
-        />
+        <field-guide field="forceReAuth" inline>
+          <el-switch
+            v-model="(main.cfg as TelegraphConfig).forceReAuth"
+            :placeholder="t('setting.telegraph.forceReAuth.tip')"
+          />
+        </field-guide>
       </el-form-item>
     </template>
     <template #footer="footer"></template>

@@ -131,3 +131,10 @@
 - `haloConfig.ts:27-38` + `useHaloApi.ts:60-70`：`usernameEnabled=true`、`passwordType` 未设（BlogConfig 默认 `0` = 密码，宿主行标签即「密码」）、`showTokenTip=false`、`allowPreviewUrlChange=true`、**`knowledgeSpaceEnabled=false`（无发布目录行）**、`picgoPicbedSupported=true` + `bundledPicbedSupported=true`（图床三项）。
 - 图床**默认选中「不使用」**（宿主实测 `checked` 在「不使用」上）→ 原 tip/summary 暗示「图片由内置图床上传」不准确，已改为三项 + 默认值 + 各自行为；`password` 的 doc 链接补了 `linkText="Halo 配置说明"`（原来无 linkText 会显示通用「查看详情」）。
 - **标准确认（用户 2026-09-09「保持现状」）**：非配置属性的行（搜索关键词、验证/保存按钮）不挂字段指引，步骤 F 的键校验不为此开白名单。
+
+## #4 Telegraph 事实（首个有专有行的站）
+- `TelegraphSetting.vue` 专有 4 行，全部是真实配置属性：`postType`（登录模式，header 插槽）、`accessToken`（仅登录模式渲染）、`saveHash`、`forceReAuth`（`telegraphConfig.ts:27-30` 声明）→ 本站首次给专有表单挂 ⓘ。
+- `handlePostTypeChange`（`:38-42`）切换模式会清空 `password`/`accessToken`/`saveHash` → tip 里写明，避免用户以为填过的值还在。
+- `telegraphApiAdaptor.ts`：登录模式缺 uuid/token/hash 直接抛错（`:34-37`）；匿名验证时从 Cookie 取 `tph_uuid` + `/check` 返回 `save_hash`（`:106-115`），`forceReAuth` 控制是否强制重取；发布走 `content.html` 表单（`:168-174`，`md(post.description)` 转换）；`getPreviewUrl`（`:296-306`）在 `isCorsProxy` 且填了代理时给查看链接加 `<代理>/<home>` 前缀。
+- 图床：`picgoPicbedSupported=true`、`bundledPicbedSupported=false`（`useTelegraphApi.ts:58-60`），实测默认 checked 在「不使用」；平台无图片上传接口 → tip 如实写「图片只能外链」。
+- **UI 用词一致性**：单选项目实文案是「匿名发布 / 登录发布」（locale `setting.telegraph.login.*`），我初稿写成「匿名用户 / 登录用户」→ 已按界面用词改回。教训：**tip 里引用界面元素名必须抄宿主实测文本**，不能按代码枚举名或语感推断。

@@ -20,6 +20,24 @@ export const telegraphHelpConfig: PageHelpConfig = {
     username: { tip: "作者名，显示在文章详情，可自行设置，默认为空" },
     password: { tip: "Uuid：匿名模式验证后自动获取，登录模式需从浏览器工具读取 tph_uuid" },
     saveHash: { tip: "Hash：验证后自动保存，或登录模式手动填写 save hash" },
+    postType: {
+      tip: "登录模式：「匿名发布」无需 Telegraph 账号，点验证时自动获取 Uuid 与 Hash，文章以匿名页发布；「登录发布」需自己填 Access Token、Uuid 与 Hash，文章归入你的账号。切换模式会清空已填写的 Uuid / Access Token / Hash。",
+    },
+    accessToken: {
+      tip: "Telegraph 账号的 Access Token（tph_token），仅「登录发布」模式需要，可从浏览器开发者工具的 Cookie 中读取；「匿名发布」留空。",
+    },
+    forceReAuth: {
+      tip: "刷新授权：打开后下次验证会强制重新获取 Uuid 与 Hash（换设备、或提示授权失效时使用），平时保持关闭。",
+    },
+    previewUrl: {
+      tip: "预览规则固定为 /[postid]（不可修改）。Telegraph 域名需要代理才能访问，配置好 CORS 代理后，查看链接会自动加上代理前缀，形如 <代理地址>/https://telegra.ph/<文章路径>。",
+    },
+    pageType: {
+      tip: "发布格式：Telegraph 使用自己的正文块格式，插件会把内容转换后上传，这里保持默认即可。",
+    },
+    picbedService: {
+      tip: "Telegraph 只有「不使用」与「PicGo」两项（无内置图床）。平台本身没有图片上传接口，文章里的图片只能以外部链接形式出现，保持默认「不使用」即可；思源本地未上传的图片不会随文章上传。",
+    },
     corsAnywhereUrl: {
       tip: "Telegraph 为 CORS 受限平台，必须填写你自己的 CORS 代理地址，否则无法访问",
       link: "https://siyuan.wiki/s/20240312153728-paen10j",
