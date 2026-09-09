@@ -125,3 +125,9 @@
 - `notionConfig.ts:24-33` + `useNotionApi.ts:63-69`：`passwordType=Token`（键 `password`）、`usernameEnabled` 未开（**无用户名行**）、`knowledgeSpaceTitle="根页面"`（键 `blogid`）、`allowPreviewUrlChange=false`、`cateSearchEnabled=true`（**「搜索关键词」行会渲染**）、`picgoPicbedSupported=true`、`bundledPicbedSupported=false`。
 - **「搜索关键词」行是唯一无 ⓘ 的渲染行**：它绑 `formData.ksKeyword`（临时检索值，不是配置属性），按 change `tasks.md` 2.5 的规则不挂字段指引——这是标准内的显式例外，不是漏配。若你要给它也挂提示，需要另设一个非属性键（会让步骤 F 的「键必须是配置实例真实属性」那把尺子出现例外），需先改标准。
 - 实测图床选项 `["不使用","PicGo 强烈推荐"]` → 原「Notion 无内置图片上传，使用 PicGo 外部链接图床」的 tip 已补准（含选「不使用」时的行为）。
+
+## #3 Halo 事实 + 一项标准确认
+- `HaloSetting.vue` 无专有行（只有「仅支持 Halo 2.9」提示 + 共用表单）→ 零挂载；现有 7 个 `fields` 键与宿主实测的 7 行**一一对应**（`rowsWithoutGuide=[]`），本站零改名零补键，只补准文案。
+- `haloConfig.ts:27-38` + `useHaloApi.ts:60-70`：`usernameEnabled=true`、`passwordType` 未设（BlogConfig 默认 `0` = 密码，宿主行标签即「密码」）、`showTokenTip=false`、`allowPreviewUrlChange=true`、**`knowledgeSpaceEnabled=false`（无发布目录行）**、`picgoPicbedSupported=true` + `bundledPicbedSupported=true`（图床三项）。
+- 图床**默认选中「不使用」**（宿主实测 `checked` 在「不使用」上）→ 原 tip/summary 暗示「图片由内置图床上传」不准确，已改为三项 + 默认值 + 各自行为；`password` 的 doc 链接补了 `linkText="Halo 配置说明"`（原来无 linkText 会显示通用「查看详情」）。
+- **标准确认（用户 2026-09-09「保持现状」）**：非配置属性的行（搜索关键词、验证/保存按钮）不挂字段指引，步骤 F 的键校验不为此开白名单。

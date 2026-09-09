@@ -172,14 +172,35 @@
 ### 停下等验收
 - 未动 #3 Halo 及之后平台。
 
+## 会话：2026-09-09（#2 Notion 放行 + 「保持现状」定档 → C 组 #3 Halo）
+
+### 标准确认
+- 用户对「搜索关键词行是否挂指引」拍板 **保持现状**：非配置属性的行不挂，步骤 F 的键校验不为此开白名单 → 已写进 change `tasks.md` 2.5 与 findings。
+
+### 执行
+- `common-halo.ts`：**零改名零补键**（现有 7 键与宿主 7 行一一对应），只补准三处：
+  1. `picbedService`：宿主实测三项 `不使用 / PicGo / 当前平台` 且**默认选中「不使用」** → tip 改为三项各自行为 + 默认值（原文暗示默认走内置图床）。
+  2. `password`：doc 链接补 `linkText="Halo 配置说明"`（原先无 linkText 会显示通用「查看详情」）。
+  3. `summary`：改为「图床默认不使用，选当前平台时上传到 Halo 附件」。
+- `HaloSetting.vue` 查实无专有行 → 零挂载；`haloConfig.ts:38` `knowledgeSpaceEnabled=false` → 本站**没有发布目录行**（所以不需要 `blogid` 键，这是族内第一个例外，说明「按族套键集」会出错）。
+- 文档草稿 `common-halo.md` 图床行同步补准。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（真实账号 `common_Halo`）
+- 标题 Halo29、**7 行 = 7 个 ⓘ**、`notSameLine=[]`、`rowsWithoutGuide=[]`；账号数前后都是 32（未误建）。
+- 改后 `picbedService`/`password` tip 实测为新文案且链接文案正确；HelpPanel summary 已是新句、无「暂无专属帮助文档」回退。截图 `tmp/field-guide-halo-picbed.png`。
+
+### 停下等验收
+- 未动 #4 Telegraph 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 C 进行中：#1 语雀 ✅ 放行、#2 Notion 已完成待验收（GitHub 族 6 站已全通过） |
-| 我要去哪里？ | 验收后：#3 Halo → #4 Telegraph → #5 Confluence → D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 C 进行中：#1 语雀 ✅、#2 Notion ✅、#3 Halo 已完成待验收（GitHub 族 6 站全通过） |
+| 我要去哪里？ | 验收后：#4 Telegraph（补 `picbedService`，且它是 CORS 代理平台，`corsAnywhereUrl`/`middlewareUrl` 行会渲染）→ #5 Confluence → D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 「管理/去授权」是同一个 configure 按钮，未授权账号也能进配置页（别再新建账号冒险）；行标签 ≠ 键名，一切以绑定的配置属性为准；「搜索关键词」这类非属性行是标准内的不挂例外，要挂得先改标准 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion（本轮，待提交） |
+| 我学到了什么？ | Halo 证明「按族套键集」会错（它没有发布目录行）；每站仍以宿主实测的行集为准做双向核对（行→键、键→行）；默认值要看宿主上实际 checked，不能只看代码默认 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

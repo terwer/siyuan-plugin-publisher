@@ -12,7 +12,7 @@
 - [x] 2.2 `base/impl/CommonGithubSetting.vue`：仓库名、分支、存储目录、文件规则、文章预览规则、YAML 预设配置、图片存储目录、图片访问链接、折叠高级四项；「YAML永久链接」行沿用 `yamlLinkSupported` 条件。
 - [ ] 2.3 `base/impl/MetaweblogSetting.vue`、`base/impl/CustomWebSetting.vue`、`base/CookieSetting.vue`：各自专有行（待对应族首个平台开工时挂）。
 - [ ] 2.4 `commonblog/YuqueSetting.vue`、`NotionSetting.vue`、`ConfluenceSetting.vue`、`HaloSetting.vue`、`TelegraphSetting.vue` 与 `fs/LocalSystemSetting.vue` 的专有行。
-- [x] 2.5 无对应配置属性的行（检索关键词行绑 `formData.ksKeyword`、验证行）不挂指引。
+- [x] 2.5 无对应配置属性的行（检索关键词行绑 `formData.ksKeyword`、验证行）不挂指引 —— 用户 2026-09-09 确认「保持现状」：这类行属标准内的显式不挂例外，步骤 F 的键校验不为此开非属性键白名单。
 - [x] 2.6 宿主复核弹层定位：`el-tooltip` 设 `:teleported="false"` 后 popper 留在 `.syp-panel` DOM 内（`panel.contains(popper) === true`），逐行滚入视区后弹层完整可见、无裁切与错位；字段已填值时指引仍在。
 - [x] 2.7 呈现硬性要求（用户看图定稿）：指引与控件**必须同行**（FieldGuide 包裹控件，`inline` 供开关/单选组紧贴、`tall` 供文本域贴首行）；图标用 `@element-plus/icons-vue` 官方 `InfoFilled`，不手写 path；视觉权重压到安静档——14px + `--el-text-color-placeholder` + hover 主色 + tooltip `show-after 150ms`，不与输入内容争注意力。
 

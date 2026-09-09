@@ -13,7 +13,7 @@ export const haloHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Halo",
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
   summary:
-    "通过 Halo API 发布到 Halo 2.x 博客。Halo API 平台仅支持 Halo 2.9（2.20+ 已调整 API 策略，需改用「Halo网页版」）。账号使用用户名与密码，图片由内置图床上传到 Halo 附件，发布后文章地址形如 https://<host>/archives/<slug>。",
+    "通过 Halo API 发布到 Halo 2.x 博客。Halo API 平台仅支持 Halo 2.9（2.20+ 已调整 API 策略，需改用「Halo网页版」）。账号使用用户名与密码；图床默认「不使用」，选「当前平台」时图片上传到 Halo 附件；发布后文章地址形如 https://<host>/archives/<slug>。",
   fields: {
     home: { tip: "Halo 站点首页地址，通常与 API 地址一致，如 https://yourhalo.com。" },
     apiUrl: { tip: "Halo 站点 API 地址，通常与首页地址相同，如 https://yourhalo.com。" },
@@ -21,10 +21,13 @@ export const haloHelpConfig: PageHelpConfig = {
     password: {
       tip: "Halo 登录密码（非令牌），与用户名一起用于 API 认证。",
       link: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+      linkText: "Halo 配置说明",
     },
     previewUrl: { tip: "Halo 文章预览规则，默认 /archives/{slug}；查看链接为 https://<host>/archives/<slug>，可修改。" },
-    pageType: { tip: "Halo 默认按 HTML 内容发布。" },
-    picbedService: { tip: "Halo 支持内置图床，选择「当前平台」可将图片上传到 Halo 附件（/upload/）。" },
+    pageType: { tip: "发布格式：Halo 默认按 HTML 内容发布。" },
+    picbedService: {
+      tip: "图床服务有三项：「不使用」（默认）图片按原有地址引用，需保证图片可公网访问；「当前平台」把图片上传到 Halo 附件，文章内为 /upload/<图片名>；「PicGo」先传外部图床再引用外链。带本地图片发布时选「当前平台」即可。",
+    },
   },
   faq: [
     {
