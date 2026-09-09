@@ -9,8 +9,8 @@
 3. 不做一次性大批量；每个增量小、可验证、可回退。
 
 ## 当前步骤
-步骤 B：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll 已完成待验收（`fbbd9ebf`）。
-用户已授权自行重启 DSH Web 恢复 chrome-devtools MCP（重启会中断本会话）。
+步骤 B（GitHub 族 6 站）**全部回填完成**：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll ✅、#9 Quartz ✅、#10 Vuepress 待验收、#11 Vuepress2 ✅（试点）。
+DSH Web 已按用户指示重启过一次，chrome-devtools MCP 恢复正常；下一批是 C 组 Common 族（清单见「下一站开工清单」）。
 
 ## 重启后第一步（会话恢复时照此执行）
 1. `update_goal` 先 `get_goal` 再 `resume`（重启后目标会被解除武装，当前 rev 9、phase paused）。
@@ -26,8 +26,8 @@
 | B | #6 Hexo | 复用 A | 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），无需改名 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`，5 条 tip 均为 Hexo 专属且在面板内完整可见 | ✅ 已验收；`blogid` 文案在 #9 一并修正 |
 | B | #7 Hugo | 复用 A | 补同 9 键；**并纠正错误表述**：Hugo 写的是 `url` 且固定 `/post/<文章别名>.html`，不读「文章预览规则」（`hugoYamlConverterAdaptor.ts:37-38`） | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 复核为 Hugo 专属、面板内完整可见 | ✅ 放行（用户回复「继续」）；`blogid` 文案在 #9 一并修正 |
 | B | #8 Jekyll | 复用 A | 补同 9 键；**再纠正两处**：Jekyll 的 `permalink` 无条件写入（`:68`），开关只改取值来源；`dynYamlCfg` 非空会顶替 `layout`/`published` 默认值 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；4 条 tip 宿主实测 + 21 键 registry 解析全绿；截图 `tmp/field-guide-jekyll-yamllink.png` | ✅ 放行（用户「重启并继续验证」）；`blogid` 文案在 #9 一并修正 |
-| B | #9 Quartz | 复用 A | 补同 9 键；`dynYamlCfg` 留空写的是 `enableToc`/`enableBackLinks`（非 Jekyll 那两项）；**跨站修正**：`allowKnowledgeSpaceChange` 只作用于快速发布页，设置页发布目录并非只读 → 五站 `blogid` 文案全部改准 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 宿主实测 `added:1/visible:1` 且文案为 Quartz 专属；Jekyll 修正后文案已复测渲染；截图 `tmp/field-guide-quartz-dynyaml.png` | ⬜ 待验收 |
-| B | #10 Vuepress | 复用 A | 同上 | | ⬜ |
+| B | #9 Quartz | 复用 A | 补同 9 键；`dynYamlCfg` 留空写的是 `enableToc`/`enableBackLinks`（非 Jekyll 那两项）；**跨站修正**：`allowKnowledgeSpaceChange` 只作用于快速发布页，设置页发布目录并非只读 → 五站 `blogid` 文案全部改准 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 宿主实测 `added:1/visible:1` 且文案为 Quartz 专属；Jekyll 修正后文案已复测渲染；截图 `tmp/field-guide-quartz-dynyaml.png` | ✅ 放行（用户回复「继续」） |
+| B | #10 Vuepress | 复用 A | 补同 9 键；**本平台独有**：转换器会写 `author: {name, link}`（`vuepressYamlConverterAdaptor.ts:94-114`），故 `author`/`site` 真实影响文章头；`dynYamlCfg` 留空不补任何字段；`permalink` 硬编码不读预览规则（文档草稿 L34 同步改准） | 真实账号 `github_Vuepress`：基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；6 条 tip `added:1/visible:1` 且为 Vuepress 专属；截图 `tmp/field-guide-vuepress-author-site.png` | ⬜ 待验收 |
 | C | #1 语雀 | commonblog/YuqueSetting | `token`→`password`、`knowledgeSpace`→`blogid` | | ⬜ |
 | C | #2 Notion | commonblog/NotionSetting | `token`→`password`、`knowledgeSpace`→`blogid` | | ⬜ |
 | C | #3 Halo | commonblog/HaloSetting | — | | ⬜ |
@@ -90,26 +90,17 @@
 3. **安静档**：官方 `InfoFilled` 14px、`--el-text-color-placeholder`、hover 主色、tooltip `show-after 150ms`、`:teleported="false"` 留在 `.syp-panel` 内。
 4. 未采用的更强档（默认隐藏、悬停才淡入 / 只给易错字段挂）已明确否决，保持全行 + 安静档。
 
-## 下一站开工清单：#6 Hexo（**只记录，未开始**）
-配置文件：`src/helpConfigs/pages/platform-config/common-github-hexo.ts`（`pageId: platform-config/github_Hexo`）；宿主账号行 key `github_Hexo`（无实例后缀）。
+## GitHub 族 6 站已完成（方法固化，供后续各族照做）
+每站动作：读该平台**转换器 + Config 默认值** → 补齐真实渲染行的 `fields` 键（键=配置属性名）→ `pnpm vitest run` + `pnpm build:v2` → 宿主开表单量「基础 ⓘ 数 / 展开高级 ⓘ 数 / `notSameLine`」+ hover 差集复核 tip 文案 → 截图 → **停下等验收**。
+族内实测差异（说明为什么不能套模板）：`permalink` 有条件/无条件/硬编码三种（Hexo 读预览规则、Quartz 读预览规则且占位符全、Hugo 与 Vuepress 硬编码、Jekyll 无条件写）；`dynYamlCfg` 留空时 Jekyll 补 `layout`/`published`、Quartz 补 `enableToc`/`enableBackLinks`、其余不补；只有 Vuepress 写 `author: {name, link}`（`site` 即 `author.link`）。
+遗留（归步骤 F）：`common-github-hexo.ts` 文件名/`pageId` 大小写孤例；六站 tour `content` 与 `fields` tip 存在整句重复。
 
-现状：`fields` 已有 12 键且**全部已是配置属性名**（GitHub 族本来就干净，无需改名）——`home apiUrl username password githubRepo githubBranch defaultPath mdFilenameRule previewPostUrl previewUrl pageType picbedService`。
-
-需补 9 个键（均按代码事实写文案）：
-| 键 | 该行是否渲染（依据） | 文案要点（依据） |
-|---|---|---|
-| `yamlLinkEnabled` | 渲染：Hexo 属受支持集（`yamlLinkCapability.spec.ts`），`yamlLinkSupported` 默认 true | 开关会把永久链接写入 Front Matter，Hexo 构建器识别 `permalink` |
-| `blogid` | 渲染：`hexoConfig.ts:47` `knowledgeSpaceEnabled=true`、`:48` `allowKnowledgeSpaceChange=false` → 只读；设置页恒为 `el-select`（树/单选项切换只在 `PublishKnowledgeSpace.vue` 的发布页里） | 只读、随「存储目录」同步；`syncDefaultPath` 写回 `blogid` |
-| `imageStorePath` | 渲染：`commonGithubConfig.ts:117` 默认 `Bundled` | 默认 `source/images`（`hexoConfig.ts:38`） |
-| `imageLinkPath` | 同上 | 默认 `../images`（`hexoConfig.ts:39`），源码与构建产物均可显示 |
-| `dynYamlCfg` | 渲染（GitHub 族共用行） | JSON 片段逐键合并进 Front Matter（`hexoYamlConverterAdaptor.ts:95-104`） |
-| `defaultMsg` / `author` / `email` | 渲染（折叠高级） | commit message 与提交作者/邮箱（`commonGithubApiAdaptor.ts:39-41` → `zhi-github-middleware` 提交体） |
-| `site` | 渲染（折叠高级） | 默认由 `home + username` 拼出；Hexo 转换器不写作者字段，仅作账号信息 |
-
-预期宿主结果：基础 17 个 ⓘ（比 Vuepress2 多 `yamlLinkEnabled`），展开高级后共 **21** 个；逐行 `sameLine=true`、弹层在面板内完整可见；`defaultPath` 文案是 `source/_posts`、`mdFilenameRule` 是 `[filename].md`、`previewPostUrl` 是 `/post/[postid].html`。
-
-待办动作（届时执行）：改 `common-github-hexo.ts` 补 9 键 → `pnpm vitest run` + `pnpm build:v2` → 重载宿主 → 量测 + 截图 → **停下等验收**。
-遗留观察（不在本站处理）：`common-github-hexo.ts` 文件名与 `pageId` 大小写是族内孤例（其余为 `github-<x>.ts` + kebab pageId），registry 归一化可解析，改名会牵动 `verifiedConfigs`/`registry.spec.ts`，暂不动；Hexo 的 tour `content` 与 `fields` tip 有整句重复，归步骤 F.4 去重。
+## 下一站开工清单：#1 语雀（C 组第一站，**先查实再动笔**）
+配置文件 `src/helpConfigs/pages/platform-config/common-yuque.ts`；账号 key `common_Yuque`。开工前必须读代码确认（勿凭记忆）：
+1. `commonblog/YuqueSetting.vue` 真实渲染哪些专有行、每行绑的是不是配置属性 → 决定要不要新挂 ⓘ（C 组共用 `CommonBlogSetting` 已挂好，专有行还没挂）。
+2. `yuqueConfig.ts` 的 `passwordType`（token 型 → 鉴权行仍绑 `password`）、`knowledgeSpaceEnabled`/`blogid` 语义（语雀是知识库 `book_id` 还是 namespace）、`picbedService` 默认值（决定图片两行是否出现）。
+3. 改名两项：`token` → `password`、`knowledgeSpace` → `blogid`（`registry.spec.ts` 现有用例按 `'token'` 取 Yuque 的 tip，改名后要同步）。
+4. 语雀需专业会员；字段指引核验只看渲染，不依赖会员态。
 
 ## 核心资产：行 → 配置属性键映射（来自代码，勿凭记忆改）
 

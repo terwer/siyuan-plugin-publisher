@@ -99,3 +99,10 @@
 - 本次 MCP 的 `mcp__chrome-devtools__*` 从会话工具表里消失（宿主被关闭后掉线），恢复需重启 DSH Web——会打断当前会话，不该自动做。
 - 替代：PowerShell + `ClientWebSocket` 直连 9222 的 CDP（`Runtime.evaluate` + `awaitPromise`/`returnByValue`、`Page.captureScreenshot`），脚本已固化在 `tmp/cdp-eval.ps1`、`tmp/cdp-shot.ps1`（`tmp/` 已 gitignore，属研究/调试工具不入库）。注意 `Runtime.evaluate` 响应路径是 `$result.result.result.value`。
 - 思源可用 `C:\Program Files\SiYuan\SiYuan.exe --workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222` 拉起，约 3 秒 9222 就绪；内核端口每次随机（本次 59072）。
+
+## #10 Vuepress 复核出的事实（GitHub 族收尾，六站差异定档）
+- `vuepressYamlConverterAdaptor.ts:88-92`：`permalink` **仅当 `yamlLinkEnabled && post.wp_slug`** 时写入，取值**硬编码** `/post/<文章别名>.html`，不读 `previewPostUrl`（同 Hugo 的性质、字段名同 Hexo）。文档草稿 L34 的「与文章预览规则一致」已改准。
+- 同文件 `:94-114`：**只有这一站**把 `author` 写进文章头 —— `author: { name: cfg.author ?? "terwer", link: cfg.site }`，`site` 留空时回退 `home + "/" + username`。所以 Vuepress 的 `author`/`site` tip 必须写「影响文章 Front Matter」，其余五站写「仅作 commit/账号信息」。
+- 同文件 `:121-131`：`dynYamlCfg` 留空**不补任何字段**（Jekyll 补 `layout`/`published`、Quartz 补 `enableToc`/`enableBackLinks`、Hexo/Hugo/Vuepress2 亦不补），且合并发生在 `author` 之后 → 同名键会覆盖 `author`。
+- `vuepressConfig.ts`：`defaultPath=docs`、`mdFilenameRule=[filename].md`、`imageStorePath=docs/.vuepress/public/images`、`imageLinkPath=images`（按 `getImagePath` 规则引用为 `/images/<名>`）、`allowKnowledgeSpaceChange=false`。
+- 六站 `permalink`/`dynYamlCfg` 差异汇总已写进 `task_plan.md`「GitHub 族 6 站已完成」，作为后续各族「不许套模板」的依据。

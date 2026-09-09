@@ -122,14 +122,32 @@
 ### 停下等验收
 - 未动 #10 Vuepress 及之后平台。
 
+## 会话：2026-09-09（#9 Quartz 放行 → #10 Vuepress，GitHub 族收尾）
+
+### 执行
+- `github-vuepress.ts` 补同 9 键 + 改准 `previewPostUrl`；文档草稿 `github-vuepress.md` L34 的「permalink 与文章预览规则一致」改准，并补全该站 front matter 实际字段清单。
+- 该站两处**族内独有**事实（都来自 `vuepressYamlConverterAdaptor.ts`）：
+  1. `:88-92` `permalink` 仅当 `yamlLinkEnabled && wp_slug` 时写，取值**硬编码** `/post/<文章别名>.html`。
+  2. `:94-114` **只有 Vuepress 把 `author` 写进文章头**（`{ name: cfg.author ?? "terwer", link: cfg.site }`，`site` 留空回退 `home + "/" + username`）→ `author`/`site` 的 tip 在本站写「影响文章 Front Matter」，其余五站写「仅作 commit/账号信息」。
+  3. `:121-131` `dynYamlCfg` 留空不补任何字段，且合并晚于 `author` → 同名键会覆盖 `author`（tip 已写明）。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（真实账号 `github_Vuepress`，无需临时开表单）
+- 精确匹配 key 元素（避免 `github_Vuepress2` 干扰）→ 行内有「管理」，直接进：标题 Vuepress、基础 **17** ⓘ、展开高级 **21** ⓘ、`notSameLine=[]`。
+- 6 条 tip 复核（`author`/`site`/`yamlLinkEnabled`/`dynYamlCfg`/`blogid`/`imageLinkPath`）全部 `visible:1 / added:1`、文案为 Vuepress 专属、`inPanel` + `fullyVisible`。截图 `tmp/field-guide-vuepress-author-site.png`。
+- **GitHub 族 6 站（#6 Hexo、#7 Hugo、#8 Jekyll、#9 Quartz、#10 Vuepress、#11 Vuepress2）全部回填并逐站过宿主**；族内差异与方法固化进 `task_plan.md`，#6 Hexo 的旧开工清单已替换为 #1 语雀的「先查实再动笔」清单。
+
+### 停下等验收
+- 未动 C 组（Common 族 5 站）及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 B：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll ✅、#9 Quartz 已完成待验收 |
-| 我要去哪里？ | 验收后：#10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 B 全部完成：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll ✅、#9 Quartz ✅、#10 Vuepress 已完成待验收（GitHub 族 6/6 已回填） |
+| 我要去哪里？ | 验收后进入 C 组 Common 族：#1 语雀 → #2 Notion → #3 Halo → #4 Telegraph → #5 Confluence（含 `token`→`password`、`knowledgeSpace`→`blogid` 改名与 `registry.spec.ts` 同步）→ D 组 Cookie 族 8 站 → E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 同族五站 permalink/dynYamlCfg 行为各不相同，必须逐站读转换器；`allowKnowledgeSpaceChange` 只管快速发布页，别把「只读」写进设置页文案；账号行按钮随启停状态变化，定位要按 `.syp-account-item` 校验；EP 弹层可见性用 `style.display` 判定 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航记录 `92234b1f` → Quartz + 五站 `blogid` 修正（本轮，待提交） |
+| 我学到了什么？ | 六站差异证明「逐站读转换器」是硬要求（permalink 三种写法、dynYamlCfg 三种默认、仅 Vuepress 写 author）；行定位要按 `.syp-account-item` 精确匹配 key（`github_Vuepress` 是 `github_Vuepress2` 的前缀）；EP 弹层可见性用 `style.display` 判定 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz + `blogid` 跨站修正 `894ddb34` → Vuepress（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

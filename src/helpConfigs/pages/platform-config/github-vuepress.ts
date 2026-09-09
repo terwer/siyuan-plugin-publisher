@@ -27,10 +27,31 @@ export const vuepressHelpConfig: PageHelpConfig = {
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
     defaultPath: { tip: "Vuepress 文章存储目录，默认 docs。发布后的 .md 会写入该目录。" },
     mdFilenameRule: { tip: "文章文件名规则，默认 [filename].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。开启「YAML 永久链接」时会在 front matter 写入 permalink 以强制文章地址为该规则。" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。注意：「YAML永久链接」写入的 permalink 是固定的 /post/<文章别名>.html，不读这条规则。" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
     pageType: { tip: "Vuepress 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Vuepress 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 docs/.vuepress/public/images，文章中引用为绝对路径 /images/<图片名>（构建时 .vuepress/public 映射到站点根）。" },
+    yamlLinkEnabled: {
+      tip: "开启后在 Front Matter 写入 permalink，取值固定为 /post/<文章别名>.html（不读「文章预览规则」），且文章需有别名才会写入。关闭则不写 permalink，文章地址由站点的路由与主题配置决定。",
+    },
+    blogid: {
+      tip: "发布目录：验证通过后下拉列出仓库中的可选目录，文章 .md 提交到所选目录（默认 docs）；改动「存储目录」会同步覆盖这里。要改选目录请回本页调整，快速发布页里该目录为只读。",
+    },
+    imageStorePath: {
+      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 docs/.vuepress/public/images。",
+    },
+    imageLinkPath: {
+      tip: "文章内图片引用前缀，默认 images，即引用为 /images/<图片名> 的站点根绝对路径（构建时 .vuepress/public 映射到站点根）；填 ./images 之类则改为相对文章路径引用。",
+    },
+    dynYamlCfg: {
+      tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，留空则不额外补充字段；同名键会覆盖前面自动生成的字段（包括 author）。",
+    },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
+    author: { tip: "文章 Front Matter 里的作者名（author.name），留空时使用默认值；同时作为 commit 作者名写入仓库提交记录。" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    site: {
+      tip: "作者主页地址，写入文章 Front Matter 的 author.link；留空时由「平台首页 + 用户名」自动拼出。",
+    },
   },
   faq: [
     {

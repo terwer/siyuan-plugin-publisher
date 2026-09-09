@@ -31,7 +31,7 @@
 - Vuepress1 的文章来源目录是 **`docs/`**，文章 `.md` 写入该目录，文件名默认 `[filename].md`。
 - 图片选「当前平台」图床时，会提交到仓库根目录的 **`docs/.vuepress/public/images/`**，文章内引用为 **绝对路径 `/images/<图片名>`**。
 - Vuepress 构建时把 `.vuepress/public` 目录映射到站点根，因此 `/images/...` 引用在构建产物中能正确显示。
-- 文章 front matter 常用的字段：`title`、`date`、`permalink`（开启「YAML 永久链接」时写入，与「文章预览规则」一致）、`categories`、`article` 等。
+- 文章 front matter 会写入的字段：`title`、`date`、`categories`、`article`（标题含 `[日记]` 时为 `false`），以及 `author`（`{ name, link }`，取自配置的「作者」与「作者主页」，主页留空时用「平台首页 + 用户名」拼出）。开启「YAML 永久链接」且文章有别名时再写入 `permalink`，取值**固定为 `/post/<文章别名>.html`**（不读取「文章预览规则」）。「YAML 预设配置」留空则不额外补字段，填写时同名键会覆盖上述自动生成的值（含 `author`）。
 
 ## 四、验证与发布
 
