@@ -27,10 +27,31 @@ export const jekyllHelpConfig: PageHelpConfig = {
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。Jekyll 站点常发布到 gh-pages 分支。" },
     defaultPath: { tip: "Jekyll 文章存储目录，默认 _posts。发布后的 .md 会写入该目录。" },
     mdFilenameRule: { tip: "文章文件名规则，Jekyll 需带日期前缀，默认 [yyyy]-[mm]-[dd]-[slug].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。开启「YAML 永久链接」时会在 front matter 写入 permalink 以强制文章地址为该规则。" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。只有开启「YAML永久链接」时它才会同步写进 Front Matter 的 permalink（仅 [postid] 占位符生效）。" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
     pageType: { tip: "Jekyll 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Jekyll 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 assets/images，文章中引用为绝对路径 /assets/images/<图片名>（Jekyll 构建时 assets/ 原样复制到站点根）。" },
+    yamlLinkEnabled: {
+      tip: "Jekyll 始终把 permalink 写入 Front Matter，本开关只决定取值：开启时按「文章预览规则」生成（仅 [postid] 占位符生效，日期与分类占位符不参与），关闭时固定为 /post/<文章别名>.html。",
+    },
+    blogid: {
+      tip: "发布目录，只读，与「存储目录」保持一致（当前 _posts）：文章 .md 提交到该目录。",
+    },
+    imageStorePath: {
+      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 assets/images。",
+    },
+    imageLinkPath: {
+      tip: "文章内图片引用前缀，默认 assets/images，即引用为 /assets/images/<图片名> 的站点根绝对路径（Jekyll 构建时把仓库根下的该目录原样发布）；填 ./images 之类则以相对文章路径引用。",
+    },
+    dynYamlCfg: {
+      tip: "YAML 预设配置（JSON 片段）。留空时自动写入 layout: post 与 published: true；一旦填写，则改由你提供的键决定文章头，需要自行包含 layout、published 等主题必需字段。",
+    },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    site: {
+      tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Jekyll 的文章 Front Matter 不写作者字段，此处仅作账号信息。",
+    },
   },
   faq: [
     {
@@ -43,7 +64,7 @@ export const jekyllHelpConfig: PageHelpConfig = {
     },
     {
       q: "查看链接打不开？",
-      a: "查看链接为站点文章地址（默认 /post/<postid>.html）。开启「YAML 永久链接」会在 front matter 写入 permalink 强制文章地址为该规则；若关闭，则地址由文章 slug 与 Jekyll 默认 permalink 决定。确认预览规则与博客主题的 permalink 设置一致。",
+      a: "查看链接为站点文章地址（默认 /post/<postid>.html）。Jekyll 始终把 permalink 写入 front matter：开启「YAML 永久链接」时按「文章预览规则」生成，关闭时固定为 /post/<文章别名>.html，因此不会交给主题的 permalink 配置。若线上地址与查看链接不一致，改「文章预览规则」并保持开关开启即可。",
     },
     {
       q: "更新与删除会怎样？",

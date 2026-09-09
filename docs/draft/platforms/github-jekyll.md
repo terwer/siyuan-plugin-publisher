@@ -30,8 +30,8 @@
 
 - Jekyll 的 **`assets/` 目录**构建时会被**原样复制到站点根目录**。放在 `assets/images/` 下的图片，站点根 URL 就是 `/assets/images/<图片名>`（`baseurl` 为空时）。
 - 因此在 Markdown 中引用文章图片使用 **绝对路径 `/assets/images/<图片名>`** 即可——构建产物（`_site/`）中该路径能正确解析到图片，这也是社区与官方文档推荐的引用方式。
-- 文章的最终 URL（permalink）由 **front matter 的 `permalink`** 或 Jekyll 默认规则决定。开启「YAML 永久链接」时，插件会在 front matter 写入 `permalink: /post/<slug>.html`（与「文章预览规则」一致），保证查看链接可打开。
-- Jekyll front matter 中写 `published: true` 时文章为**发布**状态（`published` 默认 `true`），构建时会被正常渲染。
+- 文章的最终 URL（permalink）由 **front matter 的 `permalink`** 决定：插件**始终**会写入该字段，「YAML 永久链接」开关只决定取值——开启时按「文章预览规则」生成（仅 `[postid]` 占位符生效），关闭时固定为 `/post/<slug>.html`。因此不会回落到 Jekyll 默认规则。
+- Jekyll front matter 中写 `published: true` 时文章为**发布**状态（`published` 默认 `true`），构建时会被正常渲染。插件在「YAML 预设配置」留空时会自动写入 `layout: post` 与 `published: true`；一旦填写该项，文章头改由你给的键决定，需自行包含这两项。
 
 ## 四、验证与发布
 
@@ -43,6 +43,6 @@
 
 - **验证通过但发布失败**：确认 Token 对目标仓库有 push 权限，仓库名与分支正确，存储目录已存在。权限不足会收到 401/403。
 - **图片要怎么发布**：选「当前平台」图床，图片上传到仓库 `assets/images`，文章中引用绝对路径 `/assets/images/<图片名>`。因 Jekyll 构建时把 `assets/` 原样复制到站点根，构建产物能正常显示。
-- **查看链接打不开**：若开启「YAML 永久链接」，确认站点把文章地址设为了 `/post/<slug>.html`（与「文章预览规则」一致）；若关闭，则地址由 slug 与 Jekyll 默认 permalink 决定，需对应调整预览规则。另外请确认博客使用的主题/发布脚本会对仓库变更执行 Jekyll 构建（如 GitHub Pages 自动构建），否则新文章不会出现在线上站点。
+- **查看链接打不开**：插件总会写入 `permalink`，所以线上地址由它决定：开启「YAML 永久链接」时取「文章预览规则」，关闭时固定 `/post/<slug>.html`。若与预览规则不一致，改「文章预览规则」并保持开关开启即可（无需改主题 permalink）。另外请确认博客使用的主题/发布脚本会对仓库变更执行 Jekyll 构建（如 GitHub Pages 自动构建），否则新文章不会出现在线上站点。
 - **发布后线上没有新文章**：Jekyll 是通过构建（`jekyll build`）从仓库内容生成站点的。GitHub Pages 会对仓库自动执行 Jekyll 构建；确认仓库配置了自动构建（GitHub Pages / Actions / Vercel / Netlify 等）；仅推送 `.md` 不会直接改变已部署站点，需触发一次构建。
 - **更新与删除**：点「更新」会重新提交并产生一次新提交；「删除」会从仓库移除对应 `.md`，需重新构建才能从站点移除。

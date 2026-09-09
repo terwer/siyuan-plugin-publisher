@@ -74,6 +74,17 @@
 - 两站 `picbedService` 均默认 `Bundled`（`commonGithubConfig.ts:117`）→ 图片两行必然渲染；`knowledgeSpaceEnabled=true` + `allowKnowledgeSpaceChange=false` → 发布目录行只读且镜像 `defaultPath`（`syncDefaultPath` 写回 `blogid`）。
 - GitHub 族 `fields` 键**本来就是配置属性名**，这两站零改名，只补 9 键。
 
-## 宿主量测口径（避免误判）
-- 取 tip 时不能直接拿「最后一个可见 `.el-popper`」：上一个弹层可能还没隐藏，会把上一行的文案错记到本行（#7 复核时 `site` 一度显示成 `blogid` 的文案）。
-- 正确做法：每次探测前确认 `visible poppers === 0`（或先 `mouseleave` + 等待），再 hover、再取；本次已用该口径复测 `site` 通过。
+## 宿主量测口径（已踩平的坑）
+- **不要拿「最后一个可见 `.el-popper`」当本行 tip**：EP 的 tooltip 隐藏后仍可能被 `getComputedStyle` 判为可见，弹层会累积（#8 实测 `popperCount` 1→2→3），于是上一行文案被错记到本行（`site` 一度显示成 `blogid` 的文案）。等「可见数为 0」也不可靠，同理。
+- **可靠口径**：hover 前先快照所有可见弹层的 `textContent`，hover 后取**差集**里的那个；或干脆不依赖 hover——用 `helpRegistry.getField(pageId, key)` 在 vitest 里逐键核验（数据路径与组件完全一致），渲染路径由已验收的共用层保证。
+- 两种口径本次都用了：宿主 hover 差集 + 21 键 registry 全绿。
+
+## #8 Jekyll 复核出的事实（同族三站各不相同）
+- `jekyllYamlConverterAdaptor.ts:43-68`：`permalink` **无条件写入**；`yamlLinkEnabled` 且 `previewPostUrl` 非空时取其值并只替换 `[postid]`（日期/分类占位符那段是注释掉的），否则固定 `/post/<文章别名>.html`。→ 原 tip/faq/文档写「关闭时交给 Jekyll 默认 permalink」是错的，已改。
+- 同文件 `:87-97`：`dynYamlCfg` **留空**才写 `layout: post` + `published: true`；**一旦填写就只合并用户键**（不再补这两项）→ tip 与文档已明确「需自行包含 layout、published」。
+- `jekyllConfig.ts`：`_posts`、`[yyyy]-[mm]-[dd]-[slug].md`、`assets/images`（存储与引用同名，按 `getImagePath` 规则引用为 `/assets/images/<名>`）、发布目录只读。
+
+## 工具事实：chrome-devtools MCP 掉线后的替代通道
+- 本次 MCP 的 `mcp__chrome-devtools__*` 从会话工具表里消失（宿主被关闭后掉线），恢复需重启 DSH Web——会打断当前会话，不该自动做。
+- 替代：PowerShell + `ClientWebSocket` 直连 9222 的 CDP（`Runtime.evaluate` + `awaitPromise`/`returnByValue`、`Page.captureScreenshot`），脚本已固化在 `tmp/cdp-eval.ps1`、`tmp/cdp-shot.ps1`（`tmp/` 已 gitignore，属研究/调试工具不入库）。注意 `Runtime.evaluate` 响应路径是 `$result.result.result.value`。
+- 思源可用 `C:\Program Files\SiYuan\SiYuan.exe --workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222` 拉起，约 3 秒 9222 就绪；内核端口每次随机（本次 59072）。

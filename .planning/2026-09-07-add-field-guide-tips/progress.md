@@ -81,14 +81,31 @@
 ### 停下等验收
 - 未动 #8 Jekyll 及之后平台。
 
+## 会话：2026-09-09（#7 Hugo 放行 → #8 Jekyll）
+
+### 执行
+- `github-jekyll.ts` 补同 9 键，并**再纠正两处错误表述**（都在 help + `docs/draft/platforms/github-jekyll.md` 同步改）：
+  1. `permalink` 是**无条件写入**（`jekyllYamlConverterAdaptor.ts:68`），`yamlLinkEnabled` 只决定取值来源（开启→按「文章预览规则」且仅 `[postid]` 生效，日期/分类占位符那段是注释代码；关闭→固定 `/post/<文章别名>.html`）。原文说「关闭时交给 Jekyll 默认 permalink」不成立。
+  2. `dynYamlCfg` **留空**才自动写 `layout: post` + `published: true`；**一旦填写就只合并用户键**，需自带这两项（`:87-97`）。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主与工具
+- 思源未运行 → 重新以 `--workspace=<test> --remote-debugging-port=9222` 拉起（内核端口本次 59072）。
+- **chrome-devtools MCP 已从本会话工具表消失**（宿主关闭后掉线；恢复需重启 DSH Web，会打断会话，未擅自做）→ 改用 PowerShell `ClientWebSocket` 直连 CDP 的自研通道：`tmp/cdp-eval.ps1`（`Runtime.evaluate`）+ `tmp/cdp-shot.ps1`（`Page.captureScreenshot`），响应路径为 `$result.result.result.value`。
+- 宿主实测（真实账号 `github_Jekyll`，值已填）：标题 Jekyll、基础 **17** ⓘ、展开高级 **21** ⓘ、`notSameLine=[]`；hover 差集口径复核 4 条 tip 为 Jekyll 专属、`inPanel=true`、`fullyVisible=true`；截图 `tmp/field-guide-jekyll-yamllink.png`（弹层内容「Jekyll 始终把 permalink 写入 Front Matter…」已在页面内确认可见）。
+- 量测口径修正：先前写的「等可见 popper 归零再 hover」**不可靠**（EP 隐藏后 `getComputedStyle` 仍判可见，弹层累积 1→2→3，导致 `site` 一度错读 `blogid` 文案）。改为 hover 前后**文本差集**，并另用 `helpRegistry.getField` 在 vitest 里把 **21 个键逐条**核验全绿（临时 spec 跑完即删，未入库）。
+
+### 停下等验收
+- 未动 #9 Quartz 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 B：#6 Hexo ✅ 已验收，#7 Hugo 已完成并停下等验收 |
-| 我要去哪里？ | 验收后：#8 Jekyll → #9 Quartz → #10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 B：#6 Hexo ✅、#7 Hugo ✅ 放行、#8 Jekyll 已完成待验收 |
+| 我要去哪里？ | 验收后：#9 Quartz → #10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 每站文案必须回到转换器读代码（Hexo 读 `previewPostUrl`、Hugo 硬编码 `url`，同族却不同）；探测 tip 前要等上一个弹层消失；缺账号可用「添加账号」开空表单核验且不落库 |
-| 我做了什么？ | 试点三轮 + 标准冻结（`a77d5d4c`…`acfe4677`）→ Hexo（`bf11170e`）→ Hugo（本轮，待提交），全部推送、工作树干净 |
+| 我学到了什么？ | 同族三站 permalink 行为各不相同，必须逐站读转换器；hover 弹层核验要用文本差集或直接查 registry；MCP 掉线时可用 CDP WebSocket 自建通道（已固化在 tmp/） |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll（本轮，待提交），全部推送、工作树干净 |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*
