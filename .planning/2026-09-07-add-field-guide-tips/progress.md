@@ -103,14 +103,33 @@
 - 重启会中断本会话；SiYuan（9222）与仓库状态不受影响，`fbbd9ebf` 已推送、工作树干净。
 - 若重启后 MCP 仍不可用：继续用 `tmp/cdp-eval.ps1` / `tmp/cdp-shot.ps1` 的 CDP 直连通道核验，不必再卡住。
 
+## 会话：2026-09-09（重启恢复 → #9 Quartz，含一次跨站修正）
+
+### 恢复
+- 用户「已重启」→ `get_goal` 后 `update_goal resume`（rev 10、active）；`list_pages` 确认 chrome-devtools MCP 已恢复；9222 与 SiYuan 未受影响（内核端口 59072）。
+- 按用户「重启并继续验证」的口径把 #8 Jekyll 记为 ✅ 放行（台账已注明依据）。
+
+### 执行（#9 Quartz）
+- `github-quartz.ts` 补同 9 键 + 改准 `previewPostUrl`。Quartz 与同族两站都不同：`permalink` **仅开关开启时写**（`quartzYamlConverterAdaptor.ts:59-86`），且 `[postid]/[yyyy]/[MM]/[mm]/[dd]/[cats]` 全部生效；`dynYamlCfg` 留空写的是 `enableToc` + `enableBackLinks`（`:89-98`），不是 Jekyll 的 `layout`/`published` → 证实「dynYamlCfg 的实写字段必须逐站读」。
+- **跨站修正**：查实 `allowKnowledgeSpaceChange` 只被 `SinglePublishDoPublish.vue:447` 消费，设置页发布目录 `el-select` 从不禁用（宿主实测 `is-disabled=false`、`input.disabled=false`）→ 前五站 `blogid` 的「只读」表述统一改准（Vuepress2/Hexo/Hugo/Jekyll/Quartz），并在 Jekyll 上复测新文案渲染正确。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核
+- `github_Quartz` 账号是「未启用」，行上是「去授权」不是「管理」→ 首次定位误开了 `fs_LocalSystem` 表单（已记为操作要点）。改走「添加账号 → Quartz 卡片」开临时表单：标题 Quartz、基础 **17** ⓘ、展开 **21** ⓘ、`notSameLine=[]`；**未保存**，返回列表后账号数仍 32、`github_Quartz` 仍「未启用」，未落库。
+- tip 复核 5 条（`yamlLinkEnabled`/`dynYamlCfg`/`blogid`/`imageLinkPath`/`site`）全部 `visible:1 / added:1`、文案为 Quartz 专属、`inPanel` + `fullyVisible`。截图 `tmp/field-guide-quartz-dynyaml.png`。
+- 口径补充：`getComputedStyle` 过滤会把 EP 弹层全滤掉（`added:0`），要用 `style.display !== 'none'`；归属靠 hover 前后文本差集。
+
+### 停下等验收
+- 未动 #10 Vuepress 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 B：#6 Hexo ✅、#7 Hugo ✅ 放行、#8 Jekyll 已完成待验收 |
-| 我要去哪里？ | 验收后：#9 Quartz → #10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 B：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll ✅、#9 Quartz 已完成待验收 |
+| 我要去哪里？ | 验收后：#10 Vuepress → C 组 Common 族（含 `token`→`password`、`knowledgeSpace`→`blogid`）→ D 组 Cookie 族（含 `cookie`→`password`）→ E 组 MetaWeblog/WordPress/LocalSystem → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 同族三站 permalink 行为各不相同，必须逐站读转换器；hover 弹层核验要用文本差集或直接查 registry；MCP 掉线时可用 CDP WebSocket 自建通道（已固化在 tmp/） |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll（本轮，待提交），全部推送、工作树干净 |
+| 我学到了什么？ | 同族五站 permalink/dynYamlCfg 行为各不相同，必须逐站读转换器；`allowKnowledgeSpaceChange` 只管快速发布页，别把「只读」写进设置页文案；账号行按钮随启停状态变化，定位要按 `.syp-account-item` 校验；EP 弹层可见性用 `style.display` 判定 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航记录 `92234b1f` → Quartz + 五站 `blogid` 修正（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

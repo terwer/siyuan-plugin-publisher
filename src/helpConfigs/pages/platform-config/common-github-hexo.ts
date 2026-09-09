@@ -35,7 +35,7 @@ export const hexoHelpConfig: PageHelpConfig = {
       tip: "开启后把文章永久链接写入 Front Matter 的 permalink，取值来自「文章预览规则」：[postid] 换成文章别名，并支持 [yyyy]/[MM]/[dd]/[cats]，默认 /post/<文章别名>.html。关闭则不写 permalink，由 Hexo 按文件名与归档规则自行路由。",
     },
     blogid: {
-      tip: "发布目录，只读，与「存储目录」保持一致（当前 source/_posts）：文章 .md 提交到该目录。",
+      tip: "发布目录：验证通过后下拉列出仓库中的可选目录，文章 .md 提交到所选目录（默认 source/_posts）；改动「存储目录」会同步覆盖这里。要改选目录请回本页调整，快速发布页里该目录为只读。",
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 source/images。",

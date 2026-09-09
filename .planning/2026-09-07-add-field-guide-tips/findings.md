@@ -82,7 +82,18 @@
 ## #8 Jekyll 复核出的事实（同族三站各不相同）
 - `jekyllYamlConverterAdaptor.ts:43-68`：`permalink` **无条件写入**；`yamlLinkEnabled` 且 `previewPostUrl` 非空时取其值并只替换 `[postid]`（日期/分类占位符那段是注释掉的），否则固定 `/post/<文章别名>.html`。→ 原 tip/faq/文档写「关闭时交给 Jekyll 默认 permalink」是错的，已改。
 - 同文件 `:87-97`：`dynYamlCfg` **留空**才写 `layout: post` + `published: true`；**一旦填写就只合并用户键**（不再补这两项）→ tip 与文档已明确「需自行包含 layout、published」。
-- `jekyllConfig.ts`：`_posts`、`[yyyy]-[mm]-[dd]-[slug].md`、`assets/images`（存储与引用同名，按 `getImagePath` 规则引用为 `/assets/images/<名>`）、发布目录只读。
+- `jekyllConfig.ts`：`_posts`、`[yyyy]-[mm]-[dd]-[slug].md`、`assets/images`（存储与引用同名，按 `getImagePath` 规则引用为 `/assets/images/<名>`）。
+
+## #9 Quartz 复核出的事实 + 一处跨站修正
+- `quartzYamlConverterAdaptor.ts:59-86`：`permalink` **仅在 `yamlLinkEnabled` 时写入**（与 Jekyll 相反），取值来自 `previewPostUrl`，且 `[postid]`、`[yyyy]/[MM]/[mm]/[dd]`、`[cats]` **全部生效**（与 Hexo 同级、比 Jekyll 多）；规则留空时退化为 `/post/<文章别名>.html`。
+- 同文件 `:89-98`：`dynYamlCfg` 留空时写的是 `enableToc: true` + `enableBackLinks: true`（**不是** Jekyll 的 `layout`/`published`）；一旦填写则只合并用户键。→ 每站的 `dynYamlCfg` tip 必须按各自转换器实写字段逐站核对，不能套模板。
+- `quartzConfig.ts:44-45`：`knowledgeSpaceEnabled=true`、`allowKnowledgeSpaceChange=true`（GitHub 族里唯一可改选发布目录的一站）。
+- **跨站修正**：`allowKnowledgeSpaceChange` 全仓只被 `SinglePublishDoPublish.vue:447`（快速发布页 `readonlyMode`）消费，**设置页的发布目录 `el-select` 从不据此禁用**（宿主实测 Jekyll：`select.classList.contains('is-disabled')=false`、`input.disabled=false`）。此前五站 `blogid` 写的「只读，与存储目录保持一致」不准确 → 已统一改为「验证通过后下拉可选；改『存储目录』会同步覆盖；快速发布页里只读（Quartz 为可改选）」。
+
+## 宿主核验操作要点（本轮踩到的）
+- **账号行按钮随状态变化**：`未启用/已禁用` 的行上是「去授权」而不是「管理」→ 定位行时必须按 `.syp-account-item` 且校验行内文本，不能只按祖先层数找第一个「管理」（曾误开 `fs_LocalSystem` 表单）。
+- **缺可用账号时用「添加账号 → 该平台卡片」**开临时表单核验：不点保存/验证即不落库（Hugo、Quartz 两次都确认列表里仍只有原账号）。
+- **弹层可见性判定**：用 `getComputedStyle` 过滤（`opacity>0.1` 等）会把 EP 的 `.el-popper` 全部滤掉（实测 `added:0`）；用 `x.style.display !== 'none'` 才取得到。归属仍靠 hover 前后**文本差集**（本轮 5 条 `visible:1 / added:1`，无累积）。
 
 ## 工具事实：chrome-devtools MCP 掉线后的替代通道
 - 本次 MCP 的 `mcp__chrome-devtools__*` 从会话工具表里消失（宿主被关闭后掉线），恢复需重启 DSH Web——会打断当前会话，不该自动做。

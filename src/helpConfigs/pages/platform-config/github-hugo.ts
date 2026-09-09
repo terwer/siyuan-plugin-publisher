@@ -35,7 +35,7 @@ export const hugoHelpConfig: PageHelpConfig = {
       tip: "开启后在 Front Matter 写入 url 字段，取值固定为 /post/<文章别名>.html，用于锁定文章在站点的访问地址。关闭则不写 url，文章地址由主题的 permalink 配置与文件路径决定。",
     },
     blogid: {
-      tip: "发布目录，只读，与「存储目录」保持一致（当前 content/post）：文章 .md 提交到该目录。",
+      tip: "发布目录：验证通过后下拉列出仓库中的可选目录，文章 .md 提交到所选目录（默认 content/post）；改动「存储目录」会同步覆盖这里。要改选目录请回本页调整，快速发布页里该目录为只读。",
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 static/images。",

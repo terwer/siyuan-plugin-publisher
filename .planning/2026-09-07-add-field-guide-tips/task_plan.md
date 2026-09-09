@@ -17,16 +17,16 @@
 2. 确认宿主在跑：`Get-NetTCPConnection -LocalPort 9222 -State Listen`；不在则 `C:\Program Files\SiYuan\SiYuan.exe --workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222`（内核端口每次随机，用 `/json/list` 读）。
 3. 确认 #8 Jekyll 的验收状态：用户若已点头则记 ✅ 进台账，直接开 **#9 Quartz**；未点头则先补证据等验收。
 4. #9 Quartz 开工口径（照 Jekyll 的办法，不照抄文案）：读 `quartzYamlConverterAdaptor.ts` 的 permalink 段与 `dynYamlCfg` 段 + `quartzConfig.ts` 默认值 → 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/`defaultMsg`/`author`/`email`/`site`）→ vitest + build:v2 → 宿主（真实账号 `github_Quartz`）量 17/21 个 ⓘ 与 `notSameLine` → 截图 → 停下等验收。
-5. MCP 若已恢复优先用 MCP；未恢复则继续用 `tmp/cdp-eval.ps1` / `tmp/cdp-shot.ps1`（CDP 直连，已验证可用）。。
+5. MCP 若已恢复优先用 MCP；未恢复则继续用 `tmp/cdp-eval.ps1` / `tmp/cdp-shot.ps1`（CDP 直连，已验证可用）。
 
 ## 验收台账
 | 步骤 | 平台 | 共用层挂载 | fields 键改名/补全 | 宿主证据 | 用户验收 |
 |---|---|---|---|---|---|
-| A | #11 Vuepress2（试点） | CommonBlogSetting + CommonGithubSetting（**包裹式同行**，26 处） | 补 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项 | 20 行同行、官方 InfoFilled 14px 安静档、弹层在面板内完整可见 | ✅ 已验收（标准已冻结） |
-| B | #6 Hexo | 复用 A | 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），无需改名 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`，5 条 tip 均为 Hexo 专属且在面板内完整可见 | ✅ 已验收 |
-| B | #7 Hugo | 复用 A | 补同 9 键；**并纠正错误表述**：Hugo 写的是 `url` 且固定 `/post/<文章别名>.html`，不读「文章预览规则」（`hugoYamlConverterAdaptor.ts:37-38`） | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 复核为 Hugo 专属、面板内完整可见 | ✅ 放行（用户回复「继续」） |
-| B | #8 Jekyll | 复用 A | 补同 9 键；**再纠正两处**：Jekyll 的 `permalink` 无条件写入（`:68`），开关只改取值来源；`dynYamlCfg` 非空会顶替 `layout`/`published` 默认值 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；4 条 tip 宿主实测 + 21 键 registry 解析全绿；截图 `tmp/field-guide-jekyll-yamllink.png` | ⬜ 待验收 |
-| B | #9 Quartz | 复用 A | 同上 | | ⬜ |
+| A | #11 Vuepress2（试点） | CommonBlogSetting + CommonGithubSetting（**包裹式同行**，26 处） | 补 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项 | 20 行同行、官方 InfoFilled 14px 安静档、弹层在面板内完整可见 | ✅ 已验收（标准已冻结）；`blogid` 文案在 #9 一并修正 |
+| B | #6 Hexo | 复用 A | 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），无需改名 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`，5 条 tip 均为 Hexo 专属且在面板内完整可见 | ✅ 已验收；`blogid` 文案在 #9 一并修正 |
+| B | #7 Hugo | 复用 A | 补同 9 键；**并纠正错误表述**：Hugo 写的是 `url` 且固定 `/post/<文章别名>.html`，不读「文章预览规则」（`hugoYamlConverterAdaptor.ts:37-38`） | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 复核为 Hugo 专属、面板内完整可见 | ✅ 放行（用户回复「继续」）；`blogid` 文案在 #9 一并修正 |
+| B | #8 Jekyll | 复用 A | 补同 9 键；**再纠正两处**：Jekyll 的 `permalink` 无条件写入（`:68`），开关只改取值来源；`dynYamlCfg` 非空会顶替 `layout`/`published` 默认值 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；4 条 tip 宿主实测 + 21 键 registry 解析全绿；截图 `tmp/field-guide-jekyll-yamllink.png` | ✅ 放行（用户「重启并继续验证」）；`blogid` 文案在 #9 一并修正 |
+| B | #9 Quartz | 复用 A | 补同 9 键；`dynYamlCfg` 留空写的是 `enableToc`/`enableBackLinks`（非 Jekyll 那两项）；**跨站修正**：`allowKnowledgeSpaceChange` 只作用于快速发布页，设置页发布目录并非只读 → 五站 `blogid` 文案全部改准 | 基础 17 → 展开 21 个 ⓘ，`notSameLine=[]`；5 条 tip 宿主实测 `added:1/visible:1` 且文案为 Quartz 专属；Jekyll 修正后文案已复测渲染；截图 `tmp/field-guide-quartz-dynyaml.png` | ⬜ 待验收 |
 | B | #10 Vuepress | 复用 A | 同上 | | ⬜ |
 | C | #1 语雀 | commonblog/YuqueSetting | `token`→`password`、`knowledgeSpace`→`blogid` | | ⬜ |
 | C | #2 Notion | commonblog/NotionSetting | `token`→`password`、`knowledgeSpace`→`blogid` | | ⬜ |

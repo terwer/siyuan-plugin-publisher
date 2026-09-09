@@ -27,10 +27,31 @@ export const quartzHelpConfig: PageHelpConfig = {
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
     defaultPath: { tip: "Quartz 文章存储目录，默认 content。发布后的 .md 会写入该目录。" },
     mdFilenameRule: { tip: "文章文件名规则，默认 [filename].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。开启「YAML 永久链接」时会在 front matter 写入 permalink 以强制文章地址为该规则。" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成；开启「YAML永久链接」时 permalink 也按同一规则生成。" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
     pageType: { tip: "Quartz 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Quartz 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 assets/images，文章中引用为绝对路径 /assets/images/<图片名>。" },
+    yamlLinkEnabled: {
+      tip: "开启后把永久链接写入 Front Matter 的 permalink，取值来自「文章预览规则」：支持 [postid] 与 [yyyy]/[MM]/[mm]/[dd]/[cats]；规则留空时用 /post/<文章别名>.html。关闭则不写 permalink，文章地址由 Quartz 按内容目录生成。",
+    },
+    blogid: {
+      tip: "发布目录：验证通过后下拉列出仓库里的可选目录，选中即文章 .md 提交到该目录（默认 content）。改动「存储目录」会同步覆盖这里；快速发布页也允许在此平台改选目录。",
+    },
+    imageStorePath: {
+      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 assets/images。",
+    },
+    imageLinkPath: {
+      tip: "文章内图片引用前缀，默认 assets/images，即引用为 /assets/images/<图片名> 的站点根绝对路径；填 ./images 之类则改为相对文章路径引用。",
+    },
+    dynYamlCfg: {
+      tip: "YAML 预设配置（JSON 片段）。留空时自动写入 enableToc: true 与 enableBackLinks: true；一旦填写，文章头改由你给的键决定，想保留目录与反向链接需自行带上这两项。",
+    },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    site: {
+      tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Quartz 的文章 Front Matter 不写作者字段，此处仅作账号信息。",
+    },
   },
   faq: [
     {

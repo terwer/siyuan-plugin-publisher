@@ -34,7 +34,7 @@ export const vuepress2HelpConfig: PageHelpConfig = {
       tip: "选择「当前平台」图床时，图片上传到文章所在目录的 images 子目录（存储规则 [docpath]/images，如 src/post/images/<图片名>），文章中引用为相对路径 ./images/<图片名>，构建时随页面一起输出。",
     },
     blogid: {
-      tip: "发布目录，只读，与「存储目录」保持一致（当前 src/post）：决定 .md 提交到仓库的位置，也是图片就近目录 [docpath]/images 的解析基准。",
+      tip: "发布目录：验证通过后下拉列出仓库中的可选目录，文章 .md 提交到所选目录（默认 src/post）；改动「存储目录」会同步覆盖这里，它也是图片就近目录 [docpath]/images 的解析基准。要改选目录请回本页调整，快速发布页里该目录为只读。",
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 [docpath]/images，即文章所在目录下的 images 子目录。",
