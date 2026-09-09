@@ -140,14 +140,31 @@
 ### 停下等验收
 - 未动 C 组（Common 族 5 站）及之后平台。
 
+## 会话：2026-09-09（#10 Vuepress 放行 → C 组 #1 语雀）
+
+### 执行
+- `common-yuque.ts`：`token`→`password`、`knowledgeSpace`→`blogid`（键=配置属性名），补 `previewUrl`/`pageType`，`password` tip 补上「需对目标知识库有写权限 + API 发布要求专业会员」。
+- **改准一处事实错误**：原 tip 与 `docs/draft/platforms/common-yuque.md` L26 写「语雀使用内置图片链路」，实际 `useYuqueApi.ts:68-69` 是 `picgoPicbedSupported=true`、`bundledPicbedSupported=false` → 只有「不使用 / PicGo」两项，无内置图床；`BlogConfig` 默认 `picbedService=None`。tip 与草稿都按实测重写。
+- `registry.spec.ts:103-104` 随改名同步（`'token'` → `'password'`）。
+- `YuqueSetting.vue` 查实**无平台专有行**（只有会员提示 + 共用表单）→ 本站零挂载，共用层已覆盖。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核
+- 8 行全部出现 ⓘ 且 `notSameLine=[]`：`home/apiUrl/username/password/previewUrl/pageType/blogid/picbedService`；鉴权行标签是「鉴权token」但键解析为 `password` ✓，知识库行标签「知识库」解析为 `blogid` ✓。
+- 5 条 tip `added:1` 文案准确，`password` 的「前往生成 Token」链接在弹层内正常渲染；图床选项实测 `["不使用","PicGo 强烈推荐"]`。截图 `tmp/field-guide-yuque-picbed.png`。
+- **踩到并纠正的副作用**：语雀走「添加账号 → 卡片」会**直接落库**一个空账号（`common_Yuque-1ma2ix`，账号数 32→33），与 GitHub 族（Hugo/Quartz 不落库）不同 → 已按行内「删除 → 确认」删回 32 行、只剩原 `common_Yuque`。规矩写进 findings。
+
+### 停下等验收
+- 未动 #2 Notion 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 B 全部完成：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll ✅、#9 Quartz ✅、#10 Vuepress 已完成待验收（GitHub 族 6/6 已回填） |
-| 我要去哪里？ | 验收后进入 C 组 Common 族：#1 语雀 → #2 Notion → #3 Halo → #4 Telegraph → #5 Confluence（含 `token`→`password`、`knowledgeSpace`→`blogid` 改名与 `registry.spec.ts` 同步）→ D 组 Cookie 族 8 站 → E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 B（GitHub 族 6 站）✅ 全部验收/放行；步骤 C：#1 语雀 已完成待验收 |
+| 我要去哪里？ | 验收后：#2 Notion → #3 Halo → #4 Telegraph → #5 Confluence → D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 六站差异证明「逐站读转换器」是硬要求（permalink 三种写法、dynYamlCfg 三种默认、仅 Vuepress 写 author）；行定位要按 `.syp-account-item` 精确匹配 key（`github_Vuepress` 是 `github_Vuepress2` 的前缀）；EP 弹层可见性用 `style.display` 判定 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz + `blogid` 跨站修正 `894ddb34` → Vuepress（本轮，待提交） |
+| 我学到了什么？ | 「添加账号」是否落库按平台不同，核验后必须比对账号数并清理；行标签与键名可以不同（鉴权token→`password`、知识库→`blogid`），一切以绑定的配置属性为准；图床选项要看 `*PicbedSupported` 实际组合，别照抄上一站 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

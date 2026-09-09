@@ -106,3 +106,15 @@
 - 同文件 `:121-131`：`dynYamlCfg` 留空**不补任何字段**（Jekyll 补 `layout`/`published`、Quartz 补 `enableToc`/`enableBackLinks`、Hexo/Hugo/Vuepress2 亦不补），且合并发生在 `author` 之后 → 同名键会覆盖 `author`。
 - `vuepressConfig.ts`：`defaultPath=docs`、`mdFilenameRule=[filename].md`、`imageStorePath=docs/.vuepress/public/images`、`imageLinkPath=images`（按 `getImagePath` 规则引用为 `/images/<名>`）、`allowKnowledgeSpaceChange=false`。
 - 六站 `permalink`/`dynYamlCfg` 差异汇总已写进 `task_plan.md`「GitHub 族 6 站已完成」，作为后续各族「不许套模板」的依据。
+
+## #1 语雀（C 组首站）事实
+- `YuqueSetting.vue` **没有平台专有行**：只有会员提示 alert + `<common-blog-setting>` → 共用层已挂的 ⓘ 已覆盖全部 8 行，本站零挂载。
+- `yuqueConfig.ts` + `useYuqueApi.ts:64-69`：`passwordType=Token`（行标签「鉴权token」，但绑的是 `cfg.password` → 键必须是 `password`）、`knowledgeSpaceEnabled=true`、`knowledgeSpaceTitle="知识库"`（行标签是「知识库」，键仍是 `blogid`）、`allowKnowledgeSpaceChange=false`、`allowPreviewUrlChange=false`、`picgoPicbedSupported=true`、`bundledPicbedSupported=false`、`cateSearchEnabled=false`（默认，检索行不出现）。
+- 图床选项实测为 `["不使用","PicGo 强烈推荐"]` → 原 tip 与文档草稿「语雀使用内置图片链路」是**错的**（Bundled 根本不提供），已改准。
+- `previewUrl` 固定 `/[notebook]/[postid]`；`BlogConfig` 默认 `picbedService=None`。
+- `registry.spec.ts:103-104` 原按 `'token'` 取 Yuque 字段 tip，已随改名同步为 `'password'`。
+
+## 操作教训：「添加账号」是否落库按平台不同
+- GitHub 族（Hugo、Quartz）走「添加账号 → 卡片」开表单后不保存即不落库；**Common 族（语雀）点卡片就直接创建并持久化**一个空账号（本次多出 `common_Yuque-1ma2ix`，账号数 32→33）。
+- 规矩：凡用「添加账号」开临时表单核验，**事后必须回列表比对账号数并删除多余行**（删除是行内二次确认：点「删除」→ 该行出现 `.syp-confirm-bar__btn`「确认」）。本次已删回 32 行、只剩原 `common_Yuque`。
+- 更稳的做法：优先用已有账号的「管理」；行按钮随状态变化（未启用行是「去授权」，没有「管理」）。

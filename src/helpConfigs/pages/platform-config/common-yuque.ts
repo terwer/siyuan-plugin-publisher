@@ -10,15 +10,25 @@ export const yuqueHelpConfig: PageHelpConfig = {
   summary: "发布到语雀知识库；语雀 API 发布需要专业会员，这是平台策略限制。",
   fields: {
     home: { tip: "你的语雀主页地址，如 https://www.yuque.com/yourname" },
-    apiUrl: { tip: "默认使用语雀 v2 API 地址。除非语雀官方接口变更，一般不需要修改。" },
+    apiUrl: { tip: "默认使用语雀 v2 API 地址（https://www.yuque.com/api/v2）。除非语雀官方接口变更，一般不需要修改。" },
     username: { tip: "语雀用户名或登录名，用于和 Token 对应的账号保持一致。" },
-    token: {
-      tip: "语雀 API Token，在语雀设置 → 访问令牌中生成",
+    password: {
+      tip: "语雀 API Token，在语雀设置 → 访问令牌中生成，需对目标知识库有写权限；语雀 API 发布要求账号为专业会员。",
       link: "https://www.yuque.com/settings/tokens",
       linkText: "前往生成 Token",
     },
-    knowledgeSpace: { tip: "验证通过后会读取账号可写知识库。语雀 API 模式暂不支持编辑已发布文档所属知识库。" },
-    picbedService: { tip: "语雀使用内置图片链路。若使用外部图床，请确认目标知识库允许外链图片。" },
+    previewUrl: {
+      tip: "预览规则，语雀固定为 /[notebook]/[postid]（不可修改），发布后的查看链接由它拼出完整地址。",
+    },
+    pageType: {
+      tip: "发布格式：语雀按 Markdown 提交正文，保持 Markdown 即可。",
+    },
+    blogid: {
+      tip: "发布知识库：点「验证」后下拉列出该 Token 可写的知识库，文章会发布到所选知识库。语雀 API 不支持修改已发布文档所属知识库——想换库需先删除原文档再重新选择发布。",
+    },
+    picbedService: {
+      tip: "语雀这里只有「不使用」与「PicGo」两项（无内置图床）。默认「不使用」：文章按图片原有地址引用，需保证图片本身可公网访问；要把本地图片上传出去请选「PicGo」，并在「图床设置」里配好上传通道。",
+    },
   },
   faq: [
     { q: "提示「权限不足」？", a: "语雀 API 发布需要专业会员。免费版可改用语雀网页版（Cookie 模式），不要把这类失败当作插件配置损坏。" },

@@ -100,8 +100,8 @@ describe("HelpRegistry", () => {
     it("should return preset platform field help for dynamic platform-config instance keys", () => {
       helpRegistry.register(yuqueHelpConfig)
 
-      const field = helpRegistry.getField("platform-config/common_Yuque-z2jom6d", "token")
-      expect(field?.tip).toBe(yuqueHelpConfig.fields?.token.tip)
+      const field = helpRegistry.getField("platform-config/common_Yuque-z2jom6d", "password")
+      expect(field?.tip).toBe(yuqueHelpConfig.fields?.password.tip)
     })
 
     it("should return undefined for missing field", () => {
