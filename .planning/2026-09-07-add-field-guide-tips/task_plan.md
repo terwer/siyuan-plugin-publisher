@@ -9,7 +9,15 @@
 3. 不做一次性大批量；每个增量小、可验证、可回退。
 
 ## 当前步骤
-步骤 A **已验收通过**（功能 + 呈现标准均已定稿，见下节）。步骤 B（#6 Hexo）**已排期、未开始**——用户指示先睡觉，开工清单见「下一站开工清单」。。
+步骤 B：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll 已完成待验收（`fbbd9ebf`）。
+用户已授权自行重启 DSH Web 恢复 chrome-devtools MCP（重启会中断本会话）。
+
+## 重启后第一步（会话恢复时照此执行）
+1. `update_goal` 先 `get_goal` 再 `resume`（重启后目标会被解除武装，当前 rev 9、phase paused）。
+2. 确认宿主在跑：`Get-NetTCPConnection -LocalPort 9222 -State Listen`；不在则 `C:\Program Files\SiYuan\SiYuan.exe --workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222`（内核端口每次随机，用 `/json/list` 读）。
+3. 确认 #8 Jekyll 的验收状态：用户若已点头则记 ✅ 进台账，直接开 **#9 Quartz**；未点头则先补证据等验收。
+4. #9 Quartz 开工口径（照 Jekyll 的办法，不照抄文案）：读 `quartzYamlConverterAdaptor.ts` 的 permalink 段与 `dynYamlCfg` 段 + `quartzConfig.ts` 默认值 → 补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/`defaultMsg`/`author`/`email`/`site`）→ vitest + build:v2 → 宿主（真实账号 `github_Quartz`）量 17/21 个 ⓘ 与 `notSameLine` → 截图 → 停下等验收。
+5. MCP 若已恢复优先用 MCP；未恢复则继续用 `tmp/cdp-eval.ps1` / `tmp/cdp-shot.ps1`（CDP 直连，已验证可用）。。
 
 ## 验收台账
 | 步骤 | 平台 | 共用层挂载 | fields 键改名/补全 | 宿主证据 | 用户验收 |
