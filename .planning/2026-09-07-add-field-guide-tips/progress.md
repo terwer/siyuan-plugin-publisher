@@ -157,14 +157,29 @@
 ### 停下等验收
 - 未动 #2 Notion 及之后平台。
 
+## 会话：2026-09-09（#1 语雀 放行 → C 组 #2 Notion）
+
+### 执行
+- `common-notion.ts`：`token`→`password`、`knowledgeSpace`→`blogid`；`picbedService` tip 改准（只有 不使用/PicGo，补「选不使用则按原地址引用，需公网可访问」）；`blogid` 说明「文章作为所选根页面的子页面创建、已发布不可换根页面」；`previewUrl`/`pageType` 措辞收敛为契约描述。文档草稿 `common-notion.md` 的 根页面/图床 两行同步。
+- `NotionSetting.vue` 查实无专有行 → 零挂载。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（真实账号 `common_Notion`，两个 Notion 账号都是未启用态）
+- 澄清一个按钮语义：`V2AccountList.vue:106-108` 的「管理 / 去授权」是**同一个 `configure` 按钮**，只是文案按 `isAuth` 变 → 未授权账号也能直接进配置页，**不需要**启用账号或新建账号（修正上一站记下的判断，也更安全）。
+- 结果：标题 Notion、**7** 个 ⓘ、`notSameLine=[]`；唯一无 ⓘ 的是「搜索关键词」行（`cateSearchEnabled=true` 会渲染，但绑 `formData.ksKeyword` 非配置属性，按 change 2.5 规则不挂，属标准内显式例外）。
+- 5 条 tip `added:1` 文案准确（含「前往创建 Token」链接渲染）；图床选项实测 `["不使用","PicGo 强烈推荐"]`；账号数核验前后都是 **32**（未误建）。截图 `tmp/field-guide-notion-rootpage.png`。
+
+### 停下等验收
+- 未动 #3 Halo 及之后平台。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 B（GitHub 族 6 站）✅ 全部验收/放行；步骤 C：#1 语雀 已完成待验收 |
-| 我要去哪里？ | 验收后：#2 Notion → #3 Halo → #4 Telegraph → #5 Confluence → D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 C 进行中：#1 语雀 ✅ 放行、#2 Notion 已完成待验收（GitHub 族 6 站已全通过） |
+| 我要去哪里？ | 验收后：#3 Halo → #4 Telegraph → #5 Confluence → D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 「添加账号」是否落库按平台不同，核验后必须比对账号数并清理；行标签与键名可以不同（鉴权token→`password`、知识库→`blogid`），一切以绑定的配置属性为准；图床选项要看 `*PicbedSupported` 实际组合，别照抄上一站 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀（本轮，待提交） |
+| 我学到了什么？ | 「管理/去授权」是同一个 configure 按钮，未授权账号也能进配置页（别再新建账号冒险）；行标签 ≠ 键名，一切以绑定的配置属性为准；「搜索关键词」这类非属性行是标准内的不挂例外，要挂得先改标准 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

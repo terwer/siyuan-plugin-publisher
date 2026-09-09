@@ -25,8 +25,8 @@ Notion 集成地址：<https://www.notion.so/my-integrations>
 | API 地址 | 通常固定 `https://api.notion.com/v1`，保持默认 |
 | Token | 上面的 Notion 集成 Token |
 | 预览规则 | 固定 `/[postid]`，不可修改；查看链接 `https://www.notion.so/<postid>` |
-| 根页面 | 验证通过后从下拉选择目标根页面 |
-| 图床 | Notion 无内置上传，选「PicGo」：图片先上传外部图床，再以外部 image 块嵌入 |
+| 根页面 | 点「验证」后从下拉选择目标根页面，文章作为其子页面创建；已发布页面不支持改换根页面（需删除后重发） |
+| 图床 | Notion 只有「不使用」与「PicGo」两项（无内置图床）。选「PicGo」时图片先上传外部图床，再以外部 image 块嵌入页面；选「不使用」则按图片原有地址引用，需保证图片可公网访问 |
 
 ## 四、验证与发布
 

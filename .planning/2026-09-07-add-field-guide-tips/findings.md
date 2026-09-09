@@ -117,4 +117,11 @@
 ## 操作教训：「添加账号」是否落库按平台不同
 - GitHub 族（Hugo、Quartz）走「添加账号 → 卡片」开表单后不保存即不落库；**Common 族（语雀）点卡片就直接创建并持久化**一个空账号（本次多出 `common_Yuque-1ma2ix`，账号数 32→33）。
 - 规矩：凡用「添加账号」开临时表单核验，**事后必须回列表比对账号数并删除多余行**（删除是行内二次确认：点「删除」→ 该行出现 `.syp-confirm-bar__btn`「确认」）。本次已删回 32 行、只剩原 `common_Yuque`。
-- 更稳的做法：优先用已有账号的「管理」；行按钮随状态变化（未启用行是「去授权」，没有「管理」）。
+- 更稳的做法：优先用已有账号进配置页；「添加账号」只在必须时用，且事后比对账号数清理。
+
+## #2 Notion 事实 + 一处按钮语义澄清
+- **`去授权` 与 `管理` 是同一个按钮**：`V2AccountList.vue:106-108` 里 `@click="$emit('configure', …)"`，文案只是 `item.isAuth ? 管理 : 去授权`。所以未启用/未授权账号也能直接点它进配置页，**不必**为了核验去启用账号或新建账号（修正上一条里「未启用行没有管理就进不去」的判断）。
+- `NotionSetting.vue` 无平台专有行（只有 `<common-blog-setting>`）→ 零挂载。
+- `notionConfig.ts:24-33` + `useNotionApi.ts:63-69`：`passwordType=Token`（键 `password`）、`usernameEnabled` 未开（**无用户名行**）、`knowledgeSpaceTitle="根页面"`（键 `blogid`）、`allowPreviewUrlChange=false`、`cateSearchEnabled=true`（**「搜索关键词」行会渲染**）、`picgoPicbedSupported=true`、`bundledPicbedSupported=false`。
+- **「搜索关键词」行是唯一无 ⓘ 的渲染行**：它绑 `formData.ksKeyword`（临时检索值，不是配置属性），按 change `tasks.md` 2.5 的规则不挂字段指引——这是标准内的显式例外，不是漏配。若你要给它也挂提示，需要另设一个非属性键（会让步骤 F 的「键必须是配置实例真实属性」那把尺子出现例外），需先改标准。
+- 实测图床选项 `["不使用","PicGo 强烈推荐"]` → 原「Notion 无内置图片上传，使用 PicGo 外部链接图床」的 tip 已补准（含选「不使用」时的行为）。
