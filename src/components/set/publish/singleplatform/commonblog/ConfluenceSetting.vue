@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
+import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { useConfluenceApi } from "~/src/adaptors/api/confluence/useConfluenceApi.ts"
 import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
@@ -87,17 +88,19 @@ watch(
   <common-blog-setting :api-type="props.apiType" :cfg="confluenceCfg" @onHomeChange="onHomeChange">
     <template #main="main">
       <el-form-item :label="t('setting.confluence.parentPageId.label')">
-        <el-select
-          v-model="(main.cfg as ConfluenceConfig).parentPageId"
-          :placeholder="parentPageIdPlaceholder"
-          clearable
-          filterable
-          :loading="parentPageLoading"
-          @focus="loadParentPages"
-          @change="(value: string) => ((main.cfg as ConfluenceConfig).parentPageId = value)"
-        >
-          <el-option v-for="item in parentPageOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
+        <field-guide field="parentPageId">
+          <el-select
+            v-model="(main.cfg as ConfluenceConfig).parentPageId"
+            :placeholder="parentPageIdPlaceholder"
+            clearable
+            filterable
+            :loading="parentPageLoading"
+            @focus="loadParentPages"
+            @change="(value: string) => ((main.cfg as ConfluenceConfig).parentPageId = value)"
+          >
+            <el-option v-for="item in parentPageOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </field-guide>
       </el-form-item>
     </template>
   </common-blog-setting>

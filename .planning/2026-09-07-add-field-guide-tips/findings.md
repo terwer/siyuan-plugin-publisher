@@ -138,3 +138,9 @@
 - `telegraphApiAdaptor.ts`：登录模式缺 uuid/token/hash 直接抛错（`:34-37`）；匿名验证时从 Cookie 取 `tph_uuid` + `/check` 返回 `save_hash`（`:106-115`），`forceReAuth` 控制是否强制重取；发布走 `content.html` 表单（`:168-174`，`md(post.description)` 转换）；`getPreviewUrl`（`:296-306`）在 `isCorsProxy` 且填了代理时给查看链接加 `<代理>/<home>` 前缀。
 - 图床：`picgoPicbedSupported=true`、`bundledPicbedSupported=false`（`useTelegraphApi.ts:58-60`），实测默认 checked 在「不使用」；平台无图片上传接口 → tip 如实写「图片只能外链」。
 - **UI 用词一致性**：单选项目实文案是「匿名发布 / 登录发布」（locale `setting.telegraph.login.*`），我初稿写成「匿名用户 / 登录用户」→ 已按界面用词改回。教训：**tip 里引用界面元素名必须抄宿主实测文本**，不能按代码枚举名或语感推断。
+
+## #5 Confluence 事实（C 组收尾）
+- `ConfluenceSetting.vue` 有一个专有行：**父页面**（`parentPageId`，`confluenceConfig.ts:18/35` 真实属性）→ 已挂 ⓘ；它的选项来自 `getPagesBySpace(blogid)`，`@focus` 时按需拉取，且 `watch(blogid)` 变化时**清空 parentPageId**（`:51-83`）→ tip 写明这两点。
+- `confluenceConfig.ts:23-35` + `useConfluenceApi.ts:53/69-77`：`usernameEnabled=false`（无用户名行）、`passwordType=Token`（键 `password`）、`knowledgeSpaceTitle="空间"`、`allowKnowledgeSpaceChange=true`、`previewUrl=/spaces/[spaceKey]/pages/[postid]` 固定、`pageType=Html`、**`picbedService=Bundled`（默认选「当前平台」）**、picgo+bundled 均支持。
+- 发布格式行有平台专属 CSS：`ConfluenceSetting.vue` 的 `:deep(.el-radio-group .el-radio:first-child){display:none}` 隐藏 Markdown 单选 → 宿主实测 `Markdown.visible=false / HTML.checked=true`，tip 按此写「只提供 HTML 一项」。
+- **「添加账号」落库行为再确认（Common 族）**：Confluence 与语雀一样，点卡片即创建并持久化（32→33）→ 核验后按「删除 → 行内『确认』」删回 32。规矩不变：临时账号用完必须清理并复核账号数。

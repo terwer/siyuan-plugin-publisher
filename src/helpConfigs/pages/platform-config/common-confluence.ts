@@ -20,8 +20,21 @@ export const confluenceHelpConfig: PageHelpConfig = {
       link: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
       linkText: "如何生成 Confluence 个人访问令牌？",
     },
-    parentPageId: { tip: "可选：将页面挂载到指定父页面下；不选择则作为顶层页面发布" },
-    knowledgeSpace: { tip: "选择目标空间（Space），保存前会拉取账号可访问的空间列表" },
+    parentPageId: {
+      tip: "父页面（可选）：下拉列出所选空间下的页面（展开时按需拉取），文章会挂到该页面下；不选则作为空间的顶层页面发布。切换空间会清空此处已选的父页面。",
+    },
+    blogid: {
+      tip: "目标空间（Space）：点「验证」后下拉列出该令牌可访问的空间，文章发布到所选空间下。",
+    },
+    previewUrl: {
+      tip: "预览规则固定为 /spaces/[spaceKey]/pages/[postid]（不可修改），查看链接即所选空间下该页面的地址。",
+    },
+    pageType: {
+      tip: "发布格式：Confluence 需要 XHTML，这里只提供 HTML 一项（Markdown 选项对该平台不可用），保持 HTML 即可。",
+    },
+    picbedService: {
+      tip: "图床服务：默认「当前平台」，图片上传到 Confluence 并作为页面附件挂载，文章内以附件地址引用；也可选「PicGo」（先传外部图床再引用外链）或「不使用」（图片按原有地址引用，需可公网访问）。",
+    },
   },
   faq: [
     {

@@ -208,14 +208,31 @@
 ### 停下等验收
 - 未动 #5 Confluence 及之后平台。
 
+## 会话：2026-09-12（#4 Telegraph 放行 → C 组收尾 #5 Confluence）
+
+### 执行
+- `ConfluenceSetting.vue`：「父页面」`el-select` 包裹式挂 ⓘ（`field="parentPageId"`，真实配置属性），显式 import `FieldGuide`。
+- `common-confluence.ts`：`knowledgeSpace`→`blogid`；补 `previewUrl`/`pageType`/`picbedService`；`parentPageId` tip 写明「选项按所选空间在展开时拉取、切换空间会清空已选父页面」（依据 `:51-83`）；文案依据 `confluenceConfig.ts:23-35`、`useConfluenceApi.ts:53/69-77`。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（test 工作区无 Confluence 账号 → 临时新建）
+- 环境：思源未运行 → 按既定命令重新拉起（内核端口本次 52582），MCP 可用。
+- 走「添加账号 → Confluence 卡片」：标题 Confluence、**8 行 = 8 个 ⓘ**、`rowsWithoutGuide=[]`、`notSameLine=[]`。
+- 两处实测印证文案：发布格式的 **Markdown 单选 `display:none`、HTML 选中**（平台专属 CSS 隐藏）；图床默认 checked = **「当前平台」**。
+- 5 条 tip（`parentPageId`/`blogid`/`picbedService`/`pageType`/`previewUrl`）`added:1`、在面板内完整可见。截图 `tmp/field-guide-confluence-parentpage.png`。
+- **清理**：Common 族的「添加账号」会持久化（32→33）→ 已按「删除 → 行内『确认』」删回 **32**、`confluenceLeft=0`，工作区复原。
+
+### C 组完成 + 停下等验收
+- Common 族 5 站（#1 语雀、#2 Notion、#3 Halo、#4 Telegraph、#5 Confluence）全部回填并逐站过宿主；未动 D 组（Cookie 族 8 站）。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 C 进行中：#1 语雀 ✅、#2 Notion ✅、#3 Halo ✅、#4 Telegraph 已完成待验收 |
-| 我要去哪里？ | 验收后：#5 Confluence（`knowledgeSpace`→`blogid`，保留 `parentPageId`）→ D 组 Cookie 族 8 站（`cookie`→`password`、`knowledgeSpace`→`blogid`，含 `CustomWebSetting.vue`/`CookieSetting.vue` 专有行挂载）→ E 组 3 站 → F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 C（Common 族 5 站）**全部完成**：#1 ✅、#2 ✅、#3 ✅、#4 ✅、#5 Confluence 待验收；连同 GitHub 族 6 站，22 站里已回填 11 站 |
+| 我要去哪里？ | D 组 Cookie 族 8 站（#27 语雀网页版、#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：先查 `CustomWebSetting.vue`/`CookieSetting.vue` 的专有行与 `cookie`→`password`、`knowledgeSpace`→`blogid` 改名 → E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）→ F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | tip 里的界面用词必须抄宿主实测文本（匿名发布≠匿名用户）；条件渲染行（如 `accessToken`）要按两种状态分别数 ⓘ；切了模式/改了值必须切回且不点保存 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph（本轮，待提交） |
+| 我学到了什么？ | 平台专属 CSS 会改渲染事实（Confluence 隐藏 Markdown 单选）→ 文案必须按宿主可见项写；Common 族「添加账号」一律落库，用完必删并复核账号数 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph `9c187b9b` → Confluence（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*
