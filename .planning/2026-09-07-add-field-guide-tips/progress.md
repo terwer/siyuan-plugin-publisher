@@ -297,6 +297,17 @@
 - 本轮纯核对与草稿，无代码改动、无平台站文件改动；`vitest`/`build:v2` 状态与上一轮一致（65 文件 / 309 测试、构建通过）。
 - 工作树干净；#27 仍待人工验收。
 
+## 会话：2026-09-12（第四轮：#27 待验收期间，E 组预分析 + 组件全景清点）
+
+### 做了什么
+1. **组件全景清点**：全量扫 `singleplatform/**/*.vue` 的 `field-guide` 与 `el-form-item` 计数 → 真正挂过指引的只有 4 个组件（`CommonBlogSetting` 26、`CommonGithubSetting` 26、`ConfluenceSetting` 2、`TelegraphSetting` 8）；**唯一未挂却含真实行的组件是 `fs/LocalSystemSetting.vue`（3 行）**；其余各站组件都是直通壳或 slot 壳（0 行）。
+2. **E 组工作清单精确化**（覆盖尺扩到 3 站）：博客园缺 `previewUrl`/`pageType`/`picbedService`；Wordpress 键已齐（只需宿主核验）；本地系统键已齐但 3 行未挂指引 → E 组代码工作量只有本地系统那 3 处（前两行文本指引、YAML 类型单选组用 `inline`）。
+3. **修正计划表述**：`impl/MetaweblogSetting.vue`、`metaweblog/WordpressSetting.vue`、`metaweblog/CnblogsSetting.vue` 都是直通 `<common-blog-setting>` 的壳 → 「挂 impl/MetaweblogSetting.vue」不存在，已从 task_plan 删除该表述。
+
+### 质量
+- 本轮仍为只读分析（临时脚本跑完即从 `src/` 移除），未改任何组件、未开平台站；`vitest`/`build:v2` 状态与上一轮一致。
+- #27 仍待人工验收；#28 未开工。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|

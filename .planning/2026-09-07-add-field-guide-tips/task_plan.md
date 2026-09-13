@@ -87,8 +87,12 @@
   推导依据：各平台 `useXxxWeb.ts` 的运行时开关（`knowledgeSpaceEnabled`：知乎/简书/掘金/哔哩哔哩为 true，CSDN/公众号/Halo网页版为 false）+ `CommonBlogSetting` 行渲染条件。脚本 `tmp/field-guide-family-coverage.diag.spec.ts`。
 
 ### 步骤 E：MetaWeblog / Wordpress / 本地系统 3 站（每站一停）
-- [ ] 挂 `impl/MetaweblogSetting.vue`、`fs/LocalSystemSetting.vue`；补齐 cnblogs 仅 4 键的缺口；逐站宿主复核 + 等验收。
-- **状态：** pending
+- [ ] 逐站宿主复核 + 等验收。**2026-09-12 覆盖尺预推结果（各站仍需宿主确认）：**
+  - **组件挂载：只有 `fs/LocalSystemSetting.vue` 需要改**——它的 `#main` 有 3 行且都没有 `field-guide`：存储路径 `storePath`（文本）、媒体存储路径 `imageStorePath`（文本）、YAML 类型 `fsYamlType`（单选组，用 `inline`）。`impl/MetaweblogSetting.vue` 与 `metaweblog/WordpressSetting.vue`/`CnblogsSetting.vue` **都是直通壳**（`<common-blog-setting>`），行与指引全部来自已改造的共用表单 → **无需再挂**（原计划里「挂 `impl/MetaweblogSetting.vue`」这项可以删掉）。
+  - **#21 博客园**：`fields` 现 4 键，缺 `previewUrl`、`pageType`、`picbedService`（`knowledgeSpaceEnabled=false`、鉴权为 Token 型 → 键名仍是 `password`）。
+  - **#25 Wordpress**：`fields` 现 7 键，**已齐**（`missing=[]`），E 组只做宿主核验。
+  - **#29 本地系统**：`fields` 现 5 键（`storePath`/`imageStorePath`/`fsYamlType`/`pageType`/`picbedService`）**已齐**、`passwordType=None`（无鉴权行，不需要 `password` 键）；缺的是那 3 行的**指引挂载**（见上）。
+- **状态：** pending（预分析完成，未开工）
 
 ### 步骤 F：回归尺与标准固化
 - [ ] F.1 新增两把尺：① 每站 `fields` 键必须能在合并后配置实例上取到同名属性；② 按族 `REQUIRED_FIELD_KEYS` 全覆盖。

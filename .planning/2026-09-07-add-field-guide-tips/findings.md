@@ -183,3 +183,12 @@
 ### 用户可见文案合规核对（第三轮，SOP §3 第 4 项）
 - 对 22 个 help 配置文件与 22 个文档草稿扫描禁用词（已验证／V2／插件版本／逆向／实测／观测／抓包／探测／探针／复现／对照／批次）→ **零命中**；命中的「验证通过」全部是平台契约表述（指插件「验证」按钮通过后下拉出目录、测试文件清理等），不是验证进度叙述，属允许内容。仅有的 `v2` 出现在「语雀 v2 API 地址」这一平台事实里。
 - `fields[].link` 目标分两类：真实平台页（`github.com/settings/tokens`、`notion.so/my-integrations`、`yuque.com/settings/tokens`）与该平台/共享文档链接。**共享占位链接与文档草稿顶部的 `TODO：待替换真实帮助文档链接` 是同一批**：将来用户给出真实链接时，`helpUrl` 与 `fields[].link` 里的占位链接要一起替换（已并入 F 阶段待办口径，避免只换一处留下死链）。
+
+## 第四轮追加（2026-09-12）：E 组预分析（精确工作清单）
+- 覆盖尺扩到 E 组 3 站，结果（`tmp/field-guide-family-coverage.diag.spec.ts` 已含这三条）：
+  · `metaweblog_Cnblogs` expected=7 actual=4 → **缺 `previewUrl`、`pageType`、`picbedService`**；`knowledgeSpaceEnabled=false`，鉴权为 Token 型（键仍为 `password`）。
+  · `wordpress_Wordpress` expected=7 actual=7 → **已齐**，E 组仅需宿主核验。
+  · `fs_LocalSystem` expected=5 actual=5 → 键已齐（`storePath`/`imageStorePath`/`fsYamlType`/`pageType`/`picbedService`），`passwordType=None` 故无鉴权行、不需要 `password` 键。
+- **组件层唯一缺口在 `fs/LocalSystemSetting.vue`**：它的 `#main` 三行（存储路径 `storePath`、媒体存储路径 `imageStorePath`、YAML 类型 `fsYamlType` 单选组）都还没挂 `field-guide` → 键在、但页面上不会有 ⓘ。修法：前两行包裹式文本指引，第三行用 `inline`。
+- **原计划表述需修正**：`base/impl/MetaweblogSetting.vue`、`metaweblog/WordpressSetting.vue`、`metaweblog/CnblogsSetting.vue` 都是**直通壳**（渲染 `<common-blog-setting>`），行与指引全部继承已改造的共用表单 → 「挂 impl/MetaweblogSetting.vue」这一项不存在，E 组的代码工作量只有本地系统那 3 处。
+- 组件清点（`field-guide` 计数）：已挂 `base/CommonBlogSetting.vue`(26)、`base/impl/CommonGithubSetting.vue`(26)、`commonblog/ConfluenceSetting.vue`(2)、`commonblog/TelegraphSetting.vue`(8)；**未挂但含真实行**的仅 `fs/LocalSystemSetting.vue`(3 行)；其余各站组件均为直通壳或 slot 壳（0 行）。
