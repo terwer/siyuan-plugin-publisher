@@ -411,6 +411,17 @@
 - 宿主只做只读导航（账号列表 ↔ 配置页、开合鉴权面板），无账号增删、无配置保存；账号数 32 不变。
 - 脚本在 gitignored `tmp/`；#27 仍待人工验收；#28 未开工（仅预制）。
 
+## 会话：2026-09-12（第十四轮：收口复核——build:v2 发现并修掉 tmp 草稿的类型错误）
+
+### 做了什么
+1. **`pnpm build:v2` 一度为红**：`tmp/field-guide-rulers.spec.ts`（F 阶段 drop-in 草稿）里 `ConfigClass` 写成 `new (...args: any[]) => Record<string, unknown>`，而配置类实例没有索引签名 → **TS2419**。教训：**`tmp/*.spec.ts` 也在 `vue-tsc` 的检查范围内**，草稿不能只顾 vitest 能跑。
+2. 修法：`ConfigClass` 放宽为 `new (...args: any[]) => any`，调用处按诊断脚本的写法做一次 `as new (...args: any[]) => Record<string, any>` 断言 → `vue-tsc --noEmit` 无输出、`pnpm build:v2` **exit 0（✓ built）**；草稿四条尺行为不变（尺子①按预期对 7 个待办站报红，②③④全绿）。
+3. **收口复核（当前构建、当前工作树）**：全量 `pnpm vitest run` 通过；`openspec validate add-field-guide-tips --strict` → valid；宿主两把尺在语雀网页版页 `exit 0`；`git status` 干净。
+
+### 状态
+- #27 仍待人工验收；**自动续航轮次已用满**，后续必须由用户放行才能推进 #28–#35、E 组 3 站与 F 收尾。
+- 交接材料齐备：`tmp/station-28-haloweb-patch.md`（#28 预制补丁 + 改前基线 + 验收口径）、`tmp/field-guide-rulers.spec.ts`（F 两把尺 drop-in）、`tmp/sop-section3-field-guide-draft.md`（SOP §3 文本 + checklist 回写片段 + 占位链接清单 + 锚点断言改写片段）、`tmp/host-field-guide-check.ps1` / `tmp/host-help-gate-check.ps1`（宿主两把尺）。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|

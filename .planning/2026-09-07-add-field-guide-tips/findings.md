@@ -262,3 +262,8 @@
 - **#28 改前基线（宿主实测）**：`字段行 6 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项精确指出 **`平台Cookie` 与 `预览规则` 两行无指引**，并标注为「已挂载但未渲染指引」——即配置里的 `cookie` 不是配置属性、且缺 `previewUrl` 键，**在宿主里当场复现**，不再只是静态推断。
 - **修复后回归**：语雀网页版两把宿主尺仍 `exit 0`（字段指引 6 项全过、帮助引导全过），账号数仍 32 ✓ —— 说明改动没有把好页判坏。
 - **#28 预制件已就绪**：`tmp/station-28-haloweb-patch.md` —— 含精确 diff（删 `cookie`、补 `password`+`previewUrl`，键序对齐渲染行序）、**每条文案的源码依据**（`HalowebConfig:23/25/32`、`useHalowebWeb:61/90/93`、合并实例开关）、改后应见状态（6 行 = 6 ⓘ、无 `emptyWrappers`）、执行与取证命令；并标注一处待宿主确认项（发布格式单选项是否有隐藏项，Confluence 曾遇到）。
+
+## 第十四轮：收口复核（build:v2 红→绿；轮次用满，交接就绪）（2026-09-12）
+- **`pnpm build:v2` 曾因 `tmp/field-guide-rulers.spec.ts` 报 TS2419 而失败**：`RulerEntry.ConfigClass` 声明为 `new (...args: any[]) => Record<string, unknown>`，而各配置类实例没有字符串索引签名。**规则补充：`tmp/*.spec.ts` 也在 `vue-tsc --noEmit` 的检查范围内**（`build:v2` 会一起查），草稿必须同时满足「vitest 能跑」与「类型能过」。修法：类型放宽为 `new (...args: any[]) => any` + 调用处一次 `as new (...args: any[]) => Record<string, any>` 断言 → `vue-tsc` 干净、`build:v2` exit 0；草稿四条尺行为不变（① 对 7 个待办站按预期报红，②③④ 全绿）。
+- **当前工作树收口复核**：`pnpm build:v2` exit 0（✓ built）；`pnpm vitest run` **65 文件 / 309 测试全通过**；`openspec validate add-field-guide-tips --strict` → valid；宿主语雀网页版页两把尺均 exit 0；`git status` 干净。
+- **自动续航轮次已用满（14/14）**：后续推进必须由用户放行 #27 才能继续；本轮把交接件全部核到位（#28 预制补丁、F 两把尺 drop-in、SOP §3 文本与 checklist 回写片段、宿主两把尺）。
