@@ -364,6 +364,18 @@
 - 本轮纯只读审计 + 文档草稿补充，无代码改动；工作树干净。
 - #27 仍待人工验收；#28 未开工。
 
+## 会话：2026-09-12（第十轮：F.3 前置核验——V1/locale 零改动取证 + V1 打包复核）
+
+### 做了什么
+1. **变更面取证**：本 change 全部提交的 diff（`c88f930b^..HEAD`，排除 planning/openspec/docs/tmp）**恰好 21 个文件**，全部落在 V2 帮助/字段指引层（FieldGuide、helpPageIdKey、4 个设置组件、V2PlatformConfigBridge、14 个 help 配置、registry.spec）。
+2. **locales 零改动**：`-- src/i18n src/locales "*.json"` → 空；**V1 零改动**：V1 旧表单 `base/CookieSetting.vue` 与 V1 入口 `Admin.vue` 均不在变更清单 → F.3 的「locales 共享串不动，V1 文案零变化」由口头承诺变为 git 可核验证据。
+3. **V1 打包链路复核**：`python scripts/build.py`（= `pnpm build`）exit 0，产出 `siyuan-plugin-publisher-1.41.1.zip` → 共用组件挂指引后 V1 构建未受影响；`build/` 已在 `.gitignore:34`，工作树保持干净。
+4. **任务 1.1「唯一拼接点」核验**：`V2PlatformConfigBridge.vue:117` 是唯一 `platform-config/${platformKey}` 构造点，第 118 行 `provide` 一次下发，`HelpButton` 与字段指引共用同一值 ✓。
+
+### 质量
+- 本轮为只读取证 + 一次 V1 构建，无源码改动；工作树干净。
+- #27 仍待人工验收；#28 未开工。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|

@@ -103,6 +103,7 @@
   - **2026-09-12 核实：已是完成态**——全仓无任何按 `token` 键取字段说明的 spec 用例（Yuque 那条已用 `password`）；残留的 `token` 只在 tour 锚点 `[data-syp-tour='token']` 与 Telegraph 真实属性 `accessToken`，均须保留。
   - **新发现需在 F 一并处理**：`tourAnchors.spec.ts` 的「Token 平台必须用 token 锚点」用例把平台硬编码为 6 个 GitHub 站 → 同为 Token 型的 **#21 博客园漏检**，其 tour 仍指向 `password`（死步骤）。修法：改为按 `passwordType` 数据驱动覆盖 `verifiedConfigs` 全部 22 站（尺子④原型已做变异验证）。
 - [ ] F.3 V2 表单 placeholder 收敛为示例值（每次改动内保证对应 `fields` 已有说明，不留空窗）；locales 共享串不动，V1 文案零变化。
+  - **「V1 文案零变化 / locales 不动」已取证（2026-09-12）**：本 change 全部提交的 diff 恰好 21 个文件且全在 V2 帮助层；`src/i18n`/`*.json` 零改动；V1 旧表单 `base/CookieSetting.vue` 与 V1 入口 `Admin.vue` 均不在变更清单；`python scripts/build.py`（V1 打包）仍成功产出 zip。
 - [ ] F.4 SOP §3 增补「字段指引必须渲染并可核验」为与五格同等必过项 + 键命名空间规则。
   - **草稿已备**：`tmp/sop-section3-field-guide-draft.md`（含 §3 新增第 5 项、§五 回写补充、checklist 一行格式），全部平台验收通过后再写入 SOP。
 - [ ] F.5 checklist 为 22 站回写该点通过记录（不改六格结论）；勾选 change `tasks.md`；`openspec validate --strict`。

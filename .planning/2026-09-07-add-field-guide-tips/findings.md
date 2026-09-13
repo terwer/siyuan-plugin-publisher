@@ -230,3 +230,11 @@
 - **10 个待办站（7 个 Cookie + 博客园/Wordpress/本地系统）文案预审**：`summary` 与 tour 标题**均无验证进度叙述**（无「已验证/V2/批次/插件版本」等），与 22 站既有口径一致 ✓。
 - **10 个待办站的 tour 步骤与真实渲染锚点逐一比对**：除已知的博客园 `password` 死步骤外，其余全部命中——Halo网页版 `[站点首页/API 地址/Cookie 授权/图片发布/验证并保存]`、知乎/简书/掘金 `[…/专栏或笔记本或分类选择/…]`、CSDN/公众号 `[Cookie 授权/内容格式或发布格式/图片发布/验证并保存]`、哔哩哔哩（含「文集」）、Wordpress `[站点首页/XML-RPC 地址/登录用户名/应用程序密码/预览地址/验证配置]`、本地系统 `[文章输出目录/媒体目录/YAML 类型/图片处理/验证并保存]` → 与各站可渲染锚点集合完全对应 ✓ 即各站开工只需改 `fields` 键与文案，不必动 tour 结构。
 - **占位帮助链接清单（F 阶段 handoff 用）**：22 个配置里 **15 个仍是共享/占位链接**——9 个用 T1 通用占位 `…bc3gjg0`（Confluence、Notion、B站、CSDN、简书、掘金、公众号、知乎、本地系统），6 个用 Halo/通用文档 `…btcnnmj`（Halo、语雀、Halo网页版、语雀网页版、博客园、Wordpress）；**7 个已有平台专属文档**（Hexo、Hugo、Jekyll、Quartz、Vuepress、Vuepress2、Telegraph）。文档草稿顶部均已标 `TODO：待替换真实帮助文档链接` ✓ 与 SOP §3 一致；替换时 `helpUrl` 与 `fields[].link` 里的占位链接要一起换。
+
+## 第十轮：F.3 前置核验（V1/locale 零改动证据）+ 单一 pageId 拼接核验（2026-09-12）
+- **变更面收敛证明**：`git diff --stat c88f930b^..HEAD`（本 change 的全部提交，排除 planning/openspec/docs/tmp）**恰好 21 个文件**，全部落在 V2 帮助/字段指引层：
+  `components/common/help/FieldGuide.vue`、`components/common/help/helpPageIdKey.ts`（新增）、`base/CommonBlogSetting.vue`、`base/impl/CommonGithubSetting.vue`、`commonblog/ConfluenceSetting.vue`、`commonblog/TelegraphSetting.vue`、`v2/settings/V2PlatformConfigBridge.vue`、14 个 `helpConfigs/pages/platform-config/*.ts`、`registry.spec.ts`。
+- **locales 零改动**：`git diff --name-only … -- src/i18n src/locales "*.json"` → **空**。即「locales 共享串不动」有 git 证据。
+- **V1 零改动**：V1 旧表单 `base/CookieSetting.vue`、V1 入口 `Admin.vue` → **不在变更清单内**（清单仅 21 个文件，已全列）→「V1 文案零变化」有 git 证据。
+- **V1 打包链路仍通过**：`python scripts/build.py`（= `pnpm build`）成功产出 `siyuan-plugin-publisher-1.41.1.zip`（exit 0）→ 共用组件挂载字段指引后 V1 构建/打包未受影响（`build/` 已在 `.gitignore:34`，工作树保持干净）。
+- **任务 1.1「不得出现第二处拼接」核验通过**：`V2PlatformConfigBridge.vue:117` 是唯一的 `platform-config/${platformKey}` 构造点，第 118 行 `provide(SYP_HELP_PAGE_ID_KEY, helpPageId)` 一次下发，`HelpButton`（第 8 行 `:page-id="helpPageId"`）与字段指引共用同一值；`registry.ts:64` 的 `platformConfigPrefix` 属解析侧常量、spec 里的字面量属测试数据，均非第二套拼接标准。
