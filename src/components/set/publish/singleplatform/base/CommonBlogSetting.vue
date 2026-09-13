@@ -446,34 +446,37 @@ onMounted(async () => {
       class="cookie-form-item"
       data-syp-tour="cookie"
     >
-      <slot
-        v-if="$slots['cookie-actions']"
-        name="cookie-actions"
-        :cfg="formData.cfg"
-        :dyn-cfg="formData.dynCfg"
-        :setting="formData.setting"
-        :dynamic-config-array="formData.dynamicConfigArray"
-        :is-manual-expanded="isCookieManuallyExpanded"
-        :toggle-manual-editor="toggleCookieManualEditor"
-        :expand-manual-editor="toggleCookieManualEditor"
-      />
-      <template v-if="isCookieManuallyExpanded || !$slots['cookie-actions']">
-        <field-guide field="password" tall>
-          <el-input
-            v-model="formData.cfg.password"
-            class="cookie-textarea"
-            :placeholder="t('setting.blog.cookie.placeholder')"
-            type="textarea"
-            :rows="10"
+      <!-- 鉴权行只有一条指引：自动授权面板与手动文本框共用 password 的同一份说明，不各挂一个 ⓘ -->
+      <field-guide field="password" tall>
+        <div class="cookie-form-item__body">
+          <slot
+            v-if="$slots['cookie-actions']"
+            name="cookie-actions"
+            :cfg="formData.cfg"
+            :dyn-cfg="formData.dynCfg"
+            :setting="formData.setting"
+            :dynamic-config-array="formData.dynamicConfigArray"
+            :is-manual-expanded="isCookieManuallyExpanded"
+            :toggle-manual-editor="toggleCookieManualEditor"
+            :expand-manual-editor="toggleCookieManualEditor"
           />
-        </field-guide>
-        <el-alert
-          :closable="false"
-          :title="t('setting.blog.cookie.editable.tip')"
-          class="inline-tip cookie-editable-tip"
-          type="warning"
-        />
-      </template>
+          <template v-if="isCookieManuallyExpanded || !$slots['cookie-actions']">
+            <el-input
+              v-model="formData.cfg.password"
+              class="cookie-textarea"
+              :placeholder="t('setting.blog.cookie.placeholder')"
+              type="textarea"
+              :rows="10"
+            />
+            <el-alert
+              :closable="false"
+              :title="t('setting.blog.cookie.editable.tip')"
+              class="inline-tip cookie-editable-tip"
+              type="warning"
+            />
+          </template>
+        </div>
+      </field-guide>
     </el-form-item>
     <slot name="main" :cfg="formData.cfg" />
     <!-- 预览地址 -->
@@ -636,6 +639,14 @@ onMounted(async () => {
 .inline-tip
   margin 0
   padding-left 0
+
+// 鉴权行内容（授权面板 + 手动文本框）纵向堆叠，指引图标贴第一行
+.cookie-form-item__body
+  display flex
+  flex-direction column
+  gap 6px
+  width 100%
+  min-width 0
 
 .legacy-setting-form
   :deep(.el-form-item)

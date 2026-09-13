@@ -144,3 +144,12 @@
 - `confluenceConfig.ts:23-35` + `useConfluenceApi.ts:53/69-77`：`usernameEnabled=false`（无用户名行）、`passwordType=Token`（键 `password`）、`knowledgeSpaceTitle="空间"`、`allowKnowledgeSpaceChange=true`、`previewUrl=/spaces/[spaceKey]/pages/[postid]` 固定、`pageType=Html`、**`picbedService=Bundled`（默认选「当前平台」）**、picgo+bundled 均支持。
 - 发布格式行有平台专属 CSS：`ConfluenceSetting.vue` 的 `:deep(.el-radio-group .el-radio:first-child){display:none}` 隐藏 Markdown 单选 → 宿主实测 `Markdown.visible=false / HTML.checked=true`，tip 按此写「只提供 HTML 一项」。
 - **「添加账号」落库行为再确认（Common 族）**：Confluence 与语雀一样，点卡片即创建并持久化（32→33）→ 核验后按「删除 → 行内『确认』」删回 32。规矩不变：临时账号用完必须清理并复核账号数。
+
+## #27 语雀网页版事实（D 组 Cookie 族首站，挂载口径在此定稿）
+- **网页族无专有行**：`YuquewebSetting.vue` 只有 `#header` 授权提示 + 透传插槽；全仓 9 个 `web/*Setting.vue` 逐个查 `#main`/`#footer` 均为 False。`CustomWebSetting.vue` 也只是 `CommonBlogSetting` 的透传壳 → **D 组工作量在共用层与各站 `fields` 键，不在逐站挂专有行**。
+- **鉴权行「一条指引服务两个控件」**：V2 下该行渲染 `V2WebCookieAuthPanel`（去登录 / 自动读取 Cookie / 退出），手动文本框默认折叠。原实现把 `field-guide` 只包文本框 → 折叠态该行**没有 ⓘ**。定稿改法：`<field-guide field="password" tall>` 包住整行内容（新增 `.cookie-form-item__body` 容器：插槽面板 + 折叠文本框 + 提示），展开/收起 ⓘ 恒为 1。**这是 Cookie 族 8 站共用的挂载口径**，后续 7 站不再重新讨论。
+- `YuquewebConfig.ts` + `useYuquewebWeb.ts:75-90`：`usernameEnabled=false`（无用户名行）、`passwordType=Cookie`（行标签由 `passwordLabel="Cookie"` 给定）、`knowledgeSpaceEnabled=true` 且标题「知识库」（键 `blogid`）、`picgoPicbedSupported=false` + `bundledPicbedSupported=true`、`picbedService=Bundled`、`allowPreviewUrlChange=true`；`home`/`apiUrl` 被 hook 固定为 `https://www.yuque.com`（用户改动会被覆盖）→ tip 写「固定、通常无需修改」；`cateSearchEnabled` 未设 → **无「搜索关键词」行** → 该平台渲染 **7 行**。
+- `buildDocPayload`（`YuquewebWebAdaptor.ts:524-540`）写死 `format:"markdown"`、`body=post.markdown` → 发布格式 tip 写「按 Markdown 提交正文，保持默认」；`getPreviewUrl`（`:245-256`）按 `previewUrl` 模板替换 `{login}/{bookSlug}/{slug}` → tip 列出三个占位符。
+- 宿主渲染事实：发布格式两项都可见（该平台无隐藏 CSS，区别于 Confluence）、Markdown checked；图床 `["不使用","当前平台 推荐"]`、checked=「当前平台」、无 PicGo 项 —— 与 tip 完全一致。
+- 宿主路径（本族复用）：顶栏「发布工具」→ 设置 → 账号列表 → 目标账号行「管理」；**本站未用「添加账号」**，账号数 32→32，无落库清理动作。
+- HelpPanel/TourGuide 判定口径：HelpPanel 元素是 `.syp-help-panel-popover`（Teleport 到 `.syp-v2`，**不在 `.syp-panel` 内**），查询不要用 `.syp-help-panel`；TourGuide 判「命中」看 `.syp-tour-overlay__highlight` 的 `display !== none` 且尺寸非 0，并注意 `--missing` 兜底弹层不出现。

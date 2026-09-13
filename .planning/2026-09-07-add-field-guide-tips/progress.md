@@ -225,14 +225,47 @@
 ### C 组完成 + 停下等验收
 - Common 族 5 站（#1 语雀、#2 Notion、#3 Halo、#4 Telegraph、#5 Confluence）全部回填并逐站过宿主；未动 D 组（Cookie 族 8 站）。
 
+## 会话：2026-09-12（#5 Confluence 放行 → D 组第 1 站 #27 语雀网页版）
+
+### 查实（先读代码再动笔）
+- `YuquewebSetting.vue`：只有 `#header` 的授权提示 alert + 透传 `cookie-actions`/`main`/`footer` 插槽 → **无平台专有行**，零新挂。
+- `CustomWebSetting.vue`：只是 `CommonBlogSetting` 的透传壳 → Cookie 族的行全部来自共用表单。
+- 全仓 `web/*Setting.vue` 逐个查 `#main`/`#footer`：**9 个网页平台全部为 False** → D 组只需共用层 + 各站 `fields` 键校正（不用逐站挂专有行）。
+- `YuquewebConfig.ts` / `useYuquewebWeb.ts:75-90`：`usernameEnabled=false`、`passwordType=Cookie`、`passwordLabel="Cookie"`、`knowledgeSpaceEnabled=true`（标题「知识库」）、`picgoPicbedSupported=false` + `bundledPicbedSupported=true`、`picbedService=Bundled`；`home`/`apiUrl` 由 hook 固定为 `https://www.yuque.com`；`cateSearchEnabled` 未设 → 无「搜索关键词」行 → 预期 **7 行**。
+- `buildDocPayload`：`format:"markdown"` + `body = post.markdown` → 发布格式 tip 写「按 Markdown 提交」；`getPreviewUrl` 用 `previewUrl` 模板替换 `{login}/{bookSlug}/{slug}`。
+
+### 共用层改动（Cookie 族的挂载口径，本站在此定稿）
+- **问题**：V2 下鉴权行渲染的是 `V2WebCookieAuthPanel`（去登录/自动读取），手动文本框默认折叠；原 `field-guide` 只包文本框 → **折叠态该行没有 ⓘ**，违反「每行真实渲染的行都要有指引」。
+- **改法**：`CommonBlogSetting.vue` 鉴权行改为**整行一条指引**——`<field-guide field="password" tall>` 包住新增的 `.cookie-form-item__body`（内部再放授权面板插槽 + 折叠的手动文本框 + 提示），并加 `.cookie-form-item__body` 纵向堆叠样式。
+- **不变量**：展开/收起手动编辑时该行 ⓘ **恒为 1**（不出现两个）；V1 的 `CookieSetting.vue` 未动（V1 文案与结构零变化）。
+
+### 本次改动
+- `custom-yuqueweb.ts`：`cookie`→`password`、`knowledgeSpace`→`blogid`，补 `home`/`apiUrl`/`pageType`，共 **7 键 = 宿主 7 行**；summary/faq/tour 按最终流程与新文案校准（tour 4 步锚点不变）。
+- `docs/draft/platforms/custom-yuqueweb.md`：字段表按真实渲染的 7 行重写，验证流程写明「关闭登录窗口保存登录态」这一步。
+- 质量：`pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过。
+
+### 宿主复核（真实账号 `custom_Yuqueweb`，test 工作空间 / dist-v2 / 9222）
+- 环境：思源未运行 → 自行以 `--workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222` 拉起（本次内核端口 **58925**）。
+- 路径：顶栏「发布工具」→ 设置 → 账号列表 → `custom_Yuqueweb` 行「管理」（**未用「添加账号」**，避免落库）。
+- 结果：标题 语雀网页版、**7 行 = 7 个 ⓘ**、`rowsWithoutGuide=[]`；字段键与行一一对应 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`（Cookie 行标签「Cookie」、知识库行标签「知识库」）。
+- 鉴权行几何：图标 14×14 落在行首行右侧（`body.top+7`）、颜色 `rgb(168,171,178)`；展开手动编辑后 ⓘ 仍为 1（文本框已带 1092 字符 Cookie，未外传）。
+- 7 条 tip 逐条 hover：文案正确、均在 `.syp-panel` 内（`panel.contains(popper)=true`）、在视口内完整可见无裁切（最长的 `password` 弹层 284×84）。
+- 渲染事实核对：发布格式 Markdown `checked=true` 且两项都可见（无平台专属隐藏）；图床 `["不使用","当前平台 推荐"]` 且 checked=「当前平台」（与 tip 一致，无 PicGo 项）。
+- HelpPanel：标题 语雀网页版 + 新 summary + 「查看完整帮助文档」+ 常见问题 3 条（与 `faq` 一致）+ 「开始引导教程」，**无「暂无专属帮助文档」回退**。
+- TourGuide：**4/4 步全部命中真实控件**（Cookie 授权→选择知识库→图片发布→验证并保存），高亮框为真实尺寸（95/48/48/74 px）、弹层均在视口内。
+- 账号数核验：**32 → 32**，`custom_Yuqueweb` 仍「运行中/已启用」，未创建临时账号、未点保存/验证。截图 `tmp/field-guide-yuqueweb-cookie.png`。
+
+### 停下等验收
+- 未动 #28 Halo网页版 及之后 7 站。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 C（Common 族 5 站）**全部完成**：#1 ✅、#2 ✅、#3 ✅、#4 ✅、#5 Confluence 待验收；连同 GitHub 族 6 站，22 站里已回填 11 站 |
-| 我要去哪里？ | D 组 Cookie 族 8 站（#27 语雀网页版、#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：先查 `CustomWebSetting.vue`/`CookieSetting.vue` 的专有行与 `cookie`→`password`、`knowledgeSpace`→`blogid` 改名 → E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）→ F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 D（Cookie 族 8 站）第 1 站 **#27 语雀网页版已回填并过宿主，待验收**；连同 GitHub 6 + Common 5，22 站里已回填 12 站 |
+| 我要去哪里？ | D 组余 7 站（#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：直接照 #27 口径校正 `cookie`→`password`、`knowledgeSpace`→`blogid` 与缺项 → E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）→ F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | 平台专属 CSS 会改渲染事实（Confluence 隐藏 Markdown 单选）→ 文案必须按宿主可见项写；Common 族「添加账号」一律落库，用完必删并复核账号数 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph `9c187b9b` → Confluence（本轮，待提交） |
+| 我学到了什么？ | ① Cookie 族的鉴权行是「一条指引服务两个控件」（授权面板 + 手动文本框），必须包整行否则折叠态无 ⓘ；② 网页族 9 个 `*Setting.vue` 都没有专有行，D 组工作量在共用层与 `fields` 键；③ 平台专属 CSS 会改渲染事实（Confluence 隐藏 Markdown 单选）→ 文案必须按宿主可见项写 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph `9c187b9b` → Confluence `7a554a60` → 语雀网页版（本轮，待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*

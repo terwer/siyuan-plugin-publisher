@@ -9,8 +9,9 @@
 3. 不做一次性大批量；每个增量小、可验证、可回退。
 
 ## 当前步骤
-步骤 B（GitHub 族 6 站）**全部回填完成**：#6 Hexo ✅、#7 Hugo ✅、#8 Jekyll ✅、#9 Quartz ✅、#10 Vuepress 待验收、#11 Vuepress2 ✅（试点）。
-DSH Web 已按用户指示重启过一次，chrome-devtools MCP 恢复正常；下一批是 C 组 Common 族（清单见「下一站开工清单」）。
+- 步骤 A/B（GitHub 族 6 站）完成并逐站放行；步骤 C（Common 族 5 站：#1 语雀、#2 Notion、#3 Halo、#4 Telegraph、#5 Confluence）完成并逐站放行。
+- 步骤 D（Cookie 族 8 站）第 1 站 **#27 语雀网页版已回填 + 宿主复核完成，待验收**（2026-09-12，commit 待提交）。
+- 22 站里已回填 **12 站**（GitHub 6 + Common 5 + Cookie 1）。
 
 ## 重启后第一步（会话恢复时照此执行）
 1. `update_goal` 先 `get_goal` 再 `resume`（重启后目标会被解除武装，当前 rev 9、phase paused）。
@@ -33,7 +34,7 @@ DSH Web 已按用户指示重启过一次，chrome-devtools MCP 恢复正常；�
 | C | #3 Halo | **无需新挂**（`HaloSetting.vue` 只有 2.9 提示 alert + 共用表单） | 现有 7 键与渲染行**完全对应，零改名零补键**；只补准：`picbedService` 三项与默认「不使用」（实测 checked=不使用）、`password` 链接给明确 `linkText`、summary 不再暗示默认走内置图床；文档草稿图床行同步 | 标题 Halo29、7 行 = 7 个 ⓘ、`notSameLine=[]`、`rowsWithoutGuide=[]`；改后 tip 与 HelpPanel summary 均实测为新文案、无「暂无专属帮助文档」回退；账号数不变（32）；截图 `tmp/field-guide-halo-picbed.png` | ✅ 放行（用户回复「继续」） |
 | C | #4 Telegraph | **首次挂专有行**：`TelegraphSetting.vue` 4 行全部包裹式挂载（登录模式 `inline`、Access Token、Hash、刷新授权 `inline`） | 补 6 键：`postType`/`accessToken`/`forceReAuth`/`previewUrl`/`pageType`/`picbedService`（`saveHash`/`corsAnywhereUrl` 原已有）；文案含切模式清空、代理前缀、平台无图片上传接口 | 匿名 **11 行 = 11 个 ⓘ**、切「登录发布」变 **12 行 = 12 个**（`accessToken` 随行出现），`notSameLine=[]`；5 条新 tip 实测命中；图床实测 checked=不使用；账号数不变（32）、模式已切回匿名且未保存；截图 `tmp/field-guide-telegraph-posttype.png` | ✅ 放行（用户「开始」） |
 | C | #5 Confluence | **挂专有行**：`ConfluenceSetting.vue` 的「父页面」`el-select` 包裹式挂 ⓘ | `knowledgeSpace`→`blogid`；补 `previewUrl`/`pageType`/`picbedService`；`parentPageId` tip 写明「按所选空间按需拉取、切换空间会清空」；文档草稿相关行同步 | test 工作区**无 Confluence 账号** → 走「添加账号 → Confluence 卡片」核验：标题 Confluence、**8 行 = 8 个 ⓘ**、`rowsWithoutGuide=[]`、`notSameLine=[]`；实测「发布格式」Markdown 单选 `display:none`、HTML 选中（与 tip 一致）、图床默认 checked=「当前平台」（与 tip 一致）；5 条 tip `added:1` 均命中且在面板内完整可见；**核验后删除该临时账号**（33→32 复原）；截图 `tmp/field-guide-confluence-parentpage.png` | ⬜ 待验收 |
-| D | #27 语雀网页版 | CustomWebSetting / CookieSetting | `cookie`→`password`、`knowledgeSpace`→`blogid`、补 `home`/`apiUrl` | | ⬜ |
+| D | #27 语雀网页版 | **共用层补挂**：`CommonBlogSetting.vue` 鉴权行改为「整行一条指引」（`field="password"` 包住授权面板 + 手动文本框）；`YuquewebSetting.vue` 查实无专有行 → 零新挂 | `cookie`→`password`、`knowledgeSpace`→`blogid`，补 `home`/`apiUrl`/`pageType`（共 7 键） | 真实账号 `custom_Yuqueweb`：7 行 = 7 个 ⓘ、`rowsWithoutGuide=[]`；鉴权行展开/收起 ⓘ 恒为 1（无重复）；7 条 tip `added` 均命中且弹层在 `.syp-panel` 内完整可见；HelpPanel（新 summary + 完整文档 + FAQ3）+ TourGuide 4/4 命中真实控件；账号数 32→32（未误建）；截图 `tmp/field-guide-yuqueweb-cookie.png` | ⬜ 待验收 |
 | D | #28 Halo网页版 | 同上 | `cookie`→`password` | | ⬜ |
 | D | #30 知乎 | 同上 | `cookie`→`password`、`knowledgeSpace`→`blogid` | | ⬜ |
 | D | #31 CSDN | 同上 | `cookie`→`password` | | ⬜ |
@@ -64,12 +65,13 @@ DSH Web 已按用户指示重启过一次，chrome-devtools MCP 恢复正常；�
 - **状态：** pending
 
 ### 步骤 C：Common 族 5 站（每站一停）
-- [ ] 挂 `commonblog/*Setting.vue` 专有行；执行 `token`→`password`、`knowledgeSpace`→`blogid` 改名；逐站宿主复核 + 等验收。
-- **状态：** pending
+- [x] 挂 `commonblog/*Setting.vue` 专有行（Yuque/Notion/Halo 无专有行；Telegraph 4 行、Confluence 父页面 1 行）；执行 `token`→`password`、`knowledgeSpace`→`blogid` 改名；逐站宿主复核 + 等验收。
+- **状态：** complete（5/5 放行）
 
 ### 步骤 D：Custom Web Cookie 族 8 站（每站一停）
-- [ ] 挂 `CustomWebSetting.vue` / `CookieSetting.vue` 专有行；执行 `cookie`→`password`、`knowledgeSpace`→`blogid` 改名；逐站宿主复核 + 等验收。
-- **状态：** pending
+- [x] #27 语雀网页版：共用层鉴权行「整行一条指引」+ 7 键校正 + 宿主复核（待验收）。
+- [ ] 余 7 站（#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：逐站校正 `cookie`→`password`、`knowledgeSpace`→`blogid` 与缺项，宿主复核 + 等验收。
+- **状态：** in progress（1/8）
 
 ### 步骤 E：MetaWeblog / Wordpress / 本地系统 3 站（每站一停）
 - [ ] 挂 `impl/MetaweblogSetting.vue`、`fs/LocalSystemSetting.vue`；补齐 cnblogs 仅 4 键的缺口；逐站宿主复核 + 等验收。
@@ -95,7 +97,14 @@ DSH Web 已按用户指示重启过一次，chrome-devtools MCP 恢复正常；�
 族内实测差异（说明为什么不能套模板）：`permalink` 有条件/无条件/硬编码三种（Hexo 读预览规则、Quartz 读预览规则且占位符全、Hugo 与 Vuepress 硬编码、Jekyll 无条件写）；`dynYamlCfg` 留空时 Jekyll 补 `layout`/`published`、Quartz 补 `enableToc`/`enableBackLinks`、其余不补；只有 Vuepress 写 `author: {name, link}`（`site` 即 `author.link`）。
 遗留（归步骤 F）：`common-github-hexo.ts` 文件名/`pageId` 大小写孤例；六站 tour `content` 与 `fields` tip 存在整句重复。
 
-## 下一站开工清单：#1 语雀（C 组第一站，**先查实再动笔**）
+## 下一站开工清单：#28 Halo网页版（D 组第 2 站，**先查实再动笔**）
+配置文件 `src/helpConfigs/pages/platform-config/custom-haloweb.ts`；账号 key `custom_Haloweb`（另有 `custom_Haloweb-16io5w` 未启用实例）。开工前必须读代码确认（勿凭记忆）：
+1. `custom/HalowebSetting.vue`（`web/HalowebSetting.vue`）真实渲染哪些专有行、每行绑的是不是配置属性 → 决定要不要新挂 ⓘ（鉴权行已由 #27 的共用层改造覆盖）。
+2. `halowebConfig.ts` 的 `passwordType`（Cookie 型 → 鉴权行仍绑 `password`）、`knowledgeSpaceEnabled`（决定是否有发布目录行，键 `blogid`）、`picbedService` 默认值与可选项（决定图床 tip 怎么写）。
+3. 既有 `custom-haloweb.ts` 的 5 键是否含 `cookie`/`knowledgeSpace` 旧名 → 按改名规则校正；该站 2026-08-15 已补过 tour（5 步），只校准不改锚点。
+4. 复用 #27 的宿主流程：顶栏「发布工具」→ 设置 → 账号列表 → 该行「管理」→ 量「行数 / ⓘ 数 / `rowsWithoutGuide`」→ hover 差集复核 tip → HelpPanel/TourGuide → 截图 → 停下等验收。
+
+## 下一站开工清单（历史）：#1 语雀（C 组第一站，已完成）
 配置文件 `src/helpConfigs/pages/platform-config/common-yuque.ts`；账号 key `common_Yuque`。开工前必须读代码确认（勿凭记忆）：
 1. `commonblog/YuqueSetting.vue` 真实渲染哪些专有行、每行绑的是不是配置属性 → 决定要不要新挂 ⓘ（C 组共用 `CommonBlogSetting` 已挂好，专有行还没挂）。
 2. `yuqueConfig.ts` 的 `passwordType`（token 型 → 鉴权行仍绑 `password`）、`knowledgeSpaceEnabled`/`blogid` 语义（语雀是知识库 `book_id` 还是 namespace）、`picbedService` 默认值（决定图片两行是否出现）。
@@ -112,6 +121,7 @@ DSH Web 已按用户指示重启过一次，chrome-devtools MCP 恢复正常；�
 | API地址 | apiUrl | `cfg.apiUrl` | `apiUrl` |
 | 登录名 | username | `cfg.username` | `username` |
 | 密码 / Token / Cookie | password / token / cookie | **三种都绑 `cfg.password`** | `password` |
+| Cookie 行（V2 授权面板与手动文本框共存） | cookie | 面板按钮写 `cfg.password`，手动框绑 `cfg.password` | `password`（**整行只挂一条**，面板与文本框共用，勿各挂一个） |
 | 预览规则 | previewUrl | `cfg.previewUrl` | `previewUrl` |
 | 发布格式 | pageType | `cfg.pageType` | `pageType` |
 | 检索关键词 | knowledgeSpaceSearch | `formData.ksKeyword`（非配置属性） | **不挂** |

@@ -10,7 +10,7 @@
 
 - [x] 2.1 `base/CommonBlogSetting.vue`：平台首页、API 地址、用户名、鉴权行（`password`/`token`/`cookie` 三分支同键 `password`）、预览规则、发布格式、发布目录（`blogid`）、图床服务、跨域代理地址、CORS 代理行。
 - [x] 2.2 `base/impl/CommonGithubSetting.vue`：仓库名、分支、存储目录、文件规则、文章预览规则、YAML 预设配置、图片存储目录、图片访问链接、折叠高级四项；「YAML永久链接」行沿用 `yamlLinkSupported` 条件。
-- [ ] 2.3 `base/impl/MetaweblogSetting.vue`、`base/impl/CustomWebSetting.vue`、`base/CookieSetting.vue`：各自专有行（待对应族首个平台开工时挂）。
+- [ ] 2.3 `base/impl/MetaweblogSetting.vue` 专有行（待对应族首个平台开工时挂）。查实结论（2026-09-12，#27 语雀网页版）：`base/impl/CustomWebSetting.vue` 只是 `CommonBlogSetting` 的透传壳、无自有行；`base/CookieSetting.vue` 是 V1 旧表单（V1 零改动，不挂）；网页 Cookie 族的鉴权行（授权面板 + 手动文本框两个控件）由 `CommonBlogSetting.vue` 以**整行一条 `password` 指引**统一覆盖，已在 #27 定稿。
 - [ ] 2.4 `commonblog/YuqueSetting.vue`、`NotionSetting.vue`、`ConfluenceSetting.vue`、`HaloSetting.vue`、`TelegraphSetting.vue` 与 `fs/LocalSystemSetting.vue` 的专有行。
 - [x] 2.5 无对应配置属性的行（检索关键词行绑 `formData.ksKeyword`、验证行）不挂指引 —— 用户 2026-09-09 确认「保持现状」：这类行属标准内的显式不挂例外，步骤 F 的键校验不为此开非属性键白名单。
 - [x] 2.6 宿主复核弹层定位：`el-tooltip` 设 `:teleported="false"` 后 popper 留在 `.syp-panel` DOM 内（`panel.contains(popper) === true`），逐行滚入视区后弹层完整可见、无裁切与错位；字段已填值时指引仍在。
