@@ -10,8 +10,8 @@
 
 - [x] 2.1 `base/CommonBlogSetting.vue`：平台首页、API 地址、用户名、鉴权行（`password`/`token`/`cookie` 三分支同键 `password`）、预览规则、发布格式、发布目录（`blogid`）、图床服务、跨域代理地址、CORS 代理行。
 - [x] 2.2 `base/impl/CommonGithubSetting.vue`：仓库名、分支、存储目录、文件规则、文章预览规则、YAML 预设配置、图片存储目录、图片访问链接、折叠高级四项；「YAML永久链接」行沿用 `yamlLinkSupported` 条件。
-- [ ] 2.3 `base/impl/MetaweblogSetting.vue` 专有行（待对应族首个平台开工时挂）。查实结论（2026-09-12，#27 语雀网页版）：`base/impl/CustomWebSetting.vue` 只是 `CommonBlogSetting` 的透传壳、无自有行；`base/CookieSetting.vue` 是 V1 旧表单（V1 零改动，不挂）；网页 Cookie 族的鉴权行（授权面板 + 手动文本框两个控件）由 `CommonBlogSetting.vue` 以**整行一条 `password` 指引**统一覆盖，已在 #27 定稿。
-- [ ] 2.4 `commonblog/YuqueSetting.vue`、`NotionSetting.vue`、`ConfluenceSetting.vue`、`HaloSetting.vue`、`TelegraphSetting.vue` 与 `fs/LocalSystemSetting.vue` 的专有行。
+- [ ] 2.3 `base/impl/MetaweblogSetting.vue` 专有行（待对应族首个平台开工时挂）。查实结论（2026-09-12）：`base/impl/MetaweblogSetting.vue`、`metaweblog/WordpressSetting.vue`、`metaweblog/CnblogsSetting.vue` 都是渲染 `<common-blog-setting>` 的**直通壳**，无自有行 → 文件本身无需改动，MetaWeblog/WordPress 族的行与指引全部继承 2.1 的共用表单，待 E 组首个平台（#21 博客园）在宿主确认后再勾选。查实结论（2026-09-12，#27 语雀网页版）：`base/impl/CustomWebSetting.vue` 只是 `CommonBlogSetting` 的透传壳、无自有行；`base/CookieSetting.vue` 是 V1 旧表单（V1 零改动，不挂）；网页 Cookie 族的鉴权行（授权面板 + 手动文本框两个控件）由 `CommonBlogSetting.vue` 以**整行一条 `password` 指引**统一覆盖，已在 #27 定稿。
+- [ ] 2.4 `commonblog/YuqueSetting.vue`、`NotionSetting.vue`、`ConfluenceSetting.vue`、`HaloSetting.vue`、`TelegraphSetting.vue` 与 `fs/LocalSystemSetting.vue` 的专有行。查实结论（2026-09-12，组件逐文件清点 `field-guide`/`el-form-item` 计数）：`ConfluenceSetting.vue`（1 行 `parentPageId`，2 处指引）与 `TelegraphSetting.vue`（4 行，8 处指引）已随各自平台站点挂好；`YuqueSetting.vue`/`NotionSetting.vue`/`HaloSetting.vue` 均为 0 行外壳，无专有行可挂；**仅 `fs/LocalSystemSetting.vue` 仍有 3 行未挂**（存储路径 `storePath`、媒体存储路径 `imageStorePath`、YAML 类型 `fsYamlType`；前两行文本指引、单选组用 `inline`），归 #29 本地系统站点处理 → 本项待 #29 完成后勾选。
 - [x] 2.5 无对应配置属性的行（检索关键词行绑 `formData.ksKeyword`、验证行）不挂指引 —— 用户 2026-09-09 确认「保持现状」：这类行属标准内的显式不挂例外，步骤 F 的键校验不为此开非属性键白名单。
 - [x] 2.6 宿主复核弹层定位：`el-tooltip` 设 `:teleported="false"` 后 popper 留在 `.syp-panel` DOM 内（`panel.contains(popper) === true`），逐行滚入视区后弹层完整可见、无裁切与错位；字段已填值时指引仍在。
 - [x] 2.7 呈现硬性要求（用户看图定稿）：指引与控件**必须同行**（FieldGuide 包裹控件，`inline` 供开关/单选组紧贴、`tall` 供文本域贴首行）；图标用 `@element-plus/icons-vue` 官方 `InfoFilled`，不手写 path；视觉权重压到安静档——14px + `--el-text-color-placeholder` + hover 主色 + tooltip `show-after 150ms`，不与输入内容争注意力。
@@ -19,10 +19,10 @@
 ## 3. `fields` 键约定与回归
 
 - [x] 3.1 明确并落文档：`fields` 键 = 该行绑定的配置属性名（鉴权行为 `password`，与 tour 锚点 `token`/`cookie` 分属两套命名空间）。
-- [ ] 3.2 新增校验：每个已验证平台的 `fields` 键必须能在其合并后配置实例上取到同名属性；键写错即失败。（待各站改名完成后一次性加，避免中途红测）
+- [ ] 3.2 新增校验：每个已验证平台的 `fields` 键必须能在其合并后配置实例上取到同名属性；键写错即失败。（待各站改名完成后一次性加，避免中途红测）原型已跑（2026-09-12，`tmp/field-guide-key-audit.tmp.spec.ts`）：12 个已完成的平台全部 `missing=[]`。
 - [x] 3.3 试点平台 `github-vuepress2.ts` 键与真实渲染行逐行对齐，补齐 `blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/`defaultMsg`/`author`/`email`/`site`。
-- [ ] 3.4 其余 21 站 `fields` 键校准（`token`/`cookie`→`password`、`knowledgeSpace`→`blogid`）与缺项补齐：逐站推进，每站停下验收。
-- [ ] 3.5 保持 `tourAnchors.spec.ts` 的锚点校验独立通过（两把尺子互不代替）。
+- [ ] 3.4 其余 21 站 `fields` 键校准（`token`/`cookie`→`password`、`knowledgeSpace`→`blogid`）与缺项补齐：逐站推进，每站停下验收。已完成 11 站 + 试点；余量清单已提前算出（2026-09-12，`tmp/field-guide-family-coverage.diag.spec.ts`）：D 组 7 站（Halo网页版/知乎/CSDN/简书/掘金/公众号/哔哩哔哩）、E 组 #21 博客园（缺 `previewUrl`/`pageType`/`picbedService`），Wordpress 与本地系统键已齐只需宿主核验。
+- [x] 3.5 保持 `tourAnchors.spec.ts` 的锚点校验独立通过（两把尺子互不代替）。锚点校验与键尺各跑各的：两者在 309 项全量测试中同时通过（2026-09-12）。
 
 ## 4. 字段指引单一来源
 
@@ -33,6 +33,6 @@
 ## 5. 验证与记录
 
 - [x] 5.1 试点增量：全量 `pnpm vitest run`（65 文件 / 309 测试）通过、`pnpm build:v2` 通过。
-- [ ] 5.2 宿主逐族复核：GitHub、Custom Web、Common、MetaWeblog、WordPress、LocalSystem 各至少一站（试点 #11 已复核，其余随各站推进并逐站验收）。
-- [ ] 5.3 SOP §3 增补「字段指引单一来源」条目，供后续平台验证沿用。
+- [ ] 5.2 宿主逐族复核：GitHub、Custom Web、Common、MetaWeblog、WordPress、LocalSystem 各至少一站（试点 #11 已复核，其余随各站推进并逐站验收）。进度（2026-09-12）：GitHub 6 站 ✓、Common 5 站 ✓、Custom Web 1 站（#27 语雀网页版）✓；MetaWebLog / WordPress / LocalSystem 待 E 组 #21 / #25 / #29。
+- [ ] 5.3 SOP §3 增补「字段指引单一来源」条目，供后续平台验证沿用。草稿已备于 `tmp/sop-section3-field-guide-draft.md`（待全部平台验收后写入）。
 - [ ] 5.4 checklist 记录本 change 落地（不改动任何平台六格结论，仅修正字段说明相关表述）。
