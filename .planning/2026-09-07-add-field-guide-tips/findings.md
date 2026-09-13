@@ -238,3 +238,14 @@
 - **V1 零改动**：V1 旧表单 `base/CookieSetting.vue`、V1 入口 `Admin.vue` → **不在变更清单内**（清单仅 21 个文件，已全列）→「V1 文案零变化」有 git 证据。
 - **V1 打包链路仍通过**：`python scripts/build.py`（= `pnpm build`）成功产出 `siyuan-plugin-publisher-1.41.1.zip`（exit 0）→ 共用组件挂载字段指引后 V1 构建/打包未受影响（`build/` 已在 `.gitignore:34`，工作树保持干净）。
 - **任务 1.1「不得出现第二处拼接」核验通过**：`V2PlatformConfigBridge.vue:117` 是唯一的 `platform-config/${platformKey}` 构造点，第 118 行 `provide(SYP_HELP_PAGE_ID_KEY, helpPageId)` 一次下发，`HelpButton`（第 8 行 `:page-id="helpPageId"`）与字段指引共用同一值；`registry.ts:64` 的 `platformConfigPrefix` 属解析侧常量、spec 里的字面量属测试数据，均非第二套拼接标准。
+
+## 第十一轮：宿主复核脚本化（`tmp/host-field-guide-check.ps1`，退出码即结论）（2026-09-12）
+- **产出**：`tmp/host-field-guide-check.js`（页面内量测）+ `tmp/host-field-guide-check.ps1`（跑测与判定），一条命令跑完该 change 的全部宿主渲染契约，**退出码 0/1 即通过/失败**：
+  `pwsh -File tmp/host-field-guide-check.ps1 [-AllowNoGuide "搜索关键词"]`
+- **量测项**：字段行数 / 指引数 / 键清单 / 无指引的行 / 指引被挤到下一行 / 一行多条指引 / 图标不可见 / 悬停无弹层 / 弹层空文案 / 弹层越出面板 / 弹层被祖先裁切 / 弹层未挂在面板内 / 已填值行指引不可见。
+- **字段行口径**：只有带标签的 `.el-form-item` 才算字段行；无标签的「验证 / 保存取消」按钮行单独记为 `actionRows`（不是字段，不应挂指引）——首跑曾把它们误报为「无指引的行」，已修正。
+- **滚动口径（重要教训）**：首跑在「鉴权行展开」状态下把「知识库 / 图床服务」误报为 `outsidePanel`+`clippedBy: syp-shell__main`，实为**这两行已被挤到视口下方**（面板高于视口、`.syp-shell__main` 是滚动容器）——量测一个本就在折叠线以下的控件，任何位置判定都无意义。修正为**逐行 `scrollIntoView` 后再 hover 并重新取面板可见区域（面板 ∩ 视口）**，误报消失。
+- **语雀网页版（#27）两态实测全绿**：
+  · 收起态：字段行 7 = 指引 7，键恰为 `apiUrl,blogid,home,pageType,password,picbedService,previewUrl`（与冻结键表逐字一致）、`actionRows=[验证/保存取消]`；7 行已填值中 5 行（平台首页 21 / API 21 / 预览规则 26 / 发布格式 8 / 图床 4 字符）指引仍可见；7 条弹层全部 `面板内=True 未裁切=True`，文案 25–90 字 → **exit 0**。
+  · 展开态（Cookie 手动编辑，文本框 1092 字符，仅报长度不输出内容）：**鉴权行指引数恒为 1（无重复）**、该行已填值仍可见，7 条弹层仍全部 `面板内=True 未裁切=True` → **exit 0**。
+- **价值**：此后每站宿主复核不再依赖手工 CDP 查询与目测，一条命令即可复现；F 阶段与后续 7 站 + E 组 3 站可直接串入验收流程。
