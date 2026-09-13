@@ -179,3 +179,7 @@
 - **help 配置契约齐备**：`registry.spec.ts` 的 `verifiedConfigs` 已含 22 站并断言 `summary`/`fields`/`faq`/`tour` 齐备、且不在 `remaining-t1`；tour target 格式由 `tourAnchors.spec.ts` 守。
 - **F.2（同步按 `'token'` 取 tip 的用例）实为完成态**：全仓无任何按 `token` 键取字段说明的用例；残留 `token` 只在 tour 锚点（另一套命名空间，按 `passwordType` 用 `password`/`token`/`cookie`）与 Telegraph 真实属性 `accessToken`，都应保留而非删除。
 - **F.4 草稿已写**：`tmp/sop-section3-field-guide-draft.md` —— §3 新增第 5 项「字段指引必须渲染并可核验」（键=绑定属性名、鉴权行恒 `password`、全行覆盖、宿主核验步骤、回落链、两把尺子）、§五 回写补充（备注记「N 行 = N ⓘ」）、checklist 一行格式，待全部平台验收后落地。
+
+### 用户可见文案合规核对（第三轮，SOP §3 第 4 项）
+- 对 22 个 help 配置文件与 22 个文档草稿扫描禁用词（已验证／V2／插件版本／逆向／实测／观测／抓包／探测／探针／复现／对照／批次）→ **零命中**；命中的「验证通过」全部是平台契约表述（指插件「验证」按钮通过后下拉出目录、测试文件清理等），不是验证进度叙述，属允许内容。仅有的 `v2` 出现在「语雀 v2 API 地址」这一平台事实里。
+- `fields[].link` 目标分两类：真实平台页（`github.com/settings/tokens`、`notion.so/my-integrations`、`yuque.com/settings/tokens`）与该平台/共享文档链接。**共享占位链接与文档草稿顶部的 `TODO：待替换真实帮助文档链接` 是同一批**：将来用户给出真实链接时，`helpUrl` 与 `fields[].link` 里的占位链接要一起替换（已并入 F 阶段待办口径，避免只换一处留下死链）。
