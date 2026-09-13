@@ -278,3 +278,16 @@
 - **宿主尺 flaky 修复**：帮助尺首跑报「面板超出视口」，定位为**刚发生重排（鉴权行展开→收起）后弹层仍停在旧位置**；已在脚本里加「先把滚动容器归位 + 弹层不在视口内时复测一拍」，并按原失败序列复跑 + 连跑 3 次全部 `exit 0`。
 - **口径澄清（避免误判漏挂）**：该页顶部 `您当前操作的平台是：custom_Haloweb 默认分类` 是 `el-alert` 信息条（静态文案），**不是可编辑字段行**，故不计入「每行字段」标准；真实可编辑字段行恰为 6 行。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-haloweb-password-previewurl.png`（可见 6 行 ⓘ 与 Cookie 行新文案弹层）。
+
+## #30 知乎 站点完成（2026-09-12，用户「继续」已放行 #28）
+- **改前基线（宿主实测）**：`字段行 8 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项点名 **用户名 / 平台Cookie / 预览规则 / 专栏** 四行（均标为「已挂载但未渲染指引」）——`cookie` 与 `knowledgeSpace` 两个旧键**在配置实例上都不存在**。
+- **应用补丁**（`custom-zhihu.ts` + `docs/draft/platforms/custom-zhihu.md`，共用层零改动）：删 `cookie`/`knowledgeSpace` → 补 `password`/`blogid`，并补 `username`、`previewUrl`；文案按宿主实测改准——
+  · 用户名：点名「个人主页地址 `zhihu.com/people/<用户名>` 里那一段，必须填对否则读取不到专栏」（与该行 placeholder 口径一致）；
+  · 鉴权：点名真实按钮「1 去登录 / 2 自动读取 Cookie / 手动编辑」；
+  · 图床：点名真实两项 `不使用 / 当前平台 推荐` 并写明默认「当前平台」（旧文案写 Bundled 属内部术语）；
+  · 预览规则：写明默认 `/p/[postid]`；
+  · `blogid`：写明「验证后读取专栏列表 + 已发布文章暂不支持更换所属专栏」；
+  · summary 去掉「专栏归属当前不可编辑」的含糊说法，FAQ 增加「读取不到专栏？」并改准图床口径。
+- **改后实测**：**8 行 = 8 ⓘ**，键 `home/apiUrl/username/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 434 字符）鉴权行 ⓘ 恒为 1；8 条弹层全部 `面板内=True 未裁切=True`；6 个已填值行指引仍可见。
+- **帮助引导与文档**：HelpPanel 标题 知乎、在 `.syp-v2` 内且视口内未裁切、summary 46 字、FAQ **4** 条、无回退；引导 **4/4 命中**（Cookie 授权/专栏选择/图片发布/验证并保存）并正常收尾。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-zhihu-username-blogid.png`（8 行各一 ⓘ，专栏行弹层为新文案）。

@@ -438,6 +438,20 @@
 - `pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；两条宿主尺 exit 0；账号数 32 不变；截图 `tmp/field-guide-haloweb-password-previewurl.png`。
 - **#28 已交付，停下等验收**；#30 知乎未开工。
 
+## 会话：2026-09-12（#30 知乎 站点完成，待验收）
+
+### 前情
+- 用户放行 **#28 Halo网页版**（回复「继续」）。
+
+### 做了什么
+1. **改前基线**（宿主实测）：8 个字段行只有 4 个指引，**用户名 / 平台Cookie / 预览规则 / 专栏** 四行无指引——旧键 `cookie`、`knowledgeSpace` 在实例上都不存在。
+2. **应用补丁**：`custom-zhihu.ts` 删两死键、补 `password`/`blogid`/`username`/`previewUrl`，并按宿主实测改准五处文案（用户名取值来源、鉴权真实按钮名、图床真实两项与默认「当前平台」、`/p/[postid]`、专栏读取与不可换专栏）；summary 与 FAQ 同步；`docs/draft/platforms/custom-zhihu.md` 全表补齐。
+3. **改后实测**：**8 行 = 8 ⓘ**；折叠/展开态鉴权行 ⓘ 恒 1（文本框 434 字符）；8 条弹层面板内未裁切；HelpPanel（summary 46 字 + FAQ 4 + 无回退）+ 引导 **4/4 命中**。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-zhihu-username-blogid.png`。
+
+### 状态
+- **#30 已交付，停下等验收**；#31 CSDN 未开工（下一站预制清单：+`password` +`previewUrl` −`cookie`）。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
