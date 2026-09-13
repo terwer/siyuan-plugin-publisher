@@ -286,6 +286,17 @@
 - `pnpm vitest run`、`pnpm build:v2` 复跑通过；提交 `a52edae2` 已推送，工作树干净。
 - 本轮不动任何平台站文件、不改六格/帮助门禁结论；#27 仍待人工验收。
 
+## 会话：2026-09-12（第三轮：#27 待验收期间，帮助/文档门禁全量核对 + F.2/F.4 预研）
+
+### 做了什么
+1. **帮助/文档门禁全量核对（22 站）**：`docs/draft/platforms/` 恰 22 个草稿且**全部第 3 行带 `TODO：待替换真实帮助文档链接`**；`registry.spec.ts` 的 `verifiedConfigs` 已含 22 站并断言 `summary`/`fields`/`faq`/`tour` 齐备、不在 `remaining-t1` → SOP §3 第 1、2 项在 22 站无缺口。
+2. **F.2 核实为完成态**：全仓无任何按 `'token'` 取字段说明的用例（Yuque 那条早已用 `password`）；残留 `token` 只在 tour 锚点与 Telegraph 的 `accessToken` 真实属性上 → 不得误删。已更正 task_plan 里 F.2 的状态描述。
+3. **F.4 草稿落地到 `tmp/`**：`tmp/sop-section3-field-guide-draft.md`，含 §3 新增第 5 项（键=绑定属性名 / 鉴权行恒 `password` / 全行覆盖 / 宿主核验步骤 / 回落链 / 两把尺子）、§五 回写补充（备注记「N 行 = N ⓘ」）与 checklist 一行格式；待全部平台验收后再写入 SOP。
+
+### 质量
+- 本轮纯核对与草稿，无代码改动、无平台站文件改动；`vitest`/`build:v2` 状态与上一轮一致（65 文件 / 309 测试、构建通过）。
+- 工作树干净；#27 仍待人工验收。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|

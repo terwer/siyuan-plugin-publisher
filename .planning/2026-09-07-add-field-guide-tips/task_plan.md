@@ -95,8 +95,10 @@
   - 原型已跑（`tmp/field-guide-key-audit.tmp.spec.ts`、`tmp/field-guide-family-coverage.diag.spec.ts`）：12 站两把尺都 `missing=[]`。
   - **尺子②的设计要点（2026-09-12 查实）**：必须用**按平台显式 REQUIRED_FIELD_KEYS 表**，不能从 Config 构造函数推导渲染行——平台 hook 会运行时改开关（`useTelegraphApi.ts:53` 开 `usernameEnabled`、`useBilibiliWeb.ts` 开 `knowledgeSpaceEnabled` 等）；且 GitHub 族图片两行取决于**当前图床值**（`picbedService === Bundled`）。宿主内不渲染的 `middlewareUrl` 与非 `isCorsProxy` 的 `corsAnywhereUrl` 不纳入必填集。
 - [ ] F.2 同步 `registry.spec.ts` 中按 `'token'` 取 tip 的用例。
+  - **2026-09-12 核实：已是完成态**——全仓无任何按 `token` 键取字段说明的 spec 用例（Yuque 那条已用 `password`）；残留的 `token` 只在 tour 锚点 `[data-syp-tour='token']` 与 Telegraph 真实属性 `accessToken`，均须保留。
 - [ ] F.3 V2 表单 placeholder 收敛为示例值（每次改动内保证对应 `fields` 已有说明，不留空窗）；locales 共享串不动，V1 文案零变化。
 - [ ] F.4 SOP §3 增补「字段指引必须渲染并可核验」为与五格同等必过项 + 键命名空间规则。
+  - **草稿已备**：`tmp/sop-section3-field-guide-draft.md`（含 §3 新增第 5 项、§五 回写补充、checklist 一行格式），全部平台验收通过后再写入 SOP。
 - [ ] F.5 checklist 为 22 站回写该点通过记录（不改六格结论）；勾选 change `tasks.md`；`openspec validate --strict`。
 - [ ] F.6 全量测试 + build:v2 + 英文 Conventional 提交推送，工作树干净。
 - **状态：** pending

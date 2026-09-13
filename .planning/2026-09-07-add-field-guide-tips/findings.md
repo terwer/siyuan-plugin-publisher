@@ -173,3 +173,9 @@
 - **临时脚本也会被 `vue-tsc` 全量检查，且文件名大小写必须精确**：脚本放进 `tmp/` 后 `pnpm build:v2` 会一起做类型检查；本次因把 `bilibiliConfig.ts` 写成 `BilibiliConfig.ts`（另有 zhihu/csdn/jianshu/juejin/wechat 同理）触发 TS1149「仅大小写不同」直接让构建失败 → 临时脚本的 import 一律按磁盘真实文件名照抄。
 
 ## 第二轮追加（2026-09-12）
+
+## 第三轮追加（2026-09-12）：帮助/文档门禁全量核对
+- **22 个已回填平台的文档草稿齐备**：`docs/draft/platforms/` 恰好 22 个 `.md`，与 22 站一一对应，且**每个草稿第 3 行都在** `TODO：待替换真实帮助文档链接`（脚本逐文件核对通过）→ SOP §3 第 2 项（文档草稿）在 22 站无缺口。
+- **help 配置契约齐备**：`registry.spec.ts` 的 `verifiedConfigs` 已含 22 站并断言 `summary`/`fields`/`faq`/`tour` 齐备、且不在 `remaining-t1`；tour target 格式由 `tourAnchors.spec.ts` 守。
+- **F.2（同步按 `'token'` 取 tip 的用例）实为完成态**：全仓无任何按 `token` 键取字段说明的用例；残留 `token` 只在 tour 锚点（另一套命名空间，按 `passwordType` 用 `password`/`token`/`cookie`）与 Telegraph 真实属性 `accessToken`，都应保留而非删除。
+- **F.4 草稿已写**：`tmp/sop-section3-field-guide-draft.md` —— §3 新增第 5 项「字段指引必须渲染并可核验」（键=绑定属性名、鉴权行恒 `password`、全行覆盖、宿主核验步骤、回落链、两把尺子）、§五 回写补充（备注记「N 行 = N ⓘ」）、checklist 一行格式，待全部平台验收后落地。
