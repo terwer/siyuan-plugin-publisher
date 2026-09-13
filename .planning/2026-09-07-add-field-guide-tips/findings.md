@@ -153,3 +153,10 @@
 - 宿主渲染事实：发布格式两项都可见（该平台无隐藏 CSS，区别于 Confluence）、Markdown checked；图床 `["不使用","当前平台 推荐"]`、checked=「当前平台」、无 PicGo 项 —— 与 tip 完全一致。
 - 宿主路径（本族复用）：顶栏「发布工具」→ 设置 → 账号列表 → 目标账号行「管理」；**本站未用「添加账号」**，账号数 32→32，无落库清理动作。
 - HelpPanel/TourGuide 判定口径：HelpPanel 元素是 `.syp-help-panel-popover`（Teleport 到 `.syp-v2`，**不在 `.syp-panel` 内**），查询不要用 `.syp-help-panel`；TourGuide 判「命中」看 `.syp-tour-overlay__highlight` 的 `display !== none` 且尺寸非 0，并注意 `--missing` 兜底弹层不出现。
+
+## 步骤 F 前置审计（2026-09-12，第一把回归尺原型 + 兜底解析查实）
+- **键尺原型跑过一遍**：`safeMergeConfig("{}", ConfigClass, ["","","","",""])` 建合并实例，断言每站 `fields` 键都在实例上 → **12 个已回填平台全部 `missing=[]`**（Vuepress2 20 键；Hexo/Hugo/Jekyll/Quartz/Vuepress 各 21；Yuque 8；Notion 7；Halo 7；Telegraph 12；Confluence 8；Yuqueweb 7）。脚本留档 `tmp/field-guide-key-audit.tmp.spec.ts`（vitest 只扫 `src/`，用前复制过去）。
+- **平台配置页 fields 解析全景**（`helpRegistry.get()`）：22 个已验证平台命中各自专属文件且有键；**12 个未拆分平台命中 `remaining-t1` 占位配置（只有 helpUrl、无 fields）→ 这些页一个 ⓘ 都没有**（宿主实测 `github_Vitepress`：16 行、`field` 全为 `null`）；只有 `github_Docsify` / `gitlab_Gitlabdocsify` / `system_Siyuan` 真正落到 `platform-config/_default`（4 键），而这三者都不在 V2「添加账号 → 选择平台」列表里 → **兜底 fields 实际不可达**。诊断脚本留档 `tmp/field-guide-fallback-resolution.diag.spec.ts`。
+- **`_default.ts` 清理**：原 `fields` 同时有 `password` 和 `token` 两个键，但鉴权行三种分支都绑 `password`，全仓没有任何 `field="token"` → `token` 是永不被解析的死键，违反「键 = 绑定属性名」冻结规则。已删该键，并把 `password` 说明改为「按平台要求填密码、Token 或 Cookie（不是登录密码）」。
+- **操作教训修正（重要）**：「添加账号 → 选择平台卡片」**一律会持久化一个新实例**，与族无关。此前「GitHub 族（Hugo/Quartz）点卡片不落库」的结论是误判——那两站当时**已存在同 key 账号**，卡片不会新建；本次选 Vitepress 时账号数 32→33、多出 `github_Vitepress` 行 → 已按「删除 → 行内确认」删回 **32**。规矩不变：凡走「添加账号」，前后必须比对账号数并清理。
+- **临时文件会被 `vue-tsc` 检查**：`pnpm build:v2` 先跑 `vue-tsc --noEmit`，`tmp/*.spec.ts` 也在检查范围内 → 放进 `tmp/` 的脚本必须类型正确，否则 `build:v2` 直接失败。

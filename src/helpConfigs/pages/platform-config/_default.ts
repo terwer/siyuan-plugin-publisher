@@ -17,7 +17,7 @@ export const platformConfigDefaultHelpConfig: PageHelpConfig = {
     home: { tip: "平台首页地址，用于预览已发布的文章链接" },
     apiUrl: { tip: "API 接口地址，通常是平台的开放 API URL" },
     username: { tip: "平台登录用户名" },
-    password: { tip: "平台 API Token 或密码，不是登录密码" },
-    token: { tip: "鉴权 Token，通常在平台开发者设置中生成" },
+    // 鉴权行三种分支（密码 / Token / Cookie）都绑同一个配置属性 password，故此处只有一个键
+    password: { tip: "平台鉴权口令，按平台要求填密码、Token 或 Cookie（不是登录密码）" },
   },
 }

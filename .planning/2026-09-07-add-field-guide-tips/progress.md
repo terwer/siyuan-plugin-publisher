@@ -258,14 +258,29 @@
 ### 停下等验收
 - 未动 #28 Halo网页版 及之后 7 站。
 
+## 会话：2026-09-12（#27 待验收期间：F 前置审计 + 兜底清理，未开新平台）
+
+### 为什么不开 #28
+- 用户硬性要求「每站停下等验收」，#27 尚未得到人工放行 → 本轮只做**与平台站无关**的审计与清理，不动 #28 及之后 7 站。
+
+### 做了什么
+1. **第一把回归尺原型跑通**（步骤 F.1 的键尺）：对 12 个已回填平台断言 `fields` 键都能在合并配置实例上取到同名属性 → 全部 `missing=[]`。脚本留档 `tmp/field-guide-key-audit.tmp.spec.ts`（vitest 只扫 `src/`，用前复制过去）。
+2. **兜底解析查实**（`tmp/field-guide-fallback-resolution.diag.spec.ts`）：12 个未拆分平台被 `remaining-t1` 占位配置（只有 helpUrl）精确命中 → 这些页**没有任何 ⓘ**（宿主实测 Vitepress 16 行全 `null`）；只有 `github_Docsify`/`gitlab_Gitlabdocsify`/`system_Siyuan` 落到 `platform-config/_default`，而这三者不在「添加账号」选择器里 → 兜底 fields 不可达。
+3. **`_default.ts` 清理**：删掉永不被解析的死键 `token`（鉴权行三分支都绑 `password`，全仓无 `field="token"`），`password` 说明改为覆盖密码/Token/Cookie；与冻结的键规则一致，也让 F 的键尺不必为它开例外。
+4. **宿主**：顺带用 Vitepress 复现了「添加账号 → 卡片」落库行为 → 账号数 32→33 → 已删回 **32**；宿主保持运行（9222）。
+
+### 质量
+- `pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过（含 `vue-tsc --noEmit`）。
+- 本轮无平台六格/帮助门禁结论变化；#27 结论与证据见上一节，仍待验收。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 步骤 D（Cookie 族 8 站）第 1 站 **#27 语雀网页版已回填并过宿主，待验收**；连同 GitHub 6 + Common 5，22 站里已回填 12 站 |
-| 我要去哪里？ | D 组余 7 站（#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：直接照 #27 口径校正 `cookie`→`password`、`knowledgeSpace`→`blogid` 与缺项 → E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）→ F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 我在哪里？ | 步骤 D（Cookie 族 8 站）第 1 站 **#27 语雀网页版已回填并过宿主，待验收**；本轮补做 F 前置审计（键尺原型 12 站全绿）+ `_default` 死键清理，未开新平台。22 站里已回填 12 站 |
+| 我要去哪里？ | 用户放行 #27 后开 D 组余 7 站（#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：照 #27 口径校正 `cookie`→`password`、`knowledgeSpace`→`blogid` 与缺项 → E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）→ F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
 | 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
-| 我学到了什么？ | ① Cookie 族的鉴权行是「一条指引服务两个控件」（授权面板 + 手动文本框），必须包整行否则折叠态无 ⓘ；② 网页族 9 个 `*Setting.vue` 都没有专有行，D 组工作量在共用层与 `fields` 键；③ 平台专属 CSS 会改渲染事实（Confluence 隐藏 Markdown 单选）→ 文案必须按宿主可见项写 |
-| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph `9c187b9b` → Confluence `7a554a60` → 语雀网页版（本轮，待提交） |
+| 我学到了什么？ | ① Cookie 族的鉴权行是「一条指引服务两个控件」（授权面板 + 手动文本框），必须包整行否则折叠态无 ⓘ；② 网页族 9 个 `*Setting.vue` 都没有专有行，D 组工作量在共用层与 `fields` 键；③ `remaining-t1` 占位配置会精确命中并遮蔽 `_default`，未拆分平台因此完全没有 ⓘ（各站必须自己拆出配置）；④ 「添加账号 → 卡片」与族无关，一律新建实例，前后必须比对账号数 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph `9c187b9b` → Confluence `7a554a60` → 语雀网页版 `6005e30e` → 本轮 F 前置审计 + `_default` 死键清理（待提交） |
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*
