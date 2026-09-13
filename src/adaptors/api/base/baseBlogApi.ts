@@ -15,7 +15,8 @@ import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 import { JsonUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { Base64 } from "js-base64"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import { createFormUploadClient } from "~/src/utils/formUploadClient.ts"
+import { createJsonFetchClient } from "~/src/utils/jsonFetchClient.ts"
 
 /**
  * API授权统一封装基类
@@ -32,6 +33,8 @@ export class BaseBlogApi extends BlogApi {
   private readonly isUseSiyuanProxy: boolean
   private readonly proxyFetch: any
   private readonly corsFetch: any
+  private readonly formUploadClient: ReturnType<typeof createFormUploadClient>
+  private readonly jsonFetchClient: ReturnType<typeof createJsonFetchClient>
 
   /**
    * 初始化API授权适配器
@@ -47,10 +50,42 @@ export class BaseBlogApi extends BlogApi {
     this.logger = createAppLogger("base-blog-api")
     this.baseExtendApi = new BaseExtendApi(this, cfg)
 
-    const { isUseSiyuanProxy, proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl)
+    const { isUseSiyuanProxy, proxyFetch, corsFetch } = useProxy(cfg.middlewareUrl, cfg.corsAnywhereUrl, cfg.isCorsProxy)
     this.isUseSiyuanProxy = isUseSiyuanProxy
     this.proxyFetch = proxyFetch
     this.corsFetch = corsFetch
+    const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
+    this.formUploadClient = createFormUploadClient({
+      appInstance: this.appInstance,
+      logger: this.logger,
+      isUseSiyuanProxy: this.isUseSiyuanProxy,
+      isInSiyuanOrSiyuanNewWin,
+      forwardProxyFormPost: async (reqUrl, reqHeaders, body, fp) => {
+        const fetchResult = await this.proxyFetch(
+          reqUrl,
+          reqHeaders,
+          body,
+          "POST",
+          undefined,
+          fp,
+          "base64",
+          "base64"
+        )
+        return { body: Base64.fromBase64(fetchResult.body) }
+      },
+      middlewareFormPost: (reqUrl, reqHeaders, body) => this.corsFetch(reqUrl, reqHeaders, body, "POST"),
+      isCorsProxy: cfg.isCorsProxy,
+    })
+    this.jsonFetchClient = createJsonFetchClient({
+      appInstance: this.appInstance,
+      isUseSiyuanProxy: this.isUseSiyuanProxy,
+      isInSiyuanOrSiyuanNewWin,
+      siyuanForwardProxyFetch: (reqUrl, reqHeaders, params, method, contentType, fp, pe, re) =>
+        this.proxyFetch(reqUrl, reqHeaders, params, method, contentType, fp, pe, re),
+      middlewareFetch: (reqUrl, reqHeaders, params, method) =>
+        this.corsFetch(reqUrl, reqHeaders, params, method),
+      isCorsProxy: cfg.isCorsProxy,
+    })
   }
 
   public async checkAuth(): Promise<boolean> {
@@ -117,36 +152,17 @@ export class BaseBlogApi extends BlogApi {
       | "hex" = "text"
   ) {
     const header = headers.length > 0 ? headers[0] : {}
-
-    // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
-      this.logger.info("Using legency api fetch")
-      // remove cors fetch header
-      delete header["x-cors-headers"]
-      const blogHeaders = [
-        {
-          ...header,
-        },
-      ]
-      return this.proxyFetch(
-        url,
-        blogHeaders,
-        params,
-        method,
-        contentType,
-        forceProxy,
-        payloadEncoding,
-        responseEncoding
-      )
-    } else {
-      this.logger.info("Using cors api fetch")
-      const blogHeaders = [
-        {
-          ...header,
-        },
-      ]
-      return this.corsFetch(url, blogHeaders, params, method)
-    }
+    delete header["x-cors-headers"]
+    return await this.jsonFetchClient.fetch({
+      url,
+      headers: [{ ...header }],
+      params,
+      method,
+      contentType,
+      forceProxy,
+      payloadEncoding,
+      responseEncoding,
+    })
   }
 
   /**
@@ -158,44 +174,9 @@ export class BaseBlogApi extends BlogApi {
    * @param forceProxy - 是否强制使用代理，默认为 false
    */
   public async apiFormFetch(url: string, headers: any[], formData: BodyInit, forceProxy: boolean = false) {
-    // 如果没有可用的 CORS 代理或者没有强制使用代理，使用默认的自动检测机制
-    if (this.isUseSiyuanProxy || (!this.isUseSiyuanProxy && forceProxy) || !forceProxy) {
-      this.logger.info("Using legency api formFetch")
-      const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
-
-      if (!isInSiyuanOrSiyuanNewWin() || forceProxy) {
-        const fetchResult = await this.apiFetch(
-          url,
-          headers,
-          formData,
-          "POST",
-          undefined,
-          forceProxy,
-          "base64",
-          "base64"
-        )
-        const resText = Base64.fromBase64(fetchResult.body)
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        this.logger.debug("apiForm doFetch success, resJson=>", resJson)
-        return resJson
-      } else {
-        // get formata fetch
-        const doFetch = FormDataUtils.getFormDataFetch(this.appInstance)
-
-        // headers
-        const header = headers.length > 0 ? headers[0] : {}
-        this.logger.debug("before zhi-formdata-fetch, headers =>", headers)
-        this.logger.debug("before zhi-formdata-fetch, url =>", url)
-
-        const resText = await doFetch(this.appInstance.moduleBase, url, header, formData)
-        this.logger.debug("apiForm doFetch success, resText =>", resText)
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
-        return resJson
-      }
-    } else {
-      this.logger.info("Using cors-anywhere api formFetch")
-      return this.corsFetch(url, headers, formData, "POST")
-    }
+    const json = await this.formUploadClient.postJson({ url, headers, formData, forceProxy })
+    this.logger.debug("apiFormFetch success, resJson=>", json)
+    return json as any
   }
 
   // ================

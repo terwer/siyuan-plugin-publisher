@@ -19,6 +19,7 @@ import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { GitlabFetchClientProxyAdaptor } from "~/src/adaptors/api/base/gitlab/gitlabFetchClientProxyAdaptor.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Gitlab API 适配器
@@ -182,7 +183,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     try {
       const resJson = await this.gitlabClient.deleteRepositoryFile(postid)
       this.logger.debug("gitlab deletePost finished =>", resJson)

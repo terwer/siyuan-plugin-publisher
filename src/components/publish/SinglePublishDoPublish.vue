@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
 import { computed, markRaw, onMounted, reactive, ref, toRaw } from "vue"
-import { useRoute, useRouter } from "vue-router"
 import BackPage from "~/src/components/common/BackPage.vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
@@ -40,13 +39,33 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 
 const logger = createAppLogger("single-publish-do-publish")
 
+// props（已是无 vue-router 的解耦外壳；V1 路由页从 useRoute 取参传入，V2 直接传入）
+// 注意：不能用 `key` 作为 prop 名——`key` 是 Vue 保留属性，Vue 不会把它作为 prop 传入，会直接导致平台 key 丢失。
+const props = defineProps({
+  platformKey: {
+    type: String,
+    default: "",
+  },
+  id: {
+    type: String,
+    default: "",
+  },
+  method: {
+    type: String,
+    default: "",
+  },
+  showBack: {
+    type: Boolean,
+    default: undefined,
+  },
+})
+
+const emit = defineEmits(["back"])
+
 // uses
 const { t } = useVueI18n()
-const route = useRoute()
-const { query } = useRoute()
 const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete, initPublishMethods, doForceSingleDelete } = usePublish()
-const router = useRouter()
 const { getPublishCfg } = usePublishConfig()
 const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
@@ -54,14 +73,13 @@ const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 const sysKeys = pre.systemCfg.map((item) => {
   return item.platformKey
 })
-const params = reactive(route.params)
-const key = params.key as string
-const id = params.id as string
+const key = props.platformKey as string
+const id = props.id as string
 
 const formData = reactive({
   isInit: false,
 
-  method: query.method as MethodEnum,
+  method: props.method as MethodEnum,
   isPublishLoading: false,
   isDeleteLoading: false,
   errMsg: "",
@@ -344,15 +362,8 @@ const syncPost = (post: Post) => {
 }
 
 const onBack = () => {
-  const path = `/publish/singlePublish`
-  logger.info("will go to =>", path)
-  const query = {
-    path: path,
-    query: {
-      id: id,
-    },
-  }
-  router.push(query)
+  logger.info("will go back in single-publish-do-publish")
+  emit("back")
 }
 
 const initPage = async () => {
@@ -462,7 +473,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <back-page title="常规发布" :has-back-emit="true" @backEmit="onBack">
+  <back-page title="常规发布" :has-back-emit="true" :show-back="showBack" @backEmit="onBack">
     <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
     <div v-else id="batch-publish-index">
       <!-- 显示加载计时器 -->

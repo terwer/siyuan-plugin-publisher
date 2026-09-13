@@ -57,7 +57,12 @@ enum FsYamlType {
   /**
    * Astro类型
    */
-  Astro = "astro"
+  Astro = "astro",
+
+  /**
+   * Docsify类型
+   */
+  Docsify = "docsify"
 }
 
-export { FsYamlType }
+export { FsYamlType };

@@ -12,8 +12,9 @@ import { Attachment, CategoryInfo, MediaObject, Post, TagInfo, UserBlog } from "
 import { AliasTranslator, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { HalowebPostMeta } from "~/src/adaptors/web/haloweb/HalowebPostMeta.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Halo 网页授权适配器
@@ -244,7 +245,7 @@ class HalowebWebAdaptor extends BaseWebApi {
     // return StrUtil.pathJoin(this.cfg.home ?? "", postUrl)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const haloPostKey = this.getHaloPostidKey(postid)
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`
@@ -296,7 +297,7 @@ class HalowebWebAdaptor extends BaseWebApi {
       this.logger.debug("newMediaObject on halo =>", mediaObject)
 
       // get formData and Blob
-      const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+      const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
       // uploadUrl
       const uploadUrl = `/apis/api.console.halo.run/v1alpha1/attachments/upload`
@@ -444,6 +445,10 @@ class HalowebWebAdaptor extends BaseWebApi {
 
   private async getHaloCategories(): Promise<any[]> {
     const hcs = await this.halowebFetch("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
+    if (!hcs || typeof hcs !== "object" || !Array.isArray(hcs.items)) {
+      this.logger.error("get haloweb categories failed, unexpected response =>", hcs)
+      throw new Error("Halo 网页版接口返回异常，登录状态可能已失效，请重新授权后再试")
+    }
     return hcs.items
   }
 
@@ -468,6 +473,10 @@ class HalowebWebAdaptor extends BaseWebApi {
 
   private async getHaloTags() {
     const tags = await this.halowebFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
+    if (!tags || typeof tags !== "object" || !Array.isArray(tags.items)) {
+      this.logger.error("get haloweb tags failed, unexpected response =>", tags)
+      throw new Error("Halo 网页版接口返回异常，登录状态可能已失效，请重新授权后再试")
+    }
     const allTags = tags.items
     return allTags
   }

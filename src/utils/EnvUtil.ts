@@ -7,10 +7,10 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { SiyuanDevice } from "zhi-device"
-import { StrUtil } from "zhi-common"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Buffer } from "node:buffer"
+import { StrUtil } from "zhi-common"
+import { SiyuanDevice } from "zhi-device"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 环境工具类
@@ -95,6 +95,36 @@ class EnvUtil {
     } catch (e) {
       this.logger.error(`failed to write file "${filePath}":`, e)
       return false
+    }
+  }
+
+  /**
+   * 读取文件内容
+   * @param filePath 文件路径
+   */
+  public static readFile(filePath: string): string | null {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        this.logger.warn("file system module not available")
+        return null
+      }
+
+      const fs = win.fs
+      const pathModule = win.require("path")
+      const normalizedPath = pathModule.normalize(filePath)
+
+      if (fs.existsSync(normalizedPath)) {
+        const content = fs.readFileSync(normalizedPath, "utf-8")
+        this.logger.debug(`file read: ${normalizedPath}`)
+        return content
+      }
+
+      this.logger.warn(`file not found: ${normalizedPath}`)
+      return null
+    } catch (e) {
+      this.logger.error(`failed to read file "${filePath}":`, e)
+      return null
     }
   }
 

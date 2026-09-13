@@ -106,7 +106,7 @@ class CookieUtils {
     let cookies = {}
     try {
       cookies = cookie.parse(value)
-      this.logger.debug("cookieObj", cookies)
+      this.logger.debug("cookieObj", { keys: Object.keys(cookies) })
     } catch (e) {
       this.logger.warn("Failed to parse cookie =>" + e)
     }

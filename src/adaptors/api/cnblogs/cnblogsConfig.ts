@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 
 /**
@@ -40,6 +40,9 @@ class CnblogsConfig extends MetaweblogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+    this.picgoPicbedSupported = true
+    this.bundledPicbedSupported = true
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
 

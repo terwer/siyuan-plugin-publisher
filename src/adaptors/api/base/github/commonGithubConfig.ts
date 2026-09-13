@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { PasswordType } from "zhi-blog-api"
+import { PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { StrUtil } from "zhi-common"
 
@@ -66,6 +66,16 @@ class CommonGithubConfig extends CommonBlogConfig {
   public override previewUrl: string = ""
 
   /**
+   * 平台是否支持把文章永久链接写入 YAML Front Matter。
+   *
+   * 该能力由平台的构建器决定：只有 YamlConverter 会按 yamlLinkEnabled 写入 permalink/url 的平台才为 true，
+   * 配置页才展示「YAML永久链接」开关；构建器不识别该字段时必须置为 false，避免提供无效果的开关。
+   *
+   * @see src/adaptors/api/base/github/yamlLinkCapability.spec.ts
+   */
+  public yamlLinkSupported: boolean = true
+
+  /**
    * 构造函数
    *
    * @param {string} githubUsername - GitHub 用户名
@@ -103,6 +113,8 @@ class CommonGithubConfig extends CommonBlogConfig {
     this.email = "youweics@163.com"
     this.site = StrUtil.pathJoin(this.home, "/" + this.username)
     this.mdFilenameRule = "[filename].md"
+    // Git 静态博客平台将图片提交到仓库（source/images），默认使用「当前平台」图床
+    this.picbedService = PicbedServiceTypeEnum.Bundled
 
     this.middlewareUrl = middlewareUrl
   }

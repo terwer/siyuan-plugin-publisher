@@ -1,0 +1,521 @@
+/*
+ * Copyright (c) 2023, Terwer . All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * V2 UI 基础样式
+ * 所有样式都包裹在 .syp-v2 命名空间下，确保与思源笔记样式隔离
+ */
+
+@import "./variables.styl"
+@import "./syp-legacy-bridge.styl"
+@import "./syp-floating.styl"
+
+.syp-v2
+  font-family $syp-font-family
+  font-size $syp-font-size-sm
+  color var(--b3-theme-on-background, $syp-text-primary)
+  line-height 1.5
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  min-width 0
+  max-height calc(100vh - 180px)
+
+  *, *::before, *::after
+    box-sizing border-box
+
+  .syp-btn
+    display inline-flex
+    align-items center
+    justify-content center
+    height $syp-sm-btn-height
+    padding $syp-sm-btn-padding-y $syp-sm-btn-padding-x
+    border none
+    border-radius $syp-radius-sm
+    font-size $syp-sm-btn-font-size
+    font-weight 500
+    cursor pointer
+    transition all 0.2s ease
+    outline none
+
+    &:hover
+      opacity 0.9
+
+    &:active
+      opacity 0.8
+
+    &.syp-btn-primary
+      background-color $syp-primary
+      color white
+
+    &.syp-btn-secondary
+      background-color var(--b3-theme-surface-light, $syp-bg-secondary)
+      color var(--b3-theme-on-surface, $syp-text-primary)
+
+    &.syp-btn-text
+      background-color transparent
+      color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+      &:hover
+        background-color var(--b3-theme-surface-light, $syp-bg-secondary)
+
+  .syp-card
+    background-color var(--b3-theme-surface, $syp-bg-primary)
+    border-radius $syp-radius-lg
+    box-shadow $syp-shadow-sm
+    border 1px solid var(--b3-border-color, $syp-border-secondary)
+    padding $syp-spacing-md
+    transition box-shadow 0.2s ease
+
+    &:hover
+      box-shadow $syp-shadow-md
+
+  .syp-input
+    width 100%
+    padding $syp-sm-input-padding-y $syp-sm-input-padding-x
+    border 1px solid var(--b3-border-color, $syp-border-primary)
+    border-radius $syp-radius-sm
+    font-size $syp-sm-btn-font-size
+    color var(--b3-theme-on-surface, $syp-text-primary)
+    background-color var(--b3-theme-surface, $syp-bg-primary)
+    line-height 1.5
+    transition border-color 0.2s ease
+
+    &:focus
+      outline none
+      border-color $syp-primary
+
+    &::placeholder
+      color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+  .syp-toggle
+    position relative
+    display inline-block
+    width $syp-sm-toggle-width
+    height $syp-sm-toggle-height
+
+    input
+      opacity 0
+      width 0
+      height 0
+
+      &:checked + .syp-toggle-slider
+        background-color $syp-primary
+
+      &:checked + .syp-toggle-slider:before
+        transform translateX($syp-sm-toggle-translate)
+
+    .syp-toggle-slider
+      position absolute
+      cursor pointer
+      top 0
+      left 0
+      right 0
+      bottom 0
+      background-color var(--b3-border-color, $syp-border-primary)
+      border-radius $syp-sm-toggle-height
+      transition 0.3s
+
+      &:before
+        position absolute
+        content ""
+        height $syp-sm-toggle-dot
+        width $syp-sm-toggle-dot
+        left 3px
+        bottom 3px
+        background-color white
+        border-radius 50%
+        transition 0.3s
+
+  .syp-panel
+    display flex
+    flex-direction column
+    height 100%
+    background linear-gradient(180deg, var(--b3-theme-surface, $syp-bg-primary) 0%, var(--b3-theme-background, $syp-bg-secondary) 100%)
+    border-radius $syp-radius-xl
+    box-shadow $syp-shadow-lg
+    border 1px solid var(--b3-border-color, $syp-border-secondary)
+    overflow hidden
+
+  .syp-header
+    display flex
+    align-items center
+    justify-content space-between
+    padding $syp-spacing-md $syp-spacing-lg
+    border-bottom 1px solid var(--b3-border-color, $syp-border-secondary)
+    flex-shrink 0
+
+    .syp-header-title
+      font-size $syp-font-size-lg
+      font-weight 600
+      color var(--b3-theme-on-background, $syp-text-primary)
+
+  .syp-content
+    padding $syp-spacing-lg
+    overflow-y auto
+
+  .syp-list
+    list-style none
+    margin 0
+    padding 0
+
+    .syp-list-item
+      display flex
+      align-items center
+      padding $syp-spacing-md
+      border-bottom 1px solid var(--b3-border-color, $syp-border-secondary)
+      cursor pointer
+      transition background-color 0.2s ease
+
+      &:hover
+        background-color var(--b3-theme-surface-light, $syp-bg-secondary)
+
+      &:last-child
+        border-bottom none
+
+  .syp-empty
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding $syp-spacing-xl
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+    text-align center
+
+    .syp-empty-icon
+      font-size 48px
+      margin-bottom $syp-spacing-md
+
+    .syp-empty-text
+      font-size $syp-font-size-md
+      margin-bottom $syp-spacing-sm
+
+    .syp-empty-subtext
+      font-size $syp-font-size-sm
+
+  .syp-shell
+    display grid
+    gap 0
+    min-height 0
+    flex 1
+
+    &.is-quick-publish
+      grid-template-columns minmax(0, 1fr)
+
+    &.is-settings
+      grid-template-columns 140px minmax(0, 1fr)
+
+  .syp-shell__nav
+    padding 12px
+    background linear-gradient(180deg, #fbfdff 0%, #f6f9ff 100%)
+    border-right 1px solid var(--b3-border-color, $syp-border-secondary)
+    overflow-y auto
+    min-height 0
+
+  .syp-shell__section-title
+    margin-bottom 8px
+    font-size $syp-font-size-xs
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+    letter-spacing 0.08em
+    text-transform uppercase
+
+  .syp-shell__nav-item
+    position relative
+    width 100%
+    text-align left
+    border none
+    background transparent
+    color #667085
+    padding 7px 10px 7px 14px
+    border-radius 8px
+    font-size 13px
+    margin-bottom 4px
+    cursor pointer
+    transition all 0.2s ease
+
+    &:hover
+      background #f0f6ff
+      color #2563eb
+
+    &.is-active
+      background #ffffff
+      color #1d4ed8
+      font-weight 700
+      box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
+
+      &::before
+        content ""
+        position absolute
+        left 5px
+        top 8px
+        bottom 8px
+        width 3px
+        border-radius 999px
+        background #1677ff
+
+  .syp-shell__main
+    display flex
+    flex-direction column
+    padding $syp-spacing-xl
+    background var(--b3-theme-background, $syp-bg-primary)
+    min-width 0
+    min-height 0
+    overflow-y auto
+    overflow-x hidden
+
+  .syp-settings-page
+    display flex
+    flex-direction column
+    gap 18px
+
+  .syp-settings-page__header
+    display flex
+    justify-content space-between
+    align-items flex-start
+    gap $syp-spacing-md
+    flex-shrink 0
+
+  .syp-settings-page__eyebrow
+    font-size $syp-font-size-xs
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+    letter-spacing 0.08em
+    text-transform uppercase
+
+  .syp-settings-page__title
+    margin 0
+    font-size $syp-sm-title-size
+    line-height 1.3
+    color var(--b3-theme-on-background, $syp-text-primary)
+
+  .syp-settings-page__desc
+    margin 8px 0 0
+    max-width 640px
+    font-size $syp-font-size-sm
+    color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+  .syp-settings-empty
+    display flex
+    flex-direction column
+    gap $syp-spacing-sm
+    padding $syp-spacing-lg
+    border 1px solid var(--b3-border-color, $syp-border-secondary)
+    border-radius $syp-radius-lg
+    background $syp-card-bg-gradient
+
+  .syp-settings-empty__title
+    font-size $syp-font-size-lg
+    font-weight 600
+    color var(--b3-theme-on-background, $syp-text-primary)
+
+  .syp-settings-empty__desc
+    font-size $syp-font-size-sm
+    color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+  .syp-settings-group-list
+    display flex
+    flex-direction column
+    gap $syp-spacing-md
+
+  .syp-settings-group
+    padding $syp-sm-card-padding
+    border 1px solid var(--b3-border-color, $syp-border-secondary)
+    border-radius $syp-sm-card-radius
+    background $syp-card-bg-gradient
+
+  .syp-settings-group__title
+    font-size 13px
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+  .syp-settings-group__desc
+    margin-top 8px
+    font-size $syp-font-size-sm
+    color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+  .syp-settings-form-list
+    display flex
+    flex-direction column
+    gap 0
+    margin-top $syp-spacing-md
+
+  .syp-settings-form-row
+    display flex
+    align-items center
+    justify-content space-between
+    gap $syp-spacing-md
+    padding $syp-sm-row-padding 0
+    border-bottom 1px solid var(--b3-border-color, $syp-border-secondary)
+
+    &:first-child
+      padding-top 0
+
+    &:last-child
+      padding-bottom 0
+      border-bottom none
+
+  .syp-settings-form-main
+    min-width 0
+    flex 1
+
+  .syp-settings-form-label
+    font-size $syp-font-size-sm
+    font-weight 600
+    color var(--b3-theme-on-surface, $syp-text-primary)
+
+  .syp-settings-form-desc
+    margin-top 4px
+    font-size 13px
+    color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+  .syp-settings-form-control
+    display flex
+    align-items center
+    justify-content flex-end
+    gap $syp-spacing-sm
+    flex-shrink 0
+
+  .syp-settings-status-text
+    font-size $syp-font-size-xs
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+  .syp-settings-detail-grid
+    display grid
+    grid-template-columns repeat(2, minmax(0, 1fr))
+    gap $syp-spacing-md
+
+  .syp-settings-detail-card
+    padding $syp-sm-card-padding
+    border-radius $syp-sm-card-radius
+    background $syp-card-bg-gradient
+    border 1px solid var(--b3-border-color, $syp-border-secondary)
+
+  .syp-settings-detail-card__title
+    margin-bottom 14px
+    font-size 13px
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+  .syp-settings-detail-list
+    display flex
+    flex-direction column
+    gap 12px
+
+  .syp-settings-detail-row
+    display grid
+    grid-template-columns 72px minmax(0, 1fr)
+    gap 12px
+    align-items start
+
+  .syp-settings-detail-label
+    font-size $syp-font-size-xs
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+  .syp-settings-detail-value
+    font-size $syp-font-size-sm
+    color var(--b3-theme-on-surface, $syp-text-secondary)
+    word-break break-all
+
+  @media (max-width: 960px)
+    .syp-v2
+      height auto
+      max-height calc(100vh - 96px)
+
+    .syp-shell
+      &.is-quick-publish
+        grid-template-columns 1fr
+
+      &.is-settings
+        grid-template-columns 1fr
+
+    .syp-shell__nav
+      border none
+      padding $syp-spacing-md
+
+    .syp-shell__main
+      padding $syp-spacing-lg
+
+    .syp-settings-page__title
+      font-size 18px
+
+    .syp-settings-form-row
+      align-items flex-start
+      flex-direction column
+
+    .syp-settings-form-control
+      width 100%
+      justify-content flex-start
+
+    .syp-settings-detail-grid
+      grid-template-columns 1fr
+
+
+// V2 统一确认弹窗（Element Plus MessageBox 包装）
+.syp-v2-message-box
+  width 360px
+  max-width calc(100vw - 48px)
+  padding 0
+  border-radius 12px
+  border 1px solid var(--b3-border-color, rgba(222, 224, 227, 0.95))
+  box-shadow 0 16px 48px rgba(15, 23, 42, 0.18)
+  overflow hidden
+  background var(--b3-theme-surface, $syp-bg-primary)
+
+  .el-message-box__header
+    padding 14px 16px 8px
+
+  .el-message-box__title
+    color var(--b3-theme-on-background, $syp-text-primary)
+    font-size 15px
+    font-weight 700
+    line-height 1.35
+
+  .el-message-box__headerbtn
+    top 10px
+    right 10px
+    width 28px
+    height 28px
+    border-radius 8px
+
+    &:hover
+      background var(--b3-theme-surface-light, #f2f3f5)
+
+  .el-message-box__content
+    padding 4px 16px 12px
+    color var(--b3-theme-on-surface-light, $syp-text-secondary)
+    font-size 13px
+    line-height 1.55
+
+  .el-message-box__status
+    font-size 18px
+
+  .el-message-box__btns
+    padding 10px 16px 14px
+    display flex
+    justify-content flex-end
+    gap 8px
+
+    .el-button
+      min-height 28px
+      padding 0 12px
+      border-radius 8px
+      font-size 12px
+      font-weight 600
+      margin-left 0
+
+    .el-button--primary
+      background #4080ff
+      border-color #4080ff
+
+      &:hover
+        background #2f6ff0
+        border-color #2f6ff0
+
+    .syp-v2-message-box__confirm-danger.el-button--primary
+      background #d92d20
+      border-color #d92d20
+
+      &:hover
+        background #c6281d
+        border-color #c6281d
+
+.syp-v2-message-box-modal
+  background var(--b3-theme-background)
+  opacity 0.35
+  backdrop-filter blur(1px)

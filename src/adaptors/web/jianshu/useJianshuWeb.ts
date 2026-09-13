@@ -12,6 +12,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { JianshuWebAdaptor } from "~/src/adaptors/web/jianshu/jianshuWebAdaptor.ts"
@@ -38,7 +39,7 @@ const useJianshuWeb = async (key?: string, newCfg?: JianshuConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<JianshuConfig>(setting[key], {} as JianshuConfig)
+    cfg = safeMergeConfig<JianshuConfig>(setting[key], JianshuConfig, ["", "", ""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)

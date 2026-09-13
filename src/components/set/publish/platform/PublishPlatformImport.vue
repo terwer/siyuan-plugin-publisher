@@ -27,7 +27,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessageBox } from "element-plus"
 import { Delete } from "@element-plus/icons-vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
+import { localizePrePlatforms, usePlatformDefine } from "~/src/composables/usePlatformDefine.ts"
 import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 
 const logger = createAppLogger("publish-platform-import")
@@ -112,13 +112,13 @@ const doImportAll = async () => {
 
   let totalImportCount = 0
   // 大类导入
-  totalImportCount += basicImport(pre.commonCfg)
-  totalImportCount += basicImport(pre.githubCfg)
-  totalImportCount += basicImport(pre.gitlabCfg)
-  totalImportCount += basicImport(pre.metaweblogCfg)
-  totalImportCount += basicImport(pre.wordpressCfg)
-  totalImportCount += basicImport(pre.customCfg)
-  totalImportCount += basicImport(pre.fsCfg)
+  totalImportCount += basicImport(localizePrePlatforms(pre.commonCfg, t))
+  totalImportCount += basicImport(localizePrePlatforms(pre.githubCfg, t))
+  totalImportCount += basicImport(localizePrePlatforms(pre.gitlabCfg, t))
+  totalImportCount += basicImport(localizePrePlatforms(pre.metaweblogCfg, t))
+  totalImportCount += basicImport(localizePrePlatforms(pre.wordpressCfg, t))
+  totalImportCount += basicImport(localizePrePlatforms(pre.customCfg, t))
+  totalImportCount += basicImport(localizePrePlatforms(pre.fsCfg, t))
 
   formData.isImportLoading = false
 

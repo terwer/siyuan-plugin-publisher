@@ -37,14 +37,14 @@ localFsCfg.placeholder = localFsPlaceholder
 
     <template #main="main">
       <!-- 存储路径 -->
-      <el-form-item :label="t('setting.blog.type.fs.store.path')">
+      <el-form-item :label="t('setting.blog.type.fs.store.path')" data-syp-tour="storePath">
         <el-input
           v-model="(main.cfg as LocalSystemConfig).storePath"
           :placeholder="t('setting.blog.type.fs.store.path.tip')"
         />
       </el-form-item>
       <!-- 媒体存储路径 -->
-      <el-form-item :label="t('setting.blog.type.fs.media.path')">
+      <el-form-item :label="t('setting.blog.type.fs.media.path')" data-syp-tour="imageStorePath">
         <el-input
           v-model="(main.cfg as LocalSystemConfig).imageStorePath"
           :placeholder="t('setting.blog.type.fs.media.path.tip')"
@@ -52,7 +52,7 @@ localFsCfg.placeholder = localFsPlaceholder
       </el-form-item>
 
       <!-- YAML类型 -->
-      <el-form-item :label="t('setting.blog.type.fs.yaml.type')">
+      <el-form-item :label="t('setting.blog.type.fs.yaml.type')" data-syp-tour="fsYamlType">
         <div class="yaml-type-radio-group">
           <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Default" size="default">
             {{ t("setting.blog.type.fs.yaml.type.default") }}
@@ -95,11 +95,11 @@ localFsCfg.placeholder = localFsPlaceholder
 .yaml-type-radio-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 4px 12px;
+  margin-top: 4px;
 }
 
 .yaml-type-radio-group .el-radio {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 </style>

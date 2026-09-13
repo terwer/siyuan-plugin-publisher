@@ -1,0 +1,1225 @@
+<template>
+  <div class="syp-v2" @click.stop @mousedown.stop @mouseup.stop @pointerdown.stop @touchstart.stop>
+    <div class="syp-panel">
+      <div class="syp-header">
+        <div class="syp-header-title-group">
+          <div class="syp-header-chip">
+            <LucideSend class="syp-header-chip__icon" />
+            <span>{{ t("v2.app.brand") }}</span>
+          </div>
+          <div class="syp-header-title">{{ panelTitle }}</div>
+        </div>
+        <div class="syp-header-actions">
+          <SypTooltip
+            v-if="isQuickPublishView && quickPublish.state.hasDocument"
+            content=""
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
+            type="button"
+            :aria-label="t('v2.panel.singlePublish')"
+            @click.stop="openSinglePublishForCurrent"
+          >
+            <LucidePenLine />
+            <span class="syp-btn-text-entry__label">{{ t("v2.panel.singlePublish") }}</span>
+          </SypTooltip>
+          <SypTooltip
+            v-if="!isSettingsView && !isManageView"
+            content=""
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
+            type="button"
+            :aria-label="t('v2.app.action.openManage')"
+            @click.stop="openManage"
+          >
+            <LucideHouse />
+            <span class="syp-btn-text-entry__label">{{ t("v2.app.action.openManage") }}</span>
+          </SypTooltip>
+          <SypTooltip
+            v-if="isManageView"
+            :content="t('v2.app.back.manage')"
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-back"
+            type="button"
+            :aria-label="t('v2.app.back.manage')"
+            @click.stop="backFromManage"
+          >
+            <LucideChevronLeft />
+            <span class="syp-btn-back__label">{{ t("v2.app.back.manage") }}</span>
+          </SypTooltip>
+          <SypTooltip
+            v-if="!isSettingsView"
+            content=""
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
+            type="button"
+            :aria-label="t('v2.app.action.openSettings')"
+            @click.stop="openSettings"
+          >
+            <LucideSettings />
+            <span class="syp-btn-text-entry__label">{{ t("v2.app.action.openSettings") }}</span>
+          </SypTooltip>
+          <SypTooltip
+            v-else
+            :content="settingsBackTitle"
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-back"
+            type="button"
+            :aria-label="settingsBackTitle"
+            @click.stop="handleSettingsBack"
+          >
+            <LucideChevronLeft />
+            <span class="syp-btn-back__label">{{ settingsBackTitle }}</span>
+          </SypTooltip>
+          <SypTooltip
+            :content="t('v2.app.action.close')"
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-text"
+            type="button"
+            :aria-label="t('v2.app.action.close')"
+            @click.stop="close"
+          >
+            <LucideX />
+          </SypTooltip>
+        </div>
+      </div>
+
+      <UnifiedWorkspaceShell
+        :current-view="currentView"
+        :active-section="settings.state.section"
+        @change-section="changeSettingsSection"
+      >
+        <div v-if="settingsSwitchLoading" class="syp-settings-switch-loading" role="status" aria-live="polite">
+          <span class="syp-settings-switch-loading__dot"></span>
+          <span>{{ t("main.loading") }}</span>
+        </div>
+
+        <div v-if="initError && !isSettingsView && !isManageView" class="syp-publish-status is-failed">
+          <div class="syp-publish-status__title">{{ t("v2.quickPublish.error.initFailed") }}</div>
+          <div class="syp-publish-status__desc">{{ initError }}</div>
+          <button type="button" class="syp-btn syp-btn-primary" @click="retryInit">{{ t("v2.common.retry") }}</button>
+        </div>
+
+        <div v-else-if="isManageView" class="syp-manage-wrap">
+          <V2ArticleManage
+            @open-single="openManageSingle"
+            @open-batch="openManageBatch"
+            @open-flash="openManageFlash"
+          />
+
+          <!-- 管理页右侧滑入面板：列表仍在背后可见 -->
+          <div v-if="managePanel" class="syp-manage-panel-mask" @click="closeManagePanelOnMask"></div>
+          <aside
+            v-if="managePanel"
+            class="syp-manage-panel"
+            role="dialog"
+            :aria-label="panelTitle"
+            @keydown.esc="closeManagePanel"
+          >
+            <div class="syp-manage-panel__head">
+              <button
+                type="button"
+                class="syp-manage-panel__back"
+                :aria-label="t('v2.app.back.manage')"
+                @click="closeManagePanel"
+              >
+                <LucideChevronLeft />
+              </button>
+              <span class="syp-manage-panel__title">{{ panelTitle }}</span>
+            </div>
+            <div class="syp-manage-panel__body">
+              <V2SinglePublish
+                v-if="managePanel === 'single'"
+                :page-id="managePanelPageId"
+                :preset-platform-key="managePanelPlatformKey || undefined"
+                embedded
+                @back="closeManagePanel"
+              />
+              <V2BatchPublish
+                v-else-if="managePanel === 'batch'"
+                :page-id="managePanelPageId"
+                embedded
+                @back="closeManagePanel"
+              />
+              <template v-else>
+                <div class="syp-manage-panel__flashhint">{{ t("v2.singlePublish.status.previewHint") }}</div>
+                <V2QuickPublishGrid
+                  :page-id="managePanelPageId"
+                  @back="closeManagePanel"
+                />
+              </template>
+            </div>
+          </aside>
+        </div>
+
+        <V2SinglePublish
+          v-else-if="isSinglePublishView"
+          :page-id="quickPublish.state.pageId"
+          @back="onSinglePublishBack"
+        />
+
+        <V2BatchPublish
+          v-else-if="isBatchPublishView"
+          :page-id="quickPublish.state.pageId"
+          @back="onBatchPublishBack"
+        />
+
+        <section v-else-if="!isSettingsView" class="syp-quick-shell">
+          <div class="syp-quick-shell__eyebrow">{{ t("v2.quickPublish.currentDocument") }}</div>
+          <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
+          <p class="syp-quick-shell__desc">{{ t("v2.quickPublish.desc") }}</p>
+
+          <div
+            class="syp-publish-status"
+            :class="`is-${publishState.status}`"
+            role="status"
+            aria-live="polite"
+            :aria-busy="publishState.isPublishing"
+          >
+            <div class="syp-publish-status__title">{{ publishTitle }}</div>
+            <div class="syp-publish-status__desc">{{ publishDescription }}</div>
+            <div
+              v-if="publishState.status === 'success_with_warnings' && publishState.errMsg"
+              class="syp-publish-status__warning"
+            >
+              <div class="syp-publish-status__warning-head">
+                <div class="syp-publish-status__warning-title">
+                  {{ t("v2.quickPublish.warning.imageUploadFailed") }}
+                </div>
+                <button type="button" class="syp-publish-status__detail-btn" @click="showPublishErrorDetails">
+                  {{ t("v2.quickPublish.action.viewErrorDetails") }}
+                </button>
+              </div>
+            </div>
+            <div v-if="publishState.status === 'failed' && publishState.errMsg" class="syp-publish-status__error">
+              <div class="syp-publish-status__error-head">
+                <div class="syp-publish-status__error-title">{{ publishState.errMsg }}</div>
+                <button type="button" class="syp-publish-status__detail-btn is-error" @click="showPublishErrorDetails">
+                  {{ t("v2.quickPublish.action.viewErrorDetails") }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="quickPublish.state.isLoading" class="syp-platform-skeleton-grid">
+            <div class="syp-platform-skeleton">
+              <div class="syp-platform-skeleton__title">{{ t("v2.quickPublish.loading.platforms") }}</div>
+              <div class="syp-platform-skeleton__row"></div>
+              <div class="syp-platform-skeleton__row short"></div>
+              <div class="syp-platform-skeleton__row"></div>
+            </div>
+            <div class="syp-platform-skeleton">
+              <div class="syp-platform-skeleton__title">{{ t("v2.quickPublish.loading.status") }}</div>
+              <div class="syp-platform-skeleton__row short"></div>
+              <div class="syp-platform-skeleton__row"></div>
+            </div>
+          </div>
+
+          <div v-else-if="!quickPublish.state.hasDocument" class="syp-empty-state">
+            <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noDocument.title") }}</div>
+            <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noDocument.desc") }}</div>
+          </div>
+
+          <div v-else-if="!hasPlatforms" class="syp-empty-state">
+            <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noPlatforms.title") }}</div>
+            <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noPlatforms.desc") }}</div>
+          </div>
+
+          <div v-else class="syp-platform-grid">
+            <V2PlatformCard
+              v-for="item in quickPublish.state.platformItems"
+              :key="item.platformKey"
+              :platform-name="item.platformName"
+              :platform-icon="item.platformIcon"
+              :is-authorized="item.isAuthorized"
+              :is-published="item.isPublished"
+              :tooltip-text="item.tooltipText"
+              :is-processing="publishState.isPublishing"
+              :preview-link="previewLinkMap[item.platformKey]"
+              :is-failed="isFailed(item)"
+              :can-force-delete="canForceDelete(item)"
+              @primary="publishToPlatform(item)"
+              @preview="previewPlatform(item)"
+              @delete="deletePlatform(item)"
+              @force-delete="forceDeletePlatform(item)"
+              @configure="configurePlatform(item)"
+            />
+          </div>
+        </section>
+
+        <V2AccountList
+          v-else-if="settings.state.section === 'account' && settings.state.accountView === 'list'"
+          :items="settings.state.accountItems"
+          @add="settings.openPlatformSelect"
+          @configure="settings.openAccountConfig"
+          @toggle="handleToggleAccountEnabled"
+          @delete="handleDeleteAccount"
+          @reorder="handleReorderAccounts"
+        />
+
+        <V2PlatformSelect
+          v-else-if="settings.state.section === 'account' && settings.state.accountView === 'select'"
+          :items="settings.selectablePlatforms.value"
+          @select="settings.createAccountDraft"
+        />
+
+        <V2PlatformConfigBridge
+          v-else-if="settings.state.section === 'account' && settings.state.accountView === 'config'"
+          :platform-key="settings.state.selectedPlatformKey"
+          :platform-name="settings.state.selectedPlatformName"
+          @cookie-authorized="handleCookieAuthorized"
+          @validated="handleConfigValidated"
+          @saved="handleConfigSaved"
+          @show-error-details="showLastConfigValidationError"
+        />
+
+        <V2PicBedSettings v-else-if="settings.state.section === 'picbed'" />
+
+        <V2PreferenceSettings v-else-if="settings.state.section === 'preference'" />
+
+        <section v-else-if="settings.state.section === 'ai'" class="syp-settings-page syp-settings-ai">
+          <div class="syp-settings-page__header">
+            <div>
+              <div class="syp-settings-page__eyebrow">{{ t("v2.ai.eyebrow") }}</div>
+              <h2 class="syp-settings-page__title">{{ t("v2.ai.title") }}</h2>
+              <p class="syp-settings-page__desc">{{ t("v2.ai.desc") }}</p>
+            </div>
+          </div>
+          <AiSetting />
+        </section>
+
+        <V2PreferenceSettings v-else />
+      </UnifiedWorkspaceShell>
+
+      <SypErrorDetailsPanel
+        :visible="errorDetailsState.visible"
+        :title="errorDetailsState.title"
+        :summary="errorDetailsState.summary"
+        :details="errorDetailsState.details"
+        :copy-label="t('main.copy')"
+        :copy-success-text="t('main.copy.success')"
+        :copy-failure-text="t('main.copy.failure')"
+        :close-label="t('main.opt.ok')"
+        @close="hideErrorDetails"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, provide, ref } from "vue"
+import "~/src/assets/v2/base.styl"
+import SypErrorDetailsPanel from "~/src/components/v2/common/SypErrorDetailsPanel.vue"
+import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
+import { type V2CurrentView } from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
+import UnifiedWorkspaceShell from "~/src/components/v2/layout/UnifiedWorkspaceShell.vue"
+import V2PlatformCard from "~/src/components/v2/publish/V2PlatformCard.vue"
+import V2SinglePublish from "~/src/components/v2/publish/V2SinglePublish.vue"
+import V2BatchPublish from "~/src/components/v2/publish/V2BatchPublish.vue"
+import V2QuickPublishGrid from "~/src/components/v2/publish/V2QuickPublishGrid.vue"
+import V2ArticleManage from "~/src/components/v2/V2ArticleManage.vue"
+import { type V2PlatformConfigValidationResult } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
+import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
+import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
+import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
+import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
+import V2PreferenceSettings from "~/src/components/v2/settings/V2PreferenceSettings.vue"
+import AiSetting from "~/src/components/set/preference/AiSetting.vue"
+import { useV2ErrorDetails } from "~/src/composables/v2/useV2ErrorDetails.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
+import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
+import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
+import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/composables/v2/v2FloatingUi.ts"
+import LucideChevronLeft from "~icons/lucide/chevron-left"
+import LucideSend from "~icons/lucide/send"
+import LucideSettings from "~icons/lucide/settings"
+import LucideHouse from "~icons/lucide/house"
+import LucideX from "~icons/lucide/x"
+import LucidePenLine from "~icons/lucide/pen-line"
+
+const props = defineProps<{
+  initialView?: "quick_publish" | "settings"
+  onClose?: () => void
+}>()
+
+const currentView = ref<V2CurrentView>(props.initialView ?? "quick_publish")
+const isSettingsView = computed(() => currentView.value === "settings")
+const isManageView = computed(() => currentView.value === "manage")
+const isSinglePublishView = computed(() => currentView.value === "single_publish")
+const isBatchPublishView = computed(() => currentView.value === "batch_publish")
+const isQuickPublishView = computed(() => currentView.value === "quick_publish")
+
+// 管理页「单发/批发/闪发」的右侧滑入面板（列表仍在背后可见）
+type ManagePanel = "single" | "batch" | "flash"
+const managePanel = ref<ManagePanel | null>(null)
+const managePanelPageId = ref("")
+const managePanelPlatformKey = ref("")
+const managePanelTitle = ref("")
+const initError = ref("")
+const quickPublish = useV2QuickPublish()
+const settings = useV2Settings()
+const publishValidation = useV2PublishValidation()
+const { t } = useV2I18n()
+const hasPlatforms = computed(() => quickPublish.hasPlatforms.value)
+const publishState = computed(() => quickPublish.state.publishState)
+const previewLinkMap = computed<Record<string, string>>(() => quickPublish.state.previewLinkMap)
+const { errorDetailsState, showErrorDetails, storeErrorDetails, hideErrorDetails, clearErrorDetails, reopenErrorDetails } =
+  useV2ErrorDetails()
+provide("v2-show-error-details", showErrorDetails)
+const settingsSwitchLoading = ref(false)
+let settingsSwitchLoadingTimer: number | undefined
+
+const panelTitle = computed(() => {
+  if (isManageView.value) {
+    if (managePanel.value === "single") {
+      return managePanelTitle.value || t("v2.panel.singlePublish")
+    }
+    if (managePanel.value === "batch") {
+      return t("v2.panel.batchPublish")
+    }
+    if (managePanel.value === "flash") {
+      return t("v2.panel.quickPublish")
+    }
+    return t("v2.app.panel.manage")
+  }
+  if (isSinglePublishView.value) {
+    return t("v2.panel.singlePublish")
+  }
+  if (isBatchPublishView.value) {
+    return t("v2.panel.batchPublish")
+  }
+  return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
+})
+
+const settingsBackTitle = computed(() => {
+  if (settings.state.section === "account" && settings.state.accountView === "config") {
+    const returnTarget = settings.getConfigReturnTarget()
+    if (returnTarget === "quick_publish") {
+      return t("v2.app.back.quickPublish")
+    }
+    return t("v2.app.back.accountList")
+  }
+  if (settings.state.section === "account" && settings.state.accountView !== "list") {
+    return t("v2.app.back.accountList")
+  }
+  return t("v2.app.back.quickPublish")
+})
+
+const publishTitle = computed(() => {
+  const action = publishState.value.lastAction
+  if (publishState.value.status === "preparing") {
+    return action === "delete" ? t("v2.publish.title.preparingDelete") : t("v2.publish.title.preparing")
+  }
+  if (publishState.value.status === "publishing") {
+    if (action === "update") {
+      return t("v2.publish.title.updating")
+    }
+    if (action === "delete") {
+      return t("v2.publish.title.deleting")
+    }
+    return t("v2.publish.title.publishing")
+  }
+  if (publishState.value.status === "success") {
+    if (action === "update") {
+      return t("v2.publish.title.updateSuccess")
+    }
+    if (action === "delete") {
+      return t("v2.publish.title.deleteSuccess")
+    }
+    return t("v2.publish.title.publishSuccess")
+  }
+  if (publishState.value.status === "success_with_warnings") {
+    if (action === "update") {
+      return t("v2.publish.title.updateSuccessWithWarnings")
+    }
+    return t("v2.publish.title.publishSuccessWithWarnings")
+  }
+  if (publishState.value.status === "preview_ready") {
+    return t("v2.publish.title.previewReady")
+  }
+  if (publishState.value.status === "failed") {
+    if (action === "update") {
+      return t("v2.publish.title.updateFailed")
+    }
+    if (action === "delete") {
+      return t("v2.publish.title.deleteFailed")
+    }
+    return t("v2.publish.title.publishFailed")
+  }
+  return t("v2.publish.title.idle")
+})
+
+const publishDescription = computed(() => {
+  const name = publishState.value.platformName
+  const action = publishState.value.lastAction
+  if (publishState.value.status === "preparing") {
+    if (action === "delete") {
+      return name ? t("v2.publish.desc.preparingDelete.named", { name }) : t("v2.publish.desc.preparingDelete.default")
+    }
+    return name ? t("v2.publish.desc.preparing.named", { name }) : t("v2.publish.desc.preparing.default")
+  }
+  if (publishState.value.status === "publishing") {
+    if (action === "update") {
+      return name ? t("v2.publish.desc.updating.named", { name }) : t("v2.publish.desc.updating.default")
+    }
+    if (action === "delete") {
+      return name ? t("v2.publish.desc.deleting.named", { name }) : t("v2.publish.desc.deleting.default")
+    }
+    return name ? t("v2.publish.desc.publishing.named", { name }) : t("v2.publish.desc.publishing.default")
+  }
+  if (publishState.value.status === "success") {
+    if (action === "update") {
+      return name ? t("v2.publish.desc.updateSuccess.named", { name }) : t("v2.publish.desc.updateSuccess.default")
+    }
+    if (action === "delete") {
+      return name ? t("v2.publish.desc.deleteSuccess.named", { name }) : t("v2.publish.desc.deleteSuccess.default")
+    }
+    return name ? t("v2.publish.desc.publishSuccess.named", { name }) : t("v2.publish.desc.publishSuccess.default")
+  }
+  if (publishState.value.status === "success_with_warnings") {
+    if (action === "update") {
+      return name
+        ? t("v2.publish.desc.updateSuccessWithWarnings.named", { name })
+        : t("v2.publish.desc.updateSuccessWithWarnings.default")
+    }
+    return name
+      ? t("v2.publish.desc.publishSuccessWithWarnings.named", { name })
+      : t("v2.publish.desc.publishSuccessWithWarnings.default")
+  }
+  if (publishState.value.status === "preview_ready") {
+    return name ? t("v2.publish.desc.previewReady.named", { name }) : t("v2.publish.desc.previewReady.default")
+  }
+  if (publishState.value.status === "failed") {
+    if (publishState.value.errMsg) {
+      if (action === "update") {
+        return name
+          ? t("v2.publish.desc.updateFailedWithReason.named", { name, reason: publishState.value.errMsg })
+          : t("v2.publish.desc.updateFailedWithReason.default", { reason: publishState.value.errMsg })
+      }
+      if (action === "delete") {
+        return name
+          ? t("v2.publish.desc.deleteFailedWithReason.named", { name, reason: publishState.value.errMsg })
+          : t("v2.publish.desc.deleteFailedWithReason.default", { reason: publishState.value.errMsg })
+      }
+      return name
+        ? t("v2.publish.desc.publishFailedWithReason.named", { name, reason: publishState.value.errMsg })
+        : t("v2.publish.desc.publishFailedWithReason.default", { reason: publishState.value.errMsg })
+    }
+    if (action === "update") {
+      return name ? t("v2.publish.desc.updateFailed.named", { name }) : t("v2.publish.desc.updateFailed.default")
+    }
+    if (action === "delete") {
+      return name ? t("v2.publish.desc.deleteFailed.named", { name }) : t("v2.publish.desc.deleteFailed.default")
+    }
+    return name ? t("v2.publish.desc.publishFailed.named", { name }) : t("v2.publish.desc.publishFailed.default")
+  }
+  return t("v2.publish.desc.idle")
+})
+
+onMounted(async () => {
+  window.addEventListener("keydown", handleWindowKeydown)
+  try {
+    await quickPublish.init()
+  } catch (e) {
+    initError.value = e instanceof Error ? e.message : String(e ?? t("v2.common.unknownError"))
+  }
+  try {
+    await settings.loadAccountItems()
+  } catch {
+    // Settings error is handled internally by the component
+  }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleWindowKeydown)
+})
+
+function handleWindowKeydown(event: KeyboardEvent) {
+  if (event.key !== "Escape") {
+    return
+  }
+  if (managePanel.value) {
+    closeManagePanel()
+  }
+}
+
+async function openSettings() {
+  closeManagePanel()
+  await settings.setSection("account")
+  currentView.value = "settings"
+}
+
+async function backToQuickPublish() {
+  currentView.value = "quick_publish"
+  await quickPublish.init()
+}
+
+async function openManage() {
+  currentView.value = "manage"
+}
+
+async function backFromManage() {
+  if (managePanel.value) {
+    closeManagePanel()
+    return
+  }
+  await backToQuickPublish()
+}
+
+function openManagePanel(panel: ManagePanel, pageId: string, platformKey = "") {
+  if (!pageId) {
+    return
+  }
+  managePanel.value = panel
+  managePanelPageId.value = pageId
+  managePanelPlatformKey.value = platformKey
+}
+
+function closeManagePanel() {
+  managePanel.value = null
+  managePanelPageId.value = ""
+  managePanelPlatformKey.value = ""
+}
+
+function closeManagePanelOnMask() {
+  if (managePanel.value !== null) {
+    closeManagePanel()
+  }
+}
+
+function openManageSingle(pageId: string, platformKey = "", title = "") {
+  managePanelTitle.value = title
+  openManagePanel("single", pageId, platformKey)
+}
+
+function openManageBatch(pageId: string, title = "") {
+  managePanelTitle.value = title
+  openManagePanel("batch", pageId)
+}
+
+function openManageFlash(pageId: string, title = "") {
+  managePanelTitle.value = title
+  openManagePanel("flash", pageId)
+}
+
+async function backFromSinglePublish() {
+  await backToQuickPublish()
+}
+
+async function backFromBatchPublish() {
+  await backToQuickPublish()
+}
+
+/**
+ * quick_publish 卡片「详细发布」：以当前文档进入详细发布视图。
+ */
+async function openSinglePublishForCurrent() {
+  currentView.value = "single_publish"
+}
+
+function onSinglePublishBack() {
+  if (managePanel.value === "single") {
+    closeManagePanel()
+    return
+  }
+  void backFromSinglePublish()
+}
+
+function onBatchPublishBack() {
+  if (managePanel.value === "batch") {
+    closeManagePanel()
+    return
+  }
+  void backFromBatchPublish()
+}
+
+async function changeSettingsSection(section: "account" | "picbed" | "preference" | "ai") {
+  if (settings.state.section === section && settings.state.accountView === "list") {
+    return
+  }
+
+  clearSettingsSwitchLoadingTimer()
+  settingsSwitchLoadingTimer = window.setTimeout(() => {
+    settingsSwitchLoading.value = true
+  }, 50)
+
+  try {
+    await settings.setSection(section)
+  } finally {
+    clearSettingsSwitchLoadingTimer()
+    settingsSwitchLoading.value = false
+  }
+}
+
+function clearSettingsSwitchLoadingTimer() {
+  if (settingsSwitchLoadingTimer) {
+    window.clearTimeout(settingsSwitchLoadingTimer)
+    settingsSwitchLoadingTimer = undefined
+  }
+}
+
+async function handleSettingsBack() {
+  if (settings.state.section === "account" && settings.state.accountView === "config") {
+    const returnTarget = settings.getConfigReturnTarget()
+    if (returnTarget === "quick_publish") {
+      await backToQuickPublish()
+      return
+    }
+  }
+
+  if (settings.state.section === "account" && settings.state.accountView !== "list") {
+    await settings.backInAccountFlow()
+    return
+  }
+
+  await backToQuickPublish()
+}
+
+function close() {
+  props.onClose?.()
+}
+
+function publishToPlatform(item: (typeof quickPublish.state.platformItems)[number]) {
+  quickPublish.publishToPlatform(item)
+}
+
+function previewPlatform(item: (typeof quickPublish.state.platformItems)[number]) {
+  quickPublish.previewPlatform(item, true)
+}
+
+function deletePlatform(item: (typeof quickPublish.state.platformItems)[number]) {
+  quickPublish.deletePlatform(item)
+}
+
+async function configurePlatform(item: (typeof quickPublish.state.platformItems)[number]) {
+  currentView.value = "settings"
+  await settings.setSection("account")
+  await settings.openAccountConfig(item.platformKey, item.platformName, "quick_publish")
+}
+
+function isFailed(item: (typeof quickPublish.state.platformItems)[number]) {
+  return publishState.value.status === "failed" && publishState.value.platformKey === item.platformKey
+}
+
+// 仅当该平台「删除失败」时才允许「强制删除」，正常状态下始终为 false，避免误导/误操作。
+function canForceDelete(item: (typeof quickPublish.state.platformItems)[number]) {
+  return (
+    publishState.value.status === "failed" &&
+    publishState.value.platformKey === item.platformKey &&
+    publishState.value.canForceDelete === true
+  )
+}
+
+function forceDeletePlatform(item: (typeof quickPublish.state.platformItems)[number]) {
+  quickPublish.forceDeletePlatform(item)
+}
+
+function showPublishErrorDetails() {
+  showErrorDetails(
+    t("v2.quickPublish.errorDetails"),
+    publishState.value.errMsg || t("v2.common.unknownError"),
+    publishState.value.errDetails || publishState.value.errMsg || t("v2.common.unknownError")
+  )
+}
+
+function showLastConfigValidationError() {
+  reopenErrorDetails()
+}
+
+async function handleToggleAccountEnabled(platformKey: string, nextEnabled: boolean) {
+  await settings.toggleAccountEnabled(platformKey, nextEnabled)
+  await quickPublish.init()
+}
+
+async function handleDeleteAccount(platformKey: string) {
+  try {
+    await settings.phase4DeleteDraft(platformKey)
+    await quickPublish.init()
+    v2MessageSuccess(t("main.opt.success"))
+  } catch (error) {
+    v2MessageError(error instanceof Error ? error.message : t("main.opt.failure"))
+  }
+}
+
+async function handleReorderAccounts(orderedPlatformKeys: string[]) {
+  try {
+    await settings.reorderAccounts(orderedPlatformKeys)
+    await quickPublish.init()
+  } catch (error) {
+    await settings.loadAccountItems()
+    v2MessageError(error instanceof Error ? error.message : t("v2.account.order.saveFailed"))
+  }
+}
+
+async function handleCookieAuthorized(_result: { ok: boolean }) {
+  await settings.loadAccountItems()
+  await quickPublish.init()
+}
+
+async function completeConfigIfPublishReady() {
+  const platformKey = settings.state.selectedPlatformKey
+  if (!platformKey) {
+    return
+  }
+
+  const validation = await publishValidation.validatePlatformPublish(platformKey)
+  if (validation.isAuth === true && validation.canPublish === true && validation.dynCfg) {
+    await publishValidation.enableAccountAfterPublishValidation(platformKey, validation.dynCfg)
+    const returnTarget = settings.getConfigReturnTarget()
+    await settings.finishAccountConfig()
+    await quickPublish.init()
+    if (returnTarget === "quick_publish") {
+      currentView.value = "quick_publish"
+    }
+    return
+  }
+
+  await settings.loadAccountItems()
+  await quickPublish.init()
+  v2MessageWarning(validation.reason || t("v2.publishValidation.incomplete"))
+}
+
+async function handleConfigValidated(result: V2PlatformConfigValidationResult) {
+  await settings.loadAccountItems()
+  await quickPublish.init()
+  if (result.ok) {
+    hideErrorDetails()
+    clearErrorDetails()
+    await completeConfigIfPublishReady()
+  } else {
+    const summary = result.errorMessage || t("v2.platformConfig.validation.failedGeneric")
+    storeErrorDetails(
+      t("v2.platformConfig.validation.errorTitle"),
+      summary,
+      result.errorDetails || result.errorMessage || summary
+    )
+  }
+}
+
+async function handleConfigSaved(result: { ok: boolean }) {
+  await settings.loadAccountItems()
+  await quickPublish.init()
+  if (result.ok) {
+    await completeConfigIfPublishReady()
+  }
+}
+
+async function retryInit() {
+  initError.value = ""
+  try {
+    await quickPublish.init()
+  } catch (e) {
+    initError.value = e instanceof Error ? e.message : String(e ?? t("v2.common.unknownError"))
+  }
+}
+</script>
+
+<style scoped lang="stylus">
+@import "../../assets/v2/variables.styl"
+
+.syp-v2
+  position relative
+  width 960px
+  max-width calc(100vw - 48px)
+  max-height calc(100vh - 180px)
+  display flex
+  flex-direction column
+
+.syp-panel
+  position relative
+  max-height 100%
+  display flex
+  flex-direction column
+
+.syp-header-title-group
+  display flex
+  align-items center
+  gap 12px
+  min-width 0
+
+.syp-header-chip
+  display inline-flex
+  align-items center
+  gap 8px
+  padding 4px 10px
+  border-radius 999px
+  background var(--b3-theme-surface-light, $syp-chip-bg)
+  color var(--b3-theme-on-surface-light, $syp-chip-text)
+  font-size 12px
+  letter-spacing 0.04em
+
+.syp-header-chip__icon
+  width 14px
+  height 14px
+
+.syp-header-actions
+  display flex
+  align-items center
+  gap 6px
+  flex-shrink 0
+
+.syp-btn-quiet
+  min-width 28px
+  height 28px
+  padding 0
+  background transparent
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+  border-radius 999px
+
+  &:hover
+    color var(--b3-theme-primary, $syp-accent)
+    background var(--b3-theme-surface-light, $syp-accent-hover-bg)
+
+.syp-btn-text-entry
+  display inline-flex
+  align-items center
+  padding 0 10px
+  font-size 13px
+  font-weight 500
+  white-space nowrap
+
+  svg
+    width 15px
+    height 15px
+    flex-shrink 0
+    margin-right 0
+
+  .syp-btn-text-entry__label
+    line-height 1
+    margin-left 7px
+
+.syp-btn-back
+  display inline-flex
+  align-items center
+  gap 4px
+  height 28px
+  padding 0 8px
+  background var(--b3-theme-surface-light, transparent)
+  border 1px solid var(--b3-border-color, transparent)
+  color var(--b3-theme-on-surface, $syp-text-tertiary)
+  border-radius 999px
+  font-size 12px
+
+  &:hover
+    color var(--b3-theme-primary, $syp-accent)
+    background var(--b3-theme-surface-light, $syp-accent-hover-bg)
+
+.syp-btn-back__label
+  white-space nowrap
+
+.syp-settings-switch-loading
+  position sticky
+  top 0
+  z-index 20
+  display inline-flex
+  align-self flex-end
+  align-items center
+  gap 6px
+  margin-bottom 8px
+  padding 6px 10px
+  border-radius 999px
+  border 1px solid #d8e7ff
+  background #f5f9ff
+  color #2563eb
+  font-size 12px
+  font-weight 600
+  box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
+
+.syp-settings-switch-loading__dot
+  width 7px
+  height 7px
+  border-radius 999px
+  background #1677ff
+  animation syp-settings-loading-pulse 0.9s ease-in-out infinite alternate
+
+@keyframes syp-settings-loading-pulse
+  from
+    opacity 0.35
+    transform scale(0.82)
+  to
+    opacity 1
+    transform scale(1)
+
+.syp-quick-shell
+  display flex
+  flex-direction column
+  gap 12px
+
+// 发布状态条：思源语义色（--b3-theme-*），明/暗由宿主变量驱动
+.syp-publish-status
+  padding 8px 12px
+  border-radius $syp-radius-md
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
+  display flex
+  flex-direction column
+  gap 4px
+  transition background 0.2s ease, border-color 0.2s ease
+
+  &.is-idle
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    border 1px dashed var(--b3-border-color, $syp-border-primary)
+
+    .syp-publish-status__title
+      font-weight 500
+      color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+    .syp-publish-status__desc
+      color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+  &.is-preparing,
+  &.is-publishing
+    background var(--b3-theme-primary-lightest, $syp-status-info-bg)
+    border 1px solid var(--b3-theme-primary, $syp-primary)
+
+    .syp-publish-status__title
+      color var(--b3-theme-primary, $syp-primary)
+
+    .syp-publish-status__desc
+      color var(--b3-theme-on-surface, $syp-text-secondary)
+
+  &.is-success,
+  &.is-preview_ready
+    background var(--b3-theme-surface-light, $syp-status-success-bg)
+    border 1px solid var(--b3-theme-success, $syp-success)
+
+    .syp-publish-status__title
+      color var(--b3-theme-success, $syp-success)
+
+    .syp-publish-status__desc
+      color var(--b3-theme-on-surface, $syp-text-secondary)
+
+  &.is-success_with_warnings
+    background var(--b3-theme-surface-light, $syp-status-warning-bg)
+    border 1px solid var(--b3-theme-warning, $syp-warning)
+
+    .syp-publish-status__title
+      color var(--b3-theme-warning, $syp-warning)
+
+    .syp-publish-status__desc
+      color var(--b3-theme-on-surface, $syp-text-secondary)
+
+  &.is-failed
+    background var(--b3-theme-surface-light, $syp-status-error-bg)
+    border 1px solid var(--b3-theme-error, $syp-error)
+
+    .syp-publish-status__title
+      color var(--b3-theme-error, $syp-error)
+
+    .syp-publish-status__desc
+      color var(--b3-theme-on-surface, $syp-text-secondary)
+
+.syp-publish-status__title
+  font-size 14px
+  font-weight 600
+  line-height 1.5
+  color var(--b3-theme-on-background, $syp-text-primary)
+
+.syp-publish-status__desc
+  font-size 13px
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
+  line-height 1.5
+
+.syp-publish-status__warning
+  border-radius 10px
+  background var(--b3-theme-surface-light, $syp-status-warning-deep-bg)
+  padding 10px 12px
+  border 1px solid var(--b3-border-color, $syp-status-warning-border)
+
+.syp-publish-status__warning-head,
+.syp-publish-status__error-head
+  display flex
+  align-items center
+  justify-content space-between
+  gap 10px
+
+.syp-publish-status__warning-title
+  font-size 12px
+  font-weight 600
+  color var(--b3-theme-warning, $syp-warning)
+  margin-bottom 0
+
+.syp-publish-status__detail-btn
+  min-height 24px
+  padding 0 8px
+  border-radius 7px
+  border 1px solid var(--b3-border-color, $syp-status-warning-border)
+  background var(--b3-theme-surface, $syp-bg-primary)
+  color var(--b3-theme-warning, $syp-warning)
+  font-size 12px
+  font-weight 600
+  cursor pointer
+
+  &:hover
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
+    border-color var(--b3-theme-warning, $syp-warning)
+
+  &.is-error
+    border-color var(--b3-border-color, $syp-status-error-border)
+    color var(--b3-theme-error, $syp-error)
+
+    &:hover
+      border-color var(--b3-theme-error, $syp-error)
+
+.syp-publish-status__error
+  border-radius 10px
+  background var(--b3-theme-surface-light, $syp-status-error-deep-bg)
+  padding 10px 12px
+  border 1px solid var(--b3-border-color, $syp-status-error-border)
+
+.syp-publish-status__error-title
+  font-size 12px
+  font-weight 600
+  color var(--b3-theme-error, $syp-error)
+  margin-bottom 0
+
+.syp-quick-shell__eyebrow
+  font-size 12px
+  letter-spacing 0.08em
+  text-transform uppercase
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+.syp-quick-shell__title
+  margin 0
+  font-size 20px
+  line-height 1.3
+  color var(--b3-theme-on-background, $syp-text-primary)
+
+.syp-quick-shell__desc
+  margin 0
+  font-size 13px
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+.syp-platform-skeleton-grid,
+.syp-platform-grid
+  display grid
+  grid-template-columns repeat(2, minmax(0, 1fr))
+  gap 10px
+
+.syp-platform-skeleton
+  padding $syp-sm-card-padding
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+
+.syp-platform-skeleton__title
+  font-size 13px
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+  margin-bottom 14px
+
+.syp-platform-skeleton__row
+  height 32px
+  border-radius 6px
+  background linear-gradient(90deg, var(--b3-theme-surface-light, #eef2f7) 0%, var(--b3-theme-surface, #f7f9fc) 100%)
+  margin-bottom 8px
+
+  &.short
+    width 62%
+
+.syp-empty-state
+  display flex
+  flex-direction column
+  gap 6px
+  padding 16px
+  border-radius $syp-sm-card-radius
+  background $syp-card-bg-gradient
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+
+.syp-empty-state__title
+  font-size 16px
+  font-weight 600
+  color var(--b3-theme-on-background, $syp-text-primary)
+
+.syp-empty-state__desc
+  font-size 13px
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+.syp-manage-wrap
+  position relative
+  display flex
+  flex-direction column
+
+.syp-manage-panel-mask
+  position absolute
+  inset 0
+  background rgba(48, 49, 51, 0.28)
+  z-index 20
+  border-radius $syp-sm-card-radius
+
+.syp-manage-panel
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  width min(94%, 460px)
+  z-index 30
+  display flex
+  flex-direction column
+  background var(--b3-theme-surface, $syp-bg-primary)
+  border-left 1px solid var(--b3-border-color, $syp-border-primary)
+  border-radius 0 $syp-sm-card-radius $syp-sm-card-radius 0
+  box-shadow -8px 0 24px rgba(0, 0, 0, 0.12)
+
+.syp-manage-panel__head
+  display flex
+  align-items center
+  gap 8px
+  padding 10px 14px
+  border-bottom 1px solid var(--b3-border-color, $syp-border-primary)
+
+.syp-manage-panel__back
+  width 26px
+  height 26px
+  border-radius 6px
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  background var(--b3-theme-surface, $syp-bg-primary)
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+  cursor pointer
+  display inline-flex
+  align-items center
+  justify-content center
+
+  &:hover
+    color var(--b3-theme-primary, $syp-accent)
+    border-color var(--b3-theme-primary, $syp-accent)
+
+.syp-manage-panel__title
+  font-weight 600
+  font-size 14px
+  color var(--b3-theme-on-background, $syp-text-primary)
+
+.syp-manage-panel__body
+  flex 1
+  overflow-y auto
+  padding 14px
+
+.syp-manage-panel__flashhint
+  font-size 12px
+  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+  text-align center
+  padding 0 0 8px
+
+@media (max-width: 960px)
+  .syp-v2
+    width auto
+    max-width calc(100vw - 24px)
+
+  .syp-header-title-group
+    gap 8px
+
+  .syp-platform-skeleton-grid,
+  .syp-platform-grid
+    grid-template-columns 1fr
+</style>

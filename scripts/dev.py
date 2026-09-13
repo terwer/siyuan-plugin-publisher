@@ -52,8 +52,8 @@ if __name__ == "__main__":
 
     if args.platform == 'siyuan':
         dist_name = 'dist'
-        # zhi-build
-        zhi_build_cmd = "zhi-build --production -d " + dist_name
+        # V1 legacy plugin CJS build
+        zhi_build_cmd = "vite build --config vite.v1.siyuan.config.ts --outDir " + dist_name
         print(zhi_build_cmd)
         os.system(zhi_build_cmd)
     elif args.platform == 'widget':
@@ -101,6 +101,6 @@ if __name__ == "__main__":
         pass
 
     # vite-build
-    vite_cmd = "vue-tsc --noEmit && vite build --watch --outDir " + dist_name
+    vite_cmd = "vue-tsc --noEmit && vite build --watch --config vite.v1.app.config.ts --outDir " + dist_name
     print(vite_cmd)
     os.system(vite_cmd)

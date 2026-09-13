@@ -1,0 +1,80 @@
+/*
+ * V2 浮层（Tooltip / ElMessage 等 teleported 节点）
+ * 必须由 base.styl 引入，确保打进 dist-v2 CSS（勿仅放在 Vue SFC 非 scoped 块）
+ */
+
+// --- P0 Tooltip：宿主暗黑时强制思源表面色，压过 EP is-light 白底 ---
+html[data-theme-mode="dark"] .el-popper.syp-v2-tooltip-popper,
+html.dark .el-popper.syp-v2-tooltip-popper,
+.publisher-v2-menu-content.dark .el-popper.syp-v2-tooltip-popper
+  max-width 360px
+  padding 7px 9px
+  border-radius 6px
+  border 1px solid var(--b3-border-color, rgba(255, 255, 255, 0.08))
+  background var(--b3-theme-surface, #252526)
+  color var(--b3-theme-on-surface, #cccccc)
+  font-size 12px
+  line-height 1.5
+  word-break break-word
+  box-shadow var(--b3-dialog-shadow, 0 4px 12px rgba(0, 0, 0, 0.35))
+
+html[data-theme-mode="dark"] .el-popper.is-light.syp-v2-tooltip-popper,
+html.dark .el-popper.is-light.syp-v2-tooltip-popper,
+.publisher-v2-menu-content.dark .el-popper.is-light.syp-v2-tooltip-popper,
+html[data-theme-mode="dark"] .el-popper.is-dark.syp-v2-tooltip-popper,
+html.dark .el-popper.is-dark.syp-v2-tooltip-popper,
+.publisher-v2-menu-content.dark .el-popper.is-dark.syp-v2-tooltip-popper
+  background var(--b3-theme-surface, #252526)
+  color var(--b3-theme-on-surface, #cccccc)
+  border-color var(--b3-border-color, rgba(255, 255, 255, 0.08))
+
+html[data-theme-mode="dark"] .syp-v2-tooltip-popper .el-popper__arrow::before,
+html.dark .syp-v2-tooltip-popper .el-popper__arrow::before,
+.publisher-v2-menu-content.dark .syp-v2-tooltip-popper .el-popper__arrow::before
+  background var(--b3-theme-surface, #252526)
+  border 1px solid var(--b3-border-color, rgba(255, 255, 255, 0.08))
+
+// --- P1 Element Plus 输入 placeholder（桥接区 / 设置表单）---
+html.dark .publisher-v2-menu-content .el-input__inner::placeholder,
+html[data-theme-mode="dark"] .publisher-v2-menu-content .el-input__inner::placeholder,
+.publisher-v2-menu-content.dark .el-input__inner::placeholder
+  color var(--b3-theme-on-surface-light, #8b949e)
+
+html.dark .publisher-v2-menu-content .el-textarea__inner::placeholder,
+html[data-theme-mode="dark"] .publisher-v2-menu-content .el-textarea__inner::placeholder,
+.publisher-v2-menu-content.dark .el-textarea__inner::placeholder
+  color var(--b3-theme-on-surface-light, #8b949e)
+
+// --- P4 ElMessage（teleport 到 body，随 html.dark / 宿主暗黑着色）---
+html.dark .el-message,
+html[data-theme-mode="dark"] .el-message
+  background var(--b3-theme-surface, #252526)
+  border 1px solid var(--b3-border-color, rgba(255, 255, 255, 0.08))
+  box-shadow var(--b3-dialog-shadow, 0 4px 12px rgba(0, 0, 0, 0.35))
+
+html.dark .el-message .el-message__content,
+html[data-theme-mode="dark"] .el-message .el-message__content
+  color var(--b3-theme-on-surface, #cccccc)
+
+// --- P5 ElMessageBox（teleport 到 body；偏好设置等仍用 sypConfirm）---
+html.dark .el-overlay.syp-v2-message-box-modal,
+html[data-theme-mode="dark"] .el-overlay.syp-v2-message-box-modal
+  background var(--b3-theme-background, rgba(0, 0, 0, 0.55))
+  opacity 1
+  z-index 5000
+
+html.dark .el-message-box.syp-v2-message-box,
+html[data-theme-mode="dark"] .el-message-box.syp-v2-message-box,
+.publisher-v2-menu-content.dark .el-message-box.syp-v2-message-box
+  z-index 5001
+  background var(--b3-theme-surface, #252526)
+  border 1px solid var(--b3-border-color, rgba(255, 255, 255, 0.08))
+  box-shadow var(--b3-dialog-shadow, 0 16px 48px rgba(0, 0, 0, 0.45))
+
+html.dark .el-message-box.syp-v2-message-box .el-message-box__title,
+html[data-theme-mode="dark"] .el-message-box.syp-v2-message-box .el-message-box__title
+  color var(--b3-theme-on-background, #e8e8e8)
+
+html.dark .el-message-box.syp-v2-message-box .el-message-box__content,
+html[data-theme-mode="dark"] .el-message-box.syp-v2-message-box .el-message-box__content
+  color var(--b3-theme-on-surface-light, #b0b0b0)

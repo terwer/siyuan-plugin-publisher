@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import { markRaw, onBeforeMount, reactive, ref } from "vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { useRouter } from "vue-router"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -44,8 +43,10 @@ const props = defineProps({
 
 // uses
 const { t } = useVueI18n()
-const router = useRouter()
 const { getSetting } = usePublishSettingStore()
+
+// emits
+const emit = defineEmits(["open"])
 
 // datas
 const formData = reactive({
@@ -64,16 +65,7 @@ const handleSingleDoPublish = (event: any, key: string) => {
   event.stopPropagation()
 
   const method = checkHasPublished(key) ? "edit" : "add"
-  const path = `/publish/singlePublish/doPublish/${key}/${props.id}`
-  logger.info("will go to =>", path)
-  const query = {
-    path: path,
-    query: {
-      showBack: "true",
-      method: method,
-    },
-  }
-  router.push(query)
+  emit("open", key, props.id, method)
 }
 
 const checkHasPublished = (key: string) => {

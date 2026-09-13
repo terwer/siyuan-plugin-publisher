@@ -7,17 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
+import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
-import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
-import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
-import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
   // 创建应用日志记录器
@@ -37,7 +38,7 @@ const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<VuepressConfig>(setting[key], {} as VuepressConfig)
+    cfg = safeMergeConfig<VuepressConfig>(setting[key], VuepressConfig, ["","","","",""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -75,7 +76,6 @@ const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Vuepress 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   // picbed service
   cfg.picgoPicbedSupported = true

@@ -35,4 +35,6 @@ if __name__ == "__main__":
     # 获取当前工作目录
     print(os.getcwd())
 
-    os.system("zhi-build --production")
+    os.environ['BUILD_TYPE'] = 'siyuan'
+
+    os.system("vite build --config vite.v1.siyuan.config.ts")

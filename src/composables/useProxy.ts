@@ -14,17 +14,21 @@ import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
+import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlrpcTransport.ts"
 
 /**
  * 用于处理代理请求的自定义 hook
  *
  * @param middlewareUrl - 可选，如果使用 CommonFetchClient 需要传递，否则可留空
  * @param corsProxyUrl - 可选，可留空
+ * @param isCorsProxy - 可选，CORS 受限平台要求强制走新 CORS 代理时传 true
  * @author terwer
  * @version 1.7.0
  * @since 1.7.0
  */
-const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
+const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: boolean) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
 
@@ -82,18 +86,23 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     } else {
       logger.info("Using middleware proxy fetch")
       const header = headers.length > 0 ? headers[0] : {}
+      const fetchHeaders: Record<string, string> = {}
+      for (const [k, v] of Object.entries(header)) {
+        // 只保留一个规范的 Content-Type，避免重复头导致服务端无法解析 body
+        if (v != null && k.toLowerCase() !== "content-type") {
+          fetchHeaders[k] = String(v)
+        }
+      }
+      fetchHeaders["Content-Type"] = contentType
       const fetchOptions = {
         method: method,
-        headers: {
-          ...header,
-          "Content-Type": contentType,
-        },
+        headers: fetchHeaders,
         body: params,
       }
       logger.info("commonFetchClient url in proxyFetch =>", url)
-      logger.info("commonFetchClient fetchOptions in proxyFetch =>", fetchOptions)
+      logger.info("commonFetchClient fetchOptions in proxyFetch =>", sanitizeSensitiveForLog(fetchOptions))
       const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
-      logger.debug("Result of proxyFetch in commonFetchClient =>", res)
+      logger.debug("Result of proxyFetch in commonFetchClient =>", sanitizeSensitiveForLog(res))
       return res
     }
   }
@@ -107,8 +116,26 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
    * @param forceProxy - 是否强制使用代理
    */
   const proxyXmlrpc = async (url: string, reqMethod: string, reqParams: any[], forceProxy: boolean = false) => {
-    const body = serializer.serializeMethodCall(reqMethod, reqParams)
-    let resText: string = await proxyFetch(url, [], body, "POST", "text/xml", forceProxy, "base64")
+    const xmlBody = serializer.serializeMethodCall(reqMethod, reqParams)
+    const transport = resolveXmlrpcTransport({
+      forceProxy,
+      isUseSiyuanProxy,
+      canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
+      isCorsProxy,
+    })
+    logger.info(`XML-RPC transport => ${transport}`, url)
+    let resText = await executeXmlrpcTransport(
+      transport,
+      {
+        pluginNodeFetch: (endpoint, body) =>
+          PluginFetchUtil.postText(appInstance, endpoint, body, "text/xml; charset=utf-8", logger),
+        siyuanForwardProxy: (endpoint, body) =>
+          siyuanProxyFetch(endpoint, [], body, "POST", "text/xml", "base64", "text"),
+        middlewareFetch: (endpoint, body, fp) =>
+          proxyFetch(endpoint, [], body, "POST", "text/xml", fp, "base64", "text"),
+      },
+      { url, xmlBody, forceProxy }
+    )
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)
@@ -157,7 +184,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
     }
 
     logger.debug("corsFetch url =>", apiUrl)
-    logger.debug("corsFetch options =>", options)
+    logger.debug("corsFetch options =>", sanitizeSensitiveForLog(options))
 
     const res = await fetch(apiUrl, options)
 
@@ -175,14 +202,14 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
         corsRespHeaders[resp_key] = resp_value
       }
     }
-    logger.debug("corsFetch corsRespHeaders =>", corsRespHeaders)
+    logger.debug("corsFetch corsRespHeaders =>", sanitizeSensitiveForLog(corsRespHeaders))
 
     const resText = await res.text()
-    logger.debug("corsFetch resText =>", resText)
+    logger.debug("corsFetch resText =>", sanitizeSensitiveForLog(resText))
 
     const resJson = JsonUtil.safeParse<any>(resText, {})
     resJson["cors-received-headers"] = JSON.stringify(corsRespHeaders)
-    logger.debug("corsFetch resJson =>", resJson)
+    logger.debug("corsFetch resJson =>", sanitizeSensitiveForLog(resJson))
 
     return resJson
   }
@@ -263,12 +290,15 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
 
     const proxyHeaders = [header]
     logger.debug("siyuan forwardProxy url =>", reqUrl)
-    logger.debug("siyuan forwardProxy fetchOptions =>", {
-      headers,
-      payload,
-      method,
-      contentType,
-    })
+    logger.debug(
+      "siyuan forwardProxy fetchOptions =>",
+      sanitizeSensitiveForLog({
+        headers,
+        payload,
+        method,
+        contentType,
+      })
+    )
     const fetchResult = await kernelApi.forwardProxy(
       reqUrl,
       proxyHeaders,
@@ -279,32 +309,42 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string) => {
       responseEncoding,
       30000
     )
-    logger.debug("proxyFetch result =>", fetchResult)
+    logger.debug("proxyFetch result =>", sanitizeSensitiveForLog(fetchResult))
 
-    if (!(fetchResult.status >= 200 && fetchResult.status < 300)) {
+    const proxyStatus = Number(fetchResult?.status ?? fetchResult?.StatusCode)
+    const proxyBodyRaw = fetchResult?.body ?? fetchResult?.Body
+
+    if (!(proxyStatus >= 200 && proxyStatus < 300)) {
       // 兼容 CSDN 错误提示
-      const bodyJson = JsonUtil.safeParse<any>(fetchResult?.body, {})
-      if (!StrUtil.isEmptyString(bodyJson?.msg)) {
-        throw new Error(bodyJson?.msg)
+      const bodyJson = JsonUtil.safeParse<any>(proxyBodyRaw, {})
+      const proxyMessage = !StrUtil.isEmptyString(bodyJson?.msg)
+        ? bodyJson?.msg
+        : StrUtil.decodeUnicodeToChinese(
+            StrUtil.isEmptyString(proxyBodyRaw) ? `请求异常：${proxyStatus}` : String(proxyBodyRaw)
+          )
+      const proxyError = new Error(proxyMessage)
+      ;(proxyError as any).status = proxyStatus
+      ;(proxyError as any).diagnostic = {
+        stage: "forward-proxy",
+        transport: "siyuan-forward-proxy",
+        url: reqUrl,
+        status: proxyStatus,
+        responseBodyPreview: sanitizeSensitiveForLog(String(proxyBodyRaw ?? "")).slice(0, 1000),
       }
-      throw new Error(
-        StrUtil.decodeUnicodeToChinese(
-          StrUtil.isEmptyString(fetchResult?.body) ? `请求异常：${fetchResult.status}` : fetchResult?.body
-        )
-      )
+      ;(proxyError as any).diagnosticMessage = JSON.stringify((proxyError as any).diagnostic, null, 2)
+      throw proxyError
     }
 
+    // 通用 forwardProxy 出口：保持历史返回形态，避免影响 JSON/表单/base64 等 apiFetch 调用方。
+    // XML-RPC 响应规范化仅在 proxyXmlrpc 入口调用 normalizeXmlrpcResponseText。
     if (responseEncoding === "text") {
       if (contentType === "application/json") {
-        const resText = fetchResult?.body
-        const resJson = JsonUtil.safeParse<any>(resText, {} as any)
+        const resJson = JsonUtil.safeParse<any>(proxyBodyRaw, {} as any)
         return resJson
       } else if (contentType === "text/html") {
-        const resText = fetchResult?.body
-        return resText
+        return proxyBodyRaw
       } else if (contentType === "text/xml") {
-        const resText = fetchResult?.body
-        return resText
+        return proxyBodyRaw
       } else {
         logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
         return fetchResult

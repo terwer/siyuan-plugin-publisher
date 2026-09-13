@@ -9,11 +9,52 @@
 
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { HtmlUtil, StrUtil } from "zhi-common"
-import type { ChatGPTAPI, ChatGPTUnofficialProxyAPI, SendMessageOptions } from "chatgpt"
+import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from "chatgpt"
+import type { SendMessageOptions } from "chatgpt"
 import { Utils } from "~/src/utils/utils.ts"
 import { isDev } from "~/src/utils/constants.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { AiConstants } from "~/src/ai/AiConstants.ts"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+
+/**
+ * OpenCode Go 接口标识：其 baseURL 形如 https://opencode.ai/zen/go/v1
+ *
+ * OpenCode Go 要求每个请求都携带 `x-opencode-session` 头（用于会话路由与 prompt 缓存），
+ * chatgpt 库默认只发送 Content-Type 与 Authorization，缺少该头会返回 400 MissingSessionID。
+ */
+const OPENCODE_GO_BASE_URL = "https://opencode.ai/zen/go"
+
+/**
+ * 判断当前 AI 配置目标是否为 OpenCode Go 接口
+ */
+const isOpenCodeGo = (baseUrl?: string): boolean => {
+  return !StrUtil.isEmptyString(baseUrl) && baseUrl?.includes(OPENCODE_GO_BASE_URL)
+}
+
+/**
+ * 为 OpenCode Go 请求注入 x-opencode-session 头
+ *
+ * @param baseFetch 原始的 fetch 实现（绑定好的全局 fetch）
+ * @returns 注入会话头之后的 fetch
+ */
+const injectOpenCodeGoSessionHeader = (baseFetch: typeof fetch) => {
+  const sessionId = sypIdUtil.newUuid()
+  return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+    const headers = new Headers(init?.headers)
+    // OpenCode Go 要求每条会话提供稳定 ID，使用固定 UUID 即可
+    headers.set("x-opencode-session", sessionId)
+    return baseFetch(input, init ? { ...init, headers } : { headers })
+  }
+}
+
+/**
+ * 根据目标 baseURL 计算应使用的 fetch，OpenCode Go 需要额外注入会话头
+ */
+const resolveFetch = (baseUrl?: string) => {
+  const baseFetch = self.fetch.bind(self)
+  return isOpenCodeGo(baseUrl) ? injectOpenCodeGoSessionHeader(baseFetch) : baseFetch
+}
 
 /**
  * 创建一个用于与 ChatGPT 服务进行交互的钩子
@@ -32,7 +73,6 @@ const useChatGPT = () => {
   let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI = undefined
   const getAPI = async () => {
     if (api === undefined) {
-      const { ChatGPTAPI, ChatGPTUnofficialProxyAPI } = await import("chatgpt")
       try {
         // 设置了代理地址创建代理实例，否则使用官方实例
         if (!StrUtil.isEmptyString(pref.value.experimentalAIProxyUrl)) {
@@ -41,7 +81,7 @@ const useChatGPT = () => {
             apiReverseProxyUrl: Utils.emptyOrDefault(process.env.OPENAI_PROXY_URL, pref.value.experimentalAIProxyUrl),
             debug: isDev,
             // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
-            fetch: self.fetch.bind(self),
+            fetch: resolveFetch(pref.value.experimentalAIProxyUrl),
           })
         } else {
           api = new ChatGPTAPI({
@@ -49,7 +89,7 @@ const useChatGPT = () => {
             apiBaseUrl: Utils.emptyOrDefault(process.env.OPENAI_BASE_URL, pref.value.experimentalAIBaseUrl),
             debug: isDev,
             // workaround for https://github.com/transitive-bullshit/chatgpt-api/issues/592
-            fetch: self.fetch.bind(self),
+            fetch: resolveFetch(pref.value.experimentalAIBaseUrl),
             completionParams: {
               model: pref.value.experimentalAIApiModel,
               max_tokens: pref.value.experimentalAIApiMaxTokens,
@@ -78,7 +118,7 @@ const useChatGPT = () => {
    * const chatResponse = await chat('你好，ChatGPT！');
    * console.log(chatResponse); // ChatGPT 生成的响应
    */
-  const chat = async (q: string, opts?: SendMessageOptions): Promise<string | any> => {
+  const chat = async (q: string, opts?: SendMessageOptions & { silent?: boolean }): Promise<string | any> => {
     try {
       const api = await getAPI()
       // 使用 ChatGPTAPI 实例进行聊天操作
@@ -104,7 +144,10 @@ const useChatGPT = () => {
       }
     } catch (e) {
       logger.error("Chat encountered an error:", e)
-      ElMessage.error("Chat encountered an error:" + e)
+      // silent 模式（如摘要自动生成）由调用方负责兜底，避免弹出误导性错误
+      if (!opts?.silent) {
+        ElMessage.error("Chat encountered an error:" + e)
+      }
     }
   }
 

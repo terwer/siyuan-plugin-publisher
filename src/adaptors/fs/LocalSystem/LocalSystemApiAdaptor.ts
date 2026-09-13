@@ -7,31 +7,35 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
-import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
-import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
-import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
-import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
-import { HugoYamlConverterAdaptor } from "~/src/adaptors/api/hugo/hugoYamlConverterAdaptor.ts"
-import { JekyllYamlConverterAdaptor } from "~/src/adaptors/api/jekyll/jekyllYamlConverterAdaptor.ts"
-import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
-import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
-import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
-import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYamlConverterAdaptor.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import { Attachment, MediaObject, PicbedServiceTypeEnum, Post, UserBlog, YamlConvertAdaptor } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
-import sypIdUtil from "~/src/utils/sypIdUtil.ts"
-import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
-import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
-import { Vuepress2ApiAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2ApiAdaptor.ts"
+import { AstroApiAdaptor } from "~/src/adaptors/api/astro/astroApiAdaptor.ts"
+import { AstroYamlConverterAdaptor } from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts"
+import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
+import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 import { HugoApiAdaptor } from "~/src/adaptors/api/hugo/hugoApiAdaptor.ts"
+import { HugoYamlConverterAdaptor } from "~/src/adaptors/api/hugo/hugoYamlConverterAdaptor.ts"
 import { JekyllApiAdaptor } from "~/src/adaptors/api/jekyll/jekyllApiAdaptor.ts"
-import { VitepressApiAdaptor } from "~/src/adaptors/api/vitepress/vitepressApiAdaptor.ts"
+import { JekyllYamlConverterAdaptor } from "~/src/adaptors/api/jekyll/jekyllYamlConverterAdaptor.ts"
 import { QuartzApiAdaptor } from "~/src/adaptors/api/quartz/quartzApiAdaptor.ts"
-import {AstroYamlConverterAdaptor} from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts";
+import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYamlConverterAdaptor.ts"
+import { VitepressApiAdaptor } from "~/src/adaptors/api/vitepress/vitepressApiAdaptor.ts"
+import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
+import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
+import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
+import { Vuepress2ApiAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2ApiAdaptor.ts"
+import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
+import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
+import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
+import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
+import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 本地系统适配器
@@ -103,8 +107,58 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     }
   }
 
+  /**
+   * 创建委派 adaptor 并将媒体上传重定向到本地文件系统
+   *
+   * 子 adaptor 的完整 preEditPost() 链路照常运行（包括统一图片处理、YAML 格式化、平台收尾逻辑），
+   * 但 handlePictures() 中调用的 newMediaObject() 会被重定向到 LocalSystemApiAdaptor 自身的方法，
+   * 使图片最终落盘到本地文件系统而非 GitHub。
+   */
+  private createDelegateAdaptor(fsYamlType: FsYamlType): BaseBlogApi {
+    const localFsCfg = this.cfg as LocalSystemConfig
+    let delegate: BaseBlogApi
+
+    switch (fsYamlType) {
+      case FsYamlType.Hexo:
+        delegate = new HexoApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Hugo:
+        delegate = new HugoApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Jekyll:
+        delegate = new JekyllApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Vuepress:
+        delegate = new VuepressApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Vuepress2:
+        delegate = new Vuepress2ApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Vitepress:
+        delegate = new VitepressApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Quartz:
+        delegate = new QuartzApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      case FsYamlType.Astro:
+        delegate = new AstroApiAdaptor(this.appInstance, localFsCfg as any)
+        break
+      default:
+        throw new Error(`不支持的 fsYamlType: ${fsYamlType}`)
+    }
+
+    // 核心修复：将子 adaptor 的媒体上传重定向到本地文件系统
+    // handlePictures() 中 this.api.newMediaObject() 将命中此替换方法
+    delegate.newMediaObject = this.newMediaObject.bind(this)
+
+    return delegate
+  }
+
   public override async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
     const localFsCfg = this.cfg as LocalSystemConfig
+
+    // 清空上一次发布的 realStorePath 残留，防止跨文档污染
+    localFsCfg.realStorePath = ""
 
     if (localFsCfg.storePath.includes(CATE_AUTO_NAME)) {
       // 自动分类
@@ -113,47 +167,20 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
 
     let updatedPost: Post
 
-    // 自定义预处理
-    switch (localFsCfg.fsYamlType) {
-      case FsYamlType.Hexo: {
-        const hexoApiAdaptor = new HexoApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await hexoApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      case FsYamlType.Hugo: {
-        const hugoApiAdaptor = new HugoApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await hugoApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      case FsYamlType.Jekyll: {
-        const jekyllApiAdaptor = new JekyllApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await jekyllApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      case FsYamlType.Vuepress: {
-        const vuepressApiAdaptor = new VuepressApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await vuepressApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      case FsYamlType.Vuepress2: {
-        const vuepress2ApiAdaptor = new Vuepress2ApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await vuepress2ApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      case FsYamlType.Vitepress: {
-        const vitepressApiAdaptor = new VitepressApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await vitepressApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      case FsYamlType.Quartz: {
-        const quartzApiAdaptor = new QuartzApiAdaptor(this.appInstance, localFsCfg as any)
-        updatedPost = await quartzApiAdaptor.preEditPost(post, id, publishCfg)
-        break
-      }
-      default: {
-        updatedPost = await super.preEditPost(post, id, publishCfg)
-        break
-      }
+    // 判断是否需要委派给子 adaptor
+    const knownFsYamlTypes = [
+      FsYamlType.Hexo, FsYamlType.Hugo, FsYamlType.Jekyll,
+      FsYamlType.Vuepress, FsYamlType.Vuepress2, FsYamlType.Vitepress,
+      FsYamlType.Quartz, FsYamlType.Astro,
+    ]
+
+    if (knownFsYamlTypes.includes(localFsCfg.fsYamlType)) {
+      // 委派给子 adaptor（完整链路），但图片上传重定向到本地文件系统
+      const delegate = this.createDelegateAdaptor(localFsCfg.fsYamlType)
+      updatedPost = await delegate.preEditPost(post, id, publishCfg)
+    } else {
+      // 默认走 LocalSystem 自身的 base 链路
+      updatedPost = await super.preEditPost(post, id, publishCfg)
     }
 
     if (updatedPost?.cate_slugs.length > 0) {
@@ -207,7 +234,35 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
+    const localFsCfg = this.cfg as LocalSystemConfig
+
+    // 仅在 Bundled 图床模式且拿到思源文档 ID 时，通过正式识别管线清理本地资源
+    if (localFsCfg.picbedService === PicbedServiceTypeEnum.Bundled && id) {
+      const { blogApi } = useSiyuanApi()
+      const { getImageItemsFromMd } = usePicgoBridge()
+
+      try {
+        const siyuanPost = await blogApi.getPost(id)
+        if (siyuanPost?.markdown) {
+          // 复用与发布链路 handlePictures 完全一致的图片识别管线
+          const imageItems = await getImageItemsFromMd(id, siyuanPost.markdown)
+          const imageStorePath = localFsCfg.imageStorePath ?? "assets"
+          this.logger.debug("will delete assets", imageItems)
+
+          for (const item of imageItems) {
+            if (!item.name) continue
+            const absImgPath = StrUtil.pathJoin(StrUtil.pathJoin(localFsCfg.storePath, imageStorePath), item.name)
+            this.logger.info(`deleting asset: ${absImgPath}`)
+            EnvUtil.deleteFile(absImgPath)
+          }
+        }
+      } catch (e) {
+        this.logger.warn("failed to clean up local assets, will still delete .md file", e)
+      }
+    }
+
+    // 最后删除 .md 文件
     return EnvUtil.deleteFile(postid)
   }
 
@@ -219,7 +274,11 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
 
     // 存储基础路径
     let storePath = localFsCfg.storePath
-    if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+    if (storePath.includes(CATE_AUTO_NAME) && mediaObject.post?.cate_slugs?.length > 0) {
+      // 自动分类场景：优先使用当前文档的分类路径，不信任历史缓存
+      storePath = storePath.replace(CATE_AUTO_NAME, mediaObject.post.cate_slugs[0])
+    } else if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+      // 非自动分类场景，或 post.cate_slugs 不可用时，使用 realStorePath
       storePath = localFsCfg.realStorePath
     }
 

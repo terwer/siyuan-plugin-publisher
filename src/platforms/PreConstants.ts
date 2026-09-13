@@ -9,6 +9,7 @@
 
 const PRE_CONSTANTS = {
   PRE_CUSTOM_HALOWEB: "custom_Haloweb",
+  PRE_CUSTOM_YUQUEWEB: "custom_Yuqueweb",
   PRE_CUSTOM_BILIBILI: "custom_Bilibili",
   PRE_CUSTOM_XIAOHONGSHU: "custom_Xiaohongshu",
   // PRE_CUSTOM_WEIBO: "custom_Weibo",

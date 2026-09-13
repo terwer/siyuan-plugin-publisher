@@ -7,19 +7,20 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
-import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
-import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
 import { YamlConvertAdaptor } from "zhi-blog-api"
+import { AstroYamlConverterAdaptor } from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts"
+import { DocsifyYamlConverterAdaptor } from "~/src/adaptors/api/docsify/docsifyYamlConverterAdaptor.ts"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 import { HugoYamlConverterAdaptor } from "~/src/adaptors/api/hugo/hugoYamlConverterAdaptor.ts"
 import { JekyllYamlConverterAdaptor } from "~/src/adaptors/api/jekyll/jekyllYamlConverterAdaptor.ts"
-import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
-import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
 import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYamlConverterAdaptor.ts"
+import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
+import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepressYamlConverterAdaptor.ts"
 import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
-import { AstroYamlConverterAdaptor } from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts"
+import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
+import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
+import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 文件系统工具类
@@ -77,6 +78,10 @@ class FsUtils {
         case FsYamlType.Astro:
           FsUtils.logger.info("Using Astro YAML adapter")
           yamlAdaptor = new AstroYamlConverterAdaptor()
+          break
+        case FsYamlType.Docsify:
+          FsUtils.logger.info("Using Docsify YAML adapter")
+          yamlAdaptor = new DocsifyYamlConverterAdaptor()
           break
         case FsYamlType.Default:
         default:

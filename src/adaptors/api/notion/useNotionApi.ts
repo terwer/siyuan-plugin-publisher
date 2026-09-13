@@ -7,16 +7,17 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { Utils } from "~/src/utils/utils.ts"
-import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { NotionApiAdaptor } from "~/src/adaptors/api/notion/notionApiAdaptor.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
+import { ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { NotionApiAdaptor } from "~/src/adaptors/api/notion/notionApiAdaptor.ts"
+import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
   // 创建应用日志记录器
@@ -36,7 +37,7 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<NotionConfig>(setting[key], {} as NotionConfig)
+    cfg = safeMergeConfig<NotionConfig>(setting[key], NotionConfig, ["", ""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -62,8 +63,6 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
-    "由于Notion平台的限制，暂时不支持编辑所属父页面。如果您想移动文档，请先点击取消删除该文档，然后重新选择新的根页面发布"
   cfg.cateSearchEnabled = true
   // picbed service
   cfg.picgoPicbedSupported = true

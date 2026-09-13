@@ -218,9 +218,13 @@ class BilibiliMdUtil {
       this.processNode(child, ops, paragraphChildNodes)
     })
 
+    // 判断段落是否包含图片：B 站正文用 para_type 区分段落类型（1=文本，2=图片），
+    // 若把图片段落标为文本段（para_type=1），B 站会忽略其 pic 数据导致图片渲染空白。
+    const hasPic = paragraphChildNodes.some((node) => node.pic && node.pic.pics && node.pic.pics.length > 0)
+
     // 将处理后的段落数据加入 content 格式
     const paragraph: Paragraph = {
-      para_type: 1,
+      para_type: hasPic ? 2 : 1,
       text: {
         nodes: [],
       },

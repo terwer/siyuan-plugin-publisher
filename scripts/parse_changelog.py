@@ -36,7 +36,7 @@ def parse_changelog():
 
     ### ⚠ BREAKING CHANGES
 
-    * **esbuild-config-custom:** previews esbuild config need to be a attr value for esbuild property, add a new customConfig property
+    * **release-tooling:** normalize release note config shape
 
     ### Features
 
@@ -57,7 +57,7 @@ def parse_changelog():
 
     ## 1.0.0 (2023-04-24)
     ### ⚠ BREAKING CHANGES
-    * **esbuild-config-custom:** previews esbuild config need to be a attr value for esbuild property, add a new customconfig property
+    * **release-tooling:** normalize release note config shape
     ### Features
     * [#163](https://github.com/terwer/zhi/issues/163) ([d9fae8a](https://github.com/terwer/zhi/commit/d9fae8af6f96052a82e62f9aea79505a52fdbb23))
     * add a vuepress 2 blog ([9862b18](https://github.com/terwer/zhi/commit/9862b1811663a2b34b05d140d3197075d943696b))

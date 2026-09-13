@@ -8,7 +8,7 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * 微信公众号配置
@@ -28,5 +28,9 @@ export class WechatConfig extends CommonWebConfig {
     this.tagEnabled = false
     this.cateEnabled = false
     this.knowledgeSpaceEnabled = false
+    // 公众号平台图片上传（素材库 upload_material），默认平台图床，与外链/PicGo 并存
+    this.picgoPicbedSupported = false
+    this.bundledPicbedSupported = true
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }

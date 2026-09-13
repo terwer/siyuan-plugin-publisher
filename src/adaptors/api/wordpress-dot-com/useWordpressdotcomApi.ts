@@ -7,17 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { Utils } from "~/src/utils/utils.ts"
-import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { WordpressdotcomApiAdaptor } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts"
+import { WordpressdotcomConfig } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomConfig.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
-import { WordpressdotcomConfig } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomConfig.ts"
-import { WordpressdotcomApiAdaptor } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomApiAdaptor.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 /**
  * 使用 Wordpress.com API的自定义hook
@@ -46,7 +47,7 @@ export const useWordpressdotcomApi = async (key?: string, newCfg?: Wordpressdotc
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<WordpressConfig>(setting[key], {} as WordpressdotcomConfig)
+    cfg = safeMergeConfig<WordpressdotcomConfig>(setting[key], WordpressdotcomConfig, ["", "", "", ""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Wordpress API的URL、用户名、认证令牌和中间件URL

@@ -15,6 +15,7 @@ import { BrowserUtil } from "zhi-device"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * MetaweblogBlogApi 类继承自 BaseBlogApi 类，并为 Metaweblog API 提供了额外的功能
@@ -166,7 +167,7 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     return ret
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const ret = await this.metaweblogCall(MetaweblogConstants.METHOD_DELETE_POST, [
       this.cfg.blogid,
       postid,

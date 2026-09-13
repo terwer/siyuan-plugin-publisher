@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { reactive, toRaw } from "vue"
+import { onMounted, reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Post, PostUtil, YamlConvertAdaptor, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
@@ -44,7 +44,9 @@ const props = defineProps({
 })
 
 const formData = reactive({
-  isLoading: false,
+  // 初始为加载态：初始化在 onMounted 中执行（组件改为同步 setup），
+  // 先显示骨架屏，避免初始化前内容为空/闪烁。
+  isLoading: true,
 
   stype: SourceContentShowType.MD_CONTENT,
   contentReadonlyMode: true,
@@ -242,7 +244,11 @@ const initPage = async () => {
   }
 }
 
-await initPage()
+// 不能用顶层 await：顶层 await 使组件 setup 返回 Promise，必须被 <Suspense> 包裹，
+// 否则源码模式在本插件的单发/批量容器中完全无法渲染。改为挂载后执行初始化。
+onMounted(async () => {
+  await initPage()
+})
 </script>
 
 <template>

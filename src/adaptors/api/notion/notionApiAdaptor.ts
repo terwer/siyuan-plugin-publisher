@@ -14,6 +14,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
 import { NotionMarkdownConverter } from "zhi-notion-markdown"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Notion API 适配器
@@ -68,7 +69,7 @@ class NotionApiAdaptor extends BaseBlogApi {
     // return await this.updatePage(postid, post.title, post.description)
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const notionPostidKey = this.getNotionPostidKey(postid)
     return await this.deletePage(notionPostidKey.pageId)
   }

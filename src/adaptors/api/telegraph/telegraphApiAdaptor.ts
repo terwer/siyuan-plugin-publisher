@@ -13,6 +13,7 @@ import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
 import md from "telegraph.md"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Telegraph API 适配器
@@ -44,6 +45,13 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     } else {
       const contentType = "text/plain"
       let xCorsHeaders: Record<any, any> = {}
+
+      // Telegraph 为 CORS 受限平台，必须通过 CORS 代理访问
+      if (StrUtil.isEmptyString(tgCfg.corsAnywhereUrl)) {
+        throw new Error(
+          "telegra.ph 需要配置 CORS 代理地址，请打开该平台的「跨域请求代理」配置项并填写你自己的 CORS 代理地址"
+        )
+      }
 
       // x-cors-headers
       xCorsHeaders["origin"] = "https://telegra.ph"
@@ -154,7 +162,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     }
 
     // 这里不用这个，因为 telegraph 必须强制代理
-    // const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    // const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     const content = md(post.description)
@@ -209,7 +217,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     }
 
     // 这里不用这个，因为 telegraph 必须强制代理
-    // const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    // const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     const content = md(post.description)
@@ -232,7 +240,7 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     throw new Error("telegra.ph 暂不支持删除文章功能")
   }
 
@@ -289,8 +297,8 @@ class TelegraphApiAdaptor extends BaseBlogApi {
     const postMeta = JsonUtil.safeParse<any>(postid, {})
     const purl = this.cfg.previewUrl ?? ""
     const postUrl = purl.replace("[postid]", postMeta?.path ?? "")
-    const useProxyPreview = false
-    if (useProxyPreview && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
+    // Telegraph 域名被墙，预览链接同样需走 CORS 代理，否则用户环境打不开
+    if (this.cfg.isCorsProxy && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
       const proxyHome = StrUtil.pathJoin(this.cfg.corsAnywhereUrl, this.cfg.home ?? "")
       return StrUtil.pathJoin(`${proxyHome}`, postUrl)
     }
