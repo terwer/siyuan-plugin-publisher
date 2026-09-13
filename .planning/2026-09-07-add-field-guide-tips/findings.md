@@ -204,3 +204,12 @@
   · TourGuide：4/4 步全部命中真实控件（highlight 739×95 / 739×48 / 739×48 / 739×74，无 `--missing` 兜底），结束后蒙层正常关闭。
   · 账号数 32 → 32（未误建/误删）。
 - **留档**：截图 `tmp/regression-yuqueweb-after-fallback-cleanup.png`（本轮）。
+
+## 第六轮：两把回归尺 drop-in 草稿 + checklist SSOT 核对（2026-09-12）
+- **drop-in 草稿已写好**：`tmp/field-guide-rulers.spec.ts`（含 22 站 `REQUIRED_FIELD_KEYS` 表 + `ready` 标记 + 三条用例：键尺、覆盖尺、进度尺）。F 阶段直接复制进 `src/helpConfigs/`，把 `ready=false` 清零即完成。
+- **试跑结果（重要）**：
+  · 覆盖尺对 **14 个 ready 站点全绿** → 按真实渲染行冻结的键表与真实配置一致（含 GitHub 族 21 键、Telegraph 12 键、本地系统 5 键等）。
+  · **键尺红**：7 个待办 Cookie 站共 **11 个键不是配置实例属性**——`cookie`（7 站全部）+ `knowledgeSpace`（知乎/简书/掘金/哔哩哔哩）。即这两个旧键**在实例上根本不存在**，不只是命名不合规。
+  · 且全仓**没有任何组件**挂 `field="cookie"`/`field="knowledgeSpace"`/`field="token"` → 这些 `tip` 当前是**永不可达的死文案**（即使行上有 ⓘ 也取不到）。→ D 组那 7 站的改名是「让指引真正存在」，不是措辞美化。
+  · 进度尺通过：未完成清单 = 7 站 + 博客园，与 campaign 进度一致。
+- **checklist SSOT 核对（只读）**：T1 小结「全链路 ✅ 22」与下列 22 行一致（#1–#11、#21、#25、#27–#35、#29）；未测 13 行 = `remaining-t1` 的 12 个未拆分平台 + `metaweblog_*` 通配；四行（#1 语雀 / #21 博客园 / #25 Wordpress / #29 本地系统）备注里没有 SOP §3 帮助记录，属**计划内**——F.5 统一为 22 站回写字段指引记录，不改六格结论。

@@ -96,7 +96,8 @@
 
 ### 步骤 F：回归尺与标准固化
 - [ ] F.1 新增两把尺：① 每站 `fields` 键必须能在合并后配置实例上取到同名属性；② 按族 `REQUIRED_FIELD_KEYS` 全覆盖。
-  - 原型已跑（`tmp/field-guide-key-audit.tmp.spec.ts`、`tmp/field-guide-family-coverage.diag.spec.ts`）：12 站两把尺都 `missing=[]`。
+  - **drop-in 草稿已就绪**：`tmp/field-guide-rulers.spec.ts`（22 站键表 + `ready` 标记 + 键尺/覆盖尺/进度尺三条用例）。F 阶段复制进 `src/helpConfigs/` 并把 `ready=false` 清零。
+  - 原型已跑：覆盖尺对 14 个 ready 站全绿；**键尺红**——7 个待办 Cookie 站有 11 个键（`cookie` ×7、`knowledgeSpace` ×4）不是配置实例属性，且全仓无组件挂这些 `field` 名 → 旧 tip 永不可达。
   - **尺子②的设计要点（2026-09-12 查实）**：必须用**按平台显式 REQUIRED_FIELD_KEYS 表**，不能从 Config 构造函数推导渲染行——平台 hook 会运行时改开关（`useTelegraphApi.ts:53` 开 `usernameEnabled`、`useBilibiliWeb.ts` 开 `knowledgeSpaceEnabled` 等）；且 GitHub 族图片两行取决于**当前图床值**（`picbedService === Bundled`）。宿主内不渲染的 `middlewareUrl` 与非 `isCorsProxy` 的 `corsAnywhereUrl` 不纳入必填集。
 - [ ] F.2 同步 `registry.spec.ts` 中按 `'token'` 取 tip 的用例。
   - **2026-09-12 核实：已是完成态**——全仓无任何按 `token` 键取字段说明的 spec 用例（Yuque 那条已用 `password`）；残留的 `token` 只在 tour 锚点 `[data-syp-tour='token']` 与 Telegraph 真实属性 `accessToken`，均须保留。
