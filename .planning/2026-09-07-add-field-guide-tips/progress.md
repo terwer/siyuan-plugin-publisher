@@ -273,6 +273,19 @@
 - `pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过（含 `vue-tsc --noEmit`）。
 - 本轮无平台六格/帮助门禁结论变化；#27 结论与证据见上一节，仍待验收。
 
+## 会话：2026-09-12（第二轮：#27 待验收期间，第二把回归尺原型 + 余 7 站键清单预推）
+
+### 做了什么
+1. **覆盖尺原型**（步骤 F 第二把尺）：从 `CommonBlogSetting.vue` 抽每行渲染条件 + 各族专有行，推出「该站应覆盖的键集」，与各站 `fields` 做差集 → **12 个已回填平台全部 `missing=[] extra=[]`**（键数与宿主实测行数逐站吻合），两把尺互相印证。脚本留档 `tmp/field-guide-family-coverage.diag.spec.ts`。
+2. **余 7 站键校正清单已提前算出**（写入 task_plan 步骤 D 表格）：Halo网页版 +password +previewUrl -cookie；知乎 +username +password +previewUrl +blogid -cookie -knowledgeSpace；CSDN +password +previewUrl -cookie；简书/掘金 +password +previewUrl +blogid -cookie -knowledgeSpace；公众号 +password -cookie；哔哩哔哩 +password +previewUrl +blogid -cookie -knowledgeSpace。各站仍按规矩在宿主逐项确认。
+3. **两条尺子设计结论**（写进 task_plan 步骤 F）：① 尺子②必须用**按平台显式 REQUIRED_FIELD_KEYS 表**，不能从 Config 构造函数推导——平台 hook 运行时改开关（Telegraph 开 `usernameEnabled`、掘金/哔哩哔哩/知乎/简书开 `knowledgeSpaceEnabled`）；② GitHub 族图片两行取决于**当前图床值**（`picbedService === Bundled`），不是「是否支持 Bundled」；宿主内不渲染的 `middlewareUrl`、非 `isCorsProxy` 的 `corsAnywhereUrl` 不进必填集。
+4. 顺带确认 `telegraph.ts` 的 `username` 键不是死键（hook 把 `usernameEnabled` 置真）——避免误删。
+
+### 质量
+- 临时脚本已移出 `src/`（`vue-tsc` 会检查仓库内所有 `.spec.ts`，留 `tmp/` 更安全）。
+- `pnpm vitest run`、`pnpm build:v2` 复跑通过；提交 `a52edae2` 已推送，工作树干净。
+- 本轮不动任何平台站文件、不改六格/帮助门禁结论；#27 仍待人工验收。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|

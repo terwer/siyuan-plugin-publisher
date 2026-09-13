@@ -170,3 +170,6 @@
 - **宿主内不渲染的行**：`middlewareUrl`（跨域代理地址）与非 `isCorsProxy` 平台的 `corsAnywhereUrl` 只在非思源环境出现 → 不纳入宿主门禁的必填集。
 - **7 个待办 Cookie 站的工作清单已提前算出**（各站仍需宿主确认）：
   `Zhihu +username +password +previewUrl +blogid -cookie -knowledgeSpace`；`Csdn +password +previewUrl -cookie`；`Jianshu +password +previewUrl +blogid -cookie -knowledgeSpace`；`Juejin +password +previewUrl +blogid -cookie -knowledgeSpace`；`Wechat +password -cookie`；`Bilibili +password +previewUrl +blogid -cookie -knowledgeSpace`；`Haloweb +password +previewUrl -cookie`。
+- **临时脚本也会被 `vue-tsc` 全量检查，且文件名大小写必须精确**：脚本放进 `tmp/` 后 `pnpm build:v2` 会一起做类型检查；本次因把 `bilibiliConfig.ts` 写成 `BilibiliConfig.ts`（另有 zhihu/csdn/jianshu/juejin/wechat 同理）触发 TS1149「仅大小写不同」直接让构建失败 → 临时脚本的 import 一律按磁盘真实文件名照抄。
+
+## 第二轮追加（2026-09-12）
