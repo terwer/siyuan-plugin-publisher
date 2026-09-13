@@ -192,3 +192,15 @@
 - **组件层唯一缺口在 `fs/LocalSystemSetting.vue`**：它的 `#main` 三行（存储路径 `storePath`、媒体存储路径 `imageStorePath`、YAML 类型 `fsYamlType` 单选组）都还没挂 `field-guide` → 键在、但页面上不会有 ⓘ。修法：前两行包裹式文本指引，第三行用 `inline`。
 - **原计划表述需修正**：`base/impl/MetaweblogSetting.vue`、`metaweblog/WordpressSetting.vue`、`metaweblog/CnblogsSetting.vue` 都是**直通壳**（渲染 `<common-blog-setting>`），行与指引全部继承已改造的共用表单 → 「挂 impl/MetaweblogSetting.vue」这一项不存在，E 组的代码工作量只有本地系统那 3 处。
 - 组件清点（`field-guide` 计数）：已挂 `base/CommonBlogSetting.vue`(26)、`base/impl/CommonGithubSetting.vue`(26)、`commonblog/ConfluenceSetting.vue`(2)、`commonblog/TelegraphSetting.vue`(8)；**未挂但含真实行**的仅 `fs/LocalSystemSetting.vue`(3 行)；其余各站组件均为直通壳或 slot 壳（0 行）。
+
+## 第五轮：宿主回归复核（当前构建，2026-09-12）
+- **背景**：`f1b67569` 改过共用兜底配置 `platform-config/_default`（删死键 `token`），该改动发生在 #27 定稿之后 → 需要对**当前最新 `dist-v2`** 做一次宿主回归，确认共用层改动没有影响已验证站点的指引渲染。
+- **做法**：桌面端渲染进程重载（强制忽略缓存）→ 插件从磁盘重新加载 → 顶栏「发布工具」→ 设置 → 账号列表 → `custom_Yuqueweb` 行「管理」→ 逐项复核。
+- **结果（全绿）**：
+  · 7 行 = 7 个 ⓘ，键精确为 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`（无缺、无多）。
+  · 鉴权行（Cookie）折叠态与展开「手动编辑」态都**恒为 1 个** ⓘ（不重复、不丢失）；文本框内已有值（长度 1092，仅记长度不记内容）时指引仍在 → 「已填值仍可见」在此构建上复现。
+  · 7/7 tip 均在 `.syp-panel` 内、视口内不被裁切（最长 284×84）；文案是语雀网页版专属说明而非兜底文案 → **证明 `_default` 清理未干扰 registry 精确解析**。
+  · HelpPanel：`.syp-help-panel-popover` 正常弹出（teleport 到 `.syp-v2`）、显示平台 summary + 3 条 FAQ + 开始引导教程，未出现「暂无专属帮助文档」兜底。
+  · TourGuide：4/4 步全部命中真实控件（highlight 739×95 / 739×48 / 739×48 / 739×74，无 `--missing` 兜底），结束后蒙层正常关闭。
+  · 账号数 32 → 32（未误建/误删）。
+- **留档**：截图 `tmp/regression-yuqueweb-after-fallback-cleanup.png`（本轮）。
