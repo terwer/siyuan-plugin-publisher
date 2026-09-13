@@ -13,9 +13,20 @@ export const halowebHelpConfig: PageHelpConfig = {
       tip: "你的 Halo 2.20+ 博客首页地址。填写完整 URL（如 https://yourhalo.com）后，登录和 Cookie 读取将自动解析到正确的地址。",
     },
     apiUrl: { tip: "通常和首页地址相同。除非你的 Halo 后台使用了独立域名，否则保持默认。" },
-    cookie: { tip: "先登录 Halo 后台，再自动读取或手动粘贴 Cookie。Cookie 过期或切换账号后需要重新读取。" },
+    password: {
+      tip:
+        "Cookie 授权：点「1 去登录」登录 Halo 后台，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
+        "也可展开「手动编辑」直接粘贴 Cookie。Cookie 过期或切换账号后需要重新读取。",
+    },
+    previewUrl: {
+      tip: "查看文章链接模板，默认 /archives/{slug}，与 Halo 的文章固定链接一致，通常保持默认。",
+    },
     pageType: { tip: "Halo 网页版默认使用 HTML 发布，通常保持默认。" },
-    picbedService: { tip: "Halo 网页版使用平台内置图片链路；默认使用 Bundled 图床即可。" },
+    picbedService: {
+      tip:
+        "图片发布方式：默认「当前平台」，图片作为 Halo 附件上传；也可选「不使用」按原图地址引用（需公网可访问），" +
+        "或选「PicGo 强烈推荐」改用你配置的 PicGo。",
+    },
   },
   faq: [
     { q: "提示「Invalid URL」？", a: "先填写站点地址（完整 URL），再点击登录或读取 Cookie。" },

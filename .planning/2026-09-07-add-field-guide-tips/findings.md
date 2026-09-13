@@ -267,3 +267,14 @@
 - **`pnpm build:v2` 曾因 `tmp/field-guide-rulers.spec.ts` 报 TS2419 而失败**：`RulerEntry.ConfigClass` 声明为 `new (...args: any[]) => Record<string, unknown>`，而各配置类实例没有字符串索引签名。**规则补充：`tmp/*.spec.ts` 也在 `vue-tsc --noEmit` 的检查范围内**（`build:v2` 会一起查），草稿必须同时满足「vitest 能跑」与「类型能过」。修法：类型放宽为 `new (...args: any[]) => any` + 调用处一次 `as new (...args: any[]) => Record<string, any>` 断言 → `vue-tsc` 干净、`build:v2` exit 0；草稿四条尺行为不变（① 对 7 个待办站按预期报红，②③④ 全绿）。
 - **当前工作树收口复核**：`pnpm build:v2` exit 0（✓ built）；`pnpm vitest run` **65 文件 / 309 测试全通过**；`openspec validate add-field-guide-tips --strict` → valid；宿主语雀网页版页两把尺均 exit 0；`git status` 干净。
 - **自动续航轮次已用满（14/14）**：后续推进必须由用户放行 #27 才能继续；本轮把交接件全部核到位（#28 预制补丁、F 两把尺 drop-in、SOP §3 文本与 checklist 回写片段、宿主两把尺）。
+
+## #28 Halo网页版 站点完成（2026-09-12，用户已放行 #27）
+- **应用补丁**（只改平台 help 配置与文档草稿，共用层零改动）：
+  · `custom-haloweb.ts`：删 `cookie`（**实例上不存在的死键**）→ 补 `password`；补 `previewUrl`；`pageType`/`picbedService` 文案按宿主实测改准（图床点名真实三项 `不使用 / PicGo 强烈推荐 / 当前平台 推荐` 并写明默认「当前平台」；鉴权键点名真实按钮 `1 去登录 / 2 自动读取 Cookie / 手动编辑`）。
+  · `docs/draft/platforms/custom-haloweb.md`：配置表补「预览规则」行与默认值 `/archives/{slug}`，图床行改为默认「当前平台」，步骤按钮名与真实 UI 对齐。
+- **改前基线（宿主实测，非推断）**：`字段行 6 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项精确点名 `平台Cookie` 与 `预览规则`，并标为「已挂载但未渲染指引（键名/键缺失）」。
+- **改后实测**：`字段行 6 行 · 指引 6 个 · 键 apiUrl,home,pageType,password,picbedService,previewUrl`，`rowsWithoutGuide=[]`、`emptyWrappers=[]`；折叠态与展开态（文本框 150 字符）鉴权行 ⓘ 恒为 1；6 条弹层全部 `面板内=True 未裁切=True`（最长 Cookie 行 101.6px 高、107 字）；5 个已填值行指引仍可见。
+- **帮助引导与文档**：HelpPanel 标题 Halo网页版、在 `.syp-v2` 内且视口内未裁切、summary 72 字、FAQ **4** 条、无回退提示；引导 **5/5 步命中**（站点首页/API 地址/Cookie 授权/图片发布/验证并保存）并正常收尾。
+- **宿主尺 flaky 修复**：帮助尺首跑报「面板超出视口」，定位为**刚发生重排（鉴权行展开→收起）后弹层仍停在旧位置**；已在脚本里加「先把滚动容器归位 + 弹层不在视口内时复测一拍」，并按原失败序列复跑 + 连跑 3 次全部 `exit 0`。
+- **口径澄清（避免误判漏挂）**：该页顶部 `您当前操作的平台是：custom_Haloweb 默认分类` 是 `el-alert` 信息条（静态文案），**不是可编辑字段行**，故不计入「每行字段」标准；真实可编辑字段行恰为 6 行。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-haloweb-password-previewurl.png`（可见 6 行 ⓘ 与 Cookie 行新文案弹层）。

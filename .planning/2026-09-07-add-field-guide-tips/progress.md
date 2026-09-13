@@ -422,6 +422,22 @@
 - #27 仍待人工验收；**自动续航轮次已用满**，后续必须由用户放行才能推进 #28–#35、E 组 3 站与 F 收尾。
 - 交接材料齐备：`tmp/station-28-haloweb-patch.md`（#28 预制补丁 + 改前基线 + 验收口径）、`tmp/field-guide-rulers.spec.ts`（F 两把尺 drop-in）、`tmp/sop-section3-field-guide-draft.md`（SOP §3 文本 + checklist 回写片段 + 占位链接清单 + 锚点断言改写片段）、`tmp/host-field-guide-check.ps1` / `tmp/host-help-gate-check.ps1`（宿主两把尺）。
 
+## 会话：2026-09-12（#28 Halo网页版 站点完成，待验收）
+
+### 前情
+- 用户放行 **#27 语雀网页版**（选择「放行 #27，现在开做 #28 Halo网页版（做完即停交证据）」）。
+
+### 做了什么
+1. **改前基线**（宿主实测）：6 个字段行只有 4 个指引，「平台Cookie」「预览规则」两行无指引并被标为「已挂载但未渲染指引」——`cookie` 是实例上不存在的死键。
+2. **应用预制补丁**：`custom-haloweb.ts` 删 `cookie`、补 `password` + `previewUrl`，并按宿主实测改准 `pageType`/`picbedService` 文案（点名真实图床三项与默认「当前平台」、真实按钮名）；`docs/draft/platforms/custom-haloweb.md` 同步补「预览规则」行。
+3. **改后实测**：**6 行 = 6 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/picbedService`；折叠/展开态鉴权行 ⓘ 恒 1；6 条弹层全部面板内未裁切；HelpPanel（summary 72 字 + FAQ 4 + 无回退）+ 引导 **5/5 命中**。
+4. **宿主尺 flaky 修复**：帮助尺首跑因「重排后弹层仍在旧位置」误报超出视口 → 脚本加「滚动归位 + 复测一拍」，按原失败序列复跑并连跑 3 次全部 exit 0。
+5. **口径澄清**：顶部「默认分类」是 `el-alert` 静态信息条，不是字段行，不计入「每行字段」。
+
+### 门禁与状态
+- `pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；两条宿主尺 exit 0；账号数 32 不变；截图 `tmp/field-guide-haloweb-password-previewurl.png`。
+- **#28 已交付，停下等验收**；#30 知乎未开工。
+
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
