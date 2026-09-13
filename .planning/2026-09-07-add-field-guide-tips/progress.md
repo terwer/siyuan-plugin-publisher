@@ -463,3 +463,17 @@
 
 ---
 *每完成一个阶段或遇到错误时更新此文件*
+
+## 会话：2026-09-12（#31 CSDN 站点完成，待验收）
+
+### 做了什么
+1. **改前基线**：6 行 = 4 ⓘ，「平台Cookie」「预览规则」无指引（`cookie` 键在实例上不存在）。
+2. **意外收获**：本站宿主打开的是**动态实例** `custom_Csdn-z26fa1o`，既有指引仍能解析 → registry 回落链在真实宿主中成立（该标准此前多为静态验证）。
+3. **应用补丁**：删 `cookie`、补 `password` + `previewUrl`，并按宿主实测改准五处文案（真实按钮名、真实图床两项与默认「当前平台」、`/[userid]/article/details/[postid]`、summary、FAQ2）；文档草稿全表同步。
+4. **改后实测**：6 行 = 6 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 884 字符）；6 条弹层面板内未裁切；HelpPanel（summary 51 字 + FAQ 3 + 无回退）+ 引导 4/4 命中。
+5. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-csdn-password-previewurl.png`。
+
+### 状态
+- **#31 已交付，停下等验收**；#32 简书 未开工（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`）。
+
+## 五问重启检查

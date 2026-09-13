@@ -291,3 +291,12 @@
 - **改后实测**：**8 行 = 8 ⓘ**，键 `home/apiUrl/username/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 434 字符）鉴权行 ⓘ 恒为 1；8 条弹层全部 `面板内=True 未裁切=True`；6 个已填值行指引仍可见。
 - **帮助引导与文档**：HelpPanel 标题 知乎、在 `.syp-v2` 内且视口内未裁切、summary 46 字、FAQ **4** 条、无回退；引导 **4/4 命中**（Cookie 授权/专栏选择/图片发布/验证并保存）并正常收尾。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-zhihu-username-blogid.png`（8 行各一 ⓘ，专栏行弹层为新文案）。
+
+## #31 CSDN 站点完成（2026-09-12，用户「继续」已放行 #30）
+- **改前基线（宿主实测）**：`字段行 6 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项点名 **平台Cookie / 预览规则**（`cookie` 键在配置实例上不存在）。
+- **动态实例 key 证据**：本站在宿主里打开的是 **`custom_Csdn-z26fa1o`**（不是预置 key），4 条既有指引仍能解析 → **registry 回落链（动态实例 key → 预置平台配置）在真实宿主中成立**，正是该 change 标准里要求「动态实例 key 走 registry 回落链解析正确」的直接证据（此前各站多在预置 key 页验证）。
+- **应用补丁**（`custom-csdn.ts` + 文档草稿，共用层零改动）：删 `cookie` → 补 `password`、补 `previewUrl`；文案按宿主实测改准——鉴权点名真实按钮「1 去登录 / 2 自动读取 Cookie / 手动编辑」、图床点名真实两项 `不使用 / 当前平台 推荐` 并写明默认「当前平台」（旧文案写 Bundled 属内部术语）、预览规则写明默认 `/[userid]/article/details/[postid]`；summary 与 FAQ2 同步改准。
+- **改后实测**：**6 行 = 6 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/picbedService`；折叠与展开态（文本框 884 字符）鉴权行 ⓘ 恒为 1；6 条弹层全部 `面板内=True 未裁切=True`；5 个已填值行指引仍可见。
+- **帮助引导与文档**：HelpPanel 标题 CSDN、在 `.syp-v2` 内且视口内未裁切、summary 51 字、FAQ **3** 条、无回退；引导 **4/4 命中**（Cookie 授权/内容格式/图片发布/验证并保存）并正常收尾。
+- **口径澄清**：该页顶部 `您当前操作的平台是：custom_Csdn-z26fa1o [随笔分类]高级进阶` 是 `el-alert` 信息条（分类展示），**不是可编辑字段行**；该页真实可编辑字段行恰为 6 行（分类/标签在发布流程里选）。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-csdn-password-previewurl.png`。
