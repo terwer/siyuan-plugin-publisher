@@ -517,3 +517,17 @@
 - **#34 已交付，停下等验收**；#35 哔哩哔哩 是 D 组最后一站（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`），之后进入 E 组 3 站与 F 收尾。
 
 ## 五问重启检查
+
+## 会话：2026-09-12（#35 哔哩哔哩 站点完成 —— D 组 8/8 交付，待验收）
+
+### 做了什么
+1. **源码先看后验**：`BilibiliConfig` 构造函数里 `knowledgeSpaceEnabled` 被 `true`→`false` 覆盖，但 hook 运行时又置回 `true`；**以宿主实测为准**（文集行确实渲染，值「远方的灯塔」），因此补 `blogid` 是对的。
+2. **改前基线**：7 行 = 4 ⓘ，「平台Cookie」「预览规则」「文集」无指引。
+3. **应用补丁**：删 `cookie`/`knowledgeSpace`，补 `password`/`blogid`/`previewUrl`，并按宿主实测改准四处文案（鉴权按钮名、图床两项与默认「当前平台」、`/[postid]`、文集）；summary/FAQ2/文档草稿同步。
+4. **改后实测**：7 行 = 7 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 1031 字符）；7 条弹层面板内未裁切；HelpPanel（summary 58 字 + FAQ 3 + 无回退）+ 引导 **5/5 命中**。
+5. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-bilibili-password-blogid.png`。
+
+### 状态
+- **D 组 8/8 已交付**（#35 待验收）。下一阶段：E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统），随后 F 收尾（两把尺落地 + SOP §3 + checklist 回写 + 最终全量提交）。
+
+## 五问重启检查

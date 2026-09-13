@@ -332,3 +332,10 @@
 - **帮助引导与文档**：HelpPanel 标题 微信公众号、在 `.syp-v2` 内且视口内未裁切、summary 53 字、FAQ **3** 条、无回退；引导 **4/4 命中**（Cookie 授权/发布格式/图片发布/验证并保存）并正常收尾。
 - **口径澄清**：顶部 `您当前操作的平台是：custom_Wechat 架构设计漫谈` 的第二段是**公众号名称**（`el-alert` 静态信息条），不是可编辑字段行；宿主内中间件地址行按既有规则不渲染（实测确认）。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-wechat-password.png`。
+
+## #35 哔哩哔哩 站点完成（D 组收尾）（2026-09-12，用户「继续」已放行 #34）
+- **改前基线（宿主实测）**：`字段行 7 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项点名 **平台Cookie / 预览规则 / 文集**（两个旧键 `cookie`、`knowledgeSpace` 在实例上都不存在）。
+- **一处差点误判的源码事实**：`BilibiliConfig` 构造函数里先设 `knowledgeSpaceEnabled = true`（第 38 行）**又紧接着置回 `false`**（第 43 行，注释「关闭知识空间」）；若只看构造函数会推断「无文集行」，但 `useBilibiliWeb.ts:69` 在运行时把 `knowledgeSpaceEnabled` 置为 `true`，**宿主实测确认文集行确实渲染（值「远方的灯塔」）** → 结论以宿主为准，补 `blogid` 正确。
+- **应用补丁**（`custom-bilibili.ts` + 文档草稿，共用层零改动）：删两死键 → 补 `password`/`blogid`，补 `previewUrl`；文案按宿主实测改准——鉴权点名真实按钮、图床点名真实两项 `不使用 / 当前平台 推荐` 并写明默认「当前平台」（该站 `picgoPicbedSupported=false`，实测确无 PicGo 项）、`previewUrl` 写明默认 `/[postid]` 且对应 `/opus/<id>`、`blogid` 写明文集列表面板；summary 与 FAQ2 同步；文档草稿补「预览规则」「文集」行。
+- **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 1031 字符）鉴权行 ⓘ 恒为 1；7 条弹层全部 `面板内=True 未裁切=True`；HelpPanel（summary 58 字 + FAQ 3 条 + 无回退）+ 引导 **5/5 命中**（含文集一步）；账号数 32 不变；截图 `tmp/field-guide-bilibili-password-blogid.png`。
+- **D 组收尾**：8 站全部交付（#27 语雀网页版、#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩），其中 #28–#34 已验收、#35 待验收。**共用层在整个 D 组零改动**（只在 #27 时改过一次并已冻结）。
