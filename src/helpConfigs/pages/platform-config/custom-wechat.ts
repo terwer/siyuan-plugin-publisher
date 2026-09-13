@@ -12,19 +12,26 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const wechatHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Wechat",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
-  summary:
-    "通过登录公众号后台的 Cookie 发布到微信公众号。以 HTML 内容发布，图片上传到公众号素材库（Bundled）。",
+  summary: "通过登录公众号后台的 Cookie 发布到微信公众号。以 HTML 内容发布，图片默认上传到公众号素材库。",
   fields: {
     home: { tip: "默认是公众号后台 https://mp.weixin.qq.com，通常保持默认。" },
     apiUrl: { tip: "默认是公众号后台接口地址，通常保持默认。" },
-    cookie: { tip: "先在浏览器登录公众号后台（mp.weixin.qq.com），再自动读取或手动粘贴 Cookie。登录过期或切换账号后需重新读取。" },
+    password: {
+      tip:
+        "Cookie 授权：点「1 去登录」用公众号管理员微信扫码登录后台，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
+        "也可展开「手动编辑」直接粘贴 Cookie。登录过期或切换账号后需重新读取。",
+    },
     previewUrl: { tip: "公众号文章编辑页 URL 模板，一般保持默认。" },
-    pageType: { tip: "公众号通过 HTML 内容发布。" },
-    picbedService: { tip: "公众号默认使用平台素材库上传图片（当前平台 推荐）。" },
+    pageType: { tip: "正文提交格式，公众号通过 HTML 内容发布，保持默认的 HTML。" },
+    picbedService: {
+      tip:
+        "图片发布方式：默认「当前平台」，图片上传到公众号素材库；也可选「不使用」按原图地址引用。" +
+        "公众号网页版未提供 PicGo 选项。",
+    },
   },
   faq: [
     { q: "Cookie 验证失败？", a: "确认已用公众号管理员账号登录 mp.weixin.qq.com（微信扫码登录），再重新读取 Cookie。" },
-    { q: "图片该选什么图床？", a: "选择“当前平台 推荐”（Bundled）。公众号通过素材库接口上传图片，不依赖本机 PicGo 服务。" },
+    { q: "图片该选什么图床？", a: "默认「当前平台」即可。公众号通过素材库接口上传图片，不依赖本机 PicGo 服务。" },
     { q: "发布成功但内容为空？", a: "公众号以 HTML 内容发布。若文档为纯 Markdown 且未转换为 HTML，请确认文档能正确渲染为 HTML 后再发布。" },
   ],
   tour: [

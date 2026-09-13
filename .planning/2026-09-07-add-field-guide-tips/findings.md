@@ -324,3 +324,11 @@
 - **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 1391 字符）鉴权行 ⓘ 恒为 1；7 条弹层全部 `面板内=True 未裁切=True`（图床行最长 94 字）；5 个已填值行指引仍可见。
 - **帮助引导与文档**：HelpPanel 标题 掘金、在 `.syp-v2` 内且视口内未裁切、summary 47 字、FAQ **4** 条、无回退；引导 **4/4 命中**（Cookie 授权/分类选择/图片发布/验证并保存）并正常收尾。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-juejin-password-blogid.png`。
+
+## #34 微信公众号 站点完成（2026-09-12，用户「继续」已放行 #33）
+- **改前基线（宿主实测）**：`字段行 6 行 · 指引 5 个`，未通过项只点名 **平台Cookie** 一行（`cookie` 键在实例上不存在）。**本站 `previewUrl` 键本就有**（该页确实渲染「预览规则」行），故预制清单里「只需补鉴权」成立——这是 D 组唯一不需要补 `previewUrl` 的站。
+- **应用补丁**（`custom-wechat.ts` + 文档草稿，共用层零改动）：`cookie`→`password`；文案按宿主实测改准——鉴权点名真实按钮「1 去登录 / 2 自动读取 Cookie / 手动编辑」并写明**微信公众号扫码登录**、图床点名真实两项 `不使用 / 当前平台 推荐` 并写明默认「当前平台」（旧文案的 Bundled 是内部术语）、`pageType` 写明默认 HTML；summary 与 FAQ2 同步；文档草稿补「预览规则」行。
+- **改后实测**：**6 行 = 6 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/picbedService`；折叠与展开态（文本框 688 字符）鉴权行 ⓘ 恒为 1；6 条弹层全部 `面板内=True 未裁切=True`（鉴权行 106 字）；5 个已填值行指引仍可见（预览规则值为 98 字符的长模板 URL，仅报长度）。
+- **帮助引导与文档**：HelpPanel 标题 微信公众号、在 `.syp-v2` 内且视口内未裁切、summary 53 字、FAQ **3** 条、无回退；引导 **4/4 命中**（Cookie 授权/发布格式/图片发布/验证并保存）并正常收尾。
+- **口径澄清**：顶部 `您当前操作的平台是：custom_Wechat 架构设计漫谈` 的第二段是**公众号名称**（`el-alert` 静态信息条），不是可编辑字段行；宿主内中间件地址行按既有规则不渲染（实测确认）。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-wechat-password.png`。
