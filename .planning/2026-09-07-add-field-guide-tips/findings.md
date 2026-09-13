@@ -300,3 +300,15 @@
 - **帮助引导与文档**：HelpPanel 标题 CSDN、在 `.syp-v2` 内且视口内未裁切、summary 51 字、FAQ **3** 条、无回退；引导 **4/4 命中**（Cookie 授权/内容格式/图片发布/验证并保存）并正常收尾。
 - **口径澄清**：该页顶部 `您当前操作的平台是：custom_Csdn-z26fa1o [随笔分类]高级进阶` 是 `el-alert` 信息条（分类展示），**不是可编辑字段行**；该页真实可编辑字段行恰为 6 行（分类/标签在发布流程里选）。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-csdn-password-previewurl.png`。
+
+## #32 简书 站点完成 + 取证工具重要修复（2026-09-12，用户「继续」已放行 #31）
+- **改前基线（宿主实测）**：`字段行 7 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项点名 **平台Cookie / 预览规则 / 笔记本**（`cookie`、`knowledgeSpace` 两个旧键在实例上都不存在）。
+- **应用补丁**（`custom-jianshu.ts` + 文档草稿，共用层零改动）：删两死键 → 补 `password`/`blogid`，补 `previewUrl`；文案按宿主实测改准（真实按钮名、真实图床两项与默认「当前平台」、`/p/[postid]`、笔记本不可更换）；summary 与 FAQ2 同步。
+- **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 989 字符）鉴权行 ⓘ 恒为 1；7 条弹层全部 `面板内=True 未裁切=True`；HelpPanel（summary 43 字 + FAQ 3 条 + 无回退）+ 引导 4/4 命中。
+- **⚠️ 取证工具修复（影响此前所有 hover 类判定）**：本轮首跑出现 `悬停未出现弹层 ×4` 的**假失败**。逐层定位：
+  · 合成 `mouseenter` 后 `.el-popper` **已挂载**、尺寸正确（284×48）、文案完整、`display: block`，但 `opacity` 恒为 `0`，类名停在 `el-fade-in-linear-enter-from`；
+  · 用 CDP `Input.dispatchMouseEvent` 发**真实鼠标移动**且宿主窗口在前台时，同一弹层 `opacity=1` → 证明是**渲染帧被节流导致 Vue 入场过渡不推进**，不是功能缺陷；
+  · `Page.bringToFront` / `Emulation.setFocusEmulationEnabled` / `Page.setWebLifecycleState(active)` 均无法让过渡推进（`visibilityState` 已是 visible、`hasFocus()` 已为 true），确认是宿主窗口被遮挡时合成器不产帧。
+  · **修复**：新增 `tmp/cdp-front.ps1`（两把宿主尺开跑先置前 + 聚焦仿真），并把弹层判定改为**结构判定** `popperShown`（已挂载 + display 非 none + 尺寸非零 + 非离场过渡 + 有文案/链接），`opacity=0` 单列为诊断项 `transitionsFrozen`（输出里显式写明「非失败」，并说明原因），同时逐条记录 `opacity`。
+  · 影响面：此前 Halo网页版/知乎/CSDN 三站跑尺时窗口恰在前台，弹层正常量到（opacity=1），证据不受影响；本轮的判定口径更稳，避免后续站点被环境节流误判。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-jianshu-password-previewurl.png`。

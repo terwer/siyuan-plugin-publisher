@@ -477,3 +477,17 @@
 - **#31 已交付，停下等验收**；#32 简书 未开工（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`）。
 
 ## 五问重启检查
+
+## 会话：2026-09-12（#32 简书 站点完成 + 宿主尺 flaky 根因修复，待验收）
+
+### 做了什么
+1. **改前基线**：7 行 = 4 ⓘ，「平台Cookie」「预览规则」「笔记本」无指引。
+2. **应用补丁**：删 `cookie`/`knowledgeSpace`，补 `password`/`blogid`/`previewUrl`，并按宿主实测改准五处文案；summary、FAQ2、文档草稿同步。
+3. **改后实测**：7 行 = 7 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 989 字符）；7 条弹层面板内未裁切；HelpPanel（summary 43 字 + FAQ 3 + 无回退）+ 引导 4/4 命中。
+4. **宿主尺 flaky 根因（重要）**：首跑 4 行报「悬停未出现弹层」属**假失败** —— 宿主窗口被遮挡时合成器不产帧，Vue 的入场过渡停在 `el-fade-in-linear-enter-from`（弹层已挂载、尺寸/文案/定位都对，仅 opacity=0）。真实鼠标 hover + 窗口在前台时 opacity=1（已直接验证）。已修：新增 `tmp/cdp-front.ps1` 先置前，判定改为结构判定，`opacity=0` 降为诊断项 `transitionsFrozen`。
+5. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-jianshu-password-previewurl.png`。
+
+### 状态
+- **#32 已交付，停下等验收**；#33 掘金 未开工（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`）。
+
+## 五问重启检查
