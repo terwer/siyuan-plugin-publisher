@@ -219,3 +219,9 @@
 - **发现（E 组 #21 博客园一处死步骤）**：`metaweblog-cnblogs.ts` 的 tour 有一站 target 是 `password`，但 `CnblogsConfig` 的 `passwordType` 是 **Token** 型、鉴权行渲染的锚点是 `token` → 该步骤定位不到真实控件（会走 `--missing` 兜底）。同时该站 `fields` 还缺 `previewUrl`/`pageType`/`picbedService` → 与 E 组待办一致，归 #21 站点一并处理。
 - **为什么现有锚点 spec 没拦住**：`tourAnchors.spec.ts` 的「Token 平台必须用 token 锚点」用例把平台 key **硬编码成 6 个 GitHub 站**（`github_Hexo/Hugo/Jekyll/Quartz/Vuepress/Vuepress2`），博客园同为 Token 型却不在名单里 → 漏检。**F 阶段修法**：把该断言改成按 `passwordType` 数据驱动（覆盖 `verifiedConfigs` 全部 22 站），不再维护手写名单。
 - **新增第四把尺并做变异验证**：`tmp/field-guide-rulers.spec.ts` 加「尺子④：每个 tour 步骤必须命中真实渲染锚点」；把博客园临时标为 ready 后**尺子④确实报红**（变异测试通过），说明这把尺能抓到该类缺陷。当前试跑：尺子②（14 站覆盖）、尺子③（进度）、尺子④（14 站锚点）全绿；尺子①按预期红（7 个待办站的 11 个死键）。
+
+## 第八轮：F.5 回写片段与 F.2 改写片段就绪（2026-09-12）
+- **F.5 checklist 回写片段已逐站备好**（`tmp/sop-section3-field-guide-draft.md` 第五节）：按验收台账里的宿主实测数字生成每站可粘贴的「字段指引：N 行 = N ⓘ（无指引行说明）」片段——语雀 8、Notion 7（无 ⓘ 行＝搜索关键词）、Halo29 7、Telegraph 匿匿名 11/登录 12、Confluence 8、GitHub 六站 17→21（Vuepress2 17→20）、语雀网页版 7，其余站点留 `<N>` 待实测。六格结论一律不动。
+- **F.2 `tourAnchors.spec.ts` 数据驱动改写片段已备**（同文件第六节）：删掉硬编码的 6 站 `TOKEN_PLATFORM_KEYS`，改为按 `passwordType` 推导期望锚点并断言「tour 里出现的鉴权锚点恰好等于期望值（无鉴权步骤则跳过）」。
+- **该改写逻辑已对 22 站预校验**：20 站 `OK`、`fs_LocalSystem` 无鉴权步骤 `SKIP`、**仅 `metaweblog_Cnblogs` 报 `expected=token used=[password]`** → 与第七轮锚点预核互相印证；#21 站点改掉该步后即全绿。
+- **台账订正**：#5 Confluence 那行的「用户验收」原为「⬜ 待验收」，但按门禁规则（未验收不得开工下一站）与用户回复「继续」的事实，其状态应为「✅ 放行（用户回复「继续」，随后开工 #27）」——已订正，避免 F 阶段汇总时误判还有一站待验收。
