@@ -17,13 +17,22 @@ export const cnblogsHelpConfig: PageHelpConfig = {
     },
     username: { tip: "博客园登录用户名" },
     password: {
-      tip: "博客园 API Token（在设置 → 开放 API 中生成），不是登录密码",
+      tip: "博客园 API Token（在博客园设置 → 开放 API 中生成，生成地址 https://i.cnblogs.com/settings），不是登录密码",
       link: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+    },
+    previewUrl: {
+      tip: "查看文章链接模板，默认 /[userid]/p/[postid].html，与博客园文章地址一致，通常保持默认。",
+    },
+    pageType: { tip: "正文提交格式，博客园默认使用 Markdown 发布，保持默认的 Markdown。" },
+    picbedService: {
+      tip:
+        "图片发布方式：默认「当前平台」，图片上传到博客园；也可选「不使用」按原图地址引用（需公网可访问），" +
+        "或选「PicGo 强烈推荐」改用你配置的 PicGo。",
     },
   },
   faq: [
     { q: "提示「用户名或密码错误」？", a: "确认是否使用了 API Token 而非登录密码，Token 生成了吗？" },
-    { q: "图片上传失败？", a: "博客园推荐使用 Bundled 图床（平台内置），或配置 PicGo。" },
+    { q: "图片上传失败？", a: "默认「当前平台」即可（博客园平台内置）；需要时可选「PicGo 强烈推荐」并先在设置里配置好 PicGo。" },
   ],
   tour: [
     {
@@ -45,7 +54,7 @@ export const cnblogsHelpConfig: PageHelpConfig = {
       placement: "bottom",
     },
     {
-      target: "[data-syp-tour='password']",
+      target: "[data-syp-tour='token']",
       title: "API Token",
       content: "这里填的是博客园 API Token，不是你的登录密码。在博客园后台 → 设置 → 开放 API 中生成。",
       placement: "bottom",

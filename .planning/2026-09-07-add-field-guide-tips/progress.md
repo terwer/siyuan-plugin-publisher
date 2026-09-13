@@ -531,3 +531,16 @@
 - **D 组 8/8 已交付**（#35 待验收）。下一阶段：E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统），随后 F 收尾（两把尺落地 + SOP §3 + checklist 回写 + 最终全量提交）。
 
 ## 五问重启检查
+
+## 会话：2026-09-12（E 组开张：#21 博客园 完成，待验收）
+
+### 做了什么
+1. **改前基线**：7 行 = 4 ⓘ，缺「预览规则」「发布格式」「图床服务」三行指引；**另一处是 tour 死步骤**（target 写 `password`，实测锚点是 `token`）→ 引导只能命中 4/5。
+2. **应用补丁**：补三键；tour target `password`→`token`；`password` 文案按页内 Token 生成地址对齐；FAQ 图床口径改准（该站支持 PicGo）；文档草稿补三行。
+3. **改后实测**：7 行 = 7 ⓘ；**tour 5/5 全命中**；覆盖诊断 `expected=7 actual=7 missing=[]`、`tour=5 dead=[]`。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-cnblogs-previewurl.png`。
+
+### 状态
+- **#21 已交付，停下等验收**；E 组余下 2 站：#25 Wordpress（键已齐，宿主核验）、#29 本地系统（需在 `fs/LocalSystemSetting.vue` 挂 3 行指引）。
+
+## 五问重启检查

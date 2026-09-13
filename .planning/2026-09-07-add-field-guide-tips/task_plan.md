@@ -42,9 +42,9 @@
 | D | #33 掘金 | 同 #27（共用层已冻结，零新挂） | `cookie`→`password`、`knowledgeSpace`→`blogid`（**两个旧键在实例上都不存在**），补 `previewUrl`；文案按宿主实测改准：鉴权点名真实按钮、图床点名**真实三项**（`不使用 / PicGo 强烈推荐 / 当前平台 推荐`）并写明默认「当前平台」、`previewUrl` 写明默认 `/post/[postid]`、`blogid` 写明分类列表与默认「后端」；summary/FAQ3 与文档草稿同步 | 真实账号 `custom_Juejin`：**改前 7 行 = 4 ⓘ**（平台Cookie/预览规则/分类 无指引）→ **改后 7 行 = 7 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态鉴权行 ⓘ 恒为 1（文本框 1391 字符）；7 条弹层全部面板内未裁切；HelpPanel（summary 47 字 + FAQ 4 条 + 无回退）+ 引导 4/4 命中；账号数 32 不变；截图 `tmp/field-guide-juejin-password-blogid.png`；两条宿主尺 `exit 0` | ⬜ 待验收 |
 | D | #34 微信公众号 | 同 #27（共用层已冻结，零新挂） | `cookie`→`password`（**该键在实例上不存在**；`previewUrl` 键本站本就有，故只需补鉴权）；文案按宿主实测改准：鉴权点名真实按钮与微信扫码登录、图床点名真实两项并写明默认「当前平台」、`pageType` 写明默认 HTML；summary/FAQ2 与文档草稿同步 | 真实账号 `custom_Wechat`：**改前 6 行 = 5 ⓘ**（仅「平台Cookie」无指引）→ **改后 6 行 = 6 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/picbedService`；折叠与展开态鉴权行 ⓘ 恒为 1（文本框 688 字符）；6 条弹层全部面板内未裁切；HelpPanel（summary 53 字 + FAQ 3 条 + 无回退）+ 引导 4/4 命中；账号数 32 不变；截图 `tmp/field-guide-wechat-password.png`；两条宿主尺 `exit 0` | ⬜ 待验收 |
 | D | #35 哔哩哔哩 | 同上 | `cookie`→`password`、`knowledgeSpace`→`blogid` | | ⬜ |
-| E | #21 博客园 | impl/MetaweblogSetting | 现仅 4 键，按真实行补齐 | | ⬜ |
-| E | #25 Wordpress | impl/MetaweblogSetting | 按真实行补齐 | | ⬜ |
-| E | #29 本地系统 | fs/LocalSystemSetting | 核对 `pageType`/`picbedService` 是否渲染 | | ⬜ |
+| E | #21 博客园 | 共用层（无专有行，零新挂） | 补 `previewUrl`/`pageType`/`picbedService`（4 键 → 7 键）；**修 tour 死步骤** `password`→`token`（该站鉴权行渲染的锚点是 `token`）；鉴权/用户名文案对齐宿主；FAQ 图床口径改准（该站实测支持 PicGo） | 真实账号 `metaweblog_Cnblogs`：**改前 7 行 = 4 ⓘ**（预览规则/发布格式/图床服务 无指引）→ **改后 7 行 = 7 ⓘ**；**tour 改前 4/5（第 4 步「API Token」未命中死步骤）→ 改后 5/5 命中**（该步高亮 739.2x66.2）；覆盖诊断 `expected=7 actual=7 missing=[] extra=[]`、`tour=5 dead=[]`；HelpPanel（summary 37 字 + FAQ 2 条 + 无回退）；账号数 32 不变；截图 `tmp/field-guide-cnblogs-previewurl.png`；两条宿主尺 `exit 0` | ⬜ 待验收 |
+| E | #25 Wordpress | 共用层（无专有行，零新挂） | 键已齐（`missing=[]`），只做宿主核验 | | ⬜ |
+| E | #29 本地系统 | `fs/LocalSystemSetting.vue` 挂 3 行指引 | 键已齐（5 键），核对 `pageType`/`picbedService` 是否渲染 | | ⬜ |
 | F | 收尾 | — | 两把回归尺 + SOP §3 + checklist 回写 + 提交 | | ⬜ |
 
 ## 各步骤

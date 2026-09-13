@@ -339,3 +339,11 @@
 - **应用补丁**（`custom-bilibili.ts` + 文档草稿，共用层零改动）：删两死键 → 补 `password`/`blogid`，补 `previewUrl`；文案按宿主实测改准——鉴权点名真实按钮、图床点名真实两项 `不使用 / 当前平台 推荐` 并写明默认「当前平台」（该站 `picgoPicbedSupported=false`，实测确无 PicGo 项）、`previewUrl` 写明默认 `/[postid]` 且对应 `/opus/<id>`、`blogid` 写明文集列表面板；summary 与 FAQ2 同步；文档草稿补「预览规则」「文集」行。
 - **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 1031 字符）鉴权行 ⓘ 恒为 1；7 条弹层全部 `面板内=True 未裁切=True`；HelpPanel（summary 58 字 + FAQ 3 条 + 无回退）+ 引导 **5/5 命中**（含文集一步）；账号数 32 不变；截图 `tmp/field-guide-bilibili-password-blogid.png`。
 - **D 组收尾**：8 站全部交付（#27 语雀网页版、#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩），其中 #28–#34 已验收、#35 待验收。**共用层在整个 D 组零改动**（只在 #27 时改过一次并已冻结）。
+
+## #21 博客园 站点完成（E 组第 1 站）（2026-09-12，用户「继续」已放行 #35）
+- **改前基线（宿主实测）**：`字段行 7 行 · 指引 4 个 · 键 apiUrl,home,password,username`，未通过项点名 **预览规则 / 发布格式 / 图床服务**（本轮**首次出现「只缺键、不缺改名」的站**：鉴权行锚点虽是 `token`，但 `fields` 键按标准仍为 `password`，故鉴权行一直有指引 ✓）。
+- **tour 死步骤已修**：该页实测锚点序列为 `home,apiUrl,username,**token**,previewUrl,pageType,picbedService,validate`，而 tour 第 4 步 target 写的是 `[data-syp-tour='password']` → **改前引导只能命中 4/5**；改为 `token` 后 **5/5 全命中**（「API Token」步高亮 739.2x66.2）。这正是 `tourAnchors.spec.ts` 硬编码 6 个 GitHub 站为「Token 型」而漏检的那一站（F 阶段改为按 `passwordType` 数据驱动即可覆盖）。
+- **应用补丁**（`metaweblog-cnblogs.ts` + 文档草稿，共用层零改动）：补 `previewUrl`（默认 `/[userid]/p/[postid].html`）、`pageType`（默认 Markdown）、`picbedService`（实测三项 `不使用 / PicGo 强烈推荐 / 当前平台 推荐`，默认第三项）三个键；`password` 文案按该页显示的「Token生成地址：https://i.cnblogs.com/settings」对齐；FAQ 图床口径由 Bundled 改为真实选项名并说明该站**支持 PicGo**。
+- **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/username/password/previewUrl/pageType/picbedService`；7 条弹层全部 `面板内=True 未裁切=True`；该站鉴权行是 Token 输入框、**无「手动编辑」展开/收起**，故「展开态 ⓘ 恒为 1」在该站不适用，对应判定由「一行只有一条指引」（`multiGuideRows` 为空）覆盖。
+- **覆盖诊断**：`metaweblog_Cnblogs expected=7 actual=7 missing=[] extra=[]`、`tour=5 dead=[]` → 该站从唯一的 tour MISMATCH 站转为 OK；全量诊断 3/3 通过（仅 `fs_LocalSystem` 按设计 SKIP：无鉴权步骤）。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-cnblogs-previewurl.png`（Token 值在页面上为掩码显示）。
