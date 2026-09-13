@@ -160,3 +160,13 @@
 - **`_default.ts` 清理**：原 `fields` 同时有 `password` 和 `token` 两个键，但鉴权行三种分支都绑 `password`，全仓没有任何 `field="token"` → `token` 是永不被解析的死键，违反「键 = 绑定属性名」冻结规则。已删该键，并把 `password` 说明改为「按平台要求填密码、Token 或 Cookie（不是登录密码）」。
 - **操作教训修正（重要）**：「添加账号 → 选择平台卡片」**一律会持久化一个新实例**，与族无关。此前「GitHub 族（Hugo/Quartz）点卡片不落库」的结论是误判——那两站当时**已存在同 key 账号**，卡片不会新建；本次选 Vitepress 时账号数 32→33、多出 `github_Vitepress` 行 → 已按「删除 → 行内确认」删回 **32**。规矩不变：凡走「添加账号」，前后必须比对账号数并清理。
 - **临时文件会被 `vue-tsc` 检查**：`pnpm build:v2` 先跑 `vue-tsc --noEmit`，`tmp/*.spec.ts` 也在检查范围内 → 放进 `tmp/` 的脚本必须类型正确，否则 `build:v2` 直接失败。
+
+## 第二把回归尺原型（2026-09-12，按渲染行推导覆盖）
+- 做法：从 `CommonBlogSetting.vue` 模板抽出**每行的渲染条件**（home/apiUrl/username/password/previewUrl/pageType/blogid/picbedService/corsAnywhereUrl/middlewareUrl），再叠加各族设置组件的专有行，得到「该站应覆盖的键集」，与各站 help 配置现有键做差集。脚本留档 `tmp/field-guide-family-coverage.diag.spec.ts`。
+- **12 个已回填平台：全部 `missing=[] extra=[]`**（逐站键数与宿主实测行数一致：Yuque 8、Notion 7、Halo 7、Telegraph 12、Confluence 8、GitHub 六站 20/21、Yuqueweb 7）→ 覆盖尺与站点工作互相印证。
+- **两个「推导陷阱」（F 正式尺子必须绕开）**：
+  1. **构造函数默认值不够**：平台 hook 会在运行时覆盖开关——`useTelegraphApi.ts:53` 置 `usernameEnabled=true`（所以 `telegraph.ts` 里的 `username` 键是对的，不是死键）、`useBilibiliWeb.ts` 置 `knowledgeSpaceEnabled=true`、`useZhihuWeb.ts`/`useJianshuWeb.ts`/`useJuejinWeb.ts` 同。→ 正式尺子用**按平台显式 REQUIRED_FIELD_KEYS 表**，不用运行时推导。
+  2. **行是否渲染依赖「当前值」**：GitHub 族的「图片存储目录/图片访问链接」条件是 `picbedService === Bundled`（`CommonGithubSetting.vue:148/160`），不是「平台是否支持 Bundled」。→ REQUIRED_FIELD_KEYS 需注明「默认图床为 Bundled」这一前提。
+- **宿主内不渲染的行**：`middlewareUrl`（跨域代理地址）与非 `isCorsProxy` 平台的 `corsAnywhereUrl` 只在非思源环境出现 → 不纳入宿主门禁的必填集。
+- **7 个待办 Cookie 站的工作清单已提前算出**（各站仍需宿主确认）：
+  `Zhihu +username +password +previewUrl +blogid -cookie -knowledgeSpace`；`Csdn +password +previewUrl -cookie`；`Jianshu +password +previewUrl +blogid -cookie -knowledgeSpace`；`Juejin +password +previewUrl +blogid -cookie -knowledgeSpace`；`Wechat +password -cookie`；`Bilibili +password +previewUrl +blogid -cookie -knowledgeSpace`；`Haloweb +password +previewUrl -cookie`。

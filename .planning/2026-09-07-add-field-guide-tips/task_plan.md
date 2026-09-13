@@ -72,6 +72,19 @@
 - [x] #27 语雀网页版：共用层鉴权行「整行一条指引」+ 7 键校正 + 宿主复核（待验收）。
 - [ ] 余 7 站（#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：逐站校正 `cookie`→`password`、`knowledgeSpace`→`blogid` 与缺项，宿主复核 + 等验收。
 - **状态：** in progress（1/8）
+- **余 7 站的键校正清单（2026-09-12 用覆盖尺原型预推，各站仍需宿主确认）：**
+
+| 站 | 需新增键 | 需删旧键 |
+| --- | --- | --- |
+| #28 Halo网页版 | `password`、`previewUrl` | `cookie` |
+| #30 知乎 | `username`、`password`、`previewUrl`、`blogid` | `cookie`、`knowledgeSpace` |
+| #31 CSDN | `password`、`previewUrl` | `cookie` |
+| #32 简书 | `password`、`previewUrl`、`blogid` | `cookie`、`knowledgeSpace` |
+| #33 掘金 | `password`、`previewUrl`、`blogid` | `cookie`、`knowledgeSpace` |
+| #34 微信公众号 | `password` | `cookie` |
+| #35 哔哩哔哩 | `password`、`previewUrl`、`blogid` | `cookie`、`knowledgeSpace` |
+
+  推导依据：各平台 `useXxxWeb.ts` 的运行时开关（`knowledgeSpaceEnabled`：知乎/简书/掘金/哔哩哔哩为 true，CSDN/公众号/Halo网页版为 false）+ `CommonBlogSetting` 行渲染条件。脚本 `tmp/field-guide-family-coverage.diag.spec.ts`。
 
 ### 步骤 E：MetaWeblog / Wordpress / 本地系统 3 站（每站一停）
 - [ ] 挂 `impl/MetaweblogSetting.vue`、`fs/LocalSystemSetting.vue`；补齐 cnblogs 仅 4 键的缺口；逐站宿主复核 + 等验收。
@@ -79,6 +92,8 @@
 
 ### 步骤 F：回归尺与标准固化
 - [ ] F.1 新增两把尺：① 每站 `fields` 键必须能在合并后配置实例上取到同名属性；② 按族 `REQUIRED_FIELD_KEYS` 全覆盖。
+  - 原型已跑（`tmp/field-guide-key-audit.tmp.spec.ts`、`tmp/field-guide-family-coverage.diag.spec.ts`）：12 站两把尺都 `missing=[]`。
+  - **尺子②的设计要点（2026-09-12 查实）**：必须用**按平台显式 REQUIRED_FIELD_KEYS 表**，不能从 Config 构造函数推导渲染行——平台 hook 会运行时改开关（`useTelegraphApi.ts:53` 开 `usernameEnabled`、`useBilibiliWeb.ts` 开 `knowledgeSpaceEnabled` 等）；且 GitHub 族图片两行取决于**当前图床值**（`picbedService === Bundled`）。宿主内不渲染的 `middlewareUrl` 与非 `isCorsProxy` 的 `corsAnywhereUrl` 不纳入必填集。
 - [ ] F.2 同步 `registry.spec.ts` 中按 `'token'` 取 tip 的用例。
 - [ ] F.3 V2 表单 placeholder 收敛为示例值（每次改动内保证对应 `fields` 已有说明，不留空窗）；locales 共享串不动，V1 文案零变化。
 - [ ] F.4 SOP §3 增补「字段指引必须渲染并可核验」为与五格同等必过项 + 键命名空间规则。
