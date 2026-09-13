@@ -213,3 +213,9 @@
   · 且全仓**没有任何组件**挂 `field="cookie"`/`field="knowledgeSpace"`/`field="token"` → 这些 `tip` 当前是**永不可达的死文案**（即使行上有 ⓘ 也取不到）。→ D 组那 7 站的改名是「让指引真正存在」，不是措辞美化。
   · 进度尺通过：未完成清单 = 7 站 + 博客园，与 campaign 进度一致。
 - **checklist SSOT 核对（只读）**：T1 小结「全链路 ✅ 22」与下列 22 行一致（#1–#11、#21、#25、#27–#35、#29）；未测 13 行 = `remaining-t1` 的 12 个未拆分平台 + `metaweblog_*` 通配；四行（#1 语雀 / #21 博客园 / #25 Wordpress / #29 本地系统）备注里没有 SOP §3 帮助记录，属**计划内**——F.5 统一为 22 站回写字段指引记录，不改六格结论。
+
+## 第七轮：tour 锚点有效性全量预核（发现 #21 博客园一处死步骤）
+- **做法**：把「该平台真实渲染的 tour 锚点集合」也按行渲染条件推导出来（鉴权行按 `passwordType` 三选一、`knowledgeSpace`/`knowledgeSpaceSearch`/`corsProxy` 按开关、本地系统独有 3 个），再逐站比对每个 tour 步骤的 target。⇒ 22 站里 **21 站 `dead=[]`**。
+- **发现（E 组 #21 博客园一处死步骤）**：`metaweblog-cnblogs.ts` 的 tour 有一站 target 是 `password`，但 `CnblogsConfig` 的 `passwordType` 是 **Token** 型、鉴权行渲染的锚点是 `token` → 该步骤定位不到真实控件（会走 `--missing` 兜底）。同时该站 `fields` 还缺 `previewUrl`/`pageType`/`picbedService` → 与 E 组待办一致，归 #21 站点一并处理。
+- **为什么现有锚点 spec 没拦住**：`tourAnchors.spec.ts` 的「Token 平台必须用 token 锚点」用例把平台 key **硬编码成 6 个 GitHub 站**（`github_Hexo/Hugo/Jekyll/Quartz/Vuepress/Vuepress2`），博客园同为 Token 型却不在名单里 → 漏检。**F 阶段修法**：把该断言改成按 `passwordType` 数据驱动（覆盖 `verifiedConfigs` 全部 22 站），不再维护手写名单。
+- **新增第四把尺并做变异验证**：`tmp/field-guide-rulers.spec.ts` 加「尺子④：每个 tour 步骤必须命中真实渲染锚点」；把博客园临时标为 ready 后**尺子④确实报红**（变异测试通过），说明这把尺能抓到该类缺陷。当前试跑：尺子②（14 站覆盖）、尺子③（进度）、尺子④（14 站锚点）全绿；尺子①按预期红（7 个待办站的 11 个死键）。

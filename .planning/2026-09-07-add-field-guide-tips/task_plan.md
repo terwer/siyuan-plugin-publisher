@@ -89,7 +89,7 @@
 ### 步骤 E：MetaWeblog / Wordpress / 本地系统 3 站（每站一停）
 - [ ] 逐站宿主复核 + 等验收。**2026-09-12 覆盖尺预推结果（各站仍需宿主确认）：**
   - **组件挂载：只有 `fs/LocalSystemSetting.vue` 需要改**——它的 `#main` 有 3 行且都没有 `field-guide`：存储路径 `storePath`（文本）、媒体存储路径 `imageStorePath`（文本）、YAML 类型 `fsYamlType`（单选组，用 `inline`）。`impl/MetaweblogSetting.vue` 与 `metaweblog/WordpressSetting.vue`/`CnblogsSetting.vue` **都是直通壳**（`<common-blog-setting>`），行与指引全部来自已改造的共用表单 → **无需再挂**（原计划里「挂 `impl/MetaweblogSetting.vue`」这项可以删掉）。
-  - **#21 博客园**：`fields` 现 4 键，缺 `previewUrl`、`pageType`、`picbedService`（`knowledgeSpaceEnabled=false`、鉴权为 Token 型 → 键名仍是 `password`）。
+  - **#21 博客园**：`fields` 现 4 键，缺 `previewUrl`、`pageType`、`picbedService`（`knowledgeSpaceEnabled=false`、鉴权为 Token 型 → 键名仍是 `password`）；**另有 tour 死步骤**：某步 target 为 `password`，但该平台鉴权行渲染的锚点是 `token` → 一并改为 `token`。
   - **#25 Wordpress**：`fields` 现 7 键，**已齐**（`missing=[]`），E 组只做宿主核验。
   - **#29 本地系统**：`fields` 现 5 键（`storePath`/`imageStorePath`/`fsYamlType`/`pageType`/`picbedService`）**已齐**、`passwordType=None`（无鉴权行，不需要 `password` 键）；缺的是那 3 行的**指引挂载**（见上）。
 - **状态：** pending（预分析完成，未开工）
@@ -101,6 +101,7 @@
   - **尺子②的设计要点（2026-09-12 查实）**：必须用**按平台显式 REQUIRED_FIELD_KEYS 表**，不能从 Config 构造函数推导渲染行——平台 hook 会运行时改开关（`useTelegraphApi.ts:53` 开 `usernameEnabled`、`useBilibiliWeb.ts` 开 `knowledgeSpaceEnabled` 等）；且 GitHub 族图片两行取决于**当前图床值**（`picbedService === Bundled`）。宿主内不渲染的 `middlewareUrl` 与非 `isCorsProxy` 的 `corsAnywhereUrl` 不纳入必填集。
 - [ ] F.2 同步 `registry.spec.ts` 中按 `'token'` 取 tip 的用例。
   - **2026-09-12 核实：已是完成态**——全仓无任何按 `token` 键取字段说明的 spec 用例（Yuque 那条已用 `password`）；残留的 `token` 只在 tour 锚点 `[data-syp-tour='token']` 与 Telegraph 真实属性 `accessToken`，均须保留。
+  - **新发现需在 F 一并处理**：`tourAnchors.spec.ts` 的「Token 平台必须用 token 锚点」用例把平台硬编码为 6 个 GitHub 站 → 同为 Token 型的 **#21 博客园漏检**，其 tour 仍指向 `password`（死步骤）。修法：改为按 `passwordType` 数据驱动覆盖 `verifiedConfigs` 全部 22 站（尺子④原型已做变异验证）。
 - [ ] F.3 V2 表单 placeholder 收敛为示例值（每次改动内保证对应 `fields` 已有说明，不留空窗）；locales 共享串不动，V1 文案零变化。
 - [ ] F.4 SOP §3 增补「字段指引必须渲染并可核验」为与五格同等必过项 + 键命名空间规则。
   - **草稿已备**：`tmp/sop-section3-field-guide-draft.md`（含 §3 新增第 5 项、§五 回写补充、checklist 一行格式），全部平台验收通过后再写入 SOP。
