@@ -312,3 +312,15 @@
   · **修复**：新增 `tmp/cdp-front.ps1`（两把宿主尺开跑先置前 + 聚焦仿真），并把弹层判定改为**结构判定** `popperShown`（已挂载 + display 非 none + 尺寸非零 + 非离场过渡 + 有文案/链接），`opacity=0` 单列为诊断项 `transitionsFrozen`（输出里显式写明「非失败」，并说明原因），同时逐条记录 `opacity`。
   · 影响面：此前 Halo网页版/知乎/CSDN 三站跑尺时窗口恰在前台，弹层正常量到（opacity=1），证据不受影响；本轮的判定口径更稳，避免后续站点被环境节流误判。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-jianshu-password-previewurl.png`。
+
+## #33 掘金 站点完成（2026-09-12，用户「继续」已放行 #32）
+- **改前基线（宿主实测）**：`字段行 7 行 · 指引 4 个 · 键 apiUrl,home,pageType,picbedService`，未通过项点名 **平台Cookie / 预览规则 / 分类**（两个旧键 `cookie`、`knowledgeSpace` 在实例上都不存在）。
+- **应用补丁**（`custom-juejin.ts` + 文档草稿，共用层零改动）：删两死键 → 补 `password`/`blogid`，补 `previewUrl`；文案按宿主实测改准——
+  · 鉴权：点名真实按钮「1 去登录 / 2 自动读取 Cookie / 手动编辑」；
+  · 图床：该页实测有**三项**（`不使用 / PicGo 强烈推荐 / 当前平台 推荐`，默认第三项）→ 文案改写为三项齐全 + 默认「当前平台」，并把「veImageX 直传、外链图片原样保留不转存」保留为事实陈述（旧文案把 PicGo 说成「双通道并存」易误导，改为明确「需要时可改选 PicGo」）；
+  · 预览规则：写明默认 `/post/[postid]`；
+  · 分类：写明「验证后列出可用分类；未选择回退默认分类「后端」」；
+  · summary 去掉 Bundled 内部术语；FAQ3 改准图床口径；文档草稿补预览规则行、按钮名与图床三项。
+- **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`；折叠与展开态（文本框 1391 字符）鉴权行 ⓘ 恒为 1；7 条弹层全部 `面板内=True 未裁切=True`（图床行最长 94 字）；5 个已填值行指引仍可见。
+- **帮助引导与文档**：HelpPanel 标题 掘金、在 `.syp-v2` 内且视口内未裁切、summary 47 字、FAQ **4** 条、无回退；引导 **4/4 命中**（Cookie 授权/分类选择/图片发布/验证并保存）并正常收尾。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-juejin-password-blogid.png`。

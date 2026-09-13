@@ -491,3 +491,16 @@
 - **#32 已交付，停下等验收**；#33 掘金 未开工（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`）。
 
 ## 五问重启检查
+
+## 会话：2026-09-12（#33 掘金 站点完成，待验收）
+
+### 做了什么
+1. **改前基线**：7 行 = 4 ⓘ，「平台Cookie」「预览规则」「分类」无指引。
+2. **应用补丁**：删 `cookie`/`knowledgeSpace`，补 `password`/`blogid`/`previewUrl`；图床文案按实测改为三项齐全 + 默认「当前平台」（不再写易误导的「PicGo 双通道并存」）；summary、FAQ3、文档草稿同步。
+3. **改后实测**：7 行 = 7 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 1391 字符）；7 条弹层面板内未裁切；HelpPanel（summary 47 字 + FAQ 4 + 无回退）+ 引导 4/4 命中。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-juejin-password-blogid.png`。
+
+### 状态
+- **#33 已交付，停下等验收**；#34 微信公众号 未开工（预制清单：+`password` −`cookie`，无预览规则/无发布目录 → 预计 6 行）。
+
+## 五问重启检查

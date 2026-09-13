@@ -12,20 +12,30 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const juejinHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Juejin",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
-  summary:
-    "通过 Cookie 授权发布到掘金。图片走平台原生上传（字节 veImageX 直传，Bundled）；默认使用 Markdown 内容发布。",
+  summary: "通过 Cookie 授权发布到掘金。图片默认走掘金原生上传；默认使用 Markdown 发布。",
   fields: {
     home: { tip: "默认是掘金首页 https://juejin.cn，通常保持默认。" },
     apiUrl: { tip: "默认是掘金 API 地址 https://api.juejin.cn，通常保持默认。" },
-    cookie: { tip: "先在浏览器登录掘金，再自动读取或手动粘贴 Cookie。切换账号或登录过期后需要重新读取。" },
-    knowledgeSpace: { tip: "掘金分类（如“后端”）。发布前需选择一个分类；未选择时回退默认分类“后端”。" },
-    pageType: { tip: "掘金默认使用 Markdown 发布，且会带上掘金要求的标签（默认“程序员”）与摘要。" },
-    picbedService: { tip: "掘金使用平台原生图片上传；默认“当前平台 推荐”（Bundled），外链图片原样保留，PicGo 双通道并存。" },
+    password: {
+      tip:
+        "Cookie 授权：点「1 去登录」登录掘金，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
+        "也可展开「手动编辑」直接粘贴 Cookie。切换账号或登录过期后需要重新读取。",
+    },
+    previewUrl: { tip: "查看文章链接模板，默认 /post/[postid]，与掘金文章地址一致，通常保持默认。" },
+    pageType: { tip: "正文提交格式，掘金默认使用 Markdown 发布，且会带上掘金要求的标签（默认「程序员」）与摘要。" },
+    blogid: {
+      tip: "要发布到的掘金分类（如「后端」）；验证通过后会列出可用分类。未选择时回退默认分类「后端」。",
+    },
+    picbedService: {
+      tip:
+        "图片发布方式：默认「当前平台」，图片走掘金原生上传（veImageX 直传），外链图片原样保留不转存；" +
+        "也可选「不使用」按原图地址引用，或选「PicGo 强烈推荐」改用你配置的 PicGo。",
+    },
   },
   faq: [
     { q: "Cookie 验证失败？", a: "确认浏览器已登录掘金并能打开掘金创作中心，再重新读取 Cookie。" },
     { q: "发布时报“必须选择一个分类/标签”或“摘要参数错误”？", a: "掘金要求分类、标签和摘要；未配置时会自动回退默认分类“后端”、默认标签“程序员”与默认摘要，但建议在文档里显式设置。" },
-    { q: "图片该选什么图床？", a: "选择“当前平台 推荐”（Bundled）。掘金使用原生 veImageX 直传，外链图片原样保留不转存；不依赖本机 PicGo 服务。" },
+    { q: "图片该选什么图床？", a: "默认「当前平台」即可，图片走掘金原生直传，外链图片原样保留不转存，不依赖本机 PicGo 服务；需要走 PicGo 时选「PicGo 强烈推荐」。" },
     { q: "文章一直显示“审核中”？", a: "掘金新文章初始处于审核（audit=1），需平台放行（audit=2）后才对外可见，与图片上传机制无关。" },
   ],
   tour: [
