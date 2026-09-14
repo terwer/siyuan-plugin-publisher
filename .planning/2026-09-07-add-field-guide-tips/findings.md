@@ -370,3 +370,11 @@
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；两条宿主尺 `exit 0`；截图 `tmp/field-guide-localsystem-storepath.png`（真实指针 hover 后 `opacity=1`）。
 - **E 组收官**：#21 博客园（缺三键 + tour 死步骤）、#25 Wordpress（文案与行为不符）、#29 本地系统（缺组件挂载）三种缺陷形态各一，说明「按真实渲染行逐项核验」这条尺子确实能分别抓到「漏键 / 说错话 / 没挂上」。下一阶段：F 收尾。
 - **顺带记录（未改动）**：存储路径默认值渲染为 `D:\Users\Administrator/Downloads/syp`（`StrUtil.pathJoin` 产生的混合分隔符），功能无影响，不在本 change 范围。
+
+## F 收尾：两把回归尺落地（2026-09-14，用户回复「继续」放行）
+- **尺子只写不验等于没写**：落地的三把尺（`fieldGuideRulers.spec.ts`）全部做了**变异验证**——每组变异跑完立刻还原，确认 `git status` 无残留。四组结果：死键 → 点名 `custom_Csdn.cookie`；删键 → 点名 `missing=[previewUrl]`；未拆分平台塞 `fields` → 点名 `platform-config/github_Vitepress`；博客园引导锚点改回 `password` → **两条用例同时红**。断言里带 `平台.键` 前缀，红了就能直接定位，不用再查表。
+- **原 `tourAnchors.spec.ts` 有一个真实空档**：它的鉴权锚点断言把平台**硬编码**为 6 个 GitHub 站（`TOKEN_PLATFORM_KEYS`），其余站只做「锚点 ∈ 已知清单」的浅检查——而博客园这类 Token 站把引导写成 `password` 时，`password` 恰好在已知清单里，于是**改前 4/5 的死步骤它一路放行**。改为按 `verifiedPlatformRows.ts` 的 22 站 + `passwordType` 数据驱动后，同一缺陷当场变红。教训：契约测试里的「已知清单」+ 少量硬编码站，会把「清单内的错配」漏掉。
+- **冻结表必须按真实渲染行写，不能从构造函数推导**：`BilibiliConfig` 构造里 `knowledgeSpaceEnabled=false`，`useBilibiliWeb.ts` 运行时又置回 `true`；Telegraph 的 `usernameEnabled` 同理是 hook 打开的；`yamlLinkEnabled` 行只在能力位为真的平台渲染。表里用 `hookFlags` 逐站记这些运行时覆盖，尺子才能既抓到「缺键」又不误报「多余键」。
+- **守卫尺（尺子③）是为下一代准备的自检**：`remaining-t1` 里 12 个未拆分平台目前只有 `helpUrl`、没有 `fields`，所以不参与两把尺；一旦将来有人给它们补 `fields` 而忘了补冻结表，尺子③ 会失败并点名页面 —— 这是「新增平台悄悄绕过回归」的唯一防线。
+- **`tmp/` 草稿里的 `ready: false` 与「未完成清单」用例一并删除**：22 站全完成后，留着「待办标记」就是双轨债；F 阶段只保留会长期有效的尺子。
+- **宿主复跑口径**：`build:v2` 之后必须强制重载渲染进程（`pnpm dev:v2` 未运行），且重载会关掉面板 —— 需要用脚本重新「工具栏 → 设置 → 目标账号行的第 4 个按钮（管理）」才回到配置页；重跑两条宿主尺得到与 #29 完全一致的测量（5 行 = 5 指引、弹层全部面板内未裁切、引导 5/5），账号数 32 不变。

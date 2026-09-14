@@ -580,7 +580,34 @@
 8. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变、两条宿主尺 `exit 0`。
 
 ### 状态
-- **#29 已交付，停下等验收**。E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）全部交付 → 验收后进入 **F 收尾**：两把回归尺落地（含把 `tourAnchors.spec.ts` 改为按 `passwordType` 数据驱动）、SOP §3 与 checklist 回写 22 站、`openspec validate --strict`、最终全量提交。
+- **#29 已交付**（用户 2026-09-14 回复「继续」→ 验收通过）。E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）全部交付 → 进入 **F 收尾**。
 - 顺带一提（未改动、不在本 change 范围）：存储路径默认值渲染为 `D:\Users\Administrator/Downloads/syp`，盘符反斜杠与后半段正斜杠混用，来自 `StrUtil.pathJoin`；功能无影响。
+
+## 会话：2026-09-14（F 收尾：两把回归尺落地 + SOP/checklist 回写）
+
+### 做了什么
+1. **两把回归尺落地**（此前只存在于 `tmp/` 草稿，现入库）：
+   · `src/helpConfigs/verifiedPlatformRows.ts` —— 22 站「真实渲染行 → 键集」冻结表（单一数据源，含平台 hook 运行时开关：Telegraph 打开用户名行、四个网页站打开知识空间行、Bili 构造 false 但运行时置回 true）；同时提供 `mergedPlatformConfig()` 与 `renderableTourAnchors()` 两个共用助手，避免两把尺各写一份合并逻辑。
+   · `src/helpConfigs/fieldGuideRulers.spec.ts` —— **尺子①键尺**（`fields` 的键必须是合并后配置实例的真实属性）、**尺子②覆盖尺**（每站必须覆盖冻结键集）、**尺子③守卫尺**（任何带 `fields` 的 platform-config 页都必须在冻结表里 → 将来拆分新平台时漏补表会被当场点名）。草稿里的 `ready` 字段与「未完成清单」用例已删（22 站全完成，留着就是双轨）。
+2. **尺子必须真的会红（变异验证，四组，每组跑完立即还原）**：
+   · 给 `custom_Csdn` 塞实例上不存在的死键 `cookie` → 键尺红，断言直接点名 `custom_Csdn.cookie`；
+   · 删掉 `custom_Csdn` 的 `previewUrl` 键 → 覆盖尺红，点名 `custom_Csdn missing=[previewUrl]`；
+   · 给仍在 `remaining-t1` 的 `github_Vitepress` 塞 `fields` → 守卫尺红，点名 `platform-config/github_Vitepress`；
+   · 把 #21 博客园引导的 `token` 锚点改回 `password` → 引导锚点两条用例同时红（「真实渲染锚点」+「按 passwordType 选鉴权锚点」），正是 #21 当初被抓到的那类死步骤。
+   还原后 `git status` 只剩本次预期改动，无残留。
+3. **引导锚点契约去硬编码**：`tourAnchors.spec.ts` 原来是 `TOKEN_PLATFORM_KEYS` 写死 6 个 GitHub 站 + 只做「锚点 ∈ 已知清单」的浅检查，因此**漏检了博客园这类 Token 站把引导写成 `password` 的死步骤**。改为按 `verifiedPlatformRows.ts` 全站数据驱动：① 每站每步必须命中该站**真实渲染**的锚点（含 hook 开关与 fs 专有锚点）；② 鉴权步必须与该站 `passwordType` 一致（无鉴权步的站跳过）。5 项用例全绿。
+4. **SOP §3 写入「字段指引必须渲染并可核验」**（第 5 条）：标准（每行都要 ⓘ、键 = 该行绑定的配置属性名、以宿主实测为准）、**两套命名空间**（鉴权行键恒为 `password`，引导锚点按 `passwordType` 三选一）、四个可核验点（每行有 ⓘ / 已填值仍可见 / 弹层在 `.syp-panel` 内不裁切 / 动态实例 key 走回落链）、组件层挂载约定、回归尺入口；第 1 条补上「`fields` 键与 tour 锚点不同名」；§5 回写步骤加「字段指引与帮助引导表」一行；附录由 11 站更新为 **22 站**并注明键集不在表里重复维护。
+5. **checklist SSOT 回写**：新增「字段指引与帮助引导（SOP §3.5）— 22 站回写」表（每站「渲染行 = ⓘ」改前 → 改后 + 宿主判定 + 日期）、共用层结论、以及「三类缺陷各得其尺」的说明；修订记录加 2026-09-14 一行；头部「更新」日期同步。**未改动任何平台六格结论**。
+6. **tasks.md 勾选与如实标注**：2.3/2.4/3.2/3.4/5.2/5.3/5.4 依据实测勾选（含查实结论：MetaWeblog/WordPress 族是直通壳、`fs/LocalSystemSetting` 3 行已在 #29 挂完）；4.1（占位符改示例值）**保留未勾**并注明属后续独立切片，4.3（tour 与 fields 去重）标注「部分完成」并说明未做 22 站逐条比对——不把没做的事写成做了。
+
+### 门禁与实测
+- `pnpm vitest run`：**66 文件 / 313 测试通过**（较上一站 +1 文件 +4 测试）；
+- `pnpm build:v2`：**exit 0**（`vue-tsc` 把新增的 3 个文件一并类型检查通过，`dist-v2/index.js` 12,349.63 kB）；
+- `openspec validate add-field-guide-tips --strict`：**valid**；
+- 宿主复跑（`build:v2` 后强制重载 → 重开本地系统配置页 → 两条宿主尺）：字段尺 **exit 0**（5 行 = 5 指引、5 条弹层全部 `面板内=True 未裁切=True`）；帮助尺 **exit 0**（summary 83 字 / FAQ 4 条 / 无回退 / 引导 5/5 命中）；账号数 **32 不变**。
+
+### 状态
+- **F 已交付，停下等验收**。change 尚未 archive（4.1/4.3 未勾，且 archive 需用户另行决定）；campaign 的 22 站 + 收尾已全部完成。
+- 未纳入本轮（诚实标注）：① `tasks.md` 4.1「占位符从长说明改示例值」未开工（22 站字段说明已全落在 `fields`，占位符仍是 `setting.blog.*.tip` 共享串）；② 4.3「三处去重」只做了顺手消重，未做逐站比对。
 
 ## 五问重启检查

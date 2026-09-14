@@ -42,7 +42,7 @@
 1. **help 配置**（代码层）：
    - 位置：`src/helpConfigs/pages/platform-config/<platform>.ts`
    - 必须含：`helpUrl` + `summary` + `fields`（关键字段提示）+ `faq`（≥1 条）+ `tour`（引导步骤，target 用 `[data-syp-tour='xxx']` 格式）
-   - `tour.target` 必须指向设置组件真实存在的锚点：鉴权行按 `passwordType` 只会渲染 `password`/`token`/`cookie` 之一，存储目录行是 `knowledgeSpace`（`LocalSystemSetting` 另有 `storePath`/`imageStorePath`/`fsYamlType`）；`src/helpConfigs/tourAnchors.spec.ts` 负责校验
+   - `tour.target` 必须指向设置组件真实存在的锚点：鉴权行按 `passwordType` 只会渲染 `password`/`token`/`cookie` 之一，发布目录行是 `knowledgeSpace`（`LocalSystemSetting` 另有 `storePath`/`imageStorePath`/`fsYamlType`）；`src/helpConfigs/tourAnchors.spec.ts` 负责校验。注意 **`fields` 键与 tour 锚点不同名**：发布目录行的键是 `blogid`、鉴权行的键恒为 `password`（详见第 5 条）
    - 缺则补，并在 `src/helpConfigs/registry.spec.ts` 的 `verifiedConfigs` 里加入该平台（强制约束）
 2. **文档草稿**：
    - 位置：`docs/draft/platforms/<platform>.md`
@@ -50,6 +50,12 @@
    - helpUrl 若还是共享/占位链接，在草稿顶部标注 `TODO：待替换真实帮助文档链接`
 3. 后续用户维护文档并给出真实链接后，替换 help 配置里的 `helpUrl`。
 4. **文案口径（help 配置与文档草稿共用）**：只写平台功能与配置契约——字段含义、存储目录与文件名规则、图片存储/引用路径、平台限制与常见问题解法。验证进度类叙述（哪些环节已通过、批次结论、"V2 已验证配置、发布、更新、删除…"、插件版本号限定、内部传输实现名）属于验证记录，只写本 change 的 checklist SSOT，不得进入用户可见的 `summary`/`fields`/`faq`/`tour` 与文档草稿。
+5. **字段指引必须渲染并可核验**（每平台必做，与五格同等计入通过/失败）：
+   - **标准**：平台配置页**每一行真实渲染的字段**都要有一个可点的 ⓘ 提示；`fields` 的键 = **该行绑定的配置属性名**（`home`/`apiUrl`/`username`/`password`/`previewUrl`/`pageType`/`blogid`/`picbedService`/平台专有键）。平台 hook 会在运行时改开关（`knowledgeSpaceEnabled` 等），**一行是否存在以宿主实测为准**，不以构造函数默认值推断。
+   - **两套命名空间（易错点）**：鉴权行的 `fields` 键**恒为 `password`**，而引导锚点按 `passwordType` 三选一渲染（`password`/`token`/`cookie`）；Token 型平台的 tour 写成 `password` 就是**永远命中不到的死步骤**。`fields` 有 `password` 不等于引导能用 `password` 锚点。
+   - **四个可核验点**：① 每行都有 ⓘ（无「有注释器但取不到文案」的空壳）；② 指引在字段**已填值时仍可见**；③ 弹层在 `.syp-panel` 内**不裁切不错位**；④ 动态实例 key（`custom_Csdn-z26fa1o` 这类）走 registry 回落链解析到预置平台配置。
+   - **组件层挂载**：指引由 `<field-guide field="…">` 挂在设置组件内；共用表单（`base/CommonBlogSetting.vue`、`base/impl/CommonGithubSetting.vue`）已覆盖共用行，**平台专有行必须在该平台组件里挂**（包裹式用于普通控件、`inline` 用于单选组/开关）；只写 `fields` 而不挂载 = 页面上不会有 ⓘ。
+   - **回归校验（自动）**：`src/helpConfigs/fieldGuideRulers.spec.ts` 三把尺——键尺（`fields` 键必须是配置实例真实属性）、覆盖尺（必须覆盖按真实渲染行冻结的键集）、守卫尺（带 `fields` 的平台页必须在冻结表 `verifiedPlatformRows.ts` 里）；引导锚点契约由 `src/helpConfigs/tourAnchors.spec.ts` 按 `passwordType` 数据驱动校验。新增/拆分平台后必须补冻结表，否则守卫尺失败并点名页面。
 
 ---
 
@@ -68,6 +74,7 @@
 
 1. 更新 `platform-checklist.md`：
    - 对应平台行五格更新为 `✅`/`❌`，备注写清验证日期、通道、关键现象。
+   - 「字段指引与帮助引导（SOP §3）」表同步该站一行：渲染行 = 指引数、宿主判定（HelpPanel/引导步骤）、日期。
    - 更新「T1 小结」计数。
    - 在「修订记录」追加一行。
 2. 更新 `tasks.md` 对应子任务勾选。
@@ -75,11 +82,24 @@
 
 ---
 
-## 附：已验证平台清单（11 个，含 help 配置状态）
+## 附：已验证平台清单（22 个，含 help 配置状态）
+
+> 键集不在本表重复维护：唯一来源是 `src/helpConfigs/verifiedPlatformRows.ts`（按真实渲染行冻结），
+> 由 `fieldGuideRulers.spec.ts` 的两把尺强制校验。本表只登记文件与页面位置。
 
 | # | 平台 | platformKey | help 文件 | 文档草稿 |
 |---|------|-------------|-----------|---------|
 | 1 | 语雀 API | `common_Yuque` | common-yuque.ts | platforms/common-yuque.md |
+| 2 | Notion | `common_Notion` | common-notion.ts | platforms/common-notion.md |
+| 3 | Halo | `common_Halo` | common-halo.ts | platforms/common-halo.md |
+| 4 | Telegraph | `common_Telegraph` | telegraph.ts | platforms/telegraph.md |
+| 5 | Confluence | `common_Confluence` | common-confluence.ts | platforms/confluence.md |
+| 6 | Hexo | `github_Hexo` | common-github-hexo.ts | platforms/common-github-hexo.md |
+| 7 | Hugo | `github_Hugo` | github-hugo.ts | platforms/github-hugo.md |
+| 8 | Jekyll | `github_Jekyll` | github-jekyll.ts | platforms/github-jekyll.md |
+| 9 | Quartz | `github_Quartz` | github-quartz.ts | platforms/github-quartz.md |
+| 10 | Vuepress | `github_Vuepress` | github-vuepress.ts | platforms/github-vuepress.md |
+| 11 | Vuepress2 | `github_Vuepress2` | github-vuepress2.ts | platforms/github-vuepress2.md |
 | 21 | 博客园 | `metaweblog_Cnblogs` | metaweblog-cnblogs.ts | platforms/metaweblog-cnblogs.md |
 | 25 | Wordpress | `wordpress_Wordpress` | wordpress-wordpress.ts | platforms/wordpress-wordpress.md |
 | 27 | 语雀网页版 | `custom_Yuqueweb` | custom-yuqueweb.ts | platforms/custom-yuqueweb.md |
@@ -90,3 +110,4 @@
 | 32 | 简书 | `custom_Jianshu` | custom-jianshu.ts | platforms/custom-jianshu.md |
 | 33 | 掘金 | `custom_Juejin` | custom-juejin.ts | platforms/custom-juejin.md |
 | 34 | 微信公众号 | `custom_Wechat` | custom-wechat.ts | platforms/custom-wechat.md |
+| 35 | 哔哩哔哩 | `custom_Bilibili` | custom-bilibili.ts | platforms/custom-bilibili.md |
