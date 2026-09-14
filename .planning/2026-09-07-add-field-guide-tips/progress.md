@@ -558,6 +558,29 @@
 8. **本轮新增工具** `tmp/cdp-reload.ps1`（强制忽略缓存重载渲染进程，让宿主重新从磁盘加载 `dist-v2`）；`pnpm dev:v2` 未运行，改完必须重载宿主才看得到新构建。
 
 ### 状态
-- **#25 已交付，停下等验收**；E 组只剩 #29 本地系统（需在 `fs/LocalSystemSetting.vue` 的 `#main` 三行挂指引：前两行包裹式、`fsYamlType` 单选组用 `inline`），随后 F 收尾。
+- **#25 已交付**（用户 2026-09-14 回复「继续」→ 验收通过）；E 组只剩 #29 本地系统，随后 F 收尾。
+
+## 五问重启检查
+
+## 会话：2026-09-14（E 组第 3 站 #29 本地系统完成 —— E 组 3/3 交付，待验收）
+
+### 做了什么
+1. **改前基线（宿主实测）**：`字段行 5 行 · 指引 2 个 · 键 pageType,picbedService`，宿主尺直接点名 **无指引的行：存储路径 / 媒体存储路径 / YAML类型**（exit 1）。与预制分析完全一致：键早就在 `fields` 里，缺的是**组件层挂载**——`fs/LocalSystemSetting.vue` 的 `#main` 三行没有 `field-guide`（E 组唯一的组件改动点，其余 E 组两站都是直通壳）。
+2. **挂载**：存储路径/媒体存储路径 用包裹式（`<field-guide field="…">` 包住 `el-input`，借助共用组件的 flex 行内布局避免指引被挤到下一行），YAML类型 用 `inline`（9 个单选框，指引紧贴控件而非行尾）。
+3. **按宿主实况改准文案**（不只是挂图标）：
+   · `storePath`：旧的「可使用插件支持的占位符生成实际目录」太含糊 → 写明真实机制 `[auto]`（`constants.ts:24` → `LocalSystemApiAdaptor.ts:163/187`：路径含 `[auto]` 时按文章分类替换）；
+   · `imageStorePath`：写明图片按该目录写成相对链接（`LocalSystemApiAdaptor.ts:302`：绝对媒体路径替换成 `.` 开头）；
+   · `fsYamlType`：点名全部 9 个真实选项，并写明**选具体框架时会委派给该框架的适配链路**（`createDelegateAdaptor`，图片仍重定向回本地文件系统），这是旧文案「匹配…等目标站点」没说清的关键；
+   · `picbedService`：旧文案只描述默认，改为三选项口径（默认「当前平台」写入媒体目录 / PicGo / 不使用跳过图片处理）；
+   · FAQ 由 3 条增至 4 条（补「按分类分文件夹怎么写路径」）；tour 第 1 步文案补默认目录；文档草稿表格改为 5 行真实行名并同步常见问题。
+4. **改后实测**：**5 行 = 5 个指引**，键 `fsYamlType/imageStorePath/pageType/picbedService/storePath`；5 行**全部有值**（存储路径 36 字符、媒体存储路径 `assets`、YAML类型 `默认`、发布格式 Markdown、图床服务 当前平台）且指引均可见；5 条弹层全部 `.syp-panel` 内、未裁切（YAML 文案 137 字 / 283.6x83.6 最高）。
+5. **弹层真绘制复核**：真实指针 hover 存储路径 ⓘ + 取帧 → `opacity=1`、class `el-popper is-light el-tooltip`、284x66/59 字，截图 `tmp/field-guide-localsystem-storepath.png` 肉眼可见（沿用 #25 定的口径：`cdp-front.ps1` 不够，要「真实指针 + 出帧」）。
+6. **帮助链路**：HelpPanel（标题 本地系统 · 在 `.syp-v2` 内 · 视口内 · 未裁切 · summary 83 字 · FAQ 4 条 · 无回退）+ 引导 **5/5 命中**（文章输出目录/媒体目录/YAML 类型/图片处理/验证并保存；YAML 步高亮 748.8x56，其余 748.8x48）。
+7. **覆盖诊断**：`fs_LocalSystem expected=5 actual=5 missing=[] extra=[]`、`tour=5 dead=[]`、鉴权步按设计 `SKIP(no auth step)`（该平台 `passwordType=None`，无鉴权行）。
+8. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变、两条宿主尺 `exit 0`。
+
+### 状态
+- **#29 已交付，停下等验收**。E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）全部交付 → 验收后进入 **F 收尾**：两把回归尺落地（含把 `tourAnchors.spec.ts` 改为按 `passwordType` 数据驱动）、SOP §3 与 checklist 回写 22 站、`openspec validate --strict`、最终全量提交。
+- 顺带一提（未改动、不在本 change 范围）：存储路径默认值渲染为 `D:\Users\Administrator/Downloads/syp`，盘符反斜杠与后半段正斜杠混用，来自 `StrUtil.pathJoin`；功能无影响。
 
 ## 五问重启检查

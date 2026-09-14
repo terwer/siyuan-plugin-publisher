@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
+import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
 import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemApi.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { LocalSystemPlaceholder } from "~/src/adaptors/fs/LocalSystem/LocalSystemPlaceholder.ts"
@@ -38,50 +39,56 @@ localFsCfg.placeholder = localFsPlaceholder
     <template #main="main">
       <!-- 存储路径 -->
       <el-form-item :label="t('setting.blog.type.fs.store.path')" data-syp-tour="storePath">
-        <el-input
-          v-model="(main.cfg as LocalSystemConfig).storePath"
-          :placeholder="t('setting.blog.type.fs.store.path.tip')"
-        />
+        <field-guide field="storePath">
+          <el-input
+            v-model="(main.cfg as LocalSystemConfig).storePath"
+            :placeholder="t('setting.blog.type.fs.store.path.tip')"
+          />
+        </field-guide>
       </el-form-item>
       <!-- 媒体存储路径 -->
       <el-form-item :label="t('setting.blog.type.fs.media.path')" data-syp-tour="imageStorePath">
-        <el-input
-          v-model="(main.cfg as LocalSystemConfig).imageStorePath"
-          :placeholder="t('setting.blog.type.fs.media.path.tip')"
-        />
+        <field-guide field="imageStorePath">
+          <el-input
+            v-model="(main.cfg as LocalSystemConfig).imageStorePath"
+            :placeholder="t('setting.blog.type.fs.media.path.tip')"
+          />
+        </field-guide>
       </el-form-item>
 
       <!-- YAML类型 -->
       <el-form-item :label="t('setting.blog.type.fs.yaml.type')" data-syp-tour="fsYamlType">
-        <div class="yaml-type-radio-group">
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Default" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.default") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Hexo" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.hexo") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Hugo" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.hugo") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Jekyll" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.jekyll") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vuepress" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.vuepress") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vuepress2" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.vuepress2") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vitepress" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.vitepress") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Quartz" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.quartz") }}
-          </el-radio>
-          <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Astro" size="default">
-            {{ t("setting.blog.type.fs.yaml.type.astro") }}
-          </el-radio>
-        </div>
+        <field-guide field="fsYamlType" inline>
+          <div class="yaml-type-radio-group">
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Default" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.default") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Hexo" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.hexo") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Hugo" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.hugo") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Jekyll" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.jekyll") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vuepress" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.vuepress") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vuepress2" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.vuepress2") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Vitepress" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.vitepress") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Quartz" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.quartz") }}
+            </el-radio>
+            <el-radio v-model="(main.cfg as LocalSystemConfig).fsYamlType" :label="FsYamlType.Astro" size="default">
+              {{ t("setting.blog.type.fs.yaml.type.astro") }}
+            </el-radio>
+          </div>
+        </field-guide>
       </el-form-item>
     </template>
 

@@ -357,3 +357,16 @@
 - **帮助链路**：HelpPanel（标题 Wordpress · 在 `.syp-v2` 内 · 视口内 · 未裁切 · summary 45 字 · FAQ 3 条 · 无回退）+ 引导 **6/6 步命中**（站点首页/XML-RPC 地址/登录用户名/账号密码/预览规则/验证配置，每步高亮 739.2x48）；覆盖诊断 `tour=6 dead=[]`。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；两条宿主尺 `exit 0`。
 - **新增工具**：`tmp/cdp-reload.ps1` —— 强制忽略缓存重载渲染进程（`pnpm dev:v2` 未运行时，改完必须重载宿主才会加载新 `dist-v2`）。
+
+## #29 本地系统 站点完成（E 组第 3 站，E 组收官）（2026-09-14，用户「继续」已放行 #25）
+- **本站缺陷性质与 E 组前两站不同：缺的是组件层挂载**（键早就齐）。改前宿主尺 `字段行 5 行 · 指引 2 个`，exit 1 并直接点名 **无指引的行：存储路径 / 媒体存储路径 / YAML类型** —— 与预制分析（该组件 `#main` 三行未挂 `field-guide`）完全一致。改法是 E 组唯一的组件改动：前两行包裹式、YAML类型 单选组 `inline`。
+- **挂载形态验证**：包裹式两行靠共用组件的 `display:flex` 行内布局保证指引同行（`notSameLine=[]`）；YAML类型 用 `inline` 让指引紧贴 9 个单选框而非行尾。5 行**全部有值**（存储路径 36 字符、媒体存储路径 `assets`、YAML类型 `默认`、发布格式 Markdown、图床服务 当前平台）→ 「已填值仍可见」在本站是全行覆盖。
+- **文案按实况改准（三处）**：
+  · `storePath`：旧文案「可使用插件支持的占位符生成实际目录」含糊 → 写明真实机制 **`[auto]`**（`constants.ts:24`，`LocalSystemApiAdaptor.ts:163` 路径含 `[auto]` 时把分类置为该值、`:187` 用分类名替换生成 `realStorePath`）；
+  · `fsYamlType`：旧文案「匹配 Hexo、Hugo…等目标站点」→ 点名全部 9 个真实选项，并写明**选具体框架会委派给该框架的适配链路**（`LocalSystemApiAdaptor.ts:117-147` `createDelegateAdaptor`，其中注释说明图片仍重定向回本地文件系统，即「用 GitHub 族的 YAML 规则、图片仍落本地」）；
+  · `picbedService`：旧文案只描述默认 → 改三选项口径（默认「当前平台」写入媒体目录 / PicGo / 不使用跳过图片处理）。
+- **帮助链路**：HelpPanel（标题 本地系统 · 在 `.syp-v2` 内 · 视口内 · 未裁切 · summary 83 字 · FAQ 4 条 · 无回退）+ 引导 **5/5 命中**（YAML 步高亮 748.8x56，其余 748.8x48）；FAQ 由 3 条增至 4 条（补 `[auto]` 用法）。
+- **覆盖诊断**：`fs_LocalSystem expected=5 actual=5 missing=[] extra=[]`、`tour=5 dead=[]`、鉴权步 `SKIP(no auth step)`（`passwordType=None`，该平台本就无鉴权行 → 「一行一条指引」的鉴权特例不适用）。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；两条宿主尺 `exit 0`；截图 `tmp/field-guide-localsystem-storepath.png`（真实指针 hover 后 `opacity=1`）。
+- **E 组收官**：#21 博客园（缺三键 + tour 死步骤）、#25 Wordpress（文案与行为不符）、#29 本地系统（缺组件挂载）三种缺陷形态各一，说明「按真实渲染行逐项核验」这条尺子确实能分别抓到「漏键 / 说错话 / 没挂上」。下一阶段：F 收尾。
+- **顺带记录（未改动）**：存储路径默认值渲染为 `D:\Users\Administrator/Downloads/syp`（`StrUtil.pathJoin` 产生的混合分隔符），功能无影响，不在本 change 范围。
