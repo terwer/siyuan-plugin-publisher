@@ -541,6 +541,23 @@
 4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-cnblogs-previewurl.png`。
 
 ### 状态
-- **#21 已交付，停下等验收**；E 组余下 2 站：#25 Wordpress（键已齐，宿主核验）、#29 本地系统（需在 `fs/LocalSystemSetting.vue` 挂 3 行指引）。
+- **#21 已交付**（用户 2026-09-14 回复「继续」→ 验收通过）；E 组余下 2 站：#25 Wordpress、#29 本地系统。
+
+## 五问重启检查
+
+## 会话：2026-09-14（E 组第 2 站 #25 Wordpress 完成，待验收）
+
+### 做了什么
+1. **先按预制清单复核「键是否真齐」**：覆盖尺对 `wordpress_Wordpress` 跑出 `expected=7 actual=7 missing=[] extra=[]`，与宿主实测 7 行逐行吻合 → 键这件事本站确实无事可做（`WordpressSetting.vue`/`MetaweblogSetting.vue` 都是直通壳，零新挂）。
+2. **宿主核验时抓到一处文案与事实不符（本站的真缺陷）**：`picbedService` 旧 tip 写「WordPress 图片发布到站点自身的媒体库，也可按站点能力选择外部图床」，读起来像「无论如何都会进媒体库」；查实 `baseExtendApi.ts:605-608`：`不使用`（`PicbedServiceTypeEnum.None`）走 `default` 分支 → **跳过图片处理**，图片按原地址引用；只有 `当前平台` 才经 `metaweblog.newMediaObject`（`metaweblogBlogApiAdaptor.ts:219`）上传到 WordPress 媒体库；`PicGo` 走 PicGo 内核。→ 文案改为点名三个真实选项（`当前平台 推荐` / `PicGo 强烈推荐` / `不使用`）各自行为，FAQ 同口径。
+3. **另两处按宿主实况改准**：`pageType` 旧 tip 只说「按 HTML 发布」，补上「选 Markdown 则直接提交 Markdown 原文」（`baseExtendApi.ts:357-361`），并点名页面上的两个真实选项；`previewUrl` 文案与行标签「预览规则」对齐；`password` 不再把「应用程序密码」写成唯一答案（页内 placeholder 就是「WordPress登录密码」），改为「账号密码 + 建议改用应用程序密码」，tour 第 4 步标题也从「应用程序密码」改为「账号密码」以免自相矛盾。
+4. **文档草稿同步**：补「发布格式」行、图床行改为三选项口径、准备清单与 FAQ 同口径。
+5. **改后实测**：7 行 = 7 个指引，键 `apiUrl/home/pageType/password/picbedService/previewUrl/username`；7 条弹层全部 `.syp-panel` 内、未裁切（最长 283.6x83.6）；**引导 6/6 步全部命中真实控件**（高亮均 739.2x48），HelpPanel summary 45 字 + FAQ 3 条 + 无回退。
+6. **把「过渡未推进」当场证伪（沿用 #32 简书的口径）**：重载宿主后尺子对 7 条 tip 全部记 `transitionsFrozen`（弹层已挂载、有尺寸、有完整文案，但停在 `el-fade-in-linear-enter-from`、`opacity=0`）。用真实指针（`tmp/cdp-mouse.ps1` 派发 `Input.dispatchMouseEvent`）压到图床行的 ⓘ 上并取一帧后复测：class 变成 `el-popper is-light el-tooltip`、`opacity=1`、283.6x83.6、文案 104 字 → **弹层是真绘制的**，`transitionsFrozen` 是宿主渲染节流的诊断项，不是缺陷。截图 `tmp/field-guide-wordpress-picbed.png` 里肉眼可见弹层已绘制。
+7. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变、两条宿主尺 `exit 0`。
+8. **本轮新增工具** `tmp/cdp-reload.ps1`（强制忽略缓存重载渲染进程，让宿主重新从磁盘加载 `dist-v2`）；`pnpm dev:v2` 未运行，改完必须重载宿主才看得到新构建。
+
+### 状态
+- **#25 已交付，停下等验收**；E 组只剩 #29 本地系统（需在 `fs/LocalSystemSetting.vue` 的 `#main` 三行挂指引：前两行包裹式、`fsYamlType` 单选组用 `inline`），随后 F 收尾。
 
 ## 五问重启检查

@@ -7,22 +7,31 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const wordpressHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpress",
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
-  summary: "发布到自建或托管的 WordPress 站点。当前配置重点是站点地址、账号和应用程序密码。",
+  summary: "发布到自建或托管的 WordPress 站点。当前配置重点是站点地址、账号和图片发布方式。",
   fields: {
     home: { tip: "WordPress 站点首页地址，如 https://yourblog.com" },
     apiUrl: { tip: "WordPress XML-RPC 端点，通常会从首页自动推导为 https://yourblog.com/xmlrpc.php" },
     username: { tip: "WordPress 管理员用户名" },
     password: {
-      tip: "WordPress 应用程序密码（在用户 → 编辑 → 应用程序密码中生成）",
+      tip: "WordPress 账号密码；建议改用「应用程序密码」（后台 → 用户 → 编辑 → 应用程序密码 中生成），避免直接使用登录口令",
     },
-    previewUrl: { tip: "默认使用 /?p=[postid] 预览格式。只有站点永久链接规则特殊时才需要调整。" },
-    pageType: { tip: "WordPress 按 HTML 内容发布，通常保持默认即可。" },
-    picbedService: { tip: "WordPress 图片发布到站点自身的媒体库，也可按站点能力选择外部图床。" },
+    previewUrl: { tip: "查看文章链接模板，默认 /?p=[postid]，与 WordPress 默认固定链接一致，通常保持默认。" },
+    pageType: {
+      tip: "正文提交格式：默认 HTML（插件先把笔记转成 HTML 再提交）；选 Markdown 则直接提交 Markdown 原文。",
+    },
+    picbedService: {
+      tip:
+        "图片发布方式：「当前平台 推荐」经 XML-RPC 上传到 WordPress 媒体库；「PicGo 强烈推荐」改用你配置的 PicGo 图床；" +
+        "「不使用」跳过图片处理，按原图地址引用（需图片本身公网可访问）。",
+    },
   },
   faq: [
     { q: "XML-RPC 被禁用？", a: "检查 WordPress 是否开启了 XML-RPC，或确认安全插件没有拦截 /xmlrpc.php。" },
     { q: "Application Password 在哪？", a: "WordPress 后台 → 用户 → 编辑 → 滚动到「应用程序密码」 → 生成。" },
-    { q: "图片上传失败？", a: "先确认站点媒体库权限和网络连通性；WordPress 图片发布到站点自身的媒体库。" },
+    {
+      q: "图片上传失败？",
+      a: "「图床服务」选「当前平台」时图片经 XML-RPC 上传到 WordPress 媒体库，请确认站点媒体库权限与网络连通；也可先在设置里配置好 PicGo，再改选「PicGo 强烈推荐」。",
+    },
   ],
   tour: [
     {
@@ -45,14 +54,14 @@ export const wordpressHelpConfig: PageHelpConfig = {
     },
     {
       target: "[data-syp-tour='password']",
-      title: "应用程序密码",
-      content: "这里建议填写 WordPress 应用程序密码，不要直接使用后台登录密码。",
+      title: "账号密码",
+      content: "填写 WordPress 账号密码；建议改用后台生成的应用程序密码，避免直接使用登录口令。",
       placement: "bottom",
     },
     {
       target: "[data-syp-tour='previewUrl']",
-      title: "预览地址",
-      content: "默认预览格式适合多数 WordPress 站点。只有固定链接结构特殊时再修改。",
+      title: "预览规则",
+      content: "查看文章链接模板，默认 /?p=[postid]，只有站点固定链接结构特殊时才需要修改。",
       placement: "bottom",
     },
     {

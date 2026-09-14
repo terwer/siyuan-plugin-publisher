@@ -347,3 +347,13 @@
 - **改后实测**：**7 行 = 7 ⓘ**，键 `home/apiUrl/username/password/previewUrl/pageType/picbedService`；7 条弹层全部 `面板内=True 未裁切=True`；该站鉴权行是 Token 输入框、**无「手动编辑」展开/收起**，故「展开态 ⓘ 恒为 1」在该站不适用，对应判定由「一行只有一条指引」（`multiGuideRows` 为空）覆盖。
 - **覆盖诊断**：`metaweblog_Cnblogs expected=7 actual=7 missing=[] extra=[]`、`tour=5 dead=[]` → 该站从唯一的 tour MISMATCH 站转为 OK；全量诊断 3/3 通过（仅 `fs_LocalSystem` 按设计 SKIP：无鉴权步骤）。
 - **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；截图 `tmp/field-guide-cnblogs-previewurl.png`（Token 值在页面上为掩码显示）。
+
+## #25 Wordpress 站点完成（E 组第 2 站）（2026-09-14，用户「继续」已放行 #21）
+- **预制清单成立**：覆盖尺 `wordpress_Wordpress expected=7 actual=7 missing=[] extra=[]`，与宿主实测 7 行逐行吻合 → 本站没有「缺键/死键」问题，预制的「只需宿主核验」判断正确；`WordpressSetting.vue`、`MetaweblogSetting.vue` 都是渲染 `<common-blog-setting>` 的**直通壳**，零新挂。
+- **核验抓到的真缺陷是文案与行为不符（图床）**：旧 tip「WordPress 图片发布到站点自身的媒体库，也可按站点能力选择外部图床」把三种选项说成一回事。查实 `baseExtendApi.ts:486-609`：`不使用`（`PicbedServiceTypeEnum.None`）落 `default` → **跳过图片处理**，图片按原地址引用；`当前平台`（Bundled）才 `newMediaObject`（`metaweblogBlogApiAdaptor.ts:219-238` → XML-RPC `metaWeblog.newMediaObject`）上传到 WordPress 媒体库；`PicGo` 走 PicGo 内核。宿主实测该页三项 `不使用 / PicGo 强烈推荐 / 当前平台 推荐` 且 `当前平台` 选中（账号已保存值）。→ 文案改为点名三选项各自行为。
+- **另两处按实况改准**：① `pageType`：旧 tip 只说「按 HTML 发布」，补「选 Markdown 则直接提交 Markdown 原文」（依据 `baseExtendApi.ts:357-361`：`Markdown` → `post.description = post.markdown`，否则 `post.html`），宿主实测默认选中 HTML；② `password`：旧 tip 把「应用程序密码」写成唯一答案，而页内 placeholder 是「WordPress登录密码」→ 改为「账号密码 + 建议改用应用程序密码」，tour 第 4 步标题同步由「应用程序密码」改为「账号密码」；`previewUrl` 措辞与行标签「预览规则」对齐（默认值实测 `/?p=[postid]`，与 promo 提示里少一个 `/` 的旧说法不同，以控件实际值为准）。
+- **改后实测**：**7 行 = 7 个指引**，键 `apiUrl/home/pageType/password/picbedService/previewUrl/username`；7 条弹层 `面板内=True 未裁切=True`（最长 283.6x83.6；图床文案 104 字、密码 65 字、发布格式 63 字、预览规则 53 字）；已填值的 4 行（API地址/预览规则/发布格式/图床服务）指引均可见，含两个单选行。
+- **`transitionsFrozen` 的最终口径（本站当场证伪）**：宿主重载后尺子对全部 7 条 tip 记「过渡未推进」（弹层已挂载、有尺寸、有完整文案，却停在 `el-fade-in-linear-enter-from`、`opacity=0`）。用真实指针派发 `Input.dispatchMouseEvent` 压到图床行 ⓘ 并**取一帧**后复测：class 变 `el-popper is-light el-tooltip`、`opacity=1`、283.6x83.6/104 字 → 弹层确实已绘制；`cdp-front.ps1`（置前 + focus 模拟）**不足以**推进过渡，能推进的是「真实指针 + 出帧」。截图 `tmp/field-guide-wordpress-picbed.png` 可肉眼核对。
+- **帮助链路**：HelpPanel（标题 Wordpress · 在 `.syp-v2` 内 · 视口内 · 未裁切 · summary 45 字 · FAQ 3 条 · 无回退）+ 引导 **6/6 步命中**（站点首页/XML-RPC 地址/登录用户名/账号密码/预览规则/验证配置，每步高亮 739.2x48）；覆盖诊断 `tour=6 dead=[]`。
+- **门禁**：`pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；账号数 32 不变；两条宿主尺 `exit 0`。
+- **新增工具**：`tmp/cdp-reload.ps1` —— 强制忽略缓存重载渲染进程（`pnpm dev:v2` 未运行时，改完必须重载宿主才会加载新 `dist-v2`）。
