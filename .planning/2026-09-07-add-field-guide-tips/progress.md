@@ -623,7 +623,8 @@
 
 ### 状态盘点（只读核对，与交接文件一致）
 - 22 站专属 help 配置齐备（`platform-config/` 下 22 个平台文件 + `_default` + `remaining-t1`）；`docs/draft/platforms/` 恰 22 篇草稿。
-- `remaining-t1` 仍有 **13 条占位记录**：12 条对应 V2「添加账号」可选平台（`github_Vitepress`/`github_Astro`、GitLab 7 站、`metaweblog_Typecho`/`metaweblog_Jvue`、`wordpress_Wordpressdotcom`），第 13 条 `metaweblog_Metaweblog` 在 `pre.ts` 中**无对应预置条目**（悬空占位）。
+- `remaining-t1` 仍有 **13 条占位记录**：12 条对应 V2「添加账号」卡片可选平台（`github_Vitepress`/`github_Astro`、GitLab 7 站、`metaweblog_Typecho`/`metaweblog_Jvue`、`wordpress_Wordpressdotcom`）；
+  第 13 条 `metaweblog_Metaweblog` 在 `pre.ts` 的 `metaweblogCfg` 卡片列表里**没有条目**（该列表只有 Cnblogs/Typecho/Jvue），但它**并非不可达**：`getSubtypeList(PlatformType.Metaweblog)` 含 `Metaweblog_Metaweblog`（`dynamicConfig.ts:328`），经「添加账号」向导创建的实例 key 形如 `metaweblog_Metaweblog-<id>`，其 pageId 走 `registry.getPresetPlatformConfig` 回落链命中这条占位（`registry.ts:63-92`）→ 该页目前只有 helpUrl、**零 ⓘ**。清单第 24 行 `metaweblog_*`「有 V2 bridge」即指此路径。
 - `pre.ts` 当前可选平台 key 共 **37 个**；其中落 `_default` 兜底的是 `github_Docsify`/`gitlab_Gitlabdocsify`/`system_Siyuan`（`custom_Flowus` 在 `pre.ts` 中已注释）。
 
 ### 台账不一致（发现，未擅自改）
