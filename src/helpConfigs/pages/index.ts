@@ -53,6 +53,7 @@ import { gitlabvuepress2HelpConfig } from "./platform-config/gitlab-gitlabvuepre
 import { gitlabvitepressHelpConfig } from "./platform-config/gitlab-gitlabvitepress"
 import { gitlabastroHelpConfig } from "./platform-config/gitlab-gitlabastro"
 import { typechoHelpConfig } from "./platform-config/metaweblog-typecho"
+import { metaweblogHelpConfig } from "./platform-config/metaweblog-metaweblog"
 import { jvueHelpConfig } from "./platform-config/metaweblog-jvue"
 import { wordpressdotcomHelpConfig } from "./platform-config/wordpress-wordpressdotcom"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
@@ -107,6 +108,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(gitlabvitepressHelpConfig)
   helpRegistry.register(gitlabastroHelpConfig)
   helpRegistry.register(typechoHelpConfig)
+  helpRegistry.register(metaweblogHelpConfig)
   helpRegistry.register(jvueHelpConfig)
   helpRegistry.register(wordpressdotcomHelpConfig)
 

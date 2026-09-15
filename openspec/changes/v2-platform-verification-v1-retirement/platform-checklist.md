@@ -74,7 +74,7 @@
 | 21 | 博客园 | `metaweblog_Cnblogs` | `Metaweblog_Cnblogs` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 全链路已验（2026-05-21）；2026-05-22 复验带图文章通过；XML-RPC `proxyXmlrpc` |
 | 22 | Typecho | `metaweblog_Typecho` | `Metaweblog_Typecho` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 23 | Jvue | `metaweblog_Jvue` | `Metaweblog_Jvue` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 24 | Metaweblog 通用 | `metaweblog_*` | `Metaweblog_Metaweblog` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 有 V2 bridge |
+| 24 | Metaweblog 通用 | `metaweblog_*` | `Metaweblog_Metaweblog` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | **未在 V2 平台注册表登记**：`src/platforms/pre.ts` 的 `metaweblogCfg` 只有 Cnblogs / Typecho / Jvue，`Metaweblog_Metaweblog` 出现 **0 次** → 「添加账号」平台选择器不提供该入口（宿主实测选择器 MetaWeblog 组仅 3 项），用户无法新建该平台账号。路由层仍可达（`SingleSettingIndex.vue` 映射 `othermeta-setting`、`bridgeRegistry.ts` 映射 `OthermetaSetting`、`dynamicConfig.ts` 推入 subtype），故保留给历史账号。帮助配置已按 34 站同一口径补齐（见下），但**配置页宿主验证因入口不可达而无法进行**，五格保持 ⬜ |
 
 ### Wordpress（2）
 
@@ -159,6 +159,14 @@
 > 从 `remaining-t1` 移出，纳入 `registry.spec.ts` 的 `verifiedConfigs` 与 `verifiedPlatformRows.ts` 冻结行，
 > 并各配 `docs/draft/platforms/<platform>.md` 文档草稿。宿主两把尺逐站实测均通过（字段尺「全部契约项通过」+ 帮助尺「帮助引导与文档：全部通过」），
 > 临时账号核验后均已删除、账号数复原为 **32**。
+
+> **`metaweblog_Metaweblog`（Metaweblog 通用）例外说明**：该站也已按同一口径补齐帮助配置
+> （`metaweblog-metaweblog.ts`：summary + fields 7 + faq 5 + tour 8；纳入 `verifiedConfigs` 与冻结行；
+> `docs/draft/platforms/metaweblog-metaweblog.md`；`remaining-t1` 至此**清空**），
+> 但**本表未登记其为已验收站**——原因是它**不在 V2 平台注册表 `src/platforms/pre.ts`**（`metaweblogCfg` 仅 Cnblogs / Typecho / Jvue），
+> 「添加账号」选择器不提供该入口（宿主实测确认），因此**无法按常规路径打开其配置页做宿主验证**；
+> 其冻结行集（7 行）系按同族站与 `MetaweblogConfig` 默认值（`usernameEnabled=true`、`knowledgeSpaceEnabled=false`）推定，
+> 未经真实渲染观测。是否把它作为用户可选入口暴露出来属**产品决策**，未擅自开工。
 
 **共用层结论（34 站共用，已冻结）**：pageId 由 `V2PlatformConfigBridge` `provide` / `FieldGuide` `inject`（prop 可覆盖，
 无 provider 时只渲染 slot）；共用表单 `base/CommonBlogSetting.vue`（12 处）与 `base/impl/CommonGithubSetting.vue`（12 处）

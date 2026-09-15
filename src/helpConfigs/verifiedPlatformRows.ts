@@ -48,6 +48,7 @@ import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitla
 import { GitlabastroConfig } from "~/src/adaptors/api/gitlab-astro/gitlabastroConfig.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { JvueConfig } from "~/src/adaptors/api/jvue/jvueConfig.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 import { WordpressdotcomConfig } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomConfig.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
@@ -81,6 +82,7 @@ import { gitlabvuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-conf
 import { gitlabvitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvitepress"
 import { gitlabastroHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabastro"
 import { typechoHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-typecho"
+import { metaweblogHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-metaweblog"
 import { jvueHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-jvue"
 import { wordpressdotcomHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpressdotcom"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
@@ -283,6 +285,14 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "metaweblog_Jvue",
     config: jvueHelpConfig,
     ConfigClass: JvueConfig,
+    required: [...COMMON_FORM, "username"],
+    hookFlags: { knowledgeSpaceEnabled: false },
+  },
+  // 通用 MetaWeblog 入口：同样无「发布目录」行，且不预设查看链接模板（previewUrl 默认空串）
+  {
+    platformKey: "metaweblog_Metaweblog",
+    config: metaweblogHelpConfig,
+    ConfigClass: MetaweblogConfig,
     required: [...COMMON_FORM, "username"],
     hookFlags: { knowledgeSpaceEnabled: false },
   },

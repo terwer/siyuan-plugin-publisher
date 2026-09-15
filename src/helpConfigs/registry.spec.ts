@@ -42,6 +42,7 @@ import { gitlabvuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-conf
 import { gitlabvitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvitepress"
 import { gitlabastroHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabastro"
 import { typechoHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-typecho"
+import { metaweblogHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-metaweblog"
 import { jvueHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-jvue"
 import { wordpressdotcomHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpressdotcom"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
@@ -217,6 +218,7 @@ describe("verified platform help configs", () => {
     gitlabvitepressHelpConfig,
     gitlabastroHelpConfig,
     typechoHelpConfig,
+    metaweblogHelpConfig,
     jvueHelpConfig,
     wordpressdotcomHelpConfig,
   ]
