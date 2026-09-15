@@ -641,4 +641,21 @@
 - **两处需宿主确认的事实（预分析发现，未下断言）**：① GitLab 族 `getPreviewUrl` 复用 GitHub 的 `/[user]/[repo]/blob/[branch]/[docpath]` 规则且不前置域名（`commonGitlabApiAdaptor.ts:202-213`）→ 查看链接能否打开须逐站实测；② 仅 `gitlab_Gitlabastro` 构造里显式置 `Bundled`，其余 6 站取 `CommonGithubConfig` 默认，图片两行按**当前图床值**渲染 → 行数须宿主实测。
 - 清单已写入 `task_plan.md`「选项 3 开工清单：12 个未拆分平台」节（含 12 站逐站差异表、12 站共同动作 5 步、两处待确认项、工作量提示）。
 
+### 自动续航轮 2（同日，仍不开工）：选项 1（4.1）口径材料预备
+- 用户仍未放行 → 继续只做只读预分析，产出 4.1 的**口径对照表 + 硬约束**，供用户拍板后再动代码。
+- **本次查实的关键硬约束（先前未记录）**：平台 `singleplatform/*/*Setting.vue` 是 **V1/V2 共用同一批文件** ——
+  `routeConfig.ts:32/131-134` 的 `setting-platform-single` → `SingleSettingIndex.vue` 属 **V1 app**（`src/main.ts` → `index.html`）；
+  V2 侧 `V2PlatformConfigBridge.vue` → `bridgeRegistry.ts` import 的是**同一批**组件，两边都经 `CommonBlogSetting.vue` 读
+  `props.cfg.placeholder.*Placeholder`（`:382/390/398/415/434/487`）。
+  → **不能直接改组件里的 placeholder 赋值**（会让 V1 文案跟着变，违反 4.2 与 proposal 的「V1 文本零变化」）。
+- **V2 专属信号已存在**：`CommonBlogSetting.vue:59` 已 `inject(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, null)`，V2 有 provider
+  （`V2PlatformConfigBridge.vue:120`）、V1 得 `null` → 现成的「仅 V2 生效」开关，无需新造机制。
+- 现状事实：占位符用的是 locales 共享串（`siyuan/i18n/zh-CN` 共 92 个 `.tip` 键），长说明与示例值混写；
+  `image.link.path.tip`/`picbedService.tip`/`pageType.tip`/`blogid.tip` 为**空值**（无占位符可读）；
+  GitLab 族 `gitlab.*.tip` 已是示例值形态（可作口径样板）。
+- 已备三种口径：**A（推荐，改 V2 分支的 placeholder 绑定 + `fields` 增可选 `sample`，V1 零变化）**、
+  B（34 个组件各自按 V2 信号注入，低侵入但重复）、C（直接改 locales，破坏 4.2 不可接受）。
+- 已备 GitHub 族 13 个字段的「示例值 + 对应 `fields.tip`」对照草案；试点站待用户在 `fs_LocalSystem` / `github_Vuepress2` 间选择。
+- 全部写入 `task_plan.md`「选项 1（4.1 占位符 → 示例值）口径对照表」节；**未写任何产品代码、未构建、未开新平台**。
+
 ## 五问重启检查

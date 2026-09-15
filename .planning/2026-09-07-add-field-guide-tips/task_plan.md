@@ -111,6 +111,57 @@
 - [ ] F.6 全量测试 + build:v2 + 英文 Conventional 提交推送，工作树干净。
 - **状态：** pending
 
+## 选项 1（4.1 占位符 → 示例值）口径对照表（2026-09-15 预分析，**未开工**，等用户拍板口径）
+
+### 关键硬约束（本次查实，直接决定 4.1 怎么做）
+**平台 `*Setting.vue` 是 V1 与 V2 共用的同一批文件**：
+`routeConfig.ts:32/131-134`（`setting-platform-single` → `SingleSettingIndex.vue`）是 **V1 app（`src/main.ts` → `index.html`）** 的入口；
+**V2 侧**（`V2PlatformConfigBridge.vue` → `bridgeRegistry.ts`）import 的是**同一批** `singleplatform/*/*Setting.vue`。
+两边都经过 `CommonBlogSetting.vue` 读取 `props.cfg.placeholder.*Placeholder`（`CommonBlogSetting.vue:382/390/398/415/434/487`）。
+→ **结论：不能直接改这些组件里的 placeholder 赋值**，否则 V1 文案跟着变，违反 change 4.2（「locales 的 `setting.blog.*.tip` 保持不动、V1 界面文案零变化」）与 proposal「V1 文本零变化」承诺。
+→ **可用的 V2 专属信号已存在**：`CommonBlogSetting.vue:59` 已 `inject(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, null)`——**V2 才有 provider**（`V2PlatformConfigBridge.vue:120`）、V1 取到 `null`。这就是「只在 V2 生效」的现成开关，无需新造机制。
+
+### 现状：占位符里的字段说明（locales 共享串，92 个 `.tip` 键）
+| locales 键 | 现值 | 问题 |
+|---|---|---|
+| `setting.blog.previewUrl.tip` | 「如果不明白原理，请勿修改此选项。MD文件预览规则（占位符：…）通常是：/[user]/[repo]/blob/[branch]/[docpath]」 | 长说明，填值即消失 |
+| `setting.blog.mdFilenameRule.tip` | 「Markdown文件名规则(占位符：[yyyy] [MM] [mm] [dd] [category] [cats] [tag] [tags] [slug] [filename])，例如：…」 | 括号占位符清单过长 |
+| `setting.blog.previewPostUrl.tip` | 「预览规则（占位符：[yyyy] [MM] [dd] [postid]），例如：/post/[postid].html 或者 …」 | 同上 |
+| `setting.blog.type.github.default.path.tip` | 「存储目录例如：docs，部分平台可使用[auto]作为特殊占位符，代表自动映射层级目录，例如：docs/[auto]」 | 说明 + 示例混在一起 |
+| `setting.blog.type.github.dyn.yaml.tip` | 「YAML预设配置，如果您不了解是干什么的请不要配置，JSON格式，例如：{"sidebar": false}。这个配置会覆盖…」 | 整段说明塞在 textarea 占位符 |
+| `setting.blog.github.url.tip` / `.apiurl.tip` | 「Github首页地址」/「Github 的 REST API 地址，通常是：https://api.github.com」 | 偏说明 |
+| `setting.blog.type.github.image.link.path.tip`、`setting.blog.picbedService.tip`、`setting.blog.pageType.tip`、`setting.blog.blogid.tip` | **空值** | 无占位符可读 |
+| GitLab 族 `setting.blog.gitlab.*.tip` | 「Gitlab首页，例如：http://localhost:8002」等 | 已是示例值形态（可作口径样板） |
+
+### 三种口径（请选一个，我再逐站推）
+| 方案 | 做法 | V1 影响 | 成本/风险 |
+|---|---|---|---|
+| **A（推荐）** | 不改 locales、不改共用组件赋值；在 `FieldGuide` 体系内新增「示例值」来源（`fields` 增可选 `sample?: string`），由 `CommonBlogSetting.vue` 在 **V2 分支**（`v2ActionBridge != null`）把 `:placeholder` 从 `placeholder.*Placeholder` 切到 `sample` | **零变化**（V1 走 `v2ActionBridge === null` 分支，仍读 locales） | 中：动 `FieldGuide` + 共用表单的 placeholder 绑定；需尺子钉死「V1 分支不变」 |
+| **B** | 各平台 `*Setting.vue` 按 V2 信号（inject 到 bridge key）选择性地注入示例值到自己的 `*Placeholder` 实例 | 零变化 | 低侵入，但 34 个组件各写一遍判断 → 重复 |
+| **C** | 直接改 locales 共享串为示例值 | **破坏 4.2/提案承诺**（V1 文案变） | 不可接受（除非用户明确同意放弃 4.2） |
+
+### 试点站建议与「示例值」草案（选定方案后先做一站给你看图）
+试点站 `fs_LocalSystem`（5 行、无专有行、结构最简）或 `github_Vuepress2`（20 行、已定稿基线的样板站）。
+草案（GitHub 族为例，取自 `github-vuepress2.ts` 的 `fields` 与各 config 真实默认值）：
+
+| 字段 | 建议示例值（placeholder） | 已有 `fields.tip`（说明归此） |
+|---|---|---|
+| `home` | `https://github.com` | 「GitHub 首页地址，默认 https://github.com。」 |
+| `apiUrl` | `https://api.github.com` | 「GitHub API 地址，默认 https://api.github.com，通常无需修改。」 |
+| `username` | `terwer` | 「GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。」 |
+| `password` | `ghp_XXXXXXXXXXXXXXXXXXXX` | 「GitHub 个人访问令牌（PAT，Token）…」 |
+| `githubRepo` | `vuepress2-blog` | 「Vuepress2 站点仓库名…」 |
+| `githubBranch` | `main` | 「发布到的分支，默认 main…」 |
+| `defaultPath` | `src/post` | 「Vuepress2 文章存储目录，默认 src/post。…」 |
+| `mdFilenameRule` | `[slug].md` | 「文章文件名规则，默认 [slug].md…」 |
+| `previewPostUrl` | `/post/[postid].html` | 「站点文章预览规则，默认 /post/[postid].html。…」 |
+| `previewUrl` | `/[user]/[repo]/blob/[branch]/[docpath]` | 「GitHub blob 预览规则…」 |
+| `imageStorePath` | `[docpath]/images` | 「选「当前平台」图床时图片提交到仓库的位置…」 |
+| `imageLinkPath` | `./images` | 「文章内图片引用前缀…」 |
+| `dynYamlCfg` | `{"sidebar": false}` | 「YAML 预设配置（JSON 片段）…」（说明已在 fields，占位符只留示例） |
+
+**待用户确认三点**：① 选 A / B / C 哪个口径；② 试点站用 `fs_LocalSystem` 还是 `github_Vuepress2`；③ 示例值是否就用上表草案（或你给更贴近真实使用的值）。
+
 ## 选项 3 开工清单：12 个未拆分平台（2026-09-15 预分析，**未开工**，等用户点头）
 
 按 `verifiedPlatformRows.ts` 同一口径预推，**每站开工仍需宿主实测确认**（先查实再动笔）。12 站现状一律为
