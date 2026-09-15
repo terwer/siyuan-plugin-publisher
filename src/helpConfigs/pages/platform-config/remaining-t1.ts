@@ -21,13 +21,8 @@ export const remainingT1HelpConfigs: PageHelpConfig[] = [
   // / github_Astro 已拆分为独立 help 配置
 
   // === Gitlab ===
-  { pageId: "platform-config/gitlab_Gitlabhexo", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/gitlab_Gitlabhugo", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/gitlab_Gitlabjekyll", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/gitlab_Gitlabvuepress", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/gitlab_Gitlabvuepress2", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/gitlab_Gitlabvitepress", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/gitlab_Gitlabastro", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
+  // gitlab_Gitlabhexo / gitlab_Gitlabhugo / gitlab_Gitlabjekyll / gitlab_Gitlabvuepress
+  // / gitlab_Gitlabvuepress2 / gitlab_Gitlabvitepress / gitlab_Gitlabastro 已拆分为独立 help 配置
 
   // === Metaweblog ===
   { pageId: "platform-config/metaweblog_Typecho", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },

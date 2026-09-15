@@ -39,6 +39,13 @@ import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
 import { Vuepress2Config } from "~/src/adaptors/api/vuepress2/vuepress2Config.ts"
 import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
 import { AstroConfig } from "~/src/adaptors/api/astro/astroConfig.ts"
+import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
+import { GitlabhugoConfig } from "~/src/adaptors/api/gitlab-hugo/gitlabhugoConfig.ts"
+import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
+import { GitlabvuepressConfig } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressConfig.ts"
+import { Gitlabvuepress2Config } from "~/src/adaptors/api/gitlab-vuepress2/gitlabvuepress2Config.ts"
+import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
+import { GitlabastroConfig } from "~/src/adaptors/api/gitlab-astro/gitlabastroConfig.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
@@ -63,6 +70,13 @@ import { vuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gith
 import { vuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress2"
 import { vitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vitepress"
 import { astroHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-astro"
+import { gitlabhexoHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabhexo"
+import { gitlabhugoHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabhugo"
+import { gitlabjekyllHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabjekyll"
+import { gitlabvuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvuepress"
+import { gitlabvuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvuepress2"
+import { gitlabvitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvitepress"
+import { gitlabastroHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabastro"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
 import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
@@ -191,6 +205,59 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     ConfigClass: AstroConfig,
     // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
     required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
+  },
+  // GitLab 族：前 4 站与 GitHub 族同构（含 YAML 永久链接开关行），后 3 站转换器不消费该开关
+  {
+    platformKey: "gitlab_Gitlabhexo",
+    config: gitlabhexoHelpConfig,
+    ConfigClass: GitlabhexoConfig,
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "yamlLinkEnabled"],
+    hookFlags: { knowledgeSpaceEnabled: true },
+  },
+  {
+    platformKey: "gitlab_Gitlabhugo",
+    config: gitlabhugoHelpConfig,
+    ConfigClass: GitlabhugoConfig,
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "yamlLinkEnabled"],
+    hookFlags: { knowledgeSpaceEnabled: true },
+  },
+  {
+    platformKey: "gitlab_Gitlabjekyll",
+    config: gitlabjekyllHelpConfig,
+    ConfigClass: GitlabjekyllConfig,
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "yamlLinkEnabled"],
+    hookFlags: { knowledgeSpaceEnabled: true },
+  },
+  {
+    platformKey: "gitlab_Gitlabvuepress",
+    config: gitlabvuepressHelpConfig,
+    ConfigClass: GitlabvuepressConfig,
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "yamlLinkEnabled"],
+    hookFlags: { knowledgeSpaceEnabled: true },
+  },
+  {
+    platformKey: "gitlab_Gitlabvuepress2",
+    config: gitlabvuepress2HelpConfig,
+    ConfigClass: Gitlabvuepress2Config,
+    // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
+    hookFlags: { knowledgeSpaceEnabled: true },
+  },
+  {
+    platformKey: "gitlab_Gitlabvitepress",
+    config: gitlabvitepressHelpConfig,
+    ConfigClass: GitlabvitepressConfig,
+    // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
+    hookFlags: { knowledgeSpaceEnabled: true },
+  },
+  {
+    platformKey: "gitlab_Gitlabastro",
+    config: gitlabastroHelpConfig,
+    ConfigClass: GitlabastroConfig,
+    // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
+    hookFlags: { knowledgeSpaceEnabled: true },
   },
   {
     platformKey: "metaweblog_Cnblogs",

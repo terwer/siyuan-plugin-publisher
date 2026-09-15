@@ -34,6 +34,13 @@ import { vuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gith
 import { vuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress2"
 import { vitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vitepress"
 import { astroHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-astro"
+import { gitlabhexoHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabhexo"
+import { gitlabhugoHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabhugo"
+import { gitlabjekyllHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabjekyll"
+import { gitlabvuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvuepress"
+import { gitlabvuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvuepress2"
+import { gitlabvitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvitepress"
+import { gitlabastroHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabastro"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -199,6 +206,13 @@ describe("verified platform help configs", () => {
     vuepress2HelpConfig,
     vitepressHelpConfig,
     astroHelpConfig,
+    gitlabhexoHelpConfig,
+    gitlabhugoHelpConfig,
+    gitlabjekyllHelpConfig,
+    gitlabvuepressHelpConfig,
+    gitlabvuepress2HelpConfig,
+    gitlabvitepressHelpConfig,
+    gitlabastroHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {

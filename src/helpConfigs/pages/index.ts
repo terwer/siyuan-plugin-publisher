@@ -45,6 +45,13 @@ import { vuepressHelpConfig } from "./platform-config/github-vuepress"
 import { vuepress2HelpConfig } from "./platform-config/github-vuepress2"
 import { vitepressHelpConfig } from "./platform-config/github-vitepress"
 import { astroHelpConfig } from "./platform-config/github-astro"
+import { gitlabhexoHelpConfig } from "./platform-config/gitlab-gitlabhexo"
+import { gitlabhugoHelpConfig } from "./platform-config/gitlab-gitlabhugo"
+import { gitlabjekyllHelpConfig } from "./platform-config/gitlab-gitlabjekyll"
+import { gitlabvuepressHelpConfig } from "./platform-config/gitlab-gitlabvuepress"
+import { gitlabvuepress2HelpConfig } from "./platform-config/gitlab-gitlabvuepress2"
+import { gitlabvitepressHelpConfig } from "./platform-config/gitlab-gitlabvitepress"
+import { gitlabastroHelpConfig } from "./platform-config/gitlab-gitlabastro"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -89,6 +96,13 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(vuepress2HelpConfig)
   helpRegistry.register(vitepressHelpConfig)
   helpRegistry.register(astroHelpConfig)
+  helpRegistry.register(gitlabhexoHelpConfig)
+  helpRegistry.register(gitlabhugoHelpConfig)
+  helpRegistry.register(gitlabjekyllHelpConfig)
+  helpRegistry.register(gitlabvuepressHelpConfig)
+  helpRegistry.register(gitlabvuepress2HelpConfig)
+  helpRegistry.register(gitlabvitepressHelpConfig)
+  helpRegistry.register(gitlabastroHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {
