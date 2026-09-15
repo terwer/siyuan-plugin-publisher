@@ -111,6 +111,42 @@
 - [ ] F.6 全量测试 + build:v2 + 英文 Conventional 提交推送，工作树干净。
 - **状态：** pending
 
+## 选项 3 开工清单：12 个未拆分平台（2026-09-15 预分析，**未开工**，等用户点头）
+
+按 `verifiedPlatformRows.ts` 同一口径预推，**每站开工仍需宿主实测确认**（先查实再动笔）。12 站现状一律为
+「命中 `remaining-t1` 占位 → `fields=0` → 配置页零 ⓘ」，动态实例 key 走 registry 回落链可达（已核对 `dynFallback=Y`）。
+
+| # | 平台 | platformKey | 预计行数 | 鉴权键 / 引导锚点 | 与同族已回填站的差异（写文案时必须另查） |
+|---|---|---|---|---|---|
+| 12 | Vitepress | `github_Vitepress` | **20** | `password` / `token` | `yamlLinkSupported=false` → **无**「YAML永久链接」行；`defaultPath=docs`、`[slug].md`、图片 `[docpath]/images` + `./images` |
+| 13 | Astro | `github_Astro` | **20** | `password` / `token` | 同上无开关行；`defaultPath=src/content/blog`、`imageStorePath=public/images`、`imageLinkPath=/images` |
+| 14 | Gitlabhexo | `gitlab_Gitlabhexo` | **21** | `password` / `token` | GitLab 族的 `home`/`apiUrl`/`tokenSettingUrl` 是占位串 `[your-gitlab-home]`/`[your-gitlab-api-url]`/`[your-gitlab-host]/-/user_settings/personal_access_tokens`；`defaultPath=source/_posts` |
+| 15 | Gitlabhugo | `gitlab_Gitlabhugo` | **21** | `password` / `token` | `defaultPath=content/post` |
+| 16 | Gitlabjekyll | `gitlab_Gitlabjekyll` | **21** | `password` / `token` | `defaultPath=_posts` |
+| 17 | Gitlabvuepress | `gitlab_Gitlabvuepress` | **21** | `password` / `token` | `defaultPath=docs` |
+| 18 | Gitlabvuepress2 | `gitlab_Gitlabvuepress2` | **20** | `password` / `token` | 无开关行；`defaultPath=src/post` |
+| 19 | Gitlabvitepress | `gitlab_Gitlabvitepress` | **20** | `password` / `token` | 无开关行；`defaultPath=docs` |
+| 20 | Gitlabastro | `gitlab_Gitlabastro` | **20** | `password` / `token` | 无开关行；`defaultPath=src/content/blog`；该站构造里显式置 `picbedService=Bundled` |
+| 22 | Typecho | `metaweblog_Typecho` | **7** | `password` / `password` | `passwordType=Password`（**引导锚点不是 `token`**）；`previewUrl=/index.php/archives/[postid]`；`knowledgeSpaceEnabled=false` → 无发布目录行；图床默认 `None` |
+| 23 | Jvue | `metaweblog_Jvue` | **7** | `password` / `password` | `previewUrl=/post/[postid].html`、`pageType=Markdown`；无发布目录行 |
+| 26 | Wordpress.com | `wordpress_Wordpressdotcom` | **7** | `password` / `password` | `previewUrl=/?p=[postid]`、`pageType=Html`、`apiUrl` 由 `WordpressUtils.parseHomeAndUrl` 推出；无发布目录行 |
+
+**共同动作（12 站一致）**
+1. 从 `remaining-t1.ts` 删该行 → 新建 `platform-config/<platform>.ts`（`helpUrl`+`summary`+`fields`+`faq`+`tour`）→ 在 `pages/index.ts` 注册 → 纳入 `registry.spec.ts` 的 `verifiedConfigs`。
+2. **在 `verifiedPlatformRows.ts` 补该站一行**（键集取上表行数对应的真实渲染行）——不补则**守卫尺③**当场点名该页（这是设计好的防线）。
+3. 补 `docs/draft/platforms/<platform>.md`（顶部标 `TODO：待替换真实帮助文档链接`）。
+4. `pnpm vitest run` + `pnpm build:v2` → 宿主重载 → 两条宿主尺（`tmp/host-field-guide-check.ps1`、`tmp/host-help-gate-check.ps1`）`exit 0` → 截图 → **停下等验收**。
+5. 用户可见文案不得写验证进度类叙述；GitLab 族复用 `[your-gitlab-*]` 占位串的事实要如实写进字段指引。
+
+**两处需宿主确认（预分析发现，勿凭推断下结论）**
+- **GitLab 族查看链接规则**：`commonGitlabApiAdaptor.ts:202-213` 复用 GitHub 族同一套 `previewUrl` 规则
+  `/[user]/[repo]/blob/[branch]/[docpath]`，且返回时不前置站点域名。该链接能否打开属「查看」格要点，**须逐站实测**。
+- **GitLab 族图床**：仅 `gitlab_Gitlabastro` 在构造里置 `Bundled`，其余 6 站取自 `CommonGithubConfig` 默认；
+  图片两行（`imageStorePath`/`imageLinkPath`）按**当前图床值**渲染，故各站行数须以宿主实测为准（上表按默认值预推）。
+
+**工作量提示**：GitHub 族 2 站可大量复用 `github-vuepress2.ts` / 已回填 6 站的 `fields` 文案（仅改平台专属值）；
+GitLab 族 7 站彼此高度同构，可先做 `gitlab_Gitlabhexo` 定稿文案再逐站差异化；MetaWeblog/Wordpress 3 站最轻。
+
 ## 呈现标准（2026-09-08 用户定稿，后续 21 站统一照此，不再逐站讨论）
 1. **全行覆盖**：该平台配置页每一行真实渲染的控件都要有 `fields` 指引（含折叠高级区）；绑的不是配置属性的行（检索关键词、验证/保存按钮）不挂。
 2. **同行不换行**：一律用**包裹式**挂载 `<field-guide field="x"><控件/></field-guide>`；开关/单选组加 `inline`，文本域加 `tall`。

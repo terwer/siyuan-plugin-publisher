@@ -633,4 +633,12 @@
 ### 状态
 - **未开工任何未授权项**（4.1 / 4.3 / 12 个未拆分平台 / change archive 全部未动）；停下等用户选择下一步。
 
+### 自动续航轮（同日，仍不开工）：选项 3 精确开工清单预备
+- 用户尚未放行任何选项，本轮遵守「禁止擅自开工未授权项」→ **只做只读预分析**，产出选项 3 的逐站清单。
+- 诊断脚本 `tmp/field-guide-unsplit-preanalysis.diag.spec.ts`（跑完即从 `src/` 移除，`git status` 干净）：按与 `verifiedPlatformRows.ts` 同一口径推导 12 站真实渲染行，并逐一核对「pageId 是否已注册 / 是否零 fields 占位 / 动态实例 key 回落链是否可达」→ **12 站 全部 `placeholder=Y(zero fields)`、`dynFallback=Y`**（确认这些页当前零 ⓘ，且回落链成立）。
+- **预计行数**：`github_Vitepress` 20、`github_Astro` 20；GitLab 7 站 21/21/21/21/20/20/20；`metaweblog_Typecho`/`metaweblog_Jvue`/`wordpress_Wordpressdotcom` 各 7。
+- **鉴权两套命名空间逐站确认**：GitHub 族与 GitLab 族均为 Token 型 → `fields` 键 `password`、**引导锚点 `token`**；Typecho/Jvue/Wordpressdotcom 均 `PasswordType_Password` → 键与锚点**都是 `password`**（与博客园相反，勿套模板）。
+- **两处需宿主确认的事实（预分析发现，未下断言）**：① GitLab 族 `getPreviewUrl` 复用 GitHub 的 `/[user]/[repo]/blob/[branch]/[docpath]` 规则且不前置域名（`commonGitlabApiAdaptor.ts:202-213`）→ 查看链接能否打开须逐站实测；② 仅 `gitlab_Gitlabastro` 构造里显式置 `Bundled`，其余 6 站取 `CommonGithubConfig` 默认，图片两行按**当前图床值**渲染 → 行数须宿主实测。
+- 清单已写入 `task_plan.md`「选项 3 开工清单：12 个未拆分平台」节（含 12 站逐站差异表、12 站共同动作 5 步、两处待确认项、工作量提示）。
+
 ## 五问重启检查
