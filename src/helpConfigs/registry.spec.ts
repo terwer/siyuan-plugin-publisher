@@ -32,6 +32,7 @@ import { jekyllHelpConfig } from "~/src/helpConfigs/pages/platform-config/github
 import { quartzHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-quartz"
 import { vuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress"
 import { vuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress2"
+import { vitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vitepress"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -195,6 +196,7 @@ describe("verified platform help configs", () => {
     quartzHelpConfig,
     vuepressHelpConfig,
     vuepress2HelpConfig,
+    vitepressHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {

@@ -37,6 +37,7 @@ import { JekyllConfig } from "~/src/adaptors/api/jekyll/jekyllConfig.ts"
 import { QuartzConfig } from "~/src/adaptors/api/quartz/quartzConfig.ts"
 import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
 import { Vuepress2Config } from "~/src/adaptors/api/vuepress2/vuepress2Config.ts"
+import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
@@ -59,6 +60,7 @@ import { jekyllHelpConfig } from "~/src/helpConfigs/pages/platform-config/github
 import { quartzHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-quartz"
 import { vuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress"
 import { vuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress2"
+import { vitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vitepress"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
 import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
@@ -171,6 +173,13 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "github_Vuepress2",
     config: vuepress2HelpConfig,
     ConfigClass: Vuepress2Config,
+    // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
+  },
+  {
+    platformKey: "github_Vitepress",
+    config: vitepressHelpConfig,
+    ConfigClass: VitepressConfig,
     // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
     required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
   },
