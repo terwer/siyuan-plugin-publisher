@@ -75,19 +75,19 @@ export const hexoHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='home']",
       title: "首页地址",
-      content: "GitHub 首页地址，默认 https://github.com。",
+      content: "确认首页地址保持默认即可，企业版或私有部署才需要改。",
       placement: "bottom",
     },
     {
       target: "[data-syp-tour='apiUrl']",
       title: "API 地址",
-      content: "GitHub API 地址，默认 https://api.github.com，通常无需修改。",
+      content: "API 地址与首页配套填写，公有云保持默认。",
       placement: "bottom",
     },
     {
       target: "[data-syp-tour='username']",
       title: "用户名",
-      content: "GitHub 用户名（owner），用于拼出仓库地址。",
+      content: "填写仓库所有者用户名，与仓库名共同定位目标仓库。",
       placement: "bottom",
     },
     {
@@ -105,7 +105,7 @@ export const hexoHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='pageType']",
       title: "发布格式",
-      content: "Hexo 默认按 Markdown 内容发布。",
+      content: "发布格式保持默认，无需调整。",
       placement: "bottom",
     },
     {

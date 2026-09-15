@@ -83,11 +83,11 @@ export const gitlabastroHelpConfig: PageHelpConfig = {
   tour: [
     { target: "[data-syp-tour='home']", title: "平台首页", content: "填写你的 GitLab 实例首页地址，用于拼出仓库地址。", placement: "bottom" },
     { target: "[data-syp-tour='apiUrl']", title: "API 地址", content: "API 地址与平台首页一致，填写平台首页后会自动同步。", placement: "bottom" },
-    { target: "[data-syp-tour='username']", title: "用户名", content: "GitLab 用户名（owner），用于拼出仓库地址。", placement: "bottom" },
+    { target: "[data-syp-tour='username']", title: "用户名", content: "填写仓库所有者用户名，与仓库名共同定位目标仓库。", placement: "bottom" },
     { target: "[data-syp-tour='token']", title: "Token", content: "GitLab 个人访问令牌，需对目标仓库有 push 权限。", placement: "bottom" },
     { target: "[data-syp-tour='knowledgeSpace']", title: "文章目录", content: "Astro 文章默认存储目录 src/content/blog，文件名规则默认 [slug].md，该目录不支持修改。", placement: "bottom" },
     { target: "[data-syp-tour='previewUrl']", title: "查看链接", content: "预览规则固定为 /[user]/[repo]/blob/[branch]/[docpath]，查看链接为仓库中该 .md 的 blob 地址。", placement: "bottom" },
-    { target: "[data-syp-tour='pageType']", title: "发布格式", content: "Astro 默认按 Markdown 内容发布。", placement: "bottom" },
+    { target: "[data-syp-tour='pageType']", title: "发布格式", content: "发布格式保持默认，无需调整。", placement: "bottom" },
     { target: "[data-syp-tour='picbedService']", title: "图片发布", content: "图床默认选「当前平台」，图片上传到仓库根目录的 public/images，文章引用绝对路径 /images/<图片名>。", placement: "bottom" },
     { target: "[data-syp-tour='validate']", title: "验证并保存", content: "验证令牌、仓库与分支后保存，再回到快速发布发布文章。", placement: "top" },
   ],

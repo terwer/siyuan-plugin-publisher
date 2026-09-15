@@ -28,7 +28,7 @@
 
 - [ ] 4.1 逐平台把 V2 表单 placeholder 从长说明改为示例值（如 `src/post`、`/post/[postid].html`），同一次改动内确保对应 `fields` 已含说明，不出现说明空窗。**未开工**（22 站指引渲染核验与本项无关：说明已全部落在 `fields`，占位符仍是 `setting.blog.*.tip` 共享串，属后续独立切片，改前须先在试点站与用户对齐「示例值」口径）。
 - [x] 4.2 locales 的 `setting.blog.*.tip` 共享串保持不动，确认 V1 界面文案零变化。本 change 全程未触碰 `siyuan/i18n/*.json`（`git log --since=2026-09-07 -- siyuan/i18n` 为空），V1 路径与文案零改动。
-- [ ] 4.3 去重：tour `content` 只讲操作顺序，字段含义归 `fields`；发现同一句话在三处各写一遍时收敛为一处。**部分完成**：逐站核验时已顺手消掉明显重复（#21 图床口径、#25 图床/发布格式/预览规则、#29 `[auto]` 与 YAML 类型），但未做 22 站逐条比对，本项保留未勾。
+- [x] 4.3 去重：tour `content` 只讲操作顺序，字段含义归 `fields`；发现同一句话在三处各写一遍时收敛为一处。**已完成**：对全部 34 站逐条比对（脚本按归一化去空白/标点判定「同一句话」，`EXACT` = 完全相同、`CONTAINED` = 一方包含另一方且长度均 ≥12），审计出 **52 处**重复、集中在 17 站（GitHub 族 8 站各 4 处、GitLab 族 7 站各 2 处、`common_Halo` 4 处、`common_Telegraph` 2 处），其余 17 站为 0。按方案甲把这三类步骤（`home`/`apiUrl`/`username`/`pageType`）的 tour 改为只讲操作顺序，字段含义完整保留在 `fields.tip`（同一次改动内完成，不留说明空窗）；复跑审计 **52 → 0**，只改 `tour.content`、`target`/`title` 与 `fields` 零改动。新增**尺子④分工尺**（`fieldGuideRulers.spec.ts`）把「引导不得重写字段说明」钉死，并经变异验证（把 Hexo 首页引导改回与 `fields.home` 一字不差 → 尺子红并点名 `github_Hexo tour「首页地址」重复了 fields.home`，还原后全绿）。宿主复核：`github_Hexo` 配置页引导 **8/8** 步渲染为新文案，同时 `home` 行 ⓘ 仍为「GitHub 首页地址，默认 https://github.com。」——两条信息各讲一遍、不再重复。
 
 ## 5. 验证与记录
 

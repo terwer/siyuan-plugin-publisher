@@ -66,13 +66,13 @@ export const telegraphHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='home']",
       title: "平台首页",
-      content: "填写 Telegra.ph 平台首页，通常固定为 https://telegra.ph。",
+      content: "保持平台首页为默认值即可。",
       placement: "bottom",
     },
     {
       target: "[data-syp-tour='apiUrl']",
       title: "接口地址",
-      content: "填写 Telegra.ph 接口地址，通常固定为 https://edit.telegra.ph。",
+      content: "接口地址保持默认，与平台首页配套。",
       placement: "bottom",
     },
     {

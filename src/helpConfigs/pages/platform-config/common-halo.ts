@@ -51,13 +51,13 @@ export const haloHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='home']",
       title: "首页地址",
-      content: "Halo 站点首页地址，通常与 API 地址一致。",
+      content: "确认首页地址与站点一致后继续。",
       placement: "bottom",
     },
     {
       target: "[data-syp-tour='apiUrl']",
       title: "API 地址",
-      content: "Halo 站点 API 地址，通常与首页地址相同。",
+      content: "API 地址随首页自动配套，确认即可。",
       placement: "bottom",
     },
     {
@@ -75,13 +75,13 @@ export const haloHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='previewUrl']",
       title: "查看链接",
-      content: "预览规则默认 /archives/{slug}，查看链接为 https://<host>/archives/<slug>。",
+      content: "发布后点「查看」打开文章链接。",
       placement: "bottom",
     },
     {
       target: "[data-syp-tour='pageType']",
       title: "发布格式",
-      content: "Halo 默认按 HTML 内容发布。",
+      content: "发布格式保持默认即可。",
       placement: "bottom",
     },
     {

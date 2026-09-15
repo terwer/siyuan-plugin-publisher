@@ -20,6 +20,11 @@
  * 尺子③守卫尺：任何带 `fields` 的 platform-config 页面都必须出现在冻结表里。
  *   作用：将来拆分/新增平台时，若不补表，本尺立刻点名该页面，避免「新平台悄悄绕过两把尺」。
  *
+ * 尺子④分工尺：引导步骤（`tour.content`）只讲操作顺序，字段含义归 `fields.tip`，同一句话不得两处都写。
+ *   历史缺陷：GitHub 族 6 站的 `home`/`apiUrl`/`pageType` 三个步骤与 `fields.tip` 一字不差，
+ *   `username` 步骤是 tip 的子串；Halo/Telegraph 亦同 —— 全量 34 站审计出 52 处重复，
+ *   同一个说法在「引导」和「ⓘ」里各讲一遍，用户看两次、维护时改一处漏一处。
+ *
  * 「鉴权行的键恒为 `password`，而引导锚点按 passwordType 三选一」这一两套命名空间的规则，
  * 由 `tourAnchors.spec.ts` 的引导锚点契约负责，不在这里重复。
  */
@@ -62,5 +67,33 @@ describe("field guide rulers", () => {
       .filter((pageId) => !covered.has(pageId))
 
     expect(uncovered, "新增字段指引后必须在 verifiedPlatformRows.ts 补一行").toEqual([])
+  })
+
+  it("尺子④：引导步骤不得重写字段说明（同一句话只讲一遍）", () => {
+    /** 归一化：去空白与标点差异，用于判定「同一句话」 */
+    const norm = (s: string): string =>
+      (s ?? "")
+        .replace(/\s+/g, "")
+        .replace(/[。，、；：""''（）()《》【】]/g, "")
+        .toLowerCase()
+
+    const offenders: string[] = []
+    for (const entry of REQUIRED_ROWS_TABLE) {
+      const fields = Object.entries(entry.config.fields ?? {}) as [string, { tip?: string }][]
+      for (const step of entry.config.tour ?? []) {
+        const tourText = norm(step.content ?? "")
+        if (tourText.length === 0) continue
+        for (const [key, help] of fields) {
+          const tipText = norm(help?.tip ?? "")
+          if (tipText.length === 0) continue
+          const duplicated =
+            tourText === tipText ||
+            (tourText.length >= 12 && tipText.length >= 12 && (tourText.includes(tipText) || tipText.includes(tourText)))
+          if (duplicated) offenders.push(`${entry.platformKey} tour「${step.title}」重复了 fields.${key}`)
+        }
+      }
+    }
+
+    expect(offenders, "引导只讲操作顺序，字段含义归 fields").toEqual([])
   })
 })
