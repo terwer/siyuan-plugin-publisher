@@ -671,4 +671,23 @@
 - 影响面仅 8 个 help 配置的 `tour` 文案，不碰 `fields`/locales/组件/发布链路。写入 `task_plan.md`「选项 2（4.3 …）审计结果」节。
 - **至此三个选项（1/2/3）都已备好可执行材料**，等用户任选其一放行。
 
+### 用户放行：全自动推进 12 个未拆分平台（2026-09-15）
+- 用户指示「继续你可以全自动的 有skill你不知道吗」→ 放开「每站停下等验收」的手工等待，改为**自动续航 + 每站交宿主证据**；并按 `chrome-devtools-9222-mode` skill **自行启动宿主**（不再等用户开思源）。
+- 环境自查（全自动完成）：`SiYuan.exe --workspace=…\test --remote-debugging-port=9222` 启动 → 9222 3 秒内监听 → `/json/version` = SiYuan 3.8.2 / Electron 42.9.2；MCP 本就是 9222 直连模式；`cdp-reload.ps1` 强制重载加载新 `dist-v2`；**账号基线 32 确认**。
+
+#### 站点 #12 github_Vitepress（已交付，commit `4da4978b`）
+1. **改前基线**：该页命中 `remaining-t1` 占位 → `fields=0` → **零 ⓘ**（本次同口径核实 `placeholder=Y(zero fields)`）。
+2. **文案依据全部落到代码行**（不照抄 Vuepress2）：`vitepressYamlConverterAdaptor.ts:68-78` 留空时写 `outline: deep`/`sidebar: false`/`prev: false`/`next: false`（与 Vuepress2 不同，已写进 `dynYamlCfg` 指引）；`vitepressConfig.ts:31-49` 默认 `defaultPath=docs`、`[slug].md`、`imageStorePath=[docpath]/images`、`imageLinkPath=./images`、`yamlLinkSupported=false`、Token 型；`useVitepressApi.ts:76-79` 运行时 `knowledgeSpaceEnabled=true`、`allowKnowledgeSpaceChange=false`。
+3. **改动**：新建 `github-vitepress.ts`（summary+`fields` 20 键+faq 4+tour 9）→ 从 `remaining-t1` 移出 → `pages/index.ts` 注册 → `registry.spec.ts` 纳入 `verifiedConfigs` → **`verifiedPlatformRows.ts` 补冻结行**（`required` 20 行，不含 `yamlLinkEnabled`）→ 新增 `docs/draft/platforms/github-vitepress.md`。
+4. **尺子变异验证（保留该习惯）**：删掉 `previewUrl` 键 → 覆盖尺② **红并点名 `github_Vitepress missing=[previewUrl]`**；还原后 3 尺全绿 → 证明新站确实被两把尺守住。
+5. **宿主实测（9222 / test 工作空间）**：
+   - 字段尺：**16 行 = 16 指引**（高级四项折叠态），展开后 **20 行 = 20 指引**；`allSameLine` 无异常；已填值 11 行仍可见指引；16 条弹层逐行实测**全部 `面板内=True 未裁切=True`**；**`yamlLinkEnabled` 行确实不渲染**（与 `yamlLinkSupported=false` 一致）；**全部契约项通过 ✅**。
+   - 帮助尺：HelpPanel 专属 summary 276 字 / 文档链接 / FAQ 4 条 / **无回退提示**；引导 **9/9 步全部命中**、正常收尾 ✅。
+   - 截图 `tmp/field-guide-github-vitepress-expanded.png`。
+6. **账号基线**：该站无既有账号 → 走「添加账号」选 Vitepress 进入配置页（33）→ 实测完毕后**已删除，恢复 32**（计数已复核 `accountCount=32`、`vitepressRemaining=0`）。
+7. 门禁：`vitest` 66 文件 / 313 测试通过、`build:v2` exit 0、`openspec --strict` valid。
+
+### 状态
+- **#12 已交付**（commit `4da4978b` 已推送）；按用户「全自动」指示继续 **#13 Astro**。
+
 ## 五问重启检查

@@ -38,6 +38,7 @@ import { QuartzConfig } from "~/src/adaptors/api/quartz/quartzConfig.ts"
 import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
 import { Vuepress2Config } from "~/src/adaptors/api/vuepress2/vuepress2Config.ts"
 import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
+import { AstroConfig } from "~/src/adaptors/api/astro/astroConfig.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
@@ -61,6 +62,7 @@ import { quartzHelpConfig } from "~/src/helpConfigs/pages/platform-config/github
 import { vuepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress"
 import { vuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vuepress2"
 import { vitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-vitepress"
+import { astroHelpConfig } from "~/src/helpConfigs/pages/platform-config/github-astro"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
 import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
@@ -180,6 +182,13 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "github_Vitepress",
     config: vitepressHelpConfig,
     ConfigClass: VitepressConfig,
+    // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
+  },
+  {
+    platformKey: "github_Astro",
+    config: astroHelpConfig,
+    ConfigClass: AstroConfig,
     // 该平台转换器不消费 yamlLinkEnabled，表单也不渲染该行
     required: [...COMMON_FORM, "username", ...GITHUB_ROWS],
   },

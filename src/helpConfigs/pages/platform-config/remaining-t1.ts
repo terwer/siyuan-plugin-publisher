@@ -18,8 +18,7 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 export const remainingT1HelpConfigs: PageHelpConfig[] = [
   // === Github ===
   // github_Hugo / github_Jekyll / github_Quartz / github_Vuepress / github_Vuepress2 / github_Vitepress
-  // 已拆分为独立 help 配置
-  { pageId: "platform-config/github_Astro", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
+  // / github_Astro 已拆分为独立 help 配置
 
   // === Gitlab ===
   { pageId: "platform-config/gitlab_Gitlabhexo", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },

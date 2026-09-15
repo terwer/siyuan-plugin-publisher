@@ -44,6 +44,7 @@ import { quartzHelpConfig } from "./platform-config/github-quartz"
 import { vuepressHelpConfig } from "./platform-config/github-vuepress"
 import { vuepress2HelpConfig } from "./platform-config/github-vuepress2"
 import { vitepressHelpConfig } from "./platform-config/github-vitepress"
+import { astroHelpConfig } from "./platform-config/github-astro"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -87,6 +88,7 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(vuepressHelpConfig)
   helpRegistry.register(vuepress2HelpConfig)
   helpRegistry.register(vitepressHelpConfig)
+  helpRegistry.register(astroHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {
