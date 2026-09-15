@@ -610,4 +610,26 @@
 - **F 已交付，停下等验收**。change 尚未 archive（4.1/4.3 未勾，且 archive 需用户另行决定）；campaign 的 22 站 + 收尾已全部完成。
 - 未纳入本轮（诚实标注）：① `tasks.md` 4.1「占位符从长说明改示例值」未开工（22 站字段说明已全落在 `fields`，占位符仍是 `setting.blog.*.tip` 共享串）；② 4.3「三处去重」只做了顺手消重，未做逐站比对。
 
+## 会话：2026-09-15（新会话接手：门禁复跑 + 状态盘点，未开工）
+
+### 环境
+- 分支 `feature/ui-2.0`，HEAD `3e815c89`，工作树干净，本地与 `origin/feature/ui-2.0` 同步（0/0）。
+- 思源未运行（9222 无监听）→ 本轮**未做任何宿主操作**，账号数基线未核验但也未触碰。
+
+### 门禁复跑（全绿）
+- `pnpm vitest run`：**66 文件 / 313 测试通过**；
+- `pnpm build:v2`：**exit 0**（`✓ built in 7.62s`，`dist-v2/index.js` 12,349.63 kB）；
+- `openspec validate add-field-guide-tips --strict`：**valid**。
+
+### 状态盘点（只读核对，与交接文件一致）
+- 22 站专属 help 配置齐备（`platform-config/` 下 22 个平台文件 + `_default` + `remaining-t1`）；`docs/draft/platforms/` 恰 22 篇草稿。
+- `remaining-t1` 仍有 **13 条占位记录**：12 条对应 V2「添加账号」可选平台（`github_Vitepress`/`github_Astro`、GitLab 7 站、`metaweblog_Typecho`/`metaweblog_Jvue`、`wordpress_Wordpressdotcom`），第 13 条 `metaweblog_Metaweblog` 在 `pre.ts` 中**无对应预置条目**（悬空占位）。
+- `pre.ts` 当前可选平台 key 共 **37 个**；其中落 `_default` 兜底的是 `github_Docsify`/`gitlab_Gitlabdocsify`/`system_Siyuan`（`custom_Flowus` 在 `pre.ts` 中已注释）。
+
+### 台账不一致（发现，未擅自改）
+- `task_plan.md` 里 **#25 Wordpress 与 #29 本地系统仍标「 待验收」**（F 收尾行标「待验收」），但 `progress.md` 已记「用户 2026-09-14 回复『继续』→ 验收通过」→ 属历史台账未回填，待用户确认后订正。
+
+### 状态
+- **未开工任何未授权项**（4.1 / 4.3 / 12 个未拆分平台 / change archive 全部未动）；停下等用户选择下一步。
+
 ## 五问重启检查
