@@ -41,6 +41,9 @@ import { gitlabvuepressHelpConfig } from "~/src/helpConfigs/pages/platform-confi
 import { gitlabvuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvuepress2"
 import { gitlabvitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvitepress"
 import { gitlabastroHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabastro"
+import { typechoHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-typecho"
+import { jvueHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-jvue"
+import { wordpressdotcomHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpressdotcom"
 import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
@@ -213,6 +216,9 @@ describe("verified platform help configs", () => {
     gitlabvuepress2HelpConfig,
     gitlabvitepressHelpConfig,
     gitlabastroHelpConfig,
+    typechoHelpConfig,
+    jvueHelpConfig,
+    wordpressdotcomHelpConfig,
   ]
 
   it("should provide complete panel, field, faq, and tour coverage for verified platforms", () => {

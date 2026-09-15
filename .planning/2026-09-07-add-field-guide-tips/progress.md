@@ -690,4 +690,29 @@
 ### 状态
 - **#12 已交付**（commit `4da4978b` 已推送）；按用户「全自动」指示继续 **#13 Astro**。
 
+#### 站点 #13 github_Astro（已交付，commit `37898e8d`）
+- 差异事实（与 Vitepress 不同，逐条落到代码行）：`astroConfig.ts:31-51` 默认 `defaultPath=src/content/blog`、**`imageStorePath=public/images`（仓库根，绝对路径）**、**`imageLinkPath=/images`**、`yamlLinkSupported=false`、`previewUrl` 固定且 `allowPreviewUrlChange=false`、`picbedService=Bundled`；`astroYamlConverterAdaptor.ts:76-83` 留空时**不追加任何键**（已写进 `dynYamlCfg` 指引）。
+- **宿主实测**：折叠 16 行 = 16 指引 / 展开 **20 行 = 20 指引**；16 条弹层全部面板内未裁切；`yamlLinkEnabled` 行确实不渲染；字段尺「全部契约项通过 ✅」；帮助尺 summary 258 字 + FAQ 5 条 + 无回退 + 引导 **9/9**；账号 33→32 复原；截图 `tmp/field-guide-github-astro-expanded.png`。
+- 尺子变异验证：删 `blogid` → ②红并点名 `github_Astro missing=[blogid]`；还原后全绿。
+
+#### GitLab 族 7 站（已交付，commit `ee54d1c4`）
+- 7 站同构、差异可枚举：`defaultPath` 分别 `source/_posts`/`content/post`/`_posts`/`docs`/`src/post`/`docs`/`src/content/blog`；图片目录分别 `source/images`/`static/images`/`assets/images`/`docs/.vuepress/public/images`/`[docpath]/images`/`[docpath]/images`/`public/images`；YAML 留空默认值 Hexo `comments/toc`、Hugo `toc/isCJKLanguage`、Jekyll `layout/published`、Vuepress 不追加、Vuepress2 `article/timeline/isOriginal`、Vitepress `outline/sidebar/prev/next`、Astro 不追加。
+- **行数已被冻结表逐站证实**：前 4 站 21 行/21 字段（含 `yamlLinkEnabled`），后 3 站 20 行/20 字段。
+- **宿主实测**：7 站帮助尺**全部通过**（summary 278-348 字、FAQ 5-6 条、无回退、引导 9/9）；`gitlab_Gitlabhexo` 字段尺折叠 17/展开 **21 指引**（含 `yamlLinkEnabled`）、`gitlab_Gitlabvuepress` 折叠 **17 行 = 17 指引**且「全部契约项通过 ✅」；截图 `tmp/field-guide-gitlab-hexo-expanded.png`。
+- 7 份文档草稿 `docs/draft/platforms/gitlab-gitlab*.md` 由子代理产出（57-66 行/份，含实例地址、Token 生成、固定预览规则、发布目录只读等 GitLab 侧差异）。
+- 账号 41→32 复原。
+
+#### 站点 Typecho / Jvue / Wordpress.com（已交付）
+- 三站共型：`rows=7`、`passwordType=Password`（**tour 锚点是 `password` 不是 `token`**）、`knowledgeSpaceEnabled=false`（**无发布目录行**）、`picbed=none`、`usernameEnabled=true`；`previewUrl` 分别 `/index.php/archives/[postid]`、`/post/[postid].html`（固定）、`/?p=[postid]`；`pageType` 分别 html/markdown/html。
+- **宿主实测**：三站字段尺均 **7 行 = 7 指引**、弹层全部面板内未裁切、「全部契约项通过 ✅」；帮助尺均通过（summary 187-192 字、FAQ 5 条、无回退、**引导 8/8**）；`wordpress_Wordpressdotcom` 命中**动态实例 key `wordpress_Wordpressdotcom-20b6uc`**，证明 registry 回落链正常。
+- 3 份文档草稿：`docs/draft/platforms/metaweblog-typecho.md`、`metaweblog-jvue.md`、`wordpress-wordpressdotcom.md`。
+- **12 个未拆分平台至此全部交付**。
+
+#### ⚠️ 事故与本轮订正（必须如实记录）
+- **我误删了一个既有账号**：清理临时账号时的匹配条件 `/typecho|jvue|wordpress\.com/i` **过宽**，把宿主上**原本就存在**的 `wordpress_Wordpressdotcom`（会话开始时位于列表索引 24、「未启用」）连同我的临时账号一起删掉了，账号数一度变成 31。
+- **已做的排查**：`repo` 快照目录为空、云同步 `enabled=false`、无 `.bak`/影子文件、回收站无、两处 VSS 卷影副本（22:05/22:06）经挂载确认**在同一路径下不含该文件** → **无法从原始数据恢复**。
+- **已做的恢复**：在宿主里重新「添加账号 → Wordpress.com」，账号数回到 **32**，`totalCfg` 32 条、`wordpressCfg` 含 `Wordpressdotcom`。
+- **恢复后的差异（如实说明）**：该账号**本来就是「未启用 + 空配置体 `{}`」**（顶层的 `wordpress_Wordpressdotcom` 段仍为空对象，与相邻的 `github_Vuepress2` 等未配置账号同形），且 test 工作区**从未记录过** `custom-wordpress_Wordpressdotcom-post-id`——即它没有可失去的已发布文章记录或凭据。唯一差异是**列表位置**：现在是索引 31 / `displayOrder=33`（追加到末尾），原始为索引 24 / order 32 之前。
+- **教训**：清理临时账号一律**按精确 platformKey 白名单**匹配，绝不用宽正则；每次「添加账号」后先记录新账号的 key，删除时只删这一批。
+
 ## 五问重启检查

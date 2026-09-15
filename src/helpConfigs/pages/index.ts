@@ -52,6 +52,9 @@ import { gitlabvuepressHelpConfig } from "./platform-config/gitlab-gitlabvuepres
 import { gitlabvuepress2HelpConfig } from "./platform-config/gitlab-gitlabvuepress2"
 import { gitlabvitepressHelpConfig } from "./platform-config/gitlab-gitlabvitepress"
 import { gitlabastroHelpConfig } from "./platform-config/gitlab-gitlabastro"
+import { typechoHelpConfig } from "./platform-config/metaweblog-typecho"
+import { jvueHelpConfig } from "./platform-config/metaweblog-jvue"
+import { wordpressdotcomHelpConfig } from "./platform-config/wordpress-wordpressdotcom"
 import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
@@ -103,6 +106,9 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(gitlabvuepress2HelpConfig)
   helpRegistry.register(gitlabvitepressHelpConfig)
   helpRegistry.register(gitlabastroHelpConfig)
+  helpRegistry.register(typechoHelpConfig)
+  helpRegistry.register(jvueHelpConfig)
+  helpRegistry.register(wordpressdotcomHelpConfig)
 
   // 其余 T1 平台
   for (const cfg of remainingT1HelpConfigs) {

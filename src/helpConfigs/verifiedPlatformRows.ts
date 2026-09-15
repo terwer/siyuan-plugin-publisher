@@ -46,6 +46,9 @@ import { GitlabvuepressConfig } from "~/src/adaptors/api/gitlab-vuepress/gitlabv
 import { Gitlabvuepress2Config } from "~/src/adaptors/api/gitlab-vuepress2/gitlabvuepress2Config.ts"
 import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
 import { GitlabastroConfig } from "~/src/adaptors/api/gitlab-astro/gitlabastroConfig.ts"
+import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
+import { JvueConfig } from "~/src/adaptors/api/jvue/jvueConfig.ts"
+import { WordpressdotcomConfig } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomConfig.ts"
 import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
@@ -77,6 +80,9 @@ import { gitlabvuepressHelpConfig } from "~/src/helpConfigs/pages/platform-confi
 import { gitlabvuepress2HelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvuepress2"
 import { gitlabvitepressHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabvitepress"
 import { gitlabastroHelpConfig } from "~/src/helpConfigs/pages/platform-config/gitlab-gitlabastro"
+import { typechoHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-typecho"
+import { jvueHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-jvue"
+import { wordpressdotcomHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpressdotcom"
 import { cnblogsHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-cnblogs"
 import { wordpressHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpress"
 import { localSystemHelpConfig } from "~/src/helpConfigs/pages/platform-config/fs-local-system"
@@ -264,6 +270,28 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     config: cnblogsHelpConfig,
     ConfigClass: CnblogsConfig,
     required: [...COMMON_FORM, "username"],
+  },
+  // Metaweblog 族无「发布目录」行（knowledgeSpaceEnabled=false），鉴权为密码型（键与锚点均为 password）
+  {
+    platformKey: "metaweblog_Typecho",
+    config: typechoHelpConfig,
+    ConfigClass: TypechoConfig,
+    required: [...COMMON_FORM, "username"],
+    hookFlags: { knowledgeSpaceEnabled: false },
+  },
+  {
+    platformKey: "metaweblog_Jvue",
+    config: jvueHelpConfig,
+    ConfigClass: JvueConfig,
+    required: [...COMMON_FORM, "username"],
+    hookFlags: { knowledgeSpaceEnabled: false },
+  },
+  {
+    platformKey: "wordpress_Wordpressdotcom",
+    config: wordpressdotcomHelpConfig,
+    ConfigClass: WordpressdotcomConfig,
+    required: [...COMMON_FORM, "username"],
+    hookFlags: { knowledgeSpaceEnabled: false },
   },
   {
     platformKey: "wordpress_Wordpress",

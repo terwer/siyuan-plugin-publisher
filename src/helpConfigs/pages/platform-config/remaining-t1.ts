@@ -12,23 +12,15 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 /**
  * 剩余 T1 平台帮助配置（仅 helpUrl，field/tour 按需追加）
  *
- * 这些平台先提供基本的 helpUrl 指向文档，字段提示与引导步骤按需补充。
- * 后续各平台可单独拆分为独立文件，扩展 field/tour/faq。
+ * 原先在此登记的 12 个平台已全部拆分为独立 help 配置（含 fields/faq/tour）。
+ * 本数组保留为「尚未拆分平台」的登记点：后续新增/待补平台继续按
+ * `{ pageId, helpUrl }` 追加即可，registry 会优先命中独立配置。
  */
 export const remainingT1HelpConfigs: PageHelpConfig[] = [
-  // === Github ===
-  // github_Hugo / github_Jekyll / github_Quartz / github_Vuepress / github_Vuepress2 / github_Vitepress
-  // / github_Astro 已拆分为独立 help 配置
-
-  // === Gitlab ===
+  // 已拆分（见 pages/platform-config/ 下同名文件）：
+  // github_Vitepress / github_Astro
   // gitlab_Gitlabhexo / gitlab_Gitlabhugo / gitlab_Gitlabjekyll / gitlab_Gitlabvuepress
-  // / gitlab_Gitlabvuepress2 / gitlab_Gitlabvitepress / gitlab_Gitlabastro 已拆分为独立 help 配置
-
-  // === Metaweblog ===
-  { pageId: "platform-config/metaweblog_Typecho", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-  { pageId: "platform-config/metaweblog_Jvue", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
+  //   / gitlab_Gitlabvuepress2 / gitlab_Gitlabvitepress / gitlab_Gitlabastro
+  // metaweblog_Typecho / metaweblog_Jvue / wordpress_Wordpressdotcom
   { pageId: "platform-config/metaweblog_Metaweblog", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
-
-  // === Wordpress ===
-  { pageId: "platform-config/wordpress_Wordpressdotcom", helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0" },
 ]

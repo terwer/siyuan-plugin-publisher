@@ -141,6 +141,24 @@
 | 33 | 掘金 | `custom_Juejin` | 4 → **7** | 补分类行 | 2026-09-13 |
 | 34 | 微信公众号 | `custom_Wechat` | 5 → **6** | 仅鉴权行缺指引 | 2026-09-13 |
 | 35 | 哔哩哔哩 | `custom_Bilibili` | 4 → **7** | 文集行运行时开关以宿主实测为准 | 2026-09-13 |
+| 12 | Vitepress | `github_Vitepress` | 0（`remaining-t1` 占位）→ **20** | 折叠 16 = 16 指引 / 展开 20 = 20；`yamlLinkEnabled` 行不渲染；引导 9/9 | 2026-09-15 |
+| 13 | Astro | `github_Astro` | 0（占位）→ **20** | 图床为仓库根 `public/images` + 绝对路径 `/images`；`yamlLinkEnabled` 行不渲染；引导 9/9 | 2026-09-15 |
+| 14 | Gitlabhexo | `gitlab_Gitlabhexo` | 0（占位）→ **21** | 折叠 17 / 展开 21（含 `yamlLinkEnabled`）；引导 9/9 | 2026-09-15 |
+| 15 | Gitlabhugo | `gitlab_Gitlabhugo` | 0（占位）→ **21** | 图片 `static/images` + 引用 `images`；引导 9/9 | 2026-09-15 |
+| 16 | Gitlabjekyll | `gitlab_Gitlabjekyll` | 0（占位）→ **21** | 文件名规则带日期前缀 `[yyyy]-[mm]-[dd]-[slug].md`；引导 9/9 | 2026-09-15 |
+| 17 | Gitlabvuepress | `gitlab_Gitlabvuepress` | 0（占位）→ **21** | 折叠 17 = 17 指引；引导 9/9 | 2026-09-15 |
+| 18 | Gitlabvuepress2 | `gitlab_Gitlabvuepress2` | 0（占位）→ **20** | `[docpath]/images` + `./images`；引导 9/9 | 2026-09-15 |
+| 19 | Gitlabvitepress | `gitlab_Gitlabvitepress` | 0（占位）→ **20** | `docs` + `[docpath]/images`；引导 9/9 | 2026-09-15 |
+| 20 | Gitlabastro | `gitlab_Gitlabastro` | 0（占位）→ **20** | 该站在构造里显式置 `picbedService=Bundled`；引导 9/9 | 2026-09-15 |
+| 22 | Typecho | `metaweblog_Typecho` | 0（占位）→ **7** | 密码型（引导锚点 `password`）；无发布目录行；引导 8/8 | 2026-09-15 |
+| 23 | Jvue | `metaweblog_Jvue` | 0（占位）→ **7** | API 地址需显式填；预览规则固定不可改；引导 8/8 | 2026-09-15 |
+| 26 | Wordpress.com | `wordpress_Wordpressdotcom` | 0（占位）→ **7** | 动态实例 key `…-20b6uc` 回落链正确；引导 8/8 | 2026-09-15 |
+
+> **本轮（2026-09-15）说明**：上表 12 个平台原登记在 `remaining-t1`（仅 `helpUrl`、零 `fields` → 配置页无任何 ⓘ），
+> 现全部拆分为独立 help 配置：新增 `src/helpConfigs/pages/platform-config/` 下 12 个文件（含 summary / fields / faq / tour），
+> 从 `remaining-t1` 移出，纳入 `registry.spec.ts` 的 `verifiedConfigs` 与 `verifiedPlatformRows.ts` 冻结行，
+> 并各配 `docs/draft/platforms/<platform>.md` 文档草稿。宿主两把尺逐站实测均通过（字段尺「全部契约项通过」+ 帮助尺「帮助引导与文档：全部通过」），
+> 临时账号核验后均已删除、账号数复原为 **32**。
 
 **共用层结论（22 站共用，已冻结）**：pageId 由 `V2PlatformConfigBridge` `provide` / `FieldGuide` `inject`（prop 可覆盖，
 无 provider 时只渲染 slot）；共用表单 `base/CommonBlogSetting.vue`（12 处）与 `base/impl/CommonGithubSetting.vue`（12 处）
