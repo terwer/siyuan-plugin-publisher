@@ -111,6 +111,41 @@
 - [ ] F.6 全量测试 + build:v2 + 英文 Conventional 提交推送，工作树干净。
 - **状态：** pending
 
+## 选项 2（4.3 tour 与 fields 去重）审计结果（2026-09-15 只读审计，**未开工**，等用户拍板）
+
+口径：tour 只讲**操作顺序**，字段含义归 `fields`；同一句话写两遍就收敛为一处（change 4.3）。
+判定规则（脚本 `tmp/field-guide-dedup-audit.diag.spec.ts`，归一化去空白/标点后比较）：
+`EXACT` = tour.content 与 field.tip 完全相同；`CONTAINED` = 一方完整包含另一方（长度均 ≥12）。
+
+**22 站逐站统计**：`EXACT=22`、`CONTAINED=8`，共 **30 处**，且**只出现在 8 个站**，其余 14 站为 0。
+
+| 站 | tour | fields | EXACT | CONTAINED | 说明 |
+|---|---|---|---|---|---|
+| github_Hexo | 8 | 21 | 3 | 1 | GitHub 族 6 站形态一致 |
+| github_Hugo | 9 | 21 | 3 | 1 | 同上 |
+| github_Jekyll | 9 | 21 | 3 | 1 | 同上 |
+| github_Quartz | 9 | 21 | 3 | 1 | 同上 |
+| github_Vuepress | 9 | 21 | 3 | 1 | 同上 |
+| github_Vuepress2 | 9 | 20 | 3 | 1 | 同上 |
+| common_Halo | 8 | 7 | 0 | 4 | `home`/`apiUrl`/`previewUrl`/`pageType` 四行 |
+| common_Telegraph | 6 | 12 | 0 | 2 | `home`/`apiUrl` 两行 |
+| 其余 14 站 | — | — | 0 | 0 | Yuque/Notion/Confluence/Cnblogs/Wordpress/LocalSystem + Cookie 族 8 站 |
+
+**重复的句子只有三类，高度同质**
+1. **`home` / `apiUrl`（最普遍）**：GitHub 族 6 站两行均 `EXACT` —— tour 与 fields 一字不差
+   （如「GitHub 首页地址，默认 https://github.com。」）；Halo/Telegraph 为 `CONTAINED`（fields 多个示例后缀）。
+2. **`username`（GitHub 族 6 站）**：`CONTAINED` —— fields 是 tour 的超集（多「token 需对该仓库有 push 权限」）。
+3. **`pageType`「发布格式」**：GitHub 族 6 站 `EXACT`（「X 默认按 Markdown 内容发布。」）；Halo `CONTAINED`。
+
+**建议的收敛方向（待你选）**
+- **方案甲（推荐，改动最小、不丢信息）**：tour 的这三类步骤**改为只讲操作顺序**，字段含义交给 ⓘ——
+  例：`home` 的 tour 改成「填写平台首页地址后，点「验证」自动拉取仓库信息」，说明仍在 `fields.home`。
+- **方案乙（保守）**：仅去掉 `EXACT` 的 22 处（一字不差那批），`CONTAINED` 的 8 处保留（fields 更详尽，不算纯重复）。
+- **方案丙（最省）**：不动 tour，只把此审计结论记进 change 作为「已审计、重复可接受」的结论（4.3 勾选并注明）。
+
+**影响面**：仅 8 个 help 配置文件的 `tour` 文案（`github-*.ts` 6 个 + `common-halo.ts` + `telegraph.ts`）；
+**不触碰** `fields`、locales、组件与任何发布链路；改完须确保 `tourAnchors.spec.ts` 仍绿（只改 content 不改 target/title）。
+
 ## 选项 1（4.1 占位符 → 示例值）口径对照表（2026-09-15 预分析，**未开工**，等用户拍板口径）
 
 ### 关键硬约束（本次查实，直接决定 4.1 怎么做）

@@ -658,4 +658,17 @@
 - 已备 GitHub 族 13 个字段的「示例值 + 对应 `fields.tip`」对照草案；试点站待用户在 `fs_LocalSystem` / `github_Vuepress2` 间选择。
 - 全部写入 `task_plan.md`「选项 1（4.1 占位符 → 示例值）口径对照表」节；**未写任何产品代码、未构建、未开新平台**。
 
+### 自动续航轮 3（同日，仍不开工）：选项 2（4.3 去重审计）结果落地
+- 用户仍未放行 → 继续只读审计，把 4.3 从「只做顺手消重、未逐站比对」推进到**有数字的审计结论**。
+- 脚本 `tmp/field-guide-dedup-audit.diag.spec.ts`（跑完即从 `src/` 移除，`git status -- src` 干净）：
+  归一化去空白/标点后比较 `tour.content` 与 `fields.tip`（`EXACT` 全等、`CONTAINED` 互相包含且长度 ≥12）。
+- **结果：22 站共 30 处重复（EXACT 22 + CONTAINED 8），只出现在 8 个站**：
+  GitHub 族 6 站各 EXACT 3 + CONTAINED 1（`home`/`apiUrl`/`pageType` 三行全等，`username` 为超集）；
+  `common_Halo` CONTAINED 4（home/apiUrl/previewUrl/pageType）；`common_Telegraph` CONTAINED 2（home/apiUrl）。
+  **其余 14 站零重复**（语雀/Notion/Confluence/博客园/Wordpress/本地系统 + Cookie 族 8 站）。
+- 重复句子只有三类：`home`+`apiUrl`、`username`、`pageType`「发布格式」。已备三种收敛方案（甲：tour 改讲操作顺序，推荐；
+  乙：只消 EXACT 的 22 处；丙：不动文案，把审计结论记入 change）。
+- 影响面仅 8 个 help 配置的 `tour` 文案，不碰 `fields`/locales/组件/发布链路。写入 `task_plan.md`「选项 2（4.3 …）审计结果」节。
+- **至此三个选项（1/2/3）都已备好可执行材料**，等用户任选其一放行。
+
 ## 五问重启检查
