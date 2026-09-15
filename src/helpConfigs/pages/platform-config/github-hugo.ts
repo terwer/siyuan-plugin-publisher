@@ -15,20 +15,21 @@ export const hugoHelpConfig: PageHelpConfig = {
   summary:
     "通过 GitHub API 将文章发布到 Hugo 静态博客仓库。账号使用 GitHub Token（PAT）；图片选「当前平台」图床上传到仓库 static/images，文章内引用为绝对路径 /images/<图片名>（Hugo 构建时把 static/ 原样复制到站点根，构建产物即可正确显示，这是官方推荐的引用方式）；查看链接为站点文章地址（/post/<slug>.html）。",
   fields: {
-    home: { tip: "GitHub 首页地址，默认 https://github.com。" },
-    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },
-    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。" },
+    home: { tip: "GitHub 首页地址，默认 https://github.com。", placeholder: "https://github.com" },
+    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。", placeholder: "https://api.github.com" },
+    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。", placeholder: "your-github-name" },
     password: {
       tip: "GitHub 个人访问令牌（PAT，Token）。在 GitHub Settings → Developer settings → Personal access tokens 生成，需勾选 repo 权限。",
+      placeholder: "ghp_xxxxxxxxxxxxxxxxxxxx",
       link: "https://github.com/settings/tokens",
       linkText: "Token 生成地址",
     },
-    githubRepo: { tip: "Hugo 博客仓库名，与用户名组成 <user>/<repo>，例如 hugo-blog。" },
-    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
-    defaultPath: { tip: "Hugo 文章存储目录，默认 content/post。发布后的 .md 会写入该目录。" },
-    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。注意：「YAML永久链接」写入的 url 是固定的 /post/<文章别名>.html，不读这条规则。" },
-    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
+    githubRepo: { tip: "Hugo 博客仓库名，与用户名组成 <user>/<repo>，例如 hugo-blog。", placeholder: "hugo-blog" },
+    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "main" },
+    defaultPath: { tip: "Hugo 文章存储目录，默认 content/post。发布后的 .md 会写入该目录。", placeholder: "content/post" },
+    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md。", placeholder: "[slug].md" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。注意：「YAML永久链接」写入的 url 是固定的 /post/<文章别名>.html，不读这条规则。", placeholder: "/post/[postid].html" },
+    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。", placeholder: "/[user]/[repo]/blob/[branch]/[docpath]" },
     pageType: { tip: "Hugo 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Hugo 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 static/images，文章中引用为绝对路径 /images/<图片名>（Hugo 构建时 static/ 原样复制到站点根）。" },
     yamlLinkEnabled: {
@@ -39,18 +40,22 @@ export const hugoHelpConfig: PageHelpConfig = {
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 static/images。",
+      placeholder: "static/images",
     },
     imageLinkPath: {
       tip: "文章内图片引用前缀，默认 images，即引用为 /images/<图片名> 的站点根绝对路径（Hugo 构建时把 static/ 原样复制到站点根）；填 ./images 或 ../images 则改为相对文章路径引用。",
+      placeholder: "/images",
     },
     dynYamlCfg: {
       tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，用于补充主题需要的自定义字段；同名键会覆盖前面自动生成的字段。",
+      placeholder: "{\"toc\": true}",
     },
-    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
-    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
-    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。", placeholder: "your-name" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。", placeholder: "you@example.com" },
     site: {
       tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Hugo 的文章 Front Matter 不写作者字段，此处仅作账号信息。",
+      placeholder: "https://github.com/your-github-name",
     },
   },
   faq: [

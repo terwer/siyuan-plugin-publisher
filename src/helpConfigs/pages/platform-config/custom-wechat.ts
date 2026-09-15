@@ -14,14 +14,15 @@ export const wechatHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary: "通过登录公众号后台的 Cookie 发布到微信公众号。以 HTML 内容发布，图片默认上传到公众号素材库。",
   fields: {
-    home: { tip: "默认是公众号后台 https://mp.weixin.qq.com，通常保持默认。" },
-    apiUrl: { tip: "默认是公众号后台接口地址，通常保持默认。" },
+    home: { tip: "默认是公众号后台 https://mp.weixin.qq.com，通常保持默认。", placeholder: "https://mp.weixin.qq.com" },
+    apiUrl: { tip: "默认是公众号后台接口地址，通常保持默认。", placeholder: "https://mp.weixin.qq.com" },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」用公众号管理员微信扫码登录后台，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。登录过期或切换账号后需重新读取。",
+        placeholder: "your-cookie",
     },
-    previewUrl: { tip: "公众号文章编辑页 URL 模板，一般保持默认。" },
+    previewUrl: { tip: "公众号文章编辑页 URL 模板，一般保持默认。", placeholder: "/s?__biz=[biz]&mid=[mid]&idx=[idx]&sn=[sn]" },
     pageType: { tip: "正文提交格式，公众号通过 HTML 内容发布，保持默认的 HTML。" },
     picbedService: {
       tip:

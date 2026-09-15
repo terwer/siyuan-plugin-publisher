@@ -14,14 +14,15 @@ export const jianshuHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary: "通过 Cookie 授权发布到简书。图片默认上传到简书；已发布文章暂不支持更换笔记本。",
   fields: {
-    home: { tip: "默认是简书首页 https://www.jianshu.com，通常保持默认。" },
-    apiUrl: { tip: "默认是简书 API 地址，通常保持默认。" },
+    home: { tip: "默认是简书首页 https://www.jianshu.com，通常保持默认。", placeholder: "https://www.jianshu.com" },
+    apiUrl: { tip: "默认是简书 API 地址，通常保持默认。", placeholder: "https://www.jianshu.com" },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」登录简书，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。切换账号或登录过期后需要重新读取。",
+        placeholder: "your-cookie",
     },
-    previewUrl: { tip: "查看文章链接模板，默认 /p/[postid]，与简书文章地址一致，通常保持默认。" },
+    previewUrl: { tip: "查看文章链接模板，默认 /p/[postid]，与简书文章地址一致，通常保持默认。", placeholder: "/p/[postid]" },
     pageType: { tip: "正文提交格式，简书默认使用 Markdown 发布，保持默认的 Markdown。" },
     blogid: {
       tip: "要发布到的简书笔记本（如「随笔」）。已发布文章暂不支持更换笔记本；需要移动时删除原文后重新选择笔记本发布。",

@@ -15,20 +15,21 @@ export const quartzHelpConfig: PageHelpConfig = {
   summary:
     "通过 GitHub API 将文章发布到 Quartz 静态博客仓库。账号使用 GitHub Token（PAT）；文章写入仓库 content 目录（文件名 [filename].md），图片选「当前平台」图床上传到仓库 assets/images，文章内引用为绝对路径 /assets/images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]）或站点文章地址（/post/<postid>.html）。",
   fields: {
-    home: { tip: "GitHub 首页地址，默认 https://github.com。" },
-    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },
-    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。" },
+    home: { tip: "GitHub 首页地址，默认 https://github.com。", placeholder: "https://github.com" },
+    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。", placeholder: "https://api.github.com" },
+    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。", placeholder: "your-github-name" },
     password: {
       tip: "GitHub 个人访问令牌（PAT，Token）。在 GitHub Settings → Developer settings → Personal access tokens 生成，需勾选 repo 权限。",
+      placeholder: "ghp_xxxxxxxxxxxxxxxxxxxx",
       link: "https://github.com/settings/tokens",
       linkText: "Token 生成地址",
     },
-    githubRepo: { tip: "Quartz 博客仓库名，与用户名组成 <user>/<repo>，例如 terwer/quartz-blog。" },
-    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
-    defaultPath: { tip: "Quartz 文章存储目录，默认 content。发布后的 .md 会写入该目录。" },
-    mdFilenameRule: { tip: "文章文件名规则，默认 [filename].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成；开启「YAML永久链接」时 permalink 也按同一规则生成。" },
-    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
+    githubRepo: { tip: "Quartz 博客仓库名，与用户名组成 <user>/<repo>，例如 terwer/quartz-blog。", placeholder: "quartz" },
+    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "v4" },
+    defaultPath: { tip: "Quartz 文章存储目录，默认 content。发布后的 .md 会写入该目录。", placeholder: "content" },
+    mdFilenameRule: { tip: "文章文件名规则，默认 [filename].md。", placeholder: "[filename].md" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成；开启「YAML永久链接」时 permalink 也按同一规则生成。", placeholder: "/post/[postid].html" },
+    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。", placeholder: "/[user]/[repo]/blob/[branch]/[docpath]" },
     pageType: { tip: "Quartz 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Quartz 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 assets/images，文章中引用为绝对路径 /assets/images/<图片名>。" },
     yamlLinkEnabled: {
@@ -39,18 +40,22 @@ export const quartzHelpConfig: PageHelpConfig = {
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 assets/images。",
+      placeholder: "assets/images",
     },
     imageLinkPath: {
       tip: "文章内图片引用前缀，默认 assets/images，即引用为 /assets/images/<图片名> 的站点根绝对路径；填 ./images 之类则改为相对文章路径引用。",
+      placeholder: "/assets/images",
     },
     dynYamlCfg: {
       tip: "YAML 预设配置（JSON 片段）。留空时自动写入 enableToc: true 与 enableBackLinks: true；一旦填写，文章头改由你给的键决定，想保留目录与反向链接需自行带上这两项。",
+      placeholder: "{\"enableToc\": true}",
     },
-    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
-    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
-    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。", placeholder: "your-name" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。", placeholder: "you@example.com" },
     site: {
       tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Quartz 的文章 Front Matter 不写作者字段，此处仅作账号信息。",
+      placeholder: "https://github.com/your-github-name",
     },
   },
   faq: [

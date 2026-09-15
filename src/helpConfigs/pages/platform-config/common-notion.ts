@@ -15,14 +15,15 @@ export const notionHelpConfig: PageHelpConfig = {
   summary:
     "通过 API Token 发布到 Notion 页面。Notion 使用 API Token（非 Cookie），页面归属到所选根页面，图片以 PicGo 外部链接图床发布为外部图片块。",
   fields: {
-    home: { tip: "Notion 平台首页，通常固定为 https://www.notion.so/，保持默认。" },
-    apiUrl: { tip: "Notion API 地址，通常固定为 https://api.notion.com/v1，保持默认。" },
+    home: { tip: "Notion 平台首页，通常固定为 https://www.notion.so/，保持默认。", placeholder: "https://www.notion.so/" },
+    apiUrl: { tip: "Notion API 地址，通常固定为 https://api.notion.com/v1，保持默认。", placeholder: "https://api.notion.com/v1" },
     password: {
       tip: "Notion API Token，在 Notion 集成（my-integrations）中创建，需勾选 Read content、Update content、Insert content 三项权限。",
+      placeholder: "ntn_xxxxxxxxxxxxxxxxxxxx",
       link: "https://www.notion.so/my-integrations",
       linkText: "前往创建 Token",
     },
-    previewUrl: { tip: "文章预览规则，固定为 /[postid]（不可修改），查看链接为 https://www.notion.so/<postid>。" },
+    previewUrl: { tip: "文章预览规则，固定为 /[postid]（不可修改），查看链接为 https://www.notion.so/<postid>。", placeholder: "/[postid]" },
     pageType: { tip: "发布格式：Notion 按 Markdown 提交正文，保持 Markdown 即可。" },
     blogid: {
       tip: "根页面（发布位置）：点「验证」后下拉列出该 Token 可见的根页面，文章会作为它的子页面创建。Notion 不支持修改已发布页面所属根页面——想换位置需先删除原文档再重新选择发布。",

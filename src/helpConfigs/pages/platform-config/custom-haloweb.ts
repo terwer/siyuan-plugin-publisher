@@ -11,15 +11,18 @@ export const halowebHelpConfig: PageHelpConfig = {
   fields: {
     home: {
       tip: "你的 Halo 2.20+ 博客首页地址。填写完整 URL（如 https://yourhalo.com）后，登录和 Cookie 读取将自动解析到正确的地址。",
+      placeholder: "https://your-halo.com",
     },
-    apiUrl: { tip: "通常和首页地址相同。除非你的 Halo 后台使用了独立域名，否则保持默认。" },
+    apiUrl: { tip: "通常和首页地址相同。除非你的 Halo 后台使用了独立域名，否则保持默认。", placeholder: "https://your-halo.com" },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」登录 Halo 后台，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。Cookie 过期或切换账号后需要重新读取。",
+        placeholder: "your-cookie",
     },
     previewUrl: {
       tip: "查看文章链接模板，默认 /archives/{slug}，与 Halo 的文章固定链接一致，通常保持默认。",
+      placeholder: "/archives/{slug}",
     },
     pageType: { tip: "Halo 网页版默认使用 HTML 发布，通常保持默认。" },
     picbedService: {

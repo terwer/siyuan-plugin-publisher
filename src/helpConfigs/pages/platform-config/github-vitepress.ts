@@ -15,22 +15,24 @@ export const vitepressHelpConfig: PageHelpConfig = {
   summary:
     "通过 GitHub API 将文章发布到 Vitepress 文档站仓库。账号使用 GitHub Token（PAT）；文章默认写入 docs 目录（文件名 [slug].md）；图片选「当前平台」图床时上传到文章所在目录的 images 子目录（存储规则 [docpath]/images，例如 docs/images/<图片名>），文章中引用为相对路径 ./images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），站点文章地址由 Vitepress 的文件路由决定。",
   fields: {
-    home: { tip: "GitHub 首页地址，默认 https://github.com。" },
-    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },
-    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。" },
+    home: { tip: "GitHub 首页地址，默认 https://github.com。", placeholder: "https://github.com" },
+    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。", placeholder: "https://api.github.com" },
+    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。", placeholder: "your-github-name" },
     password: {
       tip: "GitHub 个人访问令牌（PAT，Token）。在 GitHub Settings → Developer settings → Personal access tokens 生成，需勾选 repo 权限。",
+      placeholder: "ghp_xxxxxxxxxxxxxxxxxxxx",
       link: "https://github.com/settings/tokens",
       linkText: "Token 生成地址",
     },
-    githubRepo: { tip: "Vitepress 站点仓库名，与用户名组成 <user>/<repo>，例如 vitepress-blog。" },
-    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
-    defaultPath: { tip: "Vitepress 文章存储目录，默认 docs。发布后的 .md 会写入该目录。" },
-    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md（文章别名），与 Vitepress 的文档路径约定一致。" },
+    githubRepo: { tip: "Vitepress 站点仓库名，与用户名组成 <user>/<repo>，例如 vitepress-blog。", placeholder: "vitepress-blog" },
+    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "main" },
+    defaultPath: { tip: "Vitepress 文章存储目录，默认 docs。发布后的 .md 会写入该目录。", placeholder: "docs" },
+    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md（文章别名），与 Vitepress 的文档路径约定一致。", placeholder: "[slug].md" },
     previewPostUrl: {
       tip: "站点文章预览规则，默认 /post/[postid].html。Vitepress 采用基于文件路径的路由，Front Matter 不写入 permalink，实际站点地址由文件路径决定，此规则仅作查看参考。",
+      placeholder: "/post/[postid].html",
     },
-    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]，查看链接即该 .md 在仓库中的地址。" },
+    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]，查看链接即该 .md 在仓库中的地址。", placeholder: "/[user]/[repo]/blob/[branch]/[docpath]" },
     pageType: { tip: "Vitepress 默认按 Markdown 内容发布。" },
     picbedService: {
       tip: "选择「当前平台」图床时，图片上传到文章所在目录的 images 子目录（存储规则 [docpath]/images，如 docs/images/<图片名>），文章中引用为相对路径 ./images/<图片名>。",
@@ -40,18 +42,22 @@ export const vitepressHelpConfig: PageHelpConfig = {
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 [docpath]/images，即文章所在目录下的 images 子目录。",
+      placeholder: "[docpath]/images",
     },
     imageLinkPath: {
       tip: "文章内图片引用前缀，默认 ./images（相对文章所在目录）。",
+      placeholder: "./images",
     },
     dynYamlCfg: {
       tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时 Vitepress 默认写入 outline: deep、sidebar: false、prev: false、next: false。",
+      placeholder: "{\"outline\": \"deep\"}",
     },
-    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
-    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
-    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。", placeholder: "your-name" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。", placeholder: "you@example.com" },
     site: {
       tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Vitepress 的文章 Front Matter 不含作者字段，此处仅作账号信息。",
+      placeholder: "https://github.com/your-github-name",
     },
   },
   faq: [

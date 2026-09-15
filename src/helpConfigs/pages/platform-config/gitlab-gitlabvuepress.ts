@@ -17,23 +17,27 @@ export const gitlabvuepressHelpConfig: PageHelpConfig = {
   fields: {
     home: {
       tip: "你的 GitLab 实例首页地址（自建实例填自己的域名，如 https://gitlab.example.com），用于拼出仓库地址；修改后 API 地址与令牌地址会同步更新。",
+      placeholder: "https://gitlab.com",
     },
-    apiUrl: { tip: "GitLab API 地址，默认与平台首页一致（自建实例同样填实例地址）；平台首页留空时会被清空。" },
-    username: { tip: "GitLab 用户名（owner），用于拼出仓库地址。访问令牌需对该仓库有 push 权限。" },
+    apiUrl: { tip: "GitLab API 地址，默认与平台首页一致（自建实例同样填实例地址）；平台首页留空时会被清空。", placeholder: "https://gitlab.com" },
+    username: { tip: "GitLab 用户名（owner），用于拼出仓库地址。访问令牌需对该仓库有 push 权限。", placeholder: "your-gitlab-name" },
     password: {
       tip: "GitLab 个人访问令牌（Personal Access Token）。在 GitLab 右上角头像 → Preferences → Access Tokens（或 /-/user_settings/personal_access_tokens）生成，需勾选 api 或 write_repository 范围。",
+      placeholder: "glpat-xxxxxxxxxxxxxxxxxxxx",
       link: "https://gitlab.com/-/user_settings/personal_access_tokens",
       linkText: "Token 生成地址",
     },
-    githubRepo: { tip: "VuePress 文档站仓库名，与用户名组成 <user>/<repo>，例如 vuepress-docs。" },
-    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。" },
-    defaultPath: { tip: "VuePress 文章存储目录，默认 docs。发布后的 .md 会写入该目录。" },
-    mdFilenameRule: { tip: "文章文件名规则，默认 [filename].md（取笔记文件名），也可改用 [slug].md 等占位符组合。" },
+    githubRepo: { tip: "VuePress 文档站仓库名，与用户名组成 <user>/<repo>，例如 vuepress-docs。", placeholder: "gitlab-vuepress-blog" },
+    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "main" },
+    defaultPath: { tip: "VuePress 文章存储目录，默认 docs。发布后的 .md 会写入该目录。", placeholder: "docs" },
+    mdFilenameRule: { tip: "文章文件名规则，默认 [filename].md（取笔记文件名），也可改用 [slug].md 等占位符组合。", placeholder: "[filename].md" },
     previewPostUrl: {
       tip: "站点文章预览规则，默认 /post/[postid].html。VuePress 站点地址由文件路径决定，此规则仅作查看参考。",
+      placeholder: "/post/[postid].html",
     },
     previewUrl: {
       tip: "GitLab blob 预览规则，固定 /[user]/[repo]/blob/[branch]/[docpath]，查看链接即该 .md 在仓库中的地址；该平台固定使用此规则，不支持修改。",
+      placeholder: "/[user]/[repo]/blob/[branch]/[docpath]",
     },
     pageType: { tip: "VuePress 默认按 Markdown 内容发布。" },
     picbedService: {
@@ -44,21 +48,25 @@ export const gitlabvuepressHelpConfig: PageHelpConfig = {
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 docs/.vuepress/public/images。",
+      placeholder: "docs/.vuepress/public/images",
     },
     imageLinkPath: {
       tip: "文章内图片引用前缀，默认 images（VuePress 的 public 目录内容输出到站点根，故引用站点根下的 images）。",
+      placeholder: "/images",
     },
     yamlLinkEnabled: {
       tip: "开启后把文章永久链接写入 Front Matter，供站点按自定义链接生成页面；VuePress 构建器会读取该字段。",
     },
     dynYamlCfg: {
       tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时不追加额外字段；发布写入的 Front Matter 含 title、date、tags、categories、permalink、author 等。",
+      placeholder: "{\"sidebar\": \"auto\"}",
     },
-    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
-    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitLab 用户名或显示名。" },
-    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitLab 用户名或显示名。", placeholder: "your-name" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。", placeholder: "you@example.com" },
     site: {
       tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；VuePress 的文章 Front Matter 含 author 字段，会随文章一并写入。",
+      placeholder: "https://gitlab.com/your-gitlab-name",
     },
   },
   faq: [

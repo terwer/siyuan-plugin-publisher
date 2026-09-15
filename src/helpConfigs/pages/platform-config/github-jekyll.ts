@@ -15,20 +15,21 @@ export const jekyllHelpConfig: PageHelpConfig = {
   summary:
     "通过 GitHub API 将文章发布到 Jekyll 静态博客仓库。账号使用 GitHub Token（PAT）；文章写入仓库 _posts 目录（文件名 [yyyy]-[mm]-[dd]-[slug].md），图片选「当前平台」图床上传到仓库 assets/images，文章内引用为绝对路径 /assets/images/<图片名>（Jekyll 构建时把 assets/ 原样复制到站点根，构建产物即可正确显示），这是官方推荐的引用方式；查看链接为站点文章地址（/post/<slug>.html）。",
   fields: {
-    home: { tip: "GitHub 首页地址，默认 https://github.com。" },
-    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。" },
-    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。" },
+    home: { tip: "GitHub 首页地址，默认 https://github.com。", placeholder: "https://github.com" },
+    apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。", placeholder: "https://api.github.com" },
+    username: { tip: "GitHub 用户名（owner），用于拼出仓库地址。token 需对该仓库有 push 权限。", placeholder: "your-github-name" },
     password: {
       tip: "GitHub 个人访问令牌（PAT，Token）。在 GitHub Settings → Developer settings → Personal access tokens 生成，需勾选 repo 权限。",
+      placeholder: "ghp_xxxxxxxxxxxxxxxxxxxx",
       link: "https://github.com/settings/tokens",
       linkText: "Token 生成地址",
     },
-    githubRepo: { tip: "Jekyll 博客仓库名，与用户名组成 <user>/<repo>，例如 terwer.github.io。" },
-    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。Jekyll 站点常发布到 gh-pages 分支。" },
-    defaultPath: { tip: "Jekyll 文章存储目录，默认 _posts。发布后的 .md 会写入该目录。" },
-    mdFilenameRule: { tip: "文章文件名规则，Jekyll 需带日期前缀，默认 [yyyy]-[mm]-[dd]-[slug].md。" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。只有开启「YAML永久链接」时它才会同步写进 Front Matter 的 permalink（仅 [postid] 占位符生效）。" },
-    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。" },
+    githubRepo: { tip: "Jekyll 博客仓库名，与用户名组成 <user>/<repo>，例如 terwer.github.io。", placeholder: "your-github-name.github.io" },
+    githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。Jekyll 站点常发布到 gh-pages 分支。", placeholder: "gh-pages" },
+    defaultPath: { tip: "Jekyll 文章存储目录，默认 _posts。发布后的 .md 会写入该目录。", placeholder: "_posts" },
+    mdFilenameRule: { tip: "文章文件名规则，Jekyll 需带日期前缀，默认 [yyyy]-[mm]-[dd]-[slug].md。", placeholder: "[yyyy]-[mm]-[dd]-[slug].md" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。只有开启「YAML永久链接」时它才会同步写进 Front Matter 的 permalink（仅 [postid] 占位符生效）。", placeholder: "/post/[postid].html" },
+    previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。", placeholder: "/[user]/[repo]/blob/[branch]/[docpath]" },
     pageType: { tip: "Jekyll 默认按 Markdown 内容发布。" },
     picbedService: { tip: "Jekyll 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 assets/images，文章中引用为绝对路径 /assets/images/<图片名>（Jekyll 构建时 assets/ 原样复制到站点根）。" },
     yamlLinkEnabled: {
@@ -39,18 +40,22 @@ export const jekyllHelpConfig: PageHelpConfig = {
     },
     imageStorePath: {
       tip: "选「当前平台」图床时图片提交到仓库的位置，默认 assets/images。",
+      placeholder: "assets/images",
     },
     imageLinkPath: {
       tip: "文章内图片引用前缀，默认 assets/images，即引用为 /assets/images/<图片名> 的站点根绝对路径（Jekyll 构建时把仓库根下的该目录原样发布）；填 ./images 之类则以相对文章路径引用。",
+      placeholder: "/assets/images",
     },
     dynYamlCfg: {
       tip: "YAML 预设配置（JSON 片段）。留空时自动写入 layout: post 与 published: true；一旦填写，则改由你提供的键决定文章头，需要自行包含 layout、published 等主题必需字段。",
+      placeholder: "{\"layout\": \"post\"}",
     },
-    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。" },
-    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。" },
-    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。" },
+    defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
+    author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitHub 用户名或显示名。", placeholder: "your-name" },
+    email: { tip: "commit 作者邮箱，会写入仓库的提交记录。", placeholder: "you@example.com" },
     site: {
       tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Jekyll 的文章 Front Matter 不写作者字段，此处仅作账号信息。",
+      placeholder: "https://github.com/your-github-name",
     },
   },
   faq: [

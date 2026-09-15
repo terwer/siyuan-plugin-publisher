@@ -9,15 +9,17 @@ export const yuquewebHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
   summary: "通过 Cookie 授权发布到语雀网页版，无需语雀专业会员，使用浏览器登录态即可发布。",
   fields: {
-    home: { tip: "语雀网页版站点地址，固定为 https://www.yuque.com，通常无需修改。" },
-    apiUrl: { tip: "语雀网页版接口地址，与站点地址一致，通常无需修改。" },
+    home: { tip: "语雀网页版站点地址，固定为 https://www.yuque.com，通常无需修改。", placeholder: "https://www.yuque.com" },
+    apiUrl: { tip: "语雀网页版接口地址，与站点地址一致，通常无需修改。", placeholder: "https://www.yuque.com" },
     password: {
       tip:
         "Cookie 授权：点「去登录」登录语雀，关闭登录窗口保存登录态后点「自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。Cookie 过期后重新读取。",
+        placeholder: "your-cookie",
     },
     previewUrl: {
       tip: "查看文章链接模板，支持 {login}、{bookSlug}、{slug} 占位符，默认 /{login}/{bookSlug}/{slug}，通常保持默认。",
+      placeholder: "/{login}/{bookSlug}/{slug}",
     },
     pageType: { tip: "正文提交格式，语雀网页版按 Markdown 提交正文，保持默认的 Markdown。" },
     blogid: { tip: "要发布到的语雀知识库；验证通过后会读取当前登录账号可写的知识库列表。" },

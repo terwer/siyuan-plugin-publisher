@@ -14,14 +14,15 @@ export const juejinHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary: "通过 Cookie 授权发布到掘金。图片默认走掘金原生上传；默认使用 Markdown 发布。",
   fields: {
-    home: { tip: "默认是掘金首页 https://juejin.cn，通常保持默认。" },
-    apiUrl: { tip: "默认是掘金 API 地址 https://api.juejin.cn，通常保持默认。" },
+    home: { tip: "默认是掘金首页 https://juejin.cn，通常保持默认。", placeholder: "https://juejin.cn" },
+    apiUrl: { tip: "默认是掘金 API 地址 https://api.juejin.cn，通常保持默认。", placeholder: "https://api.juejin.cn" },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」登录掘金，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。切换账号或登录过期后需要重新读取。",
+        placeholder: "your-cookie",
     },
-    previewUrl: { tip: "查看文章链接模板，默认 /post/[postid]，与掘金文章地址一致，通常保持默认。" },
+    previewUrl: { tip: "查看文章链接模板，默认 /post/[postid]，与掘金文章地址一致，通常保持默认。", placeholder: "/post/[postid]" },
     pageType: { tip: "正文提交格式，掘金默认使用 Markdown 发布，且会带上掘金要求的标签（默认「程序员」）与摘要。" },
     blogid: {
       tip: "要发布到的掘金分类（如「后端」）；验证通过后会列出可用分类。未选择时回退默认分类「后端」。",

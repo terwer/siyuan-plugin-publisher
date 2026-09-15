@@ -11,12 +11,14 @@ export const localSystemHelpConfig: PageHelpConfig = {
   fields: {
     storePath: {
       tip: "文章输出目录（系统绝对路径），默认是下载目录下的 syp；路径里可写 [auto]，发布时按文章分类自动替换成分类名。",
+      placeholder: "/Users/you/Downloads/syp",
     },
-    imageStorePath: { tip: "图片、附件相对文章目录的保存位置，默认 assets；正文里的图片按该目录写成相对链接。" },
+    imageStorePath: { tip: "图片、附件相对文章目录的保存位置，默认 assets；正文里的图片按该目录写成相对链接。", placeholder: "assets" },
     fsYamlType: {
       tip:
         "Front Matter/YAML 风格：默认 / Hexo / Hugo / Jekyll / Vuepress / Vuepress2 / Vitepress / Quartz / Astro；" +
         "选具体框架时走该框架的适配链路，Front Matter 字段与该站点一致。",
+        placeholder: "default",
     },
     pageType: { tip: "输出格式，默认 Markdown；只有目标流程要求 HTML 时才改。" },
     picbedService: {

@@ -17,16 +17,20 @@ export const typechoHelpConfig: PageHelpConfig = {
   fields: {
     home: {
       tip: "你的 Typecho 博客首页地址，如 https://blog.example.com；填写后会据此类推出 MetaWeblog API 地址。",
+      placeholder: "https://your-typecho.com",
     },
     apiUrl: {
       tip: "MetaWeblog API 地址，默认由博客首页推导（Typecho 通常为首页下的 /action/xmlrpc）。核对无误后一般无需修改。",
+      placeholder: "https://your-typecho.com/index.php/action/xmlrpc",
     },
-    username: { tip: "Typecho 后台的登录用户名（不是昵称或显示名）。" },
+    username: { tip: "Typecho 后台的登录用户名（不是昵称或显示名）。", placeholder: "your-typecho-name" },
     password: {
       tip: "Typecho 后台的登录密码（MetaWeblog 按账号密码鉴权，不使用 Token）。",
+      placeholder: "your-typecho-password",
     },
     previewUrl: {
       tip: "查看文章链接模板，默认 /index.php/archives/[postid]，与 Typecho 的文章地址一致；若你的站点启用了地址重写，可改成实际形态。",
+      placeholder: "/index.php/archives/[postid]",
     },
     pageType: { tip: "正文提交格式，默认 HTML；Typecho 按原样接收正文，保持默认即可。" },
     picbedService: {

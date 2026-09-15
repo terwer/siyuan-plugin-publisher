@@ -13,21 +13,24 @@ export const confluenceHelpConfig: PageHelpConfig = {
   summary:
     "将思源笔记发布到 Atlassian Confluence。使用个人访问令牌（Personal Access Token, PAT）鉴权，发布到指定「空间」，可选挂载到「父页面」下。Confluence 支持平台自带图片上传（以附件形态管理）。",
   fields: {
-    home: { tip: "Confluence 站点首页地址，例如 http://localhost:8090（Atom/Jira 服务器地址）" },
-    apiUrl: { tip: "Confluence API 地址，通常与平台首页一致（如 http://localhost:8090），在修改首页后自动同步" },
+    home: { tip: "Confluence 站点首页地址，例如 http://localhost:8090（Atom/Jira 服务器地址）", placeholder: "http://localhost:8090" },
+    apiUrl: { tip: "Confluence API 地址，通常与平台首页一致（如 http://localhost:8090），在修改首页后自动同步", placeholder: "http://localhost:8090" },
     password: {
       tip: "个人访问令牌（PAT），在 Confluence 的 Personal Access Tokens 页面生成后填入",
+      placeholder: "your-personal-access-token",
       link: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
       linkText: "如何生成 Confluence 个人访问令牌？",
     },
     parentPageId: {
       tip: "父页面（可选）：下拉列出所选空间下的页面（展开时按需拉取），文章会挂到该页面下；不选则作为空间的顶层页面发布。切换空间会清空此处已选的父页面。",
+      placeholder: "123456",
     },
     blogid: {
       tip: "目标空间（Space）：点「验证」后下拉列出该令牌可访问的空间，文章发布到所选空间下。",
     },
     previewUrl: {
       tip: "预览规则固定为 /spaces/[spaceKey]/pages/[postid]（不可修改），查看链接即所选空间下该页面的地址。",
+      placeholder: "/spaces/[spaceKey]/pages/[postid]",
     },
     pageType: {
       tip: "发布格式：Confluence 需要 XHTML，这里只提供 HTML 一项（Markdown 选项对该平台不可用），保持 HTML 即可。",

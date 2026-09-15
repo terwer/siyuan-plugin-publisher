@@ -715,4 +715,16 @@
 - **恢复后的差异（如实说明）**：该账号**本来就是「未启用 + 空配置体 `{}`」**（顶层的 `wordpress_Wordpressdotcom` 段仍为空对象，与相邻的 `github_Vuepress2` 等未配置账号同形），且 test 工作区**从未记录过** `custom-wordpress_Wordpressdotcom-post-id`——即它没有可失去的已发布文章记录或凭据。唯一差异是**列表位置**：现在是索引 31 / `displayOrder=33`（追加到末尾），原始为索引 24 / order 32 之前。
 - **教训**：清理临时账号一律**按精确 platformKey 白名单**匹配，绝不用宽正则；每次「添加账号」后先记录新账号的 key，删除时只删这一批。
 
+#### 4.1 占位符改示例值（已交付，方案 A）
+
+- **目标与口径**：V2 配置表单的占位符原本是**长说明**（如「存储目录例如：docs，部分平台可使用 `[auto]` 作为特殊占位符」）。这类文案一开始输入就消失，等于把说明放在最留不住信息的位置；而同一字段的含义已由行尾 ⓘ（`fields.tip`）讲清楚。故 V2 占位符只给**可直接照抄的示例值**，说明归 ⓘ，两者不再互相重复。
+- **机制（含 V1 零变化的关键）**：新增 `src/composables/useFieldPlaceholder.ts`。有 `pageId` 注入时取 `fields.placeholder`，否则**原样返回调用方文案**。`pageId` **仅**由 V2 的 `V2PlatformConfigBridge` 提供，V1 走 standalone 路由无 provider → **V1 文案零变化**，不必在两个入口间做分支判断。
+- **接入范围**：共用表单 `CommonBlogSetting.vue`（`home`/`apiUrl`/`username`/`password`/`previewUrl` 5 行）+ `CommonGithubSetting.vue`（12 行，**GitHub 与 GitLab 两族共用该组件**），合计 **17 行**，统一写成 `ph('<字段名>', 原文案)`。
+- **数据**：按各站**真实默认值**补 `fields.placeholder`，共 **34 站 / 343 处**（GitHub 族 8 站与 GitLab 族 7 站各 17 处；其余站按该站实际存在的行给，如 Metaweblog 族 5 处、本地系统 3 处）。示例值一律中性（`your-github-name`、`ghp_xxxxxxxxxxxxxxxxxxxx`、`you@example.com`），**不使用维护者个人信息**，也不写入任何真实凭据。
+- **尺子⑤（示例尺）**：新增于 `fieldGuideRulers.spec.ts`，三条约束——示例值必须非空且 ≤60 字符（超长即说明塞进了占位符）、有示例值就必须同时有 `tip`（同源共存，不留孤零零的样例）、凭据类字段的示例不得形似真实值。经**三次变异验证**：真实形态令牌 → 红并点名 `github_Hugo fields.password 的示例值疑似真实凭据`；160 字符长文 → 红并点名 `示例值过长（160 > 60）`；还原后全绿。
+- **单测**：新增 `src/composables/useFieldPlaceholder.spec.ts` 钉住四条边界——V1 无注入回退原文案 / V2 取示例值 / V2 该字段无示例值回退 / 未登记字段回退（**不产生空串**）。
+- **宿主实测**（`github_Hexo` 配置页，9222 直连 test 工作区）：13 个输入框占位符**全部**变为示例值（平台首页 `https://github.com`、用户名 `your-github-name`、鉴权token `ghp_xxxxxxxxxxxxxxxxxxxx`、git仓库名 `hexo-blog`、存储目录 `source/_posts`、文件规则 `[filename].md`、文章预览规则 `/post/[postid].html`、YAML预设配置 `{"comments": true}`、图片存储目录 `source/images`、图片访问链接 `../images`、预览规则 `/[user]/[repo]/blob/[branch]/[docpath]`）；`[data-syp-field-guide]` 仍为 17 个；`home` 行 ⓘ 仍为「GitHub 首页地址，默认 https://github.com。」→ **说明归 ⓘ、示例归占位符**，两处各司其职。
+- **回归**：`pnpm vitest run` **67 文件 / 319 测试**全绿、`pnpm build:v2` 通过、`openspec validate add-field-guide-tips --strict` 通过。变更只增 `placeholder` 与给 `tip` 补行尾逗号，**逐行核对确认 0 处 `tip` 文本被改动**。
+- **工具事故（如实记录）**：批量补示例值的第一版 PowerShell 脚本用了 `\s+`（含换行）导致**跨行误匹配**、第二版 Node 脚本漏处理内联 `{ tip: "..." }` 形态，各损坏过一批 help 配置文件；两次均以 `git checkout --` 整目录还原后重做，未进入任何提交。最终版脚本改为**单趟按行 + 花括号配平 + 字段用后即从待办移除**，并在应用前用独立脚本校验「每个示例值的字段都真实存在于该站 `fields`」（此校验当场发现 `common_Confluence` 无 `username` 字段，属配置真无此行，已修正）。
+
 ## 五问重启检查

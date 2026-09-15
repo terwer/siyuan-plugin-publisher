@@ -14,15 +14,17 @@ export const bilibiliHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary: "通过 Cookie 授权发布到哔哩哔哩专栏（opus）。图片默认走平台上传；以 Markdown 发布，可选择文集。",
   fields: {
-    home: { tip: "默认是哔哩哔哩专栏地址 https://www.bilibili.com/opus，通常保持默认。" },
-    apiUrl: { tip: "默认是哔哩哔哩 API 地址 https://api.bilibili.com，通常保持默认。" },
+    home: { tip: "默认是哔哩哔哩专栏地址 https://www.bilibili.com/opus，通常保持默认。", placeholder: "https://www.bilibili.com" },
+    apiUrl: { tip: "默认是哔哩哔哩 API 地址 https://api.bilibili.com，通常保持默认。", placeholder: "https://api.bilibili.com" },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」登录哔哩哔哩，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。切换账号或登录过期后需重新读取。",
+        placeholder: "your-cookie",
     },
     previewUrl: {
       tip: "查看文章链接模板，默认 /[postid]，对应 B 站专栏地址 https://www.bilibili.com/opus/<id>，通常保持默认。",
+      placeholder: "/read/cv[postid]",
     },
     pageType: { tip: "正文提交格式，哔哩哔哩默认使用 Markdown 发布，保持默认的 Markdown。" },
     blogid: {

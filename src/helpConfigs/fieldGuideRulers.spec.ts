@@ -96,4 +96,39 @@ describe("field guide rulers", () => {
 
     expect(offenders, "引导只讲操作顺序，字段含义归 fields").toEqual([])
   })
+
+  it("尺子⑤：示例值只能是短示例，且必须与该字段的说明同源共存", () => {
+    /** 示例值上限：超过这个长度就不再是「示例」，而是把说明塞进了占位符 */
+    const SAMPLE_MAX = 60
+    /** 凭据类字段的示例必须是明显的占位形态，不得像真实值 */
+    const SECRET_KEYS = /^(password|accessToken|saveHash|token|cookie)$/i
+    const looksLikeRealSecret = (v: string): boolean =>
+      // 真实 PAT / PAT 前缀 + 长串；或形如真实 Cookie 的 k=v; k=v
+      (/^(ghp|glpat|ntn)_[A-Za-z0-9]{16,}$/.test(v) && !/^[a-z]+_x+$/i.test(v)) || /\w+=[^;]{12,};\s*\w+=/.test(v)
+
+    const offenders: string[] = []
+    for (const entry of REQUIRED_ROWS_TABLE) {
+      const fields = Object.entries(entry.config.fields ?? {}) as [string, { tip?: string; placeholder?: string }][]
+      for (const [key, help] of fields) {
+        const sample = help?.placeholder
+        if (sample === undefined) continue
+        if (sample.trim().length === 0) {
+          offenders.push(`${entry.platformKey} fields.${key} 的示例值为空`)
+          continue
+        }
+        if (sample.length > SAMPLE_MAX) {
+          offenders.push(`${entry.platformKey} fields.${key} 的示例值过长（${sample.length} > ${SAMPLE_MAX}），说明归 tip`)
+        }
+        // 示例是给用户照抄的，必须有无障碍的说明；两者同源共存，避免只留一段不明所以的样例
+        if (!help?.tip) {
+          offenders.push(`${entry.platformKey} fields.${key} 有示例值却没有说明`)
+        }
+        if (SECRET_KEYS.test(key) && looksLikeRealSecret(sample)) {
+          offenders.push(`${entry.platformKey} fields.${key} 的示例值疑似真实凭据`)
+        }
+      }
+    }
+
+    expect(offenders, "示例值只放可直接照抄的短样例，含义与链接仍在 tip/link").toEqual([])
+  })
 })

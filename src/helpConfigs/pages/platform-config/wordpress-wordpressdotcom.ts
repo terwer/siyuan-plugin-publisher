@@ -17,16 +17,20 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
   fields: {
     home: {
       tip: "你的 WordPress.com 站点地址，如 https://yoursite.wordpress.com；填写后会据此类推出 MetaWeblog API 地址。",
+      placeholder: "https://your-site.wordpress.com",
     },
     apiUrl: {
       tip: "MetaWeblog API 地址，默认由站点地址推导（WordPress 通常为首页下的 /xmlrpc.php）。核对无误后一般无需修改。",
+      placeholder: "https://your-site.wordpress.com/xmlrpc.php",
     },
-    username: { tip: "WordPress.com 的登录用户名（不是昵称或显示名）。" },
+    username: { tip: "WordPress.com 的登录用户名（不是昵称或显示名）。", placeholder: "you@example.com" },
     password: {
       tip: "WordPress.com 的登录密码（MetaWeblog 按账号密码鉴权，不使用 Token）。",
+      placeholder: "your-application-password",
     },
     previewUrl: {
       tip: "查看文章链接模板，默认 /?p=[postid]，与 WordPress.com 的默认文章地址一致；若站点启用了自定义永久链接，可改成实际形态。",
+      placeholder: "/?p=[postid]",
     },
     pageType: { tip: "正文提交格式，默认 HTML；WordPress.com 按原样接收正文，保持默认即可。" },
     picbedService: {

@@ -106,14 +106,14 @@
 
 ---
 
-## 字段指引与帮助引导（SOP §3.5）— 22 站回写
+## 字段指引与帮助引导（SOP §3.5）— 34 站回写
 
 > **标准**：平台配置页**每一行真实渲染的字段**都要有一个可点的 ⓘ；`fields` 键 = 该行绑定的配置属性名
 > （鉴权行**恒为 `password`**）；指引在字段已填值时仍可见；弹层在 `.syp-panel` 内不裁切不错位；
 > 动态实例 key 走 registry 回落链。完整口径见 `docs/draft/platform-verification-sop.md` 第三节第 5 条。
 >
 > **自动校验（唯一键集来源）**：`src/helpConfigs/verifiedPlatformRows.ts` 按真实渲染行冻结键集，
-> `src/helpConfigs/fieldGuideRulers.spec.ts` 用三把尺强制（键尺 / 覆盖尺 / 守卫尺）；
+> `src/helpConfigs/fieldGuideRulers.spec.ts` 用五把尺强制（键尺 / 覆盖尺 / 守卫尺 / 分工尺 / 示例尺）；
 > 引导锚点契约由 `src/helpConfigs/tourAnchors.spec.ts` 按 `passwordType` 数据驱动校验。
 > 下表只登记宿主实测事实，不重复维护键集。
 
@@ -160,7 +160,7 @@
 > 并各配 `docs/draft/platforms/<platform>.md` 文档草稿。宿主两把尺逐站实测均通过（字段尺「全部契约项通过」+ 帮助尺「帮助引导与文档：全部通过」），
 > 临时账号核验后均已删除、账号数复原为 **32**。
 
-**共用层结论（22 站共用，已冻结）**：pageId 由 `V2PlatformConfigBridge` `provide` / `FieldGuide` `inject`（prop 可覆盖，
+**共用层结论（34 站共用，已冻结）**：pageId 由 `V2PlatformConfigBridge` `provide` / `FieldGuide` `inject`（prop 可覆盖，
 无 provider 时只渲染 slot）；共用表单 `base/CommonBlogSetting.vue`（12 处）与 `base/impl/CommonGithubSetting.vue`（12 处）
 按包裹式挂载（控件列尾部同行）；平台专有行在该平台组件内挂（普通控件包裹式、单选组/开关 `inline`）；
 弹层用 `el-tooltip :teleported="false"` 留在 `.syp-panel` 内。

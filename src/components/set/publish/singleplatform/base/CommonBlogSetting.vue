@@ -16,6 +16,7 @@ import Adaptors from "~/src/adaptors"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
+import { useFieldPlaceholder } from "~/src/composables/useFieldPlaceholder.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
@@ -37,6 +38,8 @@ const { t } = useVueI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
 const { getPicbedServiceType } = usePicgoBridge()
 const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
+// V2 平台配置页的占位符只给示例值，字段含义由行尾 ⓘ 承担；非 V2 场景返回原文案
+const ph = useFieldPlaceholder()
 
 const props = defineProps({
   apiType: {
@@ -379,7 +382,7 @@ onMounted(async () => {
       <field-guide field="home">
         <el-input
           v-model="formData.cfg.home"
-          :placeholder="props.cfg?.placeholder?.homePlaceholder || ''"
+          :placeholder="ph('home', props.cfg?.placeholder?.homePlaceholder || '')"
           @input="handleHomeChange"
         />
       </field-guide>
@@ -387,7 +390,7 @@ onMounted(async () => {
     <!-- API 地址 -->
     <el-form-item v-if="props.cfg?.apiUrlEnabled != false" :label="t('setting.common.apiurl')" data-syp-tour="apiUrl">
       <field-guide field="apiUrl">
-        <el-input v-model="formData.cfg.apiUrl" :placeholder="props.cfg?.placeholder?.apiUrlPlaceholder || ''" />
+        <el-input v-model="formData.cfg.apiUrl" :placeholder="ph('apiUrl', props.cfg?.placeholder?.apiUrlPlaceholder || '')" />
       </field-guide>
     </el-form-item>
     <!-- 登录名 -->
@@ -395,7 +398,7 @@ onMounted(async () => {
       <field-guide field="username">
         <el-input
           v-model="formData.cfg.username"
-          :placeholder="props.cfg?.placeholder?.usernamePlaceholder || ''"
+          :placeholder="ph('username', props.cfg?.placeholder?.usernamePlaceholder || '')"
           @input="handleUsernameChange"
         />
       </field-guide>
@@ -412,7 +415,7 @@ onMounted(async () => {
           type="password"
           v-model="formData.cfg.password"
           show-password
-          :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
+          :placeholder="ph('password', props.cfg?.placeholder?.passwordPlaceholder || '')"
         />
       </field-guide>
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
@@ -431,7 +434,7 @@ onMounted(async () => {
           type="password"
           v-model="formData.cfg.password"
           show-password
-          :placeholder="props.cfg?.placeholder?.passwordPlaceholder || ''"
+          :placeholder="ph('password', props.cfg?.placeholder?.passwordPlaceholder || '')"
         />
       </field-guide>
       <a v-if="formData.cfg.showTokenTip" :href="formData.cfg.tokenSettingUrl" target="_blank"
@@ -484,7 +487,7 @@ onMounted(async () => {
       <field-guide field="previewUrl">
         <el-input
           v-model="formData.cfg.previewUrl"
-          :placeholder="props.cfg?.placeholder?.previewUrlPlaceholder || ''"
+          :placeholder="ph('previewUrl', props.cfg?.placeholder?.previewUrlPlaceholder || '')"
           :disabled="!props.cfg.allowPreviewUrlChange"
         />
       </field-guide>

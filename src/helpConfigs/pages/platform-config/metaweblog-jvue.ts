@@ -15,16 +15,19 @@ export const jvueHelpConfig: PageHelpConfig = {
   summary:
     "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 Jvue 博客。账号使用 Jvue 的登录用户名与密码（不是 Token）；「平台首页」填博客地址，「API 地址」填站点的 MetaWeblog 端点；正文默认按 Markdown 发布，查看文章链接模板固定为 /post/[postid].html（不支持修改）；Jvue 无发布目录概念，因此没有「发布目录」行。",
   fields: {
-    home: { tip: "你的 Jvue 博客首页地址，如 https://blog.example.com。" },
+    home: { tip: "你的 Jvue 博客首页地址，如 https://blog.example.com。", placeholder: "https://your-jvue.com" },
     apiUrl: {
       tip: "站点的 MetaWeblog API 端点地址（Jvue 需显式填写，不由首页自动推导），通常为站点下提供 XML-RPC 的接口地址。",
+      placeholder: "https://your-jvue.com/action/xmlrpc",
     },
-    username: { tip: "Jvue 后台的登录用户名（不是昵称或显示名）。" },
+    username: { tip: "Jvue 后台的登录用户名（不是昵称或显示名）。", placeholder: "your-jvue-name" },
     password: {
       tip: "Jvue 后台的登录密码（MetaWeblog 按账号密码鉴权，不使用 Token）。",
+      placeholder: "your-jvue-password",
     },
     previewUrl: {
       tip: "查看文章链接模板，固定为 /post/[postid].html，与 Jvue 的文章地址一致；该平台固定使用此规则，不支持修改。",
+      placeholder: "/post/[postid].html",
     },
     pageType: { tip: "正文提交格式，默认 Markdown，保持默认即可。" },
     picbedService: {

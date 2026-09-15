@@ -9,13 +9,14 @@ export const wordpressHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
   summary: "发布到自建或托管的 WordPress 站点。当前配置重点是站点地址、账号和图片发布方式。",
   fields: {
-    home: { tip: "WordPress 站点首页地址，如 https://yourblog.com" },
-    apiUrl: { tip: "WordPress XML-RPC 端点，通常会从首页自动推导为 https://yourblog.com/xmlrpc.php" },
-    username: { tip: "WordPress 管理员用户名" },
+    home: { tip: "WordPress 站点首页地址，如 https://yourblog.com", placeholder: "https://your-wordpress.com" },
+    apiUrl: { tip: "WordPress XML-RPC 端点，通常会从首页自动推导为 https://yourblog.com/xmlrpc.php", placeholder: "https://your-wordpress.com/xmlrpc.php" },
+    username: { tip: "WordPress 管理员用户名", placeholder: "your-wordpress-name" },
     password: {
       tip: "WordPress 账号密码；建议改用「应用程序密码」（后台 → 用户 → 编辑 → 应用程序密码 中生成），避免直接使用登录口令",
+      placeholder: "your-application-password",
     },
-    previewUrl: { tip: "查看文章链接模板，默认 /?p=[postid]，与 WordPress 默认固定链接一致，通常保持默认。" },
+    previewUrl: { tip: "查看文章链接模板，默认 /?p=[postid]，与 WordPress 默认固定链接一致，通常保持默认。", placeholder: "/?p=[postid]" },
     pageType: {
       tip: "正文提交格式：默认 HTML（插件先把笔记转成 HTML 再提交）；选 Markdown 则直接提交 Markdown 原文。",
     },

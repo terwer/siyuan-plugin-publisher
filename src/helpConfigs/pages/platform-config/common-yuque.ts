@@ -9,16 +9,18 @@ export const yuqueHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
   summary: "发布到语雀知识库；语雀 API 发布需要专业会员，这是平台策略限制。",
   fields: {
-    home: { tip: "你的语雀主页地址，如 https://www.yuque.com/yourname" },
-    apiUrl: { tip: "默认使用语雀 v2 API 地址（https://www.yuque.com/api/v2）。除非语雀官方接口变更，一般不需要修改。" },
-    username: { tip: "语雀用户名或登录名，用于和 Token 对应的账号保持一致。" },
+    home: { tip: "你的语雀主页地址，如 https://www.yuque.com/yourname", placeholder: "https://www.yuque.com/" },
+    apiUrl: { tip: "默认使用语雀 v2 API 地址（https://www.yuque.com/api/v2）。除非语雀官方接口变更，一般不需要修改。", placeholder: "https://www.yuque.com/api/v2" },
+    username: { tip: "语雀用户名或登录名，用于和 Token 对应的账号保持一致。", placeholder: "your-yuque-name" },
     password: {
       tip: "语雀 API Token，在语雀设置 → 访问令牌中生成，需对目标知识库有写权限；语雀 API 发布要求账号为专业会员。",
+      placeholder: "your-yuque-token",
       link: "https://www.yuque.com/settings/tokens",
       linkText: "前往生成 Token",
     },
     previewUrl: {
       tip: "预览规则，语雀固定为 /[notebook]/[postid]（不可修改），发布后的查看链接由它拼出完整地址。",
+      placeholder: "/[notebook]/[postid]",
     },
     pageType: {
       tip: "发布格式：语雀按 Markdown 提交正文，保持 Markdown 即可。",

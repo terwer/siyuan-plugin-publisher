@@ -9,17 +9,19 @@ export const zhihuHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary: "通过 Cookie 授权发布到知乎专栏。图片默认上传到知乎；已发布文章暂不支持更换所属专栏。",
   fields: {
-    home: { tip: "默认是知乎专栏地址 https://zhuanlan.zhihu.com，通常不需要修改。" },
-    apiUrl: { tip: "默认是知乎专栏 API 地址，除非平台接口变更，一般保持默认。" },
+    home: { tip: "默认是知乎专栏地址 https://zhuanlan.zhihu.com，通常不需要修改。", placeholder: "https://zhuanlan.zhihu.com" },
+    apiUrl: { tip: "默认是知乎专栏 API 地址，除非平台接口变更，一般保持默认。", placeholder: "https://zhuanlan.zhihu.com/api" },
     username: {
       tip: "你的知乎用户名，即个人主页地址 zhihu.com/people/<用户名> 里的那一段。必须填对，否则读取不到专栏列表。",
+      placeholder: "your-zhihu-name",
     },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」登录知乎，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
         "也可展开「手动编辑」直接粘贴 Cookie。Cookie 过期后需要重新读取。",
+        placeholder: "your-cookie",
     },
-    previewUrl: { tip: "查看文章链接模板，默认 /p/[postid]，与知乎文章地址一致，通常保持默认。" },
+    previewUrl: { tip: "查看文章链接模板，默认 /p/[postid]，与知乎文章地址一致，通常保持默认。", placeholder: "/p/[postid]" },
     pageType: { tip: "正文提交格式，知乎网页版使用 HTML 发布，保持默认的 HTML。" },
     blogid: {
       tip: "要发布到的知乎专栏；验证通过后会读取该账号可发布的专栏列表。已发布文章暂不支持更换所属专栏。",
