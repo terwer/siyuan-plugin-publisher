@@ -406,6 +406,19 @@ export const pre = {
       isAuth: false,
       isSys: false,
     },
+    // 通用入口排在最后：有专用入口时优先选专用，此项作为兜底
+    {
+      platformType: PlatformType.Metaweblog,
+      subPlatformType: SubPlatformType.Metaweblog_Metaweblog,
+      platformKey: "metaweblog_Metaweblog",
+      platformName: "MetaWeblog 通用",
+      platformIcon: svgIcons.iconIFMetaweblog,
+      i18n: { description: "setting.platform.metaweblog.metaweblog.desc" },
+      authMode: AuthMode.API,
+      isEnabled: false,
+      isAuth: false,
+      isSys: false,
+    },
   ],
   wordpressCfg: <DynamicConfig[]>[
     {

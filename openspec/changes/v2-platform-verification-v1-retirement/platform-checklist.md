@@ -74,7 +74,7 @@
 | 21 | 博客园 | `metaweblog_Cnblogs` | `Metaweblog_Cnblogs` | ✅ | ✅ | ✅ | ✅ | ✅ | V2 全链路已验（2026-05-21）；2026-05-22 复验带图文章通过；XML-RPC `proxyXmlrpc` |
 | 22 | Typecho | `metaweblog_Typecho` | `Metaweblog_Typecho` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
 | 23 | Jvue | `metaweblog_Jvue` | `Metaweblog_Jvue` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | |
-| 24 | Metaweblog 通用 | `metaweblog_*` | `Metaweblog_Metaweblog` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | **未在 V2 平台注册表登记**：`src/platforms/pre.ts` 的 `metaweblogCfg` 只有 Cnblogs / Typecho / Jvue，`Metaweblog_Metaweblog` 出现 **0 次** → 「添加账号」平台选择器不提供该入口（宿主实测选择器 MetaWeblog 组仅 3 项），用户无法新建该平台账号。路由层仍可达（`SingleSettingIndex.vue` 映射 `othermeta-setting`、`bridgeRegistry.ts` 映射 `OthermetaSetting`、`dynamicConfig.ts` 推入 subtype），故保留给历史账号。帮助配置已按 34 站同一口径补齐（见下），但**配置页宿主验证因入口不可达而无法进行**，五格保持 ⬜ |
+| 24 | Metaweblog 通用 | `metaweblog_Metaweblog` | `Metaweblog_Metaweblog` | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | 2026-09-18 已登记进 `src/platforms/pre.ts`（`metaweblogCfg` 末位，作为兜底入口），「添加账号」选择器 MetaWeblog 组现为 4 项；配置页宿主验证通过（7 行字段指引 + 帮助浮层 + 引导 8/8，见下节）。路由层 `SingleSettingIndex.vue` 映射 `othermeta-setting`、`bridgeRegistry.ts` 映射 `OthermetaSetting`、`dynamicConfig.ts` 推入 subtype。**发布链路五格仍未测**：该入口不预设 API 地址与查看链接模板，需有真实自建 MetaWeblog 站点才能连通 |
 
 ### Wordpress（2）
 
@@ -106,7 +106,7 @@
 
 ---
 
-## 字段指引与帮助引导（SOP §3.5）— 34 站回写
+## 字段指引与帮助引导（SOP §3.5）— 35 站回写
 
 > **标准**：平台配置页**每一行真实渲染的字段**都要有一个可点的 ⓘ；`fields` 键 = 该行绑定的配置属性名
 > （鉴权行**恒为 `password`**）；指引在字段已填值时仍可见；弹层在 `.syp-panel` 内不裁切不错位；
@@ -153,6 +153,7 @@
 | 22 | Typecho | `metaweblog_Typecho` | 0（占位）→ **7** | 密码型（引导锚点 `password`）；无发布目录行；引导 8/8 | 2026-09-15 |
 | 23 | Jvue | `metaweblog_Jvue` | 0（占位）→ **7** | API 地址需显式填；预览规则固定不可改；引导 8/8 | 2026-09-15 |
 | 26 | Wordpress.com | `wordpress_Wordpressdotcom` | 0（占位）→ **7** | 动态实例 key `…-20b6uc` 回落链正确；引导 8/8 | 2026-09-15 |
+| 24 | Metaweblog 通用 | `metaweblog_Metaweblog` | 0（无专属配置）→ **7** | 入口本轮登记进 `pre.ts` 后方可核验；`[data-syp-field-guide]`=7 与冻结行**顺序一致**；帮助浮层 summary + FAQ 5；引导 8/8 | 2026-09-18 |
 
 > **本轮（2026-09-15）说明**：上表 12 个平台原登记在 `remaining-t1`（仅 `helpUrl`、零 `fields` → 配置页无任何 ⓘ），
 > 现全部拆分为独立 help 配置：新增 `src/helpConfigs/pages/platform-config/` 下 12 个文件（含 summary / fields / faq / tour），
@@ -160,15 +161,18 @@
 > 并各配 `docs/draft/platforms/<platform>.md` 文档草稿。宿主两把尺逐站实测均通过（字段尺「全部契约项通过」+ 帮助尺「帮助引导与文档：全部通过」），
 > 临时账号核验后均已删除、账号数复原为 **32**。
 
-> **`metaweblog_Metaweblog`（Metaweblog 通用）例外说明**：该站也已按同一口径补齐帮助配置
+> **`metaweblog_Metaweblog`（Metaweblog 通用）登记说明（2026-09-18）**：该站帮助配置已按同一口径交付
 > （`metaweblog-metaweblog.ts`：summary + fields 7 + faq 5 + tour 8；纳入 `verifiedConfigs` 与冻结行；
-> `docs/draft/platforms/metaweblog-metaweblog.md`；`remaining-t1` 至此**清空**），
-> 但**本表未登记其为已验收站**——原因是它**不在 V2 平台注册表 `src/platforms/pre.ts`**（`metaweblogCfg` 仅 Cnblogs / Typecho / Jvue），
-> 「添加账号」选择器不提供该入口（宿主实测确认），因此**无法按常规路径打开其配置页做宿主验证**；
-> 其冻结行集（7 行）系按同族站与 `MetaweblogConfig` 默认值（`usernameEnabled=true`、`knowledgeSpaceEnabled=false`）推定，
-> 未经真实渲染观测。是否把它作为用户可选入口暴露出来属**产品决策**，未擅自开工。
+> `docs/draft/platforms/metaweblog-metaweblog.md`；`remaining-t1` 至此**清空**）。
+> 本轮按用户决策把它登记为**用户可选入口**：`src/platforms/pre.ts` 的 `metaweblogCfg` 末位（排在博客园 / Typecho / Jvue
+> 之后作兜底）、中性订阅源图标、i18n 新增 `setting.platform.metaweblog.metaweblog.desc` 并同步 4 处。
+> 入口可达后**宿主验证已完成**：选择器 MetaWeblog 组 4 项、配置页 `[data-syp-field-guide]`=7 且与冻结行**顺序一致**、
+> 5 个文本框占位均为示例值、7 条 ⓘ 各自专属、帮助浮层 summary + FAQ 5 条、引导 8/8。
+> 核验用的临时账号已按**精确 platformKey** 删除，账号数复原为 **32**。
+> 冻结行集（`home` / `apiUrl` / `username` / `password` / `previewUrl` / `pageType` / `picbedService`）与按同族站及
+> `MetaweblogConfig` 默认值（`usernameEnabled=true`、`knowledgeSpaceEnabled=false`）所作推定一致，现已由真实渲染确认。
 
-**共用层结论（34 站共用，已冻结）**：pageId 由 `V2PlatformConfigBridge` `provide` / `FieldGuide` `inject`（prop 可覆盖，
+**共用层结论（35 站共用，已冻结）**：pageId 由 `V2PlatformConfigBridge` `provide` / `FieldGuide` `inject`（prop 可覆盖，
 无 provider 时只渲染 slot）；共用表单 `base/CommonBlogSetting.vue`（12 处）与 `base/impl/CommonGithubSetting.vue`（12 处）
 按包裹式挂载（控件列尾部同行）；平台专有行在该平台组件内挂（普通控件包裹式、单选组/开关 `inline`）；
 弹层用 `el-tooltip :teleported="false"` 留在 `.syp-panel` 内。
