@@ -45,7 +45,6 @@ import { typechoHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaw
 import { metaweblogHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-metaweblog"
 import { jvueHelpConfig } from "~/src/helpConfigs/pages/platform-config/metaweblog-jvue"
 import { wordpressdotcomHelpConfig } from "~/src/helpConfigs/pages/platform-config/wordpress-wordpressdotcom"
-import { remainingT1HelpConfigs } from "~/src/helpConfigs/pages/platform-config/remaining-t1"
 
 // 测试用配置
 const testConfig: PageHelpConfig = {
@@ -235,14 +234,6 @@ describe("verified platform help configs", () => {
       for (const step of config.tour ?? []) {
         expect(step.target, `${config.pageId} tour target`).toMatch(/^\[data-syp-tour='[^']+'\]$/)
       }
-    }
-  })
-
-  it("should move verified split-out platforms out of remaining T1 help configs", () => {
-    const remainingPageIds = remainingT1HelpConfigs.map((config) => config.pageId)
-
-    for (const config of verifiedConfigs) {
-      expect(remainingPageIds, `${config.pageId} should not stay in remaining T1`).not.toContain(config.pageId)
     }
   })
 })

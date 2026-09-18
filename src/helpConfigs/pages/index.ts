@@ -56,7 +56,6 @@ import { typechoHelpConfig } from "./platform-config/metaweblog-typecho"
 import { metaweblogHelpConfig } from "./platform-config/metaweblog-metaweblog"
 import { jvueHelpConfig } from "./platform-config/metaweblog-jvue"
 import { wordpressdotcomHelpConfig } from "./platform-config/wordpress-wordpressdotcom"
-import { remainingT1HelpConfigs } from "./platform-config/remaining-t1"
 
 /**
  * 注册所有页面帮助配置
@@ -111,11 +110,6 @@ export function registerAllHelpConfigs(): void {
   helpRegistry.register(metaweblogHelpConfig)
   helpRegistry.register(jvueHelpConfig)
   helpRegistry.register(wordpressdotcomHelpConfig)
-
-  // 其余 T1 平台
-  for (const cfg of remainingT1HelpConfigs) {
-    helpRegistry.register(cfg)
-  }
 }
 
 // 模块加载时立即注册
