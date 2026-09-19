@@ -74,14 +74,14 @@ export class MetaweblogConfig extends CommonBlogConfig {
   public override middlewareUrl = ""
 
   /**
-   * 是否走宿主会话直传（Electron `session.fetch`，即 Chromium 网络栈）。
+   * 是否经宿主自身的网络栈直连（Electron `session.fetch`，即 Chromium 网络栈）。
    *
-   * 按客户端特征拒绝 Node fetch、但宿主内访问正常的站点需要开启（如 WordPress.com）。
+   * 适用于按客户端特征拒绝 Node fetch、但宿主内访问正常的站点（如 WordPress.com）。
    * 宿主不具备该能力时会自动回退既有通道，不会硬失败。默认关闭，不影响其他 MetaWeblog 平台。
    *
-   * 与 {@link BlogConfig.isCorsProxy} 构成一对处境开关：**开启本项**即走宿主直连（需要当前网络
-   * 能打开站点）；**关闭本项、仅开 `isCorsProxy` 并填好跨域代理地址**则走用户自备的代理
-   * （不需要额外网络条件）。两者都开时以已配置代理地址为准。
+   * **与 `isCorsProxy` 互相独立**：本项只表达「经宿主网络栈直连」，是否还需要额外网络条件
+   * 因平台而异，不做任何隐含绑定；若平台同时希望支持用户自备的跨域代理，另开 `isCorsProxy`
+   * 并在其配置项填入代理地址即可（见 `resolveXmlrpcTransport` 的选型规则）。
    */
   public isHostSessionFetch = false
 

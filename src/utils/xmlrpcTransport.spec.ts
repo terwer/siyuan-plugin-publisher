@@ -14,7 +14,7 @@ const publicUrl = "https://rpc.cnblogs.com/metaweblog/"
 const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
 
 describe("resolveXmlrpcTransport", () => {
-  it("prefers the user-provided CORS proxy when the platform declares host session and an address is set", () => {
+  it("prefers the user-provided CORS proxy when the platform declares CORS and an address is set", () => {
     expect(
       resolveXmlrpcTransport({
         forceProxy: false,
@@ -23,6 +23,19 @@ describe("resolveXmlrpcTransport", () => {
         isCorsProxy: true,
         hasCorsProxyUrl: true,
         isHostSessionFetch: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("cors-proxy-fetch")
+  })
+
+  it("uses the CORS proxy for a CORS-only platform when an address is set", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isCorsProxy: true,
+        hasCorsProxyUrl: true,
         canUseHostSessionFetch: true,
       })
     ).toBe("cors-proxy-fetch")
@@ -42,20 +55,7 @@ describe("resolveXmlrpcTransport", () => {
     ).toBe("electron-session-fetch")
   })
 
-  it("keeps a platform that only declares isCorsProxy on its existing channel even when an address is set", () => {
-    expect(
-      resolveXmlrpcTransport({
-        forceProxy: false,
-        isUseSiyuanProxy: false,
-        canUsePluginFetch: true,
-        isCorsProxy: true,
-        hasCorsProxyUrl: true,
-        canUseHostSessionFetch: true,
-      })
-    ).toBe("middleware-fetch")
-  })
-
-  it("keeps a platform that only declares isCorsProxy on its existing channel when no address is set", () => {
+  it("keeps a CORS platform on its existing channel when no address is configured", () => {
     expect(
       resolveXmlrpcTransport({
         forceProxy: false,
