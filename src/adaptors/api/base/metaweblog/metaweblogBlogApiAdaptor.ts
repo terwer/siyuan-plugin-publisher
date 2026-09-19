@@ -34,9 +34,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   /** 本平台是否声明走宿主会话直传（基类持有的 cfg 为通用类型，故在构造时固化一次） */
   private readonly isHostSessionFetch: boolean
 
-  /** 本平台是否声明 XML-RPC 可经用户自备的跨域代理发出 */
-  private readonly isCorsXmlrpcProxy: boolean
-
   /**
    * 初始化 metaweblog API 适配器
    *
@@ -49,13 +46,11 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     this.cfg.blogid = "metaweblog"
     this.logger = createAppLogger("metaweblog-api-adaptor")
     this.isHostSessionFetch = cfg.isHostSessionFetch
-    this.isCorsXmlrpcProxy = cfg.isCorsXmlrpcProxy
     const { proxyXmlrpc } = useProxy(
       cfg.middlewareUrl,
       cfg.corsAnywhereUrl,
       cfg.isCorsProxy,
       cfg.isHostSessionFetch,
-      cfg.isCorsXmlrpcProxy
     )
     this.proxyXmlrpc = proxyXmlrpc
   }
@@ -270,7 +265,7 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       return
     }
     // 用户配置了跨域代理时走代理通路，无需宿主会话预热
-    if (this.isCorsXmlrpcProxy && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
+    if (this.cfg.isCorsProxy && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
       return
     }
     if (!this.hostSessionReadyPromise) {

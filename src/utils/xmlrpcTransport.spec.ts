@@ -14,13 +14,13 @@ const publicUrl = "https://rpc.cnblogs.com/metaweblog/"
 const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
 
 describe("resolveXmlrpcTransport", () => {
-  it("prefers the user-provided CORS proxy when the platform declares it and an address is set", () => {
+  it("prefers the user-provided CORS proxy when the platform declares host session and an address is set", () => {
     expect(
       resolveXmlrpcTransport({
         forceProxy: false,
         isUseSiyuanProxy: false,
         canUsePluginFetch: true,
-        isCorsXmlrpcProxy: true,
+        isCorsProxy: true,
         hasCorsProxyUrl: true,
         isHostSessionFetch: true,
         canUseHostSessionFetch: true,
@@ -34,7 +34,7 @@ describe("resolveXmlrpcTransport", () => {
         forceProxy: false,
         isUseSiyuanProxy: false,
         canUsePluginFetch: true,
-        isCorsXmlrpcProxy: true,
+        isCorsProxy: true,
         hasCorsProxyUrl: false,
         isHostSessionFetch: true,
         canUseHostSessionFetch: true,
@@ -42,7 +42,7 @@ describe("resolveXmlrpcTransport", () => {
     ).toBe("electron-session-fetch")
   })
 
-  it("leaves a CORS-restricted platform on its existing channel when the new switch is not declared", () => {
+  it("keeps a platform that only declares isCorsProxy on its existing channel even when an address is set", () => {
     expect(
       resolveXmlrpcTransport({
         forceProxy: false,
@@ -50,6 +50,19 @@ describe("resolveXmlrpcTransport", () => {
         canUsePluginFetch: true,
         isCorsProxy: true,
         hasCorsProxyUrl: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("middleware-fetch")
+  })
+
+  it("keeps a platform that only declares isCorsProxy on its existing channel when no address is set", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isCorsProxy: true,
+        hasCorsProxyUrl: false,
         canUseHostSessionFetch: true,
       })
     ).toBe("middleware-fetch")

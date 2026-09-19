@@ -25,15 +25,8 @@ interface XmlrpcTransportContext {
   isUseSiyuanProxy: boolean
   /** 插件宿主是否具备 win.require + bundled node-fetch */
   canUsePluginFetch: boolean
-  /** CORS 受限平台（如 Telegra.ph） */
+  /** CORS 受限平台（如 Telegra.ph）；与 isHostSessionFetch 构成一对处境开关 */
   isCorsProxy?: boolean
-  /**
-   * 平台声明其 XML-RPC 可经**用户自备的跨域代理**发出。
-   *
-   * 独立于 {@link isCorsProxy}：后者是各平台既有的「走共享中间件」语义，
-   * 本开关只对显式声明的平台生效，避免改变其他平台既有的通道选择。
-   */
-  isCorsXmlrpcProxy?: boolean
   /**
    * 用户已配置跨域代理地址。
    *
@@ -68,21 +61,24 @@ interface XmlrpcTransportHandlers {
  * MetaWeblog XML-RPC 传输选型。
  *
  * 优先级（与 {@link createFormUploadClient} 共用 publishTransport 规则）：
- * 1. **cors-proxy-fetch** — 平台**显式声明** `isCorsXmlrpcProxy` 且用户已配置跨域代理地址（用户自备、可直连）
- * 2. **electron-session-fetch** — 平台声明宿主会话直传且宿主具备该能力（用户未配代理时的通路）
- * 3. **middleware-fetch** — 其余 `isCorsProxy`（各平台既有语义，如 Telegra.ph，保持不变）
+ * 1. **cors-proxy-fetch** — 平台**声明了宿主直连**且已配置跨域代理地址（走用户自备代理，不依赖额外网络条件）
+ * 2. **electron-session-fetch** — 平台声明宿主直连且宿主具备该能力（未配代理时的通路，需当前网络能打开站点）
+ * 3. **middleware-fetch** — 其余 `isCorsProxy`（各平台既有语义，如 Telegra.ph，**保持不变**）
  * 4. **plugin-node-fetch** — 有插件直传能力时一律直连，禁止套思源 forwardProxy（Electron/V2、本地 WP、公网博客园均适用）
  * 5. **siyuan-forward-proxy** — 无直传能力且 `isUseSiyuanProxy || forceProxy` 时（loopback/私网目标也可：思源内核默认模式允许访问本机）
  * 6. **middleware-fetch** — 浏览器 + CORS 中间件回退（无代理条件时）
  *
- * 前两条是**声明式**的：只有显式声明的平台会命中，其余平台（含 Telegra.ph）的通道选择完全不变。
- * 二者构成互补的两条通路：**用户配了跨域代理就走代理**（无需额外网络条件），
- * **没配就走宿主会话直传**（需要能访问站点本身）。任一能力缺失都按后续优先级回退，不硬失败。
+ * 前两条是**同一处境下的两种结果**，且都以 `isHostSessionFetch` 为前提：
+ * 声明宿主直连的平台（即直连站点可能需要额外网络条件的平台）方可配一条用户自备代理作为替代，
+ * **已配置地址就走代理**、**否则走宿主会话直传**。
+ *
+ * 这样 `isCorsProxy` 的既有语义不被挪用：单独使用它的平台（未声明宿主直连）在第 3 条保持原样，
+ * 不会因为用户填了代理地址而被改道；未来平台按需分别声明所需开关即可。
  *
  * SSRF 防护由内核 `SSRFSafeDialer` 兜底（`--safe-mode` 时内核拒绝 loopback/私网并返回错误）。
  */
 function resolveXmlrpcTransport(ctx: XmlrpcTransportContext): XmlrpcTransport {
-  if (ctx.isCorsXmlrpcProxy && ctx.hasCorsProxyUrl) {
+  if (ctx.isHostSessionFetch && ctx.isCorsProxy && ctx.hasCorsProxyUrl) {
     return "cors-proxy-fetch"
   }
   if (ctx.isHostSessionFetch && ctx.canUseHostSessionFetch) {
@@ -93,7 +89,8 @@ function resolveXmlrpcTransport(ctx: XmlrpcTransportContext): XmlrpcTransport {
   }
   if (ctx.canUsePluginFetch) {
     return "plugin-node-fetch"
-  }  if (
+  }
+  if (
     shouldUseSiyuanForwardProxy({
       forceProxy: ctx.forceProxy,
       isUseSiyuanProxy: ctx.isUseSiyuanProxy,

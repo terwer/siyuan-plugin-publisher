@@ -50,9 +50,8 @@ class WordpressdotcomConfig extends MetaweblogConfig {
     // 另提供一条不需要额外网络条件的通路：用户在「跨域代理地址」填入自备的代理服务后，
     // XML-RPC 即改经该代理发出（见 resolveXmlrpcTransport）。**不内置共享代理地址**，
     // 留空则回落到上面的宿主会话直传。两项均只对本平台生效。
-    this.isCorsXmlrpcProxy = true
     // 该开关同时决定配置页是否渲染「跨域代理地址」输入框（见 CommonBlogSetting.vue）。
-    // 本平台的传输选型由上面的 isCorsXmlrpcProxy / isHostSessionFetch 先判定，
+    // 本平台的传输选型由 isCorsProxy 与 isHostSessionFetch 先判定，
     // 因此这里开启只影响输入框的显示，不会把请求改道到共享中间件。
     this.isCorsProxy = true
   }

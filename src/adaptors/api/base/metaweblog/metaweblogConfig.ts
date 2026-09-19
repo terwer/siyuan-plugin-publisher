@@ -78,16 +78,12 @@ export class MetaweblogConfig extends CommonBlogConfig {
    *
    * 按客户端特征拒绝 Node fetch、但宿主内访问正常的站点需要开启（如 WordPress.com）。
    * 宿主不具备该能力时会自动回退既有通道，不会硬失败。默认关闭，不影响其他 MetaWeblog 平台。
+   *
+   * 与 {@link BlogConfig.isCorsProxy} 构成一对处境开关：**开启本项**即走宿主直连（需要当前网络
+   * 能打开站点）；**关闭本项、仅开 `isCorsProxy` 并填好跨域代理地址**则走用户自备的代理
+   * （不需要额外网络条件）。两者都开时以已配置代理地址为准。
    */
   public isHostSessionFetch = false
-
-  /**
-   * XML-RPC 是否可经**用户自备的跨域代理**发出。
-   *
-   * 用户填了「跨域代理地址」就走它（该服务本身可直连，不需要额外网络条件），
-   * 留空则回落到 {@link isHostSessionFetch} 的通路。默认关闭，只对显式声明的平台生效。
-   */
-  public isCorsXmlrpcProxy = false
 
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(home, apiUrl, username, password, middlewareUrl)

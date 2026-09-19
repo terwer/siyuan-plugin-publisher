@@ -26,7 +26,6 @@ import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlr
  * @param corsProxyUrl - 可选，用户自备的跨域代理地址，可留空
  * @param isCorsProxy - 可选，CORS 受限平台要求强制走新 CORS 代理时传 true
  * @param isHostSessionFetch - 可选，要求走宿主会话直传（Electron `session.fetch`）时传 true
- * @param isCorsXmlrpcProxy - 可选，声明本平台的 XML-RPC 可经用户自备的跨域代理发出时传 true
  * @author terwer
  * @version 1.7.0
  * @since 1.7.0
@@ -35,8 +34,7 @@ const useProxy = (
   middlewareUrl?: string,
   corsProxyUrl?: string,
   isCorsProxy?: boolean,
-  isHostSessionFetch?: boolean,
-  isCorsXmlrpcProxy?: boolean
+  isHostSessionFetch?: boolean
 ) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
@@ -185,7 +183,6 @@ const useProxy = (
       isUseSiyuanProxy,
       canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
       isCorsProxy,
-      isCorsXmlrpcProxy,
       hasCorsProxyUrl: !StrUtil.isEmptyString(corsProxyUrl),
       isHostSessionFetch,
       canUseHostSessionFetch: HostSessionFetchUtil.canUseSessionFetch(appInstance),
