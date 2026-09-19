@@ -25,6 +25,20 @@
             <span class="syp-btn-text-entry__label">{{ t("v2.panel.singlePublish") }}</span>
           </SypTooltip>
           <SypTooltip
+            v-if="isQuickPublishView"
+            content=""
+            ellipsis
+            inline-flex
+            tag="button"
+            class="syp-btn syp-btn-quiet syp-btn-text-entry"
+            type="button"
+            :aria-label="t('v2.panel.batchPublish')"
+            @click.stop="openBatchPublishForCurrent"
+          >
+            <LucideLayers />
+            <span class="syp-btn-text-entry__label">{{ t("v2.panel.batchPublish") }}</span>
+          </SypTooltip>
+          <SypTooltip
             v-if="!isSettingsView && !isManageView"
             content=""
             ellipsis
@@ -348,6 +362,7 @@ import LucideSettings from "~icons/lucide/settings"
 import LucideHouse from "~icons/lucide/house"
 import LucideX from "~icons/lucide/x"
 import LucidePenLine from "~icons/lucide/pen-line"
+import LucideLayers from "~icons/lucide/layers"
 
 const props = defineProps<{
   initialView?: "quick_publish" | "settings"
@@ -627,6 +642,16 @@ async function backFromBatchPublish() {
  */
 async function openSinglePublishForCurrent() {
   currentView.value = "single_publish"
+}
+
+/**
+ * quick_publish 卡片「批量分发」：直接进入批量发布视图。
+ *
+ * 与文章管理内的批量入口同一视图，这里只是把入口也放到顶部动作条，
+ * 从快速发布页即可直接进入，无需先绕到文章管理。
+ */
+async function openBatchPublishForCurrent() {
+  currentView.value = "batch_publish"
 }
 
 function onSinglePublishBack() {
