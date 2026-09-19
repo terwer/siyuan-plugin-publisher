@@ -372,9 +372,20 @@
     gap $syp-spacing-sm
     flex-shrink 0
 
+    // 选择控件所在行：允许控件收缩，避免右侧提示被挤成竖排
+    &.is-notebooks
+      min-width 0
+      flex-wrap nowrap
+
+      .syp-settings-notebooks-select
+        flex 0 1 auto
+        min-width 160px
+        max-width 240px
+
   .syp-settings-status-text
     font-size $syp-font-size-xs
     color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+    white-space nowrap
 
   .syp-settings-detail-grid
     display grid

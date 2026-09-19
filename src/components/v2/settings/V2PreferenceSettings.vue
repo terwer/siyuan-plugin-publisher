@@ -39,7 +39,6 @@
                 </el-select>
                 <span v-if="saveStateMap['publishSourceNotebooks'] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("v2.common.saved") }}</span>
                 <span v-else-if="saveStateMap['publishSourceNotebooks'] === 'failed'" class="syp-settings-status-text is-error">{{ t("v2.common.saveFailed") }}</span>
-                <span v-else class="syp-settings-status-text">{{ getNotebooksText() }}</span>
               </template>
               <template v-else>
                 <span v-if="saveStateMap[item.key] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("v2.common.saved") }}</span>
@@ -257,17 +256,6 @@ const visibleGroups = computed(() => {
 
 function getBooleanValue(key: PreferenceKey) {
   return preferenceForm.value[key] === true
-}
-
-function getNotebooksText() {
-  const ids = preferenceForm.value.publishSourceNotebooks ?? []
-  if (ids.length === 0) {
-    return t("v2.preference.item.publishSourceNotebooks.unrestricted")
-  }
-  return notebookOptions.value
-    .filter((nb) => ids.includes(nb.id))
-    .map((nb) => nb.name)
-    .join(", ")
 }
 
 async function handleNotebooksChange(ids: string[]) {
