@@ -212,18 +212,10 @@
             </div>
           </div>
 
-          <div v-if="quickPublish.state.isLoading" class="syp-platform-skeleton-grid">
-            <div class="syp-platform-skeleton">
-              <div class="syp-platform-skeleton__title">{{ t("v2.quickPublish.loading.platforms") }}</div>
-              <div class="syp-platform-skeleton__row"></div>
-              <div class="syp-platform-skeleton__row short"></div>
-              <div class="syp-platform-skeleton__row"></div>
-            </div>
-            <div class="syp-platform-skeleton">
-              <div class="syp-platform-skeleton__title">{{ t("v2.quickPublish.loading.status") }}</div>
-              <div class="syp-platform-skeleton__row short"></div>
-              <div class="syp-platform-skeleton__row"></div>
-            </div>
+          <!-- 加载骨架：复用真实卡片组件的骨架模式，网格、卡片结构、间距与尺寸完全一致，
+               加载完成前后不发生布局跳变 -->
+          <div v-if="quickPublish.state.isLoading" class="syp-platform-grid" aria-busy="true">
+            <V2PlatformCard v-for="n in 6" :key="n" skeleton />
           </div>
 
           <div v-else-if="!quickPublish.state.hasDocument" class="syp-empty-state">
@@ -1102,31 +1094,10 @@ async function retryInit() {
   font-size 13px
   color var(--b3-theme-on-surface-light, $syp-text-secondary)
 
-.syp-platform-skeleton-grid,
 .syp-platform-grid
   display grid
   grid-template-columns repeat(2, minmax(0, 1fr))
   gap 10px
-
-.syp-platform-skeleton
-  padding $syp-sm-card-padding
-  border-radius $syp-sm-card-radius
-  background $syp-card-bg-gradient
-  border 1px solid var(--b3-border-color, $syp-border-primary)
-
-.syp-platform-skeleton__title
-  font-size 13px
-  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
-  margin-bottom 14px
-
-.syp-platform-skeleton__row
-  height 32px
-  border-radius 6px
-  background linear-gradient(90deg, var(--b3-theme-surface-light, #eef2f7) 0%, var(--b3-theme-surface, #f7f9fc) 100%)
-  margin-bottom 8px
-
-  &.short
-    width 62%
 
 .syp-empty-state
   display flex
@@ -1219,7 +1190,6 @@ async function retryInit() {
   .syp-header-title-group
     gap 8px
 
-  .syp-platform-skeleton-grid,
   .syp-platform-grid
     grid-template-columns 1fr
 </style>
