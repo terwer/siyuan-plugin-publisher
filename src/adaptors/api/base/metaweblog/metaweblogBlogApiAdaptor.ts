@@ -15,6 +15,7 @@ import { BrowserUtil } from "zhi-device"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
+import HostSessionFetchUtil from "~/src/utils/HostSessionFetchUtil.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
@@ -27,6 +28,12 @@ import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   protected readonly proxyXmlrpc: any
 
+  /** 宿主会话就绪的幂等 Promise（仅平台声明走宿主会话直传时使用） */
+  private hostSessionReadyPromise?: Promise<boolean>
+
+  /** 本平台是否声明走宿主会话直传（基类持有的 cfg 为通用类型，故在构造时固化一次） */
+  private readonly isHostSessionFetch: boolean
+
   /**
    * 初始化 metaweblog API 适配器
    *
@@ -38,7 +45,8 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
 
     this.cfg.blogid = "metaweblog"
     this.logger = createAppLogger("metaweblog-api-adaptor")
-    const { proxyXmlrpc } = useProxy(cfg.middlewareUrl)
+    this.isHostSessionFetch = cfg.isHostSessionFetch
+    const { proxyXmlrpc } = useProxy(cfg.middlewareUrl, undefined, cfg.isCorsProxy, cfg.isHostSessionFetch)
     this.proxyXmlrpc = proxyXmlrpc
   }
 
@@ -238,7 +246,31 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   }
 
   protected async metaweblogCall(method: string, params: any[]) {
+    await this.ensureHostSessionReady()
     return await this.proxyXmlrpc(this.cfg.apiUrl, method, params)
+  }
+
+  /**
+   * 确保宿主会话已对该站点可用（仅在平台声明走宿主会话直传时执行）。
+   *
+   * 幂等：同一适配器实例内只执行一次，失败也不阻塞后续调用（由传输层决定回退）。
+   */
+  private async ensureHostSessionReady(): Promise<void> {
+    if (!this.isHostSessionFetch) {
+      return
+    }
+    if (!this.hostSessionReadyPromise) {
+      this.hostSessionReadyPromise = HostSessionFetchUtil.ensureSiteReady(
+        this.appInstance,
+        this.cfg.home,
+        this.cfg.apiUrl,
+        this.logger
+      ).catch((e) => {
+        this.logger.warn("ensureSiteReady failed, transport will fall back", e)
+        return false
+      })
+    }
+    await this.hostSessionReadyPromise
   }
 
   /**

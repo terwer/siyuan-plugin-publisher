@@ -14,6 +14,53 @@ const publicUrl = "https://rpc.cnblogs.com/metaweblog/"
 const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
 
 describe("resolveXmlrpcTransport", () => {
+  it("prefers the host session channel when the platform declares it and the host supports it", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isHostSessionFetch: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("electron-session-fetch")
+  })
+
+  it("falls back to the existing channel when the host lacks the host session capability", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isHostSessionFetch: true,
+        canUseHostSessionFetch: false,
+      })
+    ).toBe("plugin-node-fetch")
+  })
+
+  it("does not change other platforms when the host session channel is not declared", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("plugin-node-fetch")
+  })
+
+  it("keeps CORS-restricted platforms on the middleware channel", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isCorsProxy: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("middleware-fetch")
+  })
+
   it("prefers plugin-node-fetch when plugin can direct fetch", () => {
     expect(
       resolveXmlrpcTransport({
@@ -74,10 +121,27 @@ describe("executeXmlrpcTransport", () => {
         pluginNodeFetch,
         siyuanForwardProxy: vi.fn(),
         middlewareFetch: vi.fn(),
+        hostSessionFetch: vi.fn(),
       },
       { url: publicUrl, xmlBody: "<xml/>", forceProxy: false }
     )
     expect(pluginNodeFetch).toHaveBeenCalled()
+    expect(text).toContain("methodResponse")
+  })
+
+  it("routes through the host session channel when selected", async () => {
+    const hostSessionFetch = vi.fn(async () => xml)
+    const text = await executeXmlrpcTransport(
+      "electron-session-fetch",
+      {
+        pluginNodeFetch: vi.fn(),
+        siyuanForwardProxy: vi.fn(),
+        middlewareFetch: vi.fn(),
+        hostSessionFetch,
+      },
+      { url: publicUrl, xmlBody: "<xml/>", forceProxy: false }
+    )
+    expect(hostSessionFetch).toHaveBeenCalled()
     expect(text).toContain("methodResponse")
   })
 })

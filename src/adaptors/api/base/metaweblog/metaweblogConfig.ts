@@ -73,6 +73,14 @@ export class MetaweblogConfig extends CommonBlogConfig {
    */
   public override middlewareUrl = ""
 
+  /**
+   * 是否走宿主会话直传（Electron `session.fetch`，即 Chromium 网络栈）。
+   *
+   * 按客户端特征拒绝 Node fetch、但宿主内访问正常的站点需要开启（如 WordPress.com）。
+   * 宿主不具备该能力时会自动回退既有通道，不会硬失败。默认关闭，不影响其他 MetaWeblog 平台。
+   */
+  public isHostSessionFetch = false
+
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(home, apiUrl, username, password, middlewareUrl)
 

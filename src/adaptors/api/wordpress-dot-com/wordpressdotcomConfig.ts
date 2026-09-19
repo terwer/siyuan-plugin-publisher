@@ -42,6 +42,10 @@ class WordpressdotcomConfig extends MetaweblogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+
+    // WordPress.com 的站点域按客户端特征拒绝 Node fetch（返回需脚本校验的中间页），
+    // 而宿主自身的网络栈访问正常，故走宿主会话直传；宿主不具备该能力时自动回退，不硬失败。
+    this.isHostSessionFetch = true
   }
 }
 

@@ -16,6 +16,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
+import HostSessionFetchUtil from "~/src/utils/HostSessionFetchUtil.ts"
 import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlrpcTransport.ts"
 
 /**
@@ -24,11 +25,12 @@ import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlr
  * @param middlewareUrl - 可选，如果使用 CommonFetchClient 需要传递，否则可留空
  * @param corsProxyUrl - 可选，可留空
  * @param isCorsProxy - 可选，CORS 受限平台要求强制走新 CORS 代理时传 true
+ * @param isHostSessionFetch - 可选，要求走宿主会话直传（Electron `session.fetch`）时传 true
  * @author terwer
  * @version 1.7.0
  * @since 1.7.0
  */
-const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: boolean) => {
+const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: boolean, isHostSessionFetch?: boolean) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
 
@@ -41,6 +43,32 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: b
   corsProxyUrl = corsProxyUrl ?? ""
   const commonFetchClient = new CommonFetchClient(appInstance, apiUrl, middlewareUrl, isDev)
   const serializer = new Serializer(appInstance)
+
+  /**
+   * 宿主会话直传的 XML-RPC POST（Electron `session.fetch`，即 Chromium 网络栈）。
+   *
+   * 与 {@link PluginFetchUtil.postText} 的差异只在传输层：这里复用宿主自身的网络栈与默认会话，
+   * 因此对按客户端特征受限、但宿主内访问正常的站点可用（如 WordPress.com）。
+   */
+  const hostSessionPostText = async (url: string, body: string): Promise<string> => {
+    const doFetch = HostSessionFetchUtil.getSessionFetch(appInstance, logger)
+    if (!doFetch) {
+      throw new Error("宿主会话直传不可用")
+    }
+    const res = await doFetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "text/xml; charset=utf-8" },
+      body,
+    })
+    const status = Number(res.status)
+    if (!(status >= 200 && status < 300)) {
+      const errText = await res.text()
+      throw new Error(
+        StrUtil.isEmptyString(errText) ? `HTTP request failed (${status})` : `HTTP request failed (${status}): ${errText}`
+      )
+    }
+    return await res.text()
+  }
 
   /**
    * 执行代理 fetch 请求
@@ -122,6 +150,8 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: b
       isUseSiyuanProxy,
       canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
       isCorsProxy,
+      isHostSessionFetch,
+      canUseHostSessionFetch: HostSessionFetchUtil.canUseSessionFetch(appInstance),
     })
     logger.info(`XML-RPC transport => ${transport}`, url)
     let resText = await executeXmlrpcTransport(
@@ -133,6 +163,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: b
           siyuanProxyFetch(endpoint, [], body, "POST", "text/xml", "base64", "text"),
         middlewareFetch: (endpoint, body, fp) =>
           proxyFetch(endpoint, [], body, "POST", "text/xml", fp, "base64", "text"),
+        hostSessionFetch: (endpoint, body) => hostSessionPostText(endpoint, body),
       },
       { url, xmlBody, forceProxy }
     )
