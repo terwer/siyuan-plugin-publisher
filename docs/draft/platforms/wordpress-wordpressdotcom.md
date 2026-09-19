@@ -4,11 +4,14 @@
 
 通过 **MetaWeblog XML-RPC** 协议把思源笔记发布到 **WordPress.com** 站点。
 
+> **前提：需要代理。** WordPress.com 在部分网络环境下无法直接访问，请自备代理并保持开启；**先用浏览器确认能打开你的站点**，再回来验证与发布。这是网络环境限制，不是插件配置问题。
+
 ## 一、准备
 
 1. 一个 **WordPress.com** 站点（如 `yoursite.wordpress.com`）。
 2. WordPress.com 的**登录用户名与登录密码**（MetaWeblog 按账号密码鉴权，不使用 Token）。
 3. 站点已开启 XML-RPC 接口（WordPress 默认提供 `/xmlrpc.php`）。
+4. **能正常打开该站点的网络环境（代理）**——见上方前提说明。
 
 ## 二、配置
 

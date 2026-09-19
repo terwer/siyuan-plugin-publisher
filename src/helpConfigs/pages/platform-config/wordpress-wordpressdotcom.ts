@@ -13,10 +13,10 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpressdotcom",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary:
-    "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 WordPress.com 站点。账号使用 WordPress.com 的登录用户名与密码（不是 Token）；「平台首页」填站点地址，API 地址由该地址自动推导；正文默认按 HTML 发布，查看文章链接模板为 /?p=[postid]；WordPress.com 无发布目录概念，因此没有「发布目录」行。",
+    "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 WordPress.com 站点。账号使用 WordPress.com 的登录用户名与密码（不是 Token）；「平台首页」填站点地址，API 地址由该地址自动推导；正文默认按 HTML 发布，查看文章链接模板为 /?p=[postid]；WordPress.com 无发布目录概念，因此没有「发布目录」行。访问该站点有两条通路，任选其一：「跨域代理地址」填入你自备的跨域代理服务（无需额外网络条件），或留空由思源宿主自身的网络通道直连站点（需当前网络能打开该站点）。",
   fields: {
     home: {
-      tip: "你的 WordPress.com 站点地址，如 https://yoursite.wordpress.com；填写后会据此类推出 MetaWeblog API 地址。",
+      tip: "你的 WordPress.com 站点地址，如 https://yoursite.wordpress.com；填写后会据此类推出 MetaWeblog API 地址。注意：该站点在部分网络环境下无法直接访问，需要能打开它的网络环境（如代理）。",
       placeholder: "https://your-site.wordpress.com",
     },
     apiUrl: {
@@ -33,6 +33,12 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
       placeholder: "/?p=[postid]",
     },
     pageType: { tip: "正文提交格式，默认 HTML；WordPress.com 按原样接收正文，保持默认即可。" },
+    corsAnywhereUrl: {
+      tip:
+        "跨域代理地址（可选）。填入你自备的跨域代理服务后，发布请求经它转发，**无需额外网络条件**即可访问 WordPress.com；" +
+        "留空则改由思源宿主自身的网络通道直连站点，此时需当前网络能正常打开该站点。两条通路任选其一。",
+      placeholder: "https://your-cors-proxy.example.com",
+    },
     picbedService: {
       tip:
         "图片发布方式：可选「当前平台」（图片随文章提交到 WordPress.com 媒体库）、「PicGo 强烈推荐」（改用你配置的 PicGo）、" +
@@ -45,8 +51,8 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
       a: "确认用户名是 WordPress.com 的登录用户名、密码是登录密码（该平台不使用 Token）；再确认站点地址与 API 地址正确。",
     },
     {
-      q: "提示网络错误、连不上站点？",
-      a: "先确认当前网络能正常打开你的 WordPress.com 站点（用浏览器访问首页即可）。插件按宿主自身的网络通道访问站点，与浏览器能否打开保持一致；若所在网络无法访问该站点，请先解决网络可达性再回来验证。",
+      q: "网络不通 / 连不上站点，该怎么办？",
+      a: "本平台提供两条通路，按你的网络情况任选其一：① 在「跨域代理地址」填入你自备的跨域代理服务，发布请求经它转发，不需要额外网络条件；② 留空，由思源宿主自身的网络通道直连站点，此时需要当前网络能正常打开你的 WordPress.com 站点（可先用浏览器确认）。",
     },
     {
       q: "为什么没有「发布目录」？",
@@ -73,6 +79,12 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
     { target: "[data-syp-tour='previewUrl']", title: "查看链接", content: "查看文章链接模板默认 /?p=[postid]；启用自定义永久链接时改成实际形态。", placement: "bottom" },
     { target: "[data-syp-tour='pageType']", title: "发布格式", content: "正文默认按 HTML 提交，保持默认即可。", placement: "bottom" },
     { target: "[data-syp-tour='picbedService']", title: "图片发布", content: "按需选择图床：当前平台 / PicGo / 不使用。", placement: "bottom" },
+    {
+      target: "[data-syp-tour='corsProxy']",
+      title: "跨域代理地址",
+      content: "可选。填入你自备的跨域代理服务后，发布请求经它转发，无需额外网络条件；留空则由思源宿主自身的网络通道直连站点，需当前网络能打开该站点。",
+      placement: "top",
+    },
     { target: "[data-syp-tour='validate']", title: "验证并保存", content: "填写完成后点「验证并保存」，验证连通性通过即可开始发布。", placement: "top" },
   ],
 }
