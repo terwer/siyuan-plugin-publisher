@@ -45,6 +45,10 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
       a: "确认用户名是 WordPress.com 的登录用户名、密码是登录密码（该平台不使用 Token）；再确认站点地址与 API 地址正确。",
     },
     {
+      q: "提示网络错误、连不上站点？",
+      a: "先确认当前网络能正常打开你的 WordPress.com 站点（用浏览器访问首页即可）。插件按宿主自身的网络通道访问站点，与浏览器能否打开保持一致；若所在网络无法访问该站点，请先解决网络可达性再回来验证。",
+    },
+    {
       q: "为什么没有「发布目录」？",
       a: "WordPress.com 通过 MetaWeblog 发布时不暴露分类目录选择，文章直接进入站点，因此配置页不提供该行。",
     },
