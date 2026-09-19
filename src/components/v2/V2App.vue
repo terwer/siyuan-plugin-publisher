@@ -212,23 +212,20 @@
             </div>
           </div>
 
-          <!-- 加载骨架：复用真实卡片组件的骨架模式，网格、卡片结构、间距与尺寸完全一致，
-               加载完成前后不发生布局跳变 -->
-          <div v-if="quickPublish.state.isLoading" class="syp-platform-grid" aria-busy="true">
-            <V2PlatformCard v-for="n in 6" :key="n" skeleton />
-          </div>
+          <!-- 数据在极短时间内返回，期间不渲染任何占位：直接等结果出来即可，
+               加载提示与骨架都只会成为多余的一闪 -->
+          <template v-if="!quickPublish.state.isLoading">
+            <div v-if="!quickPublish.state.hasDocument" class="syp-empty-state">
+              <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noDocument.title") }}</div>
+              <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noDocument.desc") }}</div>
+            </div>
 
-          <div v-else-if="!quickPublish.state.hasDocument" class="syp-empty-state">
-            <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noDocument.title") }}</div>
-            <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noDocument.desc") }}</div>
-          </div>
+            <div v-else-if="!hasPlatforms" class="syp-empty-state">
+              <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noPlatforms.title") }}</div>
+              <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noPlatforms.desc") }}</div>
+            </div>
 
-          <div v-else-if="!hasPlatforms" class="syp-empty-state">
-            <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noPlatforms.title") }}</div>
-            <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noPlatforms.desc") }}</div>
-          </div>
-
-          <div v-else class="syp-platform-grid">
+            <div v-else class="syp-platform-grid">
             <V2PlatformCard
               v-for="item in quickPublish.state.platformItems"
               :key="item.platformKey"
@@ -247,7 +244,8 @@
               @force-delete="forceDeletePlatform(item)"
               @configure="configurePlatform(item)"
             />
-          </div>
+            </div>
+          </template>
         </section>
 
         <V2AccountList

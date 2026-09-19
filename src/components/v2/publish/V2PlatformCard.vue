@@ -1,32 +1,12 @@
 <template>
   <article
     class="syp-platform-card"
-    :class="{ 'is-disabled': !isAuthorized, 'is-processing': isProcessing, 'is-skeleton': skeleton }"
-    :aria-disabled="skeleton ? undefined : !isAuthorized"
-    :aria-hidden="skeleton ? 'true' : undefined"
+    :class="{ 'is-disabled': !isAuthorized, 'is-processing': isProcessing }"
+    :aria-disabled="!isAuthorized"
   >
-    <!-- 骨架：沿用本卡片自身的图标 / 正文 / 状态 / 操作位布局，仅以占位块替代内容，
-         使加载完成前后的间距与尺寸完全一致 -->
-    <template v-if="skeleton">
-      <div class="syp-platform-card__icon">
-        <span class="syp-skeleton-block"></span>
-      </div>
-      <div class="syp-platform-card__body">
-        <span class="syp-skeleton-line syp-skeleton-line--name"></span>
-        <div class="syp-platform-card__meta">
-          <span class="syp-skeleton-line syp-skeleton-line--tag"></span>
-          <span class="syp-skeleton-line syp-skeleton-line--tag short"></span>
-        </div>
-        <div class="syp-platform-card__actions">
-          <span class="syp-skeleton-line syp-skeleton-line--button"></span>
-        </div>
-      </div>
-    </template>
-
-    <template v-else>
     <div class="syp-platform-card__icon">
       <span v-if="platformIcon" v-html="platformIcon"></span>
-      <span v-else class="syp-platform-card__fallback">{{ (platformName ?? "").slice(0, 1) }}</span>
+      <span v-else class="syp-platform-card__fallback">{{ platformName.slice(0, 1) }}</span>
     </div>
     <div class="syp-platform-card__body">
       <SypTooltip
@@ -124,7 +104,6 @@
         @cancel="toggleForceDeleteConfirm"
       />
     </div>
-    </template>
   </article>
 </template>
 
@@ -135,8 +114,7 @@ import SypTooltip from "~/src/components/v2/common/SypTooltip.vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
 const props = defineProps<{
-  /** 平台名；骨架模式下可不传 */
-  platformName?: string
+  platformName: string
   platformIcon?: string
   isAuthorized?: boolean
   isPublished?: boolean
@@ -145,8 +123,6 @@ const props = defineProps<{
   previewLink?: string
   isFailed?: boolean
   canForceDelete?: boolean
-  /** 骨架模式：只渲染占位块，保持与真实卡片相同的布局与尺寸 */
-  skeleton?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -233,41 +209,6 @@ const primaryLabel = computed(() => {
 
   &.is-processing
     opacity 0.7
-
-  // 骨架模式：沿用上面的 flex / gap / padding 与下方各区块布局，
-  // 只把内容换成占位块，保证加载完成前后的间距与尺寸一致
-  &.is-skeleton
-    pointer-events none
-    // 与真实卡片高度对齐，避免加载完成时的纵向跳动
-    min-height 99px
-
-.syp-skeleton-block
-  display block
-  width 100%
-  height 100%
-  border-radius 8px
-  background var(--b3-theme-surface-light, $syp-bg-tertiary)
-
-.syp-skeleton-line
-  display block
-  height 14px
-  border-radius 6px
-  background var(--b3-theme-surface-light, $syp-bg-tertiary)
-
-  &--name
-    width 56%
-    height 16px
-
-  &--tag
-    width 72px
-
-    &.short
-      width 48px
-
-  &--button
-    width 64px
-    height 26px
-    border-radius 6px
 
 .syp-platform-card__icon
   width $syp-sm-icon-size
