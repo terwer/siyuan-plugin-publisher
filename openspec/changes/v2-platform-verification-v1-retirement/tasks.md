@@ -43,14 +43,14 @@
 ## 3. Gate C — 标记 V1 废弃
 
 - [x] 3.1 Checklist Gate A 全部满足（T1 35/35，2026-09-19）；同表 Gate B 亦满足（T2a 为 0 平台）
-- [ ] 3.2 README / 偏好：V1 已废弃，默认 V2
-- [ ] 3.3 保留 `useV2UI=false` 回退说明
+- [x] 3.2 偏好 / README：默认 V2；`useV2UI` 默认改为 `true`，README 中英文去掉「先手动开启新版 UI」步骤并注明旧界面已退役
+- [x] 3.3 保留回退入口：偏好开关保留但**不允许关闭**（关闭即引导到最后一个提供 V1 的发行版 `1.41.1` 下载页），并保留 `useV2UI=false` 在旧版本中的语义
 
 ## 4. Gate D — 三版本后移除 iframe
 
 - [ ] 4.1 记录 Gate C 生效版本号
 - [ ] 4.2 第三个发行版后评估 `ui-v2-migration` 等价性
-- [ ] 4.3 删除 iframe/SPA 路由与宿主（独立 PR）
+- [ ] 4.3 删除 iframe/SPA 路由与宿主（独立 PR），并**彻底移除 `useV2UI` 开关**
 - [ ] 4.4 归档本变更；合并 delta 至 `openspec/specs/`
 
 ## 修复 backlog（按需追加）

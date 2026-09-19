@@ -32,10 +32,11 @@ After publishing, you can view publishing status, open the published article, or
 ## Quick start
 
 1. Install and enable **Publisher** from the SiYuan marketplace.
-2. Open plugin preferences and enable **Use new UI**.
-3. Open Publisher from the SiYuan toolbar.
-4. Add a platform account in **Publishing Settings**, then validate and save it.
-5. Open the document you want to publish, go to **Quick Publish**, choose a platform, and publish.
+2. Open Publisher from the SiYuan toolbar.
+3. Add a platform account in **Publishing Settings**, then validate and save it.
+4. Open the document you want to publish, go to **Quick Publish**, choose a platform, and publish.
+
+> The current interface is the default. The previous interface has been retired; to use it, install the last release that shipped it, `1.41.1`.
 
 ![](./docs/images/publisher-icon.png)
 

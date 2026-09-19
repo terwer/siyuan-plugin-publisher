@@ -127,7 +127,8 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.ignoreBlockRef = false
     this.allowChangeSlug = false
 
-    this.useV2UI = false
+    // 默认使用 V2 界面；V1 已退役，该项仅保留为「需要旧界面」时的引导入口
+    this.useV2UI = true
 
     this.publishSourceNotebooks = []
   }
