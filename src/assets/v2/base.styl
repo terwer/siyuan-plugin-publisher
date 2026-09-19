@@ -515,7 +515,13 @@
         background #c6281d
         border-color #c6281d
 
+// 遮罩用深色半透明：浅色主题下若沿用主题背景色会得到「白色遮罩」，
+// 背景内容几乎不被遮挡，弹窗与页面分辨不清
 .syp-v2-message-box-modal
-  background var(--b3-theme-background)
-  opacity 0.35
-  backdrop-filter blur(1px)
+  background rgba(15, 23, 42, 0.32)
+  opacity 1
+  backdrop-filter blur(2px)
+  z-index 5000
+
+.el-message-box.syp-v2-message-box
+  z-index 5001
