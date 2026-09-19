@@ -212,9 +212,19 @@
             </div>
           </div>
 
-          <!-- 数据在极短时间内返回，期间不渲染任何占位：直接等结果出来即可，
-               加载提示与骨架都只会成为多余的一闪 -->
-          <template v-if="!quickPublish.state.isLoading">
+          <!-- 加载中：只用一行轻量提示给出确定性，不做满屏占位块。
+               提示本身不承载信息，故保持最小；而留白会让用户无法判断是在加载还是出了问题 -->
+          <div
+            v-if="quickPublish.state.isLoading"
+            class="syp-platform-loading"
+            role="status"
+            aria-live="polite"
+          >
+            <span class="syp-platform-loading__dot"></span>
+            <span>{{ t("main.loading") }}</span>
+          </div>
+
+          <template v-else>
             <div v-if="!quickPublish.state.hasDocument" class="syp-empty-state">
               <div class="syp-empty-state__title">{{ t("v2.quickPublish.empty.noDocument.title") }}</div>
               <div class="syp-empty-state__desc">{{ t("v2.quickPublish.empty.noDocument.desc") }}</div>
@@ -1096,6 +1106,28 @@ async function retryInit() {
   display grid
   grid-template-columns repeat(2, minmax(0, 1fr))
   gap 10px
+
+// 加载提示：一行小圆点 + 文案。宽度按内容收缩（不占满区域），只提供"正在加载"这一定性信息
+.syp-platform-loading
+  display inline-flex
+  align-items center
+  gap 6px
+  padding 12px
+  width fit-content
+  color var(--b3-theme-on-surface-light, $syp-text-secondary)
+
+.syp-platform-loading__dot
+  width 7px
+  height 7px
+  border-radius 999px
+  background var(--b3-theme-primary, $syp-text-primary)
+  animation syp-platform-loading-pulse 0.9s ease-in-out infinite alternate
+
+@keyframes syp-platform-loading-pulse
+  from
+    opacity 0.35
+  to
+    opacity 1
 
 .syp-empty-state
   display flex
