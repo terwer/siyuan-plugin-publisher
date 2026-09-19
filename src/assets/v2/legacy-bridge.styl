@@ -141,13 +141,17 @@ syp-compact-legacy()
     gap 4px
     margin-top 6px
 
+  // 每项是「平台图标 + 发布状态角标」两个行内兄弟节点，宽度必须自适应内容
   :deep(.syp-distri-platform-container .distri-item)
     display inline-flex
     align-items center
-    justify-content center
-    width 26px
+    justify-content flex-start
+    gap 3px
+    width auto
+    min-width 0
     height 26px
     margin 0
+    padding 0 4px
     border-radius 6px
 
     &:hover
@@ -157,12 +161,37 @@ syp-compact-legacy()
     display inline-flex
     align-items center
     justify-content center
+    flex 0 0 auto
     width 20px
     height 20px
+    line-height 1
 
     svg
       width 18px
       height 18px
+
+  // 状态角标在 V1 里没有自己的尺寸规则，会跟着图标一起溢出、压住相邻平台
+  :deep(.syp-distri-platform-container .distri-item .icon-yes),
+  :deep(.syp-distri-platform-container .distri-item .icon-no)
+    display inline-flex
+    align-items center
+    justify-content center
+    flex 0 0 auto
+    width 13px
+    height 13px
+    line-height 1
+
+    svg
+      width 13px
+      height 13px
+
+  // 「未发布」图标的路径是 fill="none" 且无描边，实际什么都不画却占着位置，
+  // 导致这一行图标间距忽宽忽窄；给它一个中性色才读得出状态
+  :deep(.syp-distri-platform-container .distri-item .icon-no)
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+
+    svg path
+      fill currentColor
 
   // 「详细发布」的平台选择卡片：V1 用 32px 字、32px 图标，单张卡片高达 100px
   // 选择器带上 .row-box / .icon-list 才够盖过 V1 自己的权重
