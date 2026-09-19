@@ -701,16 +701,18 @@ export default {
     "Controls the randomness of generated text, between 0-2, higher values are more random",
   "main.auto.fetch.title": "Auto fetch title",
   "main.auto.fetch.cate": "Auto fetch category",
+  "publish.batch.tips": "Publishes to several platforms at once; Siyuan notes is built in, so edits sync back to the note",
   "category.ai.hand":
     "Due to inconsistent classification systems across platforms, classifications need to be calibrated manually and are not automatically saved",
-  "category.ai.enabled": "AI is available, please go to the detailed mode to operate",
+  "category.ai.enabled":
+    "AI is on; use it from Detailed Publish. If the first run fails, it is usually the network — retry",
   "sys.config.ai": "AI configuration",
   "config.ai.use.siyuan":
     "Inside Siyuan notes, you can directly use Siyuan notes to configure, no configuration is required",
   "setting.blog.yamlLinkEnabled": "YAML permalink",
-  "distri.type.overide.warn": "Note: Please use caution when overwriting the selected platform with the current data.",
+  "distri.type.overide.warn": "Overwrite mode: current data replaces the selected platforms. Use with care.",
   "distri.type.merge.warn":
-    "Note: In merge mode, the title and abstract changes are not valid, and the labels and categories are merged with the selected platform data.",
+    "Merge mode: title and summary edits do not apply; tags and categories merge with each platform's data. To change a title, publish that platform on its own.",
   "preference.setting.keepTitle": "Do not update the original title",
   "preference.setting.ignoreBlockRef": "Ignore block ref",
   "preference.setting.allowChangeSlug": "Allow changing slug",

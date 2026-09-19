@@ -41,11 +41,15 @@ const { t } = useV2I18n()
 
 <style scoped lang="stylus">
 @import "../../../assets/v2/variables.styl"
+@import "../../../assets/v2/legacy-bridge.styl"
 
 .syp-batch-view
   display flex
   flex-direction column
   gap 12px
+
+  // 内嵌的批量分发表单来自 V1，统一压到 V2 的紧凑尺寸
+  syp-compact-legacy()
 
   &__head
     display flex

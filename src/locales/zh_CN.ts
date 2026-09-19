@@ -670,15 +670,15 @@ export default {
   "pref.setting.ai.temperature.tip": "控制生成文本的随机性，0-2之间，值越大越随机",
   "main.auto.fetch.title": "自动提取标题",
   "main.auto.fetch.cate": "自动提取分类",
+  "publish.batch.tips": "多平台分发；思源笔记为内置平台，改动会同步回笔记",
   "category.ai.hand": "由于各平台分类体系不一致，分类需要手动进行校准，不会自动保存",
-  "category.ai.enabled":
-    "检测到您已经配置AI，可请前往详细模式进行操作。小贴士：由于网络或者其他问题，如果第一次失败生成，多试几次或许就能出结果哟~😄",
+  "category.ai.enabled": "已启用 AI，可在「详细发布」中使用；若首次生成失败，多为网络原因，可重试",
   "sys.config.ai": "AI 设置",
   "config.ai.use.siyuan": "思源笔记内部，直接使用思源笔记配置，无需配置",
   "setting.blog.yamlLinkEnabled": "YAML永久链接",
-  "distri.type.overide.warn": "注意：覆盖模式下会用当前数据覆盖所有选择的平台，请谨慎操作。",
+  "distri.type.overide.warn": "覆盖模式：会用当前数据覆盖所选平台，请谨慎操作。",
   "distri.type.merge.warn":
-    "注意：为了保留平台数据，合并模式下，标题和摘要的修改无效，您可在在常规发布单独修改对应平台的标题和摘要，标签和分类会与所选择的平台数据合并。",
+    "合并模式：标题与摘要的改动不生效，标签与分类会与平台数据合并；如需改标题，请到单平台发布中操作。",
   "preference.setting.keepTitle": "不更新原始标题",
 
   "setting.blog.gitlab.url.tip": "Gitlab首页，例如：http://localhost:8002",
