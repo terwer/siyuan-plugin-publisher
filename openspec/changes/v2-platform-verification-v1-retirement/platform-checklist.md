@@ -190,15 +190,38 @@
 
 | # | 平台 | platformKey | Vis | Add | 备注 |
 |---|------|-------------|-----|-----|------|
-| 36 | Github Docsify | `github_Docsify` | ⬜ | ⬜ | 无 V2 bridge |
-| 37 | Gitlab Docsify | `gitlab_Gitlabdocsify` | ⬜ | ⬜ | 无 V2 bridge |
-| 38 | 小红书 | `custom_Xiaohongshu` | ⬜ | ⬜ | pre 注释 |
+| 36 | Github Docsify | `github_Docsify` | ❌ | ❌ | **仅有 adaptor，全仓无任何设置界面**：`SubPlatformType.Github_Docsify` 只在 `pre.ts`（注册）、`dynamicConfig.ts`（子类型列表）、`adaptors/index.ts`（工厂）三处出现，`src/components/**` 零命中 → V1 与 V2 都无从添加；V2 选择器按 `SUPPORTED_V2_BRIDGE_SUBTYPES` 过滤，故不出现（`useV2Settings.ts:99`） |
+| 37 | Gitlab Docsify | `gitlab_Gitlabdocsify` | ❌ | ❌ | 同 #36（`SubPlatformType.Gitlab_Docsify` 同样仅有 adaptor） |
+| 38 | 小红书 | `custom_Xiaohongshu` | ❌ | ❌ | 枚举成员在（`dynamicConfig.ts:257`）且 `getSubtypeList` 有 push（:347），但 `pre.ts` 入口**整段注释**（:573-584）→ 不在 `getAllPrePlatformList()` 中，选择器天然不含；`XiaohongshuWebAdaptor` / `XiaohongshuConfig` 仍在仓库内但无入口 |
+
+> 三站均为「不可用/不暴露」为预期结论。**Gate D 不构成功能回退**：#36/#37 从未在任何界面提供过添加入口，#38 的入口在 V1 时期已是注释状态。
 
 ---
 
 ## T3 — 存在性 / 占位（16）
 
-见原表 #39–#54（Liandi、Fs 占位等）；验收目标为「确认不可用/不暴露」。
+验收目标为「确认不可用/不暴露」。**判定基准**：`SubPlatformType` 枚举共 47 个成员，其中未在 `pre.ts` 注册者仅 10 个 = 9 个 Fs 占位 + 哨兵 `NONE`；再叠加宿主实测（V2 平台选择器共 **35** 项，与 `SUPPORTED_V2_BRIDGE_SUBTYPES` 逐项吻合）。
+
+### api 孤儿（3）
+
+| # | 平台 | 结论 | 依据 |
+|---|------|------|------|
+| 23 | Liandi | ✅ 不存在、不暴露 | `dynamicConfig.ts` 无该成员，`pre.ts` 无入口；全仓仅剩 8 处 i18n 文案残留（`setting.liandi` 等），无适配器 |
+| 24 | Siyuan | ✅ 已转为正式平台 | `system_Siyuan` 已注册（`pre.ts:600-612`）；选择器由 `PlatformType.System` 分支过滤（`useV2Settings.ts:95`）——它是内建「思源笔记」目标，不作为可添加平台列出 |
+| 31 | Yuque | ✅ 已转为正式平台 | `common_Yuque` 已注册，T1 #1 已验证通过 |
+
+### web 孤儿（4）
+
+| # | 平台 | 结论 | 依据 |
+|---|------|------|------|
+| 40 | Flowus | ✅ 已彻底移除 | 枚举成员注释（`dynamicConfig.ts:253`）、`subtypeList` push 注释（:343）、`pre.ts` 入口整段注释（:520-530） |
+| 41 | Wechat | ✅ 已转为正式平台 | `custom_Wechat` 已注册，T1 #34 已验证通过 |
+| 42 | Weibo | ✅ 不存在、不暴露 | 枚举与 `pre.ts` 均无该成员 |
+| 43 | Wuaipojie | ✅ 不存在、不暴露 | 同 #42 |
+
+### Fs 枚举占位（9）
+
+`Fs_Ftp`、`Fs_Sftp`、`Fs_BaiduNetDisk`、`Fs_AliyunDrive`、`Fs_Weiyun`、`Fs_Doubao`、`Fs_OneDrive`、`Fs_GoogleDrive`、`Fs_Quark`——9 个成员在 `pre.ts` 中**均无注册**（`fsCfg` 只注册 `Fs_LocalSystem` 一项），故选择器「文件系统」组只有「本地系统」。✅ 均不暴露。
 
 ---
 
@@ -270,5 +293,6 @@
 | 2026-09-19 | **账号资产恢复，T1 全表 35 站均有可用账号**。依 `platform-metadata.json` 记录的历史 platformKey 逐项比对，重建找回 **12 个同名账号**：`gitlab_Gitlabhexo`/`hugo`/`jekyll`/`vuepress`/`vuepress2`/`vitepress`/`astro`、`metaweblog_Typecho`/`Metaweblog`/`Jvue`、`github_Vitepress`、`github_Astro`——均「运行中/已启用」（GitHub 两项复用现有凭据，分别指向 `terwer/vitepress-blog` 与 `terwer/astro-blog`）。`wordpress_Wordpressdotcom` 另补充 3 个可用实例（原两个实例带随机后缀，不可复现）。账号数由 33 恢复至 **48**，各族覆盖：github 8/8、gitlab 7/7、metaweblog 4/4、wordpress 2/2。**待用户处理**：`custom_Csdn-iqo7y` 需用户扫码登录（Cookie 授权平台）后恢复；`gitlab_Gitlabastro-gs0au` 为重建时产生的重复实例，按「只增不删」原则保留，由用户决定 |：目标仓库 `terwer/vitepress-blog`（main，`docs`，`[slug].md`）。**V2C** 验证通过、账号「运行中/已启用」、发布目录自动拉取 `docs`（验证写入的 `test.md` 插件已自行清理）；**Pub** 提交 `6677ab5`（`docs/feature-test-hahahaha-2d7wnh.md`）；**Img** 提交 `f95ef7a`（`docs/images/image-…png`，默认「当前平台」图床，存储 `[docpath]/images`、引用 `./images/<名>`）；**Upd** 提交 `d77ac40`（正文真实变更）；**Del** 提交 `e2a3c65`（.md 404，同批图片保留；**首次报 sha 不匹配、重试即成功**，同 #9/#10 暂态、非插件缺陷）；**查看 ✅** 卡片实开 blob 地址 HTTP 200。文章 frontmatter 含 title/date/head(keywords)/outline/sidebar/prev/next，**不写 `permalink`**（`yamlLinkSupported=false`，文件路径路由）。**SOP §3 帮助引导 ✅**：字段指引 16 条与冻结行顺序一致、HelpPanel 专属 summary + 「查看完整帮助文档」+ FAQ 4 条、TourGuide **9/9**。临时账号按精确 platformKey 删除、账号数复原 **32**。T1 小结更新为 **23 个全链路 ✅ / 未测 12**。**验证口径澄清**：字段级指引的 tip 用 `el-tooltip :teleported="false"` 留在 `.syp-panel` 内（见共用层结论），而 **`HelpPanel` 经 `Teleport` 挂到 `.syp-v2`**（`HelpPanel.vue` 取 `triggerEl.closest(".syp-v2")` 作目标），故核验 HelpPanel 必须在 `.syp-v2`/全文档范围查，只看 `.syp-panel` 会误判为「浮层未打开」 |
 | 2026-09-18 | **#12 Vitepress `github_Vitepress` 六格 + 帮助引导 ✅（Electron 宿主，test 工作空间 / dist-v2 / 9222）**：目标仓库 `terwer/vitepress-blog`（main，`docs`，`[slug].md`）。**V2C** 验证通过、账号「运行中/已启用」、发布目录自动拉取 `docs`（验证写入的 `test.md` 插件已自行清理）；**Pub** 提交 `6677ab5`（`docs/feature-test-hahahaha-2d7wnh.md`）；**Img** 提交 `f95ef7a`（`docs/images/image-…png`，默认「当前平台」图床，存储 `[docpath]/images`、引用 `./images/<名>`）；**Upd** 提交 `d77ac40`（正文真实变更）；**Del** 提交 `e2a3c65`（.md 404，同批图片保留；**首次报 sha 不匹配、重试即成功**，同 #9/#10 暂态、非插件缺陷）；**查看 ✅** 卡片实开 blob 地址 HTTP 200。文章 frontmatter 含 title/date/head(keywords)/outline/sidebar/prev/next，**不写 `permalink`**（`yamlLinkSupported=false`，文件路径路由）。**SOP §3 帮助引导 ✅**：字段指引 16 条与冻结行顺序一致、HelpPanel 专属 summary + 「查看完整帮助文档」+ FAQ 4 条、TourGuide **9/9**。临时账号按精确 platformKey 删除、账号数复原 **32**。T1 小结更新为 **23 个全链路 ✅ / 未测 12**。**验证口径澄清**：字段级指引的 tip 用 `el-tooltip :teleported="false"` 留在 `.syp-panel` 内（见共用层结论），而 **`HelpPanel` 经 `Teleport` 挂到 `.syp-v2`**（`HelpPanel.vue` 取 `triggerEl.closest(".syp-v2")` 作目标），故核验 HelpPanel 必须在 `.syp-v2`/全文档范围查，只看 `.syp-panel` 会误判为「浮层未打开」 |
 | 2026-09-18 | **#13 Astro `github_Astro` 六格 + 帮助引导 ✅（Electron 宿主，test 工作空间 / dist-v2 / 9222）**：目标仓库 `terwer/astro-blog`（main，`src/content/blog`，`[slug].md`）。**V2C/Pub/Upd/Del/Img/查看 全通过**，提交依次 `da114e5`（文章）/ `0b3807e`（图片入**仓库根** `public/images/`）/ `aa35a03`（更新，patch `+V2 Upd 验证段落（Astro）`）/ `de42080`（删除，目录复原且图片保留）。文章 frontmatter 不写 `permalink`（内容集合按文件路径路由）；图片默认「当前平台」图床、引用**绝对路径** `/images/<名>`——与 #12 Vitepress 的 `[docpath]/images` + 相对 `./images` 口径不同，两者各随其构建器契约，非不一致。帮助侧：字段指引 16 条与冻结行一致（`yamlLinkEnabled` 行不渲染）、HelpPanel 专属 summary + FAQ 5 条、TourGuide 9/9。临时账号按精确 platformKey 删除、账号数复原 32。T1 小结更新为 **24 个全链路 ✅ / 未测 11**。**取证提示**：`raw.githubusercontent.com` 存在 CDN 缓存，核对**刚提交**的内容必须走 contents API（本次曾因此误读为「更新内容未变」，而实际 patch 已含新段落） |
+| 2026-09-20 | **T2b（#36–#38）与 T3（#39–#54）存在性确认收官，tasks.md 2.2 / 2.3 闭环**。两项验收目标同为「确认不可用/不暴露」，采用**静态 + 宿主双重取证**，不做发布链。**静态基准**：`SubPlatformType` 枚举 47 个成员，未在 `pre.ts` 注册者仅 10 个 = 9 个 Fs 占位（`Fs_Ftp`/`Sftp`/`BaiduNetDisk`/`AliyunDrive`/`Weiyun`/`Doubao`/`OneDrive`/`GoogleDrive`/`Quark`）+ 哨兵 `NONE`，`fsCfg` 只注册 `Fs_LocalSystem`。**宿主实测**：V2「添加账号 → 选择平台」共 **35** 项（通用 5 / GITHUB 8 / GITLAB 7 / METAWEBLOG 4 / WORDPRESS 2 / 网页平台 8 / 文件系统 1），与 `SUPPORTED_V2_BRIDGE_SUBTYPES`（`bridgeRegistry.ts` 34 项 bridge + `Fs_LocalSystem`）逐项吻合；Docsify ×2、小红书、Flowus、Weibo、Wuaipojie、Liandi、9 个 Fs 占位**均不在列表中**。**T2b 补充结论**：`Github_Docsify` / `Gitlab_Docsify` 只在 `pre.ts`、`dynamicConfig.ts`、`adaptors/index.ts` 三处出现，`src/components/**` 零命中——**V1 与 V2 都从未提供过添加入口**，故 Gate D 删除 V1 路径**不构成功能回退**；小红书入口在 V1 时期已是注释状态，同理。**T3 归类修正**：原表列为「孤儿」的 Siyuan（`system_Siyuan`）与 Yuque（`common_Yuque`）**已转为正式平台**并各自在 T1 通过；Wechat（`custom_Wechat`）同理由孤儿转为 T1 #34 正式平台；Flowus 则**已从枚举与入口彻底移除**（三处注释）。**各平台六格状态不变**（本轮不涉及发布链） |
 
 

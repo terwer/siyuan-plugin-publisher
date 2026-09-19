@@ -37,8 +37,8 @@
 ## 2. T2a / T2b / T3
 
 - [x] 2.1 T2a #30–#35：已迁入 T1 V2 Bridge；V1 回退保留至 Gate D，不再要求 V2 Inv
-- [ ] 2.2 T2b #36–#38：Vis/Add（Github Docsify、Gitlab Docsify、小红书；均「无 V2 bridge / pre 注释」，不在 V1 退役门禁内）
-- [ ] 2.3 T3 #39–#54：孤儿与 Fs 占位确认（验收目标为「确认不可用/不暴露」，不在 V1 退役门禁内）
+- [x] 2.2 T2b #36–#38：Vis/Add（Github Docsify、Gitlab Docsify、小红书；均「无 V2 bridge / pre 注释」，不在 V1 退役门禁内）—— 2026-09-20 确认：三站 Vis/Add 均为 ❌（不可用/不暴露）。Docsify ×2 全仓无任何设置界面（V1/V2 都从未提供添加入口），小红书入口为注释状态；静态比对了 `SubPlatformType` 枚举 vs `pre.ts` 活跃注册，宿主实测 V2 选择器 35 项均不含三者
+- [x] 2.3 T3 #39–#54：孤儿与 Fs 占位确认（验收目标为「确认不可用/不暴露」，不在 V1 退役门禁内）—— 2026-09-20 确认：api 孤儿 3（Liandi 不存在；Siyuan/Yuque 已转正式平台）+ web 孤儿 4（Flowus 已彻底移除；Wechat 已转正式平台；Weibo/Wuaipojie 不存在）+ Fs 枚举占位 9（枚举在、`pre.ts` 无注册，故不暴露）。判定基准：枚举 47 成员中未注册者仅 9 个 Fs 占位 + 哨兵 `NONE`
 
 ## 3. Gate C — 标记 V1 废弃
 
