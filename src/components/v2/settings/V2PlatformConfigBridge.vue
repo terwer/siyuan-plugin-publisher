@@ -201,6 +201,7 @@ function handleFormSaved(result: { ok: boolean }) {
 
 <style scoped lang="stylus">
 @import "../../../assets/v2/variables.styl"
+@import "../../../assets/v2/legacy-bridge.styl"
 
 .syp-platform-bridge
   padding 10px
@@ -208,104 +209,13 @@ function handleFormSaved(result: { ok: boolean }) {
   border 1px solid var(--b3-border-color, $syp-border-primary)
   overflow visible
 
-  :deep(.el-form)
-    width 100%
-    max-width 100%
-    overflow visible
+  // 平台配置表单是 V1 组件，尺寸统一由共用 mixin 压到 V2 口径
+  syp-compact-legacy()
 
-  :deep(.el-form-item)
-    margin-right 0
-
-  :deep(.el-form-item__content)
-    min-width 0
-
-  :deep(.el-input),
-  :deep(.el-input__wrapper),
-  :deep(.el-textarea),
-  :deep(.el-select)
-    max-width 100%
-
+  // 表单容器自身的字号（mixin 只管表单控件）
   :deep(.legacy-setting-form),
   :deep(.legacy-cookie-form)
     font-size 12px
-
-  :deep(.legacy-setting-form .el-form-item),
-  :deep(.legacy-cookie-form .el-form-item)
-    margin-bottom 6px
-
-  :deep(.legacy-setting-form .el-form-item__label),
-  :deep(.legacy-cookie-form .el-form-item__label)
-    min-height 24px
-    padding-right 8px
-    font-size 12px
-    line-height 24px
-
-  :deep(.legacy-setting-form .el-form-item__content),
-  :deep(.legacy-cookie-form .el-form-item__content)
-    min-height 24px
-    gap 4px
-
-  :deep(.legacy-setting-form .el-input__wrapper),
-  :deep(.legacy-setting-form .el-select__wrapper),
-  :deep(.legacy-cookie-form .el-input__wrapper),
-  :deep(.legacy-cookie-form .el-select__wrapper)
-    min-height 24px
-    padding 0 6px
-    border-radius $syp-radius-sm
-
-  :deep(.legacy-setting-form .el-textarea__inner),
-  :deep(.legacy-cookie-form .el-textarea__inner)
-    padding 4px 6px
-    line-height 1.4
-    font-size 12px
-    border-radius $syp-radius-sm
-
-  :deep(.legacy-setting-form .el-input__inner),
-  :deep(.legacy-cookie-form .el-input__inner)
-    font-size 12px
-
-  :deep(.legacy-setting-form .el-radio-group),
-  :deep(.legacy-cookie-form .el-radio-group)
-    gap 4px 8px
-
-  :deep(.legacy-setting-form .el-radio),
-  :deep(.legacy-setting-form .el-checkbox),
-  :deep(.legacy-cookie-form .el-radio),
-  :deep(.legacy-cookie-form .el-checkbox)
-    min-height 20px
-
-  :deep(.legacy-setting-form .el-radio__label),
-  :deep(.legacy-setting-form .el-checkbox__label),
-  :deep(.legacy-cookie-form .el-radio__label),
-  :deep(.legacy-cookie-form .el-checkbox__label)
-    padding-left 4px
-    font-size 12px
-
-  :deep(.legacy-setting-form .el-radio__inner),
-  :deep(.legacy-setting-form .el-checkbox__inner),
-  :deep(.legacy-cookie-form .el-radio__inner),
-  :deep(.legacy-cookie-form .el-checkbox__inner)
-    width 12px
-    height 12px
-
-  :deep(.legacy-setting-form .el-alert),
-  :deep(.legacy-cookie-form .el-alert)
-    --el-alert-padding 4px 6px
-    font-size 12px
-    border-radius $syp-radius-sm
-
-  :deep(.legacy-setting-form .el-button),
-  :deep(.legacy-cookie-form .el-button)
-    min-height 24px
-    padding 0 8px
-    font-size 12px
-    border-radius $syp-radius-sm
-
-  :deep(.el-alert)
-    margin-top 6px
-
-  :deep(.el-button + .el-button)
-    margin-left 6px
 
 .syp-validation-error-bar
   display flex

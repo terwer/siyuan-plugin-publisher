@@ -15,7 +15,13 @@
  *     syp-compact-legacy()
  *
  * 只改尺寸与间距，不改任何行为。
+ *
+ * 注意：成组控件（el-button-group、el-radio-button 分段、输入框前后缀）
+ * 靠相邻边框重叠成一体，通用间距/圆角规则会把它们拆散，Mixin 里已单独还原。
+ * 新增规则前先确认目标页面有没有这类控件。
  */
+
+@import "./variables.styl"
 
 syp-compact-legacy()
   :deep(.el-form)
@@ -51,7 +57,12 @@ syp-compact-legacy()
     height 30px
     min-height 30px
     padding 0 6px
-    border-radius 6px
+    border-radius $syp-radius-sm
+
+  // 数字输入框的高度在外层容器上，内核的输入框跟随它
+  :deep(.el-input-number)
+    height 30px
+    line-height 30px
 
   :deep(.el-input__inner),
   :deep(.el-textarea__inner)
@@ -60,7 +71,7 @@ syp-compact-legacy()
   :deep(.el-textarea__inner)
     padding 4px 6px
     line-height 1.4
-    border-radius 6px
+    border-radius $syp-radius-sm
 
   // 分段控件（el-radio-button）靠相邻边框并拢成一体，容器不能加 gap，
   // 间距只加在普通单选/多选上
@@ -84,7 +95,12 @@ syp-compact-legacy()
     padding 4px 6px
     margin-top 6px
     font-size 12px
-    border-radius 6px
+    border-radius $syp-radius-sm
+
+  // 各页 V1 容器继承的行高不同，会让同一条提示在这里 24px、那里 32px，统一钉死
+  :deep(.el-alert__title)
+    font-size 12px
+    line-height 16px
 
   // 提示条在 V1 里自带内边距，需要同权重覆盖
   :deep(.el-alert.top-tip),
@@ -97,7 +113,7 @@ syp-compact-legacy()
     min-height 24px
     padding 0 8px
     font-size 12px
-    border-radius 6px
+    border-radius $syp-radius-sm
 
   :deep(.el-button + .el-button)
     margin-left 6px
@@ -113,12 +129,12 @@ syp-compact-legacy()
     border-radius 0
 
     &:first-child
-      border-top-left-radius 6px
-      border-bottom-left-radius 6px
+      border-top-left-radius $syp-radius-sm
+      border-bottom-left-radius $syp-radius-sm
 
     &:last-child
-      border-top-right-radius 6px
-      border-bottom-right-radius 6px
+      border-top-right-radius $syp-radius-sm
+      border-bottom-right-radius $syp-radius-sm
 
   :deep(.el-button--large),
   :deep(.el-button--small)
@@ -172,7 +188,7 @@ syp-compact-legacy()
     height 26px
     margin 0
     padding 0 4px
-    border-radius 6px
+    border-radius $syp-radius-sm
 
     &:hover
       background var(--b3-theme-surface-lights, $syp-bg-secondary)

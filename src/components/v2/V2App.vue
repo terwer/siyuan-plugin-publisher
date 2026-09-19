@@ -853,6 +853,14 @@ async function retryInit() {
 
 <style scoped lang="stylus">
 @import "../../assets/v2/variables.styl"
+@import "../../assets/v2/legacy-bridge.styl"
+
+// AI 设置页内嵌的是 V1 的 AiSetting，尺寸统一由共用 mixin 压到 V2 口径
+.syp-settings-ai
+  syp-compact-legacy()
+
+  :deep(.ai-setting-form)
+    font-size 12px
 
 .syp-v2
   position relative
