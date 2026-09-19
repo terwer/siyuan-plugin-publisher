@@ -81,6 +81,14 @@ export class MetaweblogConfig extends CommonBlogConfig {
    */
   public isHostSessionFetch = false
 
+  /**
+   * XML-RPC 是否可经**用户自备的跨域代理**发出。
+   *
+   * 用户填了「跨域代理地址」就走它（该服务本身可直连，不需要额外网络条件），
+   * 留空则回落到 {@link isHostSessionFetch} 的通路。默认关闭，只对显式声明的平台生效。
+   */
+  public isCorsXmlrpcProxy = false
+
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(home, apiUrl, username, password, middlewareUrl)
 

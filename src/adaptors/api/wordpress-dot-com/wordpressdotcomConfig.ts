@@ -46,6 +46,15 @@ class WordpressdotcomConfig extends MetaweblogConfig {
     // WordPress.com 的站点域按客户端特征拒绝 Node fetch（返回需脚本校验的中间页），
     // 而宿主自身的网络栈访问正常，故走宿主会话直传；宿主不具备该能力时自动回退，不硬失败。
     this.isHostSessionFetch = true
+
+    // 另提供一条不需要额外网络条件的通路：用户在「跨域代理地址」填入自备的代理服务后，
+    // XML-RPC 即改经该代理发出（见 resolveXmlrpcTransport）。**不内置共享代理地址**，
+    // 留空则回落到上面的宿主会话直传。两项均只对本平台生效。
+    this.isCorsXmlrpcProxy = true
+    // 该开关同时决定配置页是否渲染「跨域代理地址」输入框（见 CommonBlogSetting.vue）。
+    // 本平台的传输选型由上面的 isCorsXmlrpcProxy / isHostSessionFetch 先判定，
+    // 因此这里开启只影响输入框的显示，不会把请求改道到共享中间件。
+    this.isCorsProxy = true
   }
 }
 

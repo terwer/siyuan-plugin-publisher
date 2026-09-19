@@ -23,14 +23,21 @@ import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlr
  * 用于处理代理请求的自定义 hook
  *
  * @param middlewareUrl - 可选，如果使用 CommonFetchClient 需要传递，否则可留空
- * @param corsProxyUrl - 可选，可留空
+ * @param corsProxyUrl - 可选，用户自备的跨域代理地址，可留空
  * @param isCorsProxy - 可选，CORS 受限平台要求强制走新 CORS 代理时传 true
  * @param isHostSessionFetch - 可选，要求走宿主会话直传（Electron `session.fetch`）时传 true
+ * @param isCorsXmlrpcProxy - 可选，声明本平台的 XML-RPC 可经用户自备的跨域代理发出时传 true
  * @author terwer
  * @version 1.7.0
  * @since 1.7.0
  */
-const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: boolean, isHostSessionFetch?: boolean) => {
+const useProxy = (
+  middlewareUrl?: string,
+  corsProxyUrl?: string,
+  isCorsProxy?: boolean,
+  isHostSessionFetch?: boolean,
+  isCorsXmlrpcProxy?: boolean
+) => {
   const logger = createAppLogger("use-proxy")
   const { kernelApi, isUseSiyuanProxy } = useSiyuanApi()
 
@@ -43,6 +50,34 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: b
   corsProxyUrl = corsProxyUrl ?? ""
   const commonFetchClient = new CommonFetchClient(appInstance, apiUrl, middlewareUrl, isDev)
   const serializer = new Serializer(appInstance)
+
+  /**
+   * 经用户自备的跨域代理发送 XML-RPC POST。
+   *
+   * 代理地址由用户配置（不内置共享地址），形如 `<代理地址>/<完整目标地址>`；
+   * 该服务本身可直连，因此这里用宿主直传通道发出，不需要额外网络条件。
+   */
+  const corsProxyXmlrpcPost = async (url: string, body: string): Promise<string> => {
+    if (StrUtil.isEmptyString(corsProxyUrl)) {
+      throw new Error("未配置跨域代理地址")
+    }
+    const apiUrl = `${corsProxyUrl.endsWith("/") ? corsProxyUrl : corsProxyUrl + "/"}${url}`
+    logger.info("corsXmlrpcPost url =>", apiUrl)
+    const doFetch = PluginFetchUtil.getPluginNodeFetch(appInstance, logger)
+    const res = await doFetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/xml; charset=utf-8" },
+      body,
+    })
+    const status = Number(res.status)
+    if (!(status >= 200 && status < 300)) {
+      const errText = await res.text()
+      throw new Error(
+        StrUtil.isEmptyString(errText) ? `HTTP request failed (${status})` : `HTTP request failed (${status}): ${errText}`
+      )
+    }
+    return await res.text()
+  }
 
   /**
    * 宿主会话直传的 XML-RPC POST（Electron `session.fetch`，即 Chromium 网络栈）。
@@ -150,6 +185,8 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: b
       isUseSiyuanProxy,
       canUsePluginFetch: PluginFetchUtil.canUsePluginFetch(appInstance),
       isCorsProxy,
+      isCorsXmlrpcProxy,
+      hasCorsProxyUrl: !StrUtil.isEmptyString(corsProxyUrl),
       isHostSessionFetch,
       canUseHostSessionFetch: HostSessionFetchUtil.canUseSessionFetch(appInstance),
     })
@@ -164,6 +201,7 @@ const useProxy = (middlewareUrl?: string, corsProxyUrl?: string, isCorsProxy?: b
         middlewareFetch: (endpoint, body, fp) =>
           proxyFetch(endpoint, [], body, "POST", "text/xml", fp, "base64", "text"),
         hostSessionFetch: (endpoint, body) => hostSessionPostText(endpoint, body),
+        corsProxyFetch: (endpoint, body) => corsProxyXmlrpcPost(endpoint, body),
       },
       { url, xmlBody, forceProxy }
     )

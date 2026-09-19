@@ -14,6 +14,47 @@ const publicUrl = "https://rpc.cnblogs.com/metaweblog/"
 const xml = `<?xml version="1.0"?><methodResponse></methodResponse>`
 
 describe("resolveXmlrpcTransport", () => {
+  it("prefers the user-provided CORS proxy when the platform declares it and an address is set", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isCorsXmlrpcProxy: true,
+        hasCorsProxyUrl: true,
+        isHostSessionFetch: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("cors-proxy-fetch")
+  })
+
+  it("falls back to the host session channel when no CORS proxy address is configured", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isCorsXmlrpcProxy: true,
+        hasCorsProxyUrl: false,
+        isHostSessionFetch: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("electron-session-fetch")
+  })
+
+  it("leaves a CORS-restricted platform on its existing channel when the new switch is not declared", () => {
+    expect(
+      resolveXmlrpcTransport({
+        forceProxy: false,
+        isUseSiyuanProxy: false,
+        canUsePluginFetch: true,
+        isCorsProxy: true,
+        hasCorsProxyUrl: true,
+        canUseHostSessionFetch: true,
+      })
+    ).toBe("middleware-fetch")
+  })
+
   it("prefers the host session channel when the platform declares it and the host supports it", () => {
     expect(
       resolveXmlrpcTransport({
@@ -122,6 +163,7 @@ describe("executeXmlrpcTransport", () => {
         siyuanForwardProxy: vi.fn(),
         middlewareFetch: vi.fn(),
         hostSessionFetch: vi.fn(),
+        corsProxyFetch: vi.fn(),
       },
       { url: publicUrl, xmlBody: "<xml/>", forceProxy: false }
     )
@@ -138,10 +180,28 @@ describe("executeXmlrpcTransport", () => {
         siyuanForwardProxy: vi.fn(),
         middlewareFetch: vi.fn(),
         hostSessionFetch,
+        corsProxyFetch: vi.fn(),
       },
       { url: publicUrl, xmlBody: "<xml/>", forceProxy: false }
     )
     expect(hostSessionFetch).toHaveBeenCalled()
+    expect(text).toContain("methodResponse")
+  })
+
+  it("routes through the user-provided CORS proxy when selected", async () => {
+    const corsProxyFetch = vi.fn(async () => xml)
+    const text = await executeXmlrpcTransport(
+      "cors-proxy-fetch",
+      {
+        pluginNodeFetch: vi.fn(),
+        siyuanForwardProxy: vi.fn(),
+        middlewareFetch: vi.fn(),
+        hostSessionFetch: vi.fn(),
+        corsProxyFetch,
+      },
+      { url: publicUrl, xmlBody: "<xml/>", forceProxy: false }
+    )
+    expect(corsProxyFetch).toHaveBeenCalled()
     expect(text).toContain("methodResponse")
   })
 })

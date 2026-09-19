@@ -34,6 +34,9 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   /** 本平台是否声明走宿主会话直传（基类持有的 cfg 为通用类型，故在构造时固化一次） */
   private readonly isHostSessionFetch: boolean
 
+  /** 本平台是否声明 XML-RPC 可经用户自备的跨域代理发出 */
+  private readonly isCorsXmlrpcProxy: boolean
+
   /**
    * 初始化 metaweblog API 适配器
    *
@@ -46,7 +49,14 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     this.cfg.blogid = "metaweblog"
     this.logger = createAppLogger("metaweblog-api-adaptor")
     this.isHostSessionFetch = cfg.isHostSessionFetch
-    const { proxyXmlrpc } = useProxy(cfg.middlewareUrl, undefined, cfg.isCorsProxy, cfg.isHostSessionFetch)
+    this.isCorsXmlrpcProxy = cfg.isCorsXmlrpcProxy
+    const { proxyXmlrpc } = useProxy(
+      cfg.middlewareUrl,
+      cfg.corsAnywhereUrl,
+      cfg.isCorsProxy,
+      cfg.isHostSessionFetch,
+      cfg.isCorsXmlrpcProxy
+    )
     this.proxyXmlrpc = proxyXmlrpc
   }
 
@@ -251,12 +261,16 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   }
 
   /**
-   * 确保宿主会话已对该站点可用（仅在平台声明走宿主会话直传时执行）。
+   * 确保宿主会话已对该站点可用（仅在平台声明走宿主会话直传、且未配置跨域代理时执行）。
    *
    * 幂等：同一适配器实例内只执行一次，失败也不阻塞后续调用（由传输层决定回退）。
    */
   private async ensureHostSessionReady(): Promise<void> {
     if (!this.isHostSessionFetch) {
+      return
+    }
+    // 用户配置了跨域代理时走代理通路，无需宿主会话预热
+    if (this.isCorsXmlrpcProxy && !StrUtil.isEmptyString(this.cfg.corsAnywhereUrl)) {
       return
     }
     if (!this.hostSessionReadyPromise) {
