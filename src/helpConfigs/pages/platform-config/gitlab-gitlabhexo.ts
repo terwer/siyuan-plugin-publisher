@@ -17,14 +17,14 @@ export const gitlabhexoHelpConfig: PageHelpConfig = {
   fields: {
     home: {
       tip: "你的 GitLab 实例首页地址（自建实例填自己的域名，如 https://gitlab.example.com），用于拼出仓库地址；修改后 API 地址与令牌地址会同步更新。",
-      placeholder: "https://gitlab.com",
+      placeholder: "https://gitlab.example.com",
     },
-    apiUrl: { tip: "GitLab API 地址，默认与平台首页一致（自建实例同样填实例地址）；平台首页留空时会被清空。", placeholder: "https://gitlab.com" },
+    apiUrl: { tip: "GitLab API 地址，默认与平台首页一致（自建实例同样填实例地址）；平台首页留空时会被清空。", placeholder: "https://gitlab.example.com" },
     username: { tip: "GitLab 用户名（owner），用于拼出仓库地址。访问令牌需对该仓库有 push 权限。", placeholder: "your-gitlab-name" },
     password: {
-      tip: "GitLab 个人访问令牌（Personal Access Token）。在 GitLab 右上角头像 → Preferences → Access Tokens（或 /-/user_settings/personal_access_tokens）生成，需勾选 api 或 write_repository 范围。",
+      tip: "GitLab 个人访问令牌（Personal Access Token）。在你的 GitLab 实例右上角头像 → Preferences → Access Tokens 生成（路径 /-/user_settings/personal_access_tokens，域名换成你自己的实例地址），需勾选 api 或 write_repository 范围。",
       placeholder: "glpat-xxxxxxxxxxxxxxxxxxxx",
-      link: "https://gitlab.com/-/user_settings/personal_access_tokens",
+      link: "https://gitlab.example.com/-/user_settings/personal_access_tokens",
       linkText: "Token 生成地址",
     },
     githubRepo: { tip: "Hexo 博客仓库名，与用户名组成 <user>/<repo>，例如 hexo-blog。", placeholder: "gitlab-hexo-blog" },
@@ -66,7 +66,7 @@ export const gitlabhexoHelpConfig: PageHelpConfig = {
     email: { tip: "commit 作者邮箱，会写入仓库的提交记录。", placeholder: "you@example.com" },
     site: {
       tip: "作者主页地址，默认由「平台首页 + 用户名」拼出；Hexo 的文章 Front Matter 不含作者字段，此处仅作账号信息。",
-      placeholder: "https://gitlab.com/your-gitlab-name",
+      placeholder: "https://gitlab.example.com/your-gitlab-name",
     },
   },
   faq: [
