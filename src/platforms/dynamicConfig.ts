@@ -7,8 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { StrUtil } from "zhi-common"
+import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 
 export class DynamicConfig {
   /**
@@ -39,6 +39,34 @@ export class DynamicConfig {
    * @since 0.9.0+
    */
   platformIcon?: string
+
+  /**
+   * 平台描述，用于平台选择、账号列表、配置决策等需要理解平台用途的入口。
+   *
+   * 运行时可由 i18n.description 翻译得到；已保存的历史配置也可能直接携带该字段。
+   *
+   * @since 1.41.1+
+   */
+  description?: string
+
+  /**
+   * 平台展示字段的国际化 key 映射。
+   *
+   * key 是目标字段名，例如 description / platformName / tooltip；value 是 i18n key。
+   * 预置数据只维护 i18n key，显示层统一本地化到对应目标字段。
+   *
+   * @since 1.41.1+
+   */
+  i18n?: Record<string, string>
+
+  /**
+   * V2 展示排序，仅用于账号列表和快速发布的展示顺序。
+   *
+   * 数字越小越靠前；不代表发布执行顺序，也不影响授权、配置或发布校验。
+   *
+   * @since 1.41.1+
+   */
+  displayOrder?: number
 
   /**
    * 是否授权
@@ -93,7 +121,9 @@ export class DynamicConfig {
     platformKey: string,
     platformName: string,
     subPlatformType?: SubPlatformType,
-    platformIcon?: string
+    platformIcon?: string,
+    description?: string,
+    i18n?: Record<string, string>
   ) {
     this.platformType = platformType
     this.platformKey = platformKey
@@ -109,6 +139,8 @@ export class DynamicConfig {
 
     this.subPlatformType = subPlatformType
     this.platformIcon = platformIcon
+    this.description = description
+    this.i18n = i18n
   }
 }
 
@@ -188,6 +220,8 @@ export enum SubPlatformType {
   Github_Vuepress2 = "Vuepress2",
   Github_Vitepress = "Vitepress",
   Github_Astro = "Astro",
+  
+    Github_Docsify = "Docsify",
 
   // Gitlab 子平台
   Gitlab_Hexo = "Gitlabhexo",
@@ -197,6 +231,8 @@ export enum SubPlatformType {
   Gitlab_Vuepress2 = "Gitlabvuepress2",
   Gitlab_Vitepress = "Gitlabvitepress",
   Gitlab_Astro = "Gitlabastro",
+  
+    Gitlab_Docsify = "Gitlabdocsify",
 
   // Metaweblog
   Metaweblog_Metaweblog = "Metaweblog",
@@ -216,6 +252,7 @@ export enum SubPlatformType {
   Custom_Juejin = "Juejin",
   // Custom_Flowus = "Flowus",
   Custom_Haloweb = "Haloweb",
+  Custom_Yuqueweb = "Yuqueweb",
   Custom_Bilibili = "Bilibili",
   Custom_Xiaohongshu = "Xiaohongshu",
 
@@ -275,6 +312,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Github_Vuepress2)
       subtypeList.push(SubPlatformType.Github_Vitepress)
       subtypeList.push(SubPlatformType.Github_Astro)
+      subtypeList.push(SubPlatformType.Github_Docsify)
       break
     case PlatformType.Gitlab:
       subtypeList.push(SubPlatformType.Gitlab_Hexo)
@@ -284,6 +322,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Gitlab_Vuepress2)
       subtypeList.push(SubPlatformType.Gitlab_Vitepress)
       subtypeList.push(SubPlatformType.Gitlab_Astro)
+      subtypeList.push(SubPlatformType.Gitlab_Docsify)
       break
     case PlatformType.Metaweblog:
       subtypeList.push(SubPlatformType.Metaweblog_Metaweblog)
@@ -303,6 +342,7 @@ export function getSubtypeList(ptype: PlatformType): SubPlatformType[] {
       subtypeList.push(SubPlatformType.Custom_Juejin)
       // subtypeList.push(SubPlatformType.Custom_Flowus)
       subtypeList.push(SubPlatformType.Custom_Haloweb)
+      subtypeList.push(SubPlatformType.Custom_Yuqueweb)
       subtypeList.push(SubPlatformType.Custom_Bilibili)
       subtypeList.push(SubPlatformType.Custom_Xiaohongshu)
       break
@@ -452,10 +492,32 @@ export function isDynamicKeyExists(dynamicConfigArray: DynamicConfig[], key: str
 
 /**
  * 通过平台key查询平台
+ *
+ * 匹配顺序：精确 → 大小写不敏感 → 规范化（忽略大小写、剥离实例 id），
+ * 以兼容历史数据（旧版插件写入的全小写 key、不带实例 id）与当前平台配置（混合大小写 platformKey、可能带实例 id）的差异，
+ * 避免文章管理「平台显示已删除」。
  */
 export function getDynCfgByKey(dynamicConfigArray: DynamicConfig[], key: string): DynamicConfig {
+  if (!key) {
+    return null
+  }
+  // 1. 精确匹配
   for (let i = 0; i < dynamicConfigArray.length; i++) {
     if (dynamicConfigArray[i].platformKey === key) {
+      return dynamicConfigArray[i]
+    }
+  }
+  // 2. 大小写不敏感匹配（保留实例 id）
+  const lowerKey = key.toLowerCase()
+  for (let i = 0; i < dynamicConfigArray.length; i++) {
+    if (dynamicConfigArray[i].platformKey.toLowerCase() === lowerKey) {
+      return dynamicConfigArray[i]
+    }
+  }
+  // 3. 规范化匹配（忽略大小写 + 剥离实例 id）
+  const normKey = normalizePlatformKey(key)
+  for (let i = 0; i < dynamicConfigArray.length; i++) {
+    if (normalizePlatformKey(dynamicConfigArray[i].platformKey) === normKey) {
       return dynamicConfigArray[i]
     }
   }
@@ -512,6 +574,27 @@ export function getDynPostidKey(platformKey: string): string {
  */
 export function getDynYamlKey(platformKey: string): string {
   return "custom-" + platformKey.replace(/_/g, "-") + "-yaml"
+}
+
+/**
+ * 规范化平台 key，用于消除「历史数据 key」与「当前平台配置 platformKey」的差异：
+ * - 剥离尾部实例 id（由 getNewPlatformKey 生成，格式 `-<短字母数字>`）
+ * - 统一分隔符 `-` 为 `_`
+ * - 全部转为小写
+ *
+ * 例如：
+ * - `fs_LocalSystem` / `fs-localsystem` -> `fs_localsystem`
+ * - `custom_Yuqueweb-z1awjla` / `custom-yuqueweb-z1awjla` -> `custom_yuqueweb`
+ * - `wordpress_Wordpressdotcom` -> `wordpress_wordpressdotcom`
+ *
+ * @since 1.41.1+
+ */
+export function normalizePlatformKey(key: string): string {
+  const normalized = key.replace(/-/g, "_").toLowerCase()
+  // 仅当剥离尾部 <id> 后剩余仍为 <type>_<subtype>（含 '_'）时才剥离，
+  // 以免把无实例 id 的纯 <type>-<subtype> 形态误判为 id 而过度剥离。
+  const stripped = normalized.replace(/_[a-z0-9]{4,}$/, "")
+  return stripped.includes("_") ? stripped : normalized
 }
 
 /**

@@ -1,0 +1,341 @@
+<template>
+  <section class="syp-settings-page">
+    <div class="syp-settings-page__header">
+      <div>
+        <div class="syp-settings-page__eyebrow">{{ t("v2.platformConfig.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">
+          {{ platformName || t("v2.platformConfig.title") }}
+          <HelpButton :page-id="helpPageId" :page-title="platformName" />
+        </h2>
+        <p class="syp-settings-page__desc">
+          {{ t("v2.platformConfig.desc") }}
+        </p>
+      </div>
+    </div>
+
+    <div v-if="state.isLoading" class="syp-settings-empty">
+      <div class="syp-settings-empty__title">{{ t("v2.platformConfig.loading.title") }}</div>
+      <div class="syp-settings-empty__desc">{{ t("v2.platformConfig.loading.desc") }}</div>
+    </div>
+
+    <div v-else-if="state.errorMessage" class="syp-settings-empty">
+      <div class="syp-settings-empty__title">{{ t("v2.platformConfig.error.title") }}</div>
+      <div class="syp-settings-empty__desc">{{ state.errorMessage }}</div>
+    </div>
+
+    <template v-else>
+      <div v-if="bridgeComponent" class="syp-platform-bridge">
+        <Suspense>
+          <component
+            :is="bridgeComponent"
+            :api-type="platformKey"
+            @validated="handleValidationResult"
+            @saved="handleFormSaved"
+          >
+            <template #cookie-actions="cookieActions">
+              <V2WebCookieAuthPanel
+                :platform-key="platformKey"
+                :cfg="cookieActions.cfg"
+                :dyn-cfg="cookieActions.dynCfg"
+                :setting="cookieActions.setting"
+                :dynamic-config-array="cookieActions.dynamicConfigArray"
+                :is-manual-expanded="cookieActions.isManualExpanded"
+                :toggle-manual-editor="cookieActions.toggleManualEditor"
+                :expand-manual-editor="cookieActions.expandManualEditor"
+                @authorized="handleCookieAuthorized"
+              />
+            </template>
+          </component>
+          <template #fallback>
+            <div class="syp-settings-empty">
+              <div class="syp-settings-empty__title">{{ t("v2.platformConfig.mounting.title") }}</div>
+              <div class="syp-settings-empty__desc">{{ t("v2.platformConfig.mounting.desc") }}</div>
+            </div>
+          </template>
+        </Suspense>
+
+        <!-- Inline validation failure bar -->
+        <div v-if="validationError" class="syp-validation-error-bar" data-testid="syp-validation-error-bar">
+          <span class="syp-validation-error-bar__text">{{ validationError }}</span>
+          <button
+            type="button"
+            class="syp-validation-error-bar__action"
+            data-testid="syp-validation-error-view-details"
+            @click="emit('show-error-details')"
+          >
+            {{ t("v2.platformConfig.validation.viewDetails") }}
+          </button>
+        </div>
+      </div>
+
+      <div v-else class="syp-settings-empty">
+        <div class="syp-settings-empty__title">{{ t("v2.platformConfig.unsupported.title") }}</div>
+        <div class="syp-settings-empty__desc">
+          {{ t("v2.platformConfig.unsupported.desc") }}
+        </div>
+      </div>
+    </template>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { computed, nextTick, onMounted, provide, reactive, ref, watch, type Component } from "vue"
+import { getV2BridgeComponent } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
+import {
+    V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY,
+    type V2PlatformConfigValidationResult,
+} from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
+import V2WebCookieAuthPanel from "~/src/components/v2/settings/V2WebCookieAuthPanel.vue"
+import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
+import type { WebCookieAuthEventStatus } from "~/src/composables/useWebCookieAuthorization.ts"
+import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
+import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import HelpButton from "~/src/components/common/help/HelpButton.vue"
+import { SYP_HELP_PAGE_ID_KEY } from "~/src/components/common/help/helpPageIdKey.ts"
+
+// 确保 page configs 已注册
+import "~/src/helpConfigs/pages/index"
+
+const props = defineProps<{
+  platformKey: string
+  platformName?: string
+}>()
+
+const emit = defineEmits<{
+  (event: "cookie-authorized", result: { status: WebCookieAuthEventStatus; ok: boolean }): void
+  (event: "validated", result: V2PlatformConfigValidationResult): void
+  (event: "saved", result: { ok: boolean }): void
+  (event: "show-error-details"): void
+}>()
+
+const { t } = useV2I18n()
+const { getPublishCfg } = usePublishConfig()
+
+// 配置页帮助上下文的唯一来源：页面帮助入口与字段级指引共用同一个 pageId，不在子组件里另拼一份
+const helpPageId = computed(() => `platform-config/${props.platformKey}`)
+provide(SYP_HELP_PAGE_ID_KEY, helpPageId)
+
+provide(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, {
+  onValidated: handleValidationResult,
+  onSaved: (result) => emit("saved", result),
+})
+
+const state = reactive({
+  isLoading: true,
+  errorMessage: "",
+  subtype: "" as SubPlatformType | "",
+})
+
+const validationError = ref<string>("")
+
+watch(validationError, async (nextError) => {
+  if (nextError) {
+    await nextTick()
+    const el = document.querySelector(".syp-validation-error-bar") as HTMLElement | null
+    el?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  }
+})
+
+const bridgeComponent = computed<Component | null>(() => {
+  return getV2BridgeComponent(state.subtype, {
+    electron: EnvUtil.isSiyuanElectron(),
+  })
+})
+
+watch(
+  () => props.platformKey,
+  async () => {
+    await loadBridgeMeta()
+  }
+)
+
+onMounted(async () => {
+  await loadBridgeMeta()
+})
+
+async function loadBridgeMeta() {
+  if (!props.platformKey) {
+    state.subtype = ""
+    state.errorMessage = t("v2.platformConfig.error.noPlatformKey")
+    state.isLoading = false
+    return
+  }
+
+  state.isLoading = true
+  state.errorMessage = ""
+
+  try {
+    const publishCfg = await getPublishCfg(props.platformKey)
+    state.subtype = publishCfg.dynCfg?.subPlatformType ?? ""
+    if (!publishCfg.dynCfg) {
+      state.errorMessage = t("v2.platformConfig.error.notFound")
+    }
+  } catch (error) {
+    state.errorMessage = error instanceof Error ? error.message : String(error ?? t("v2.common.unknownError"))
+    state.subtype = ""
+  } finally {
+    state.isLoading = false
+  }
+}
+
+function handleCookieAuthorized(result: { status: WebCookieAuthEventStatus; ok: boolean }) {
+  emit("cookie-authorized", result)
+}
+
+function handleValidationResult(result: V2PlatformConfigValidationResult) {
+  if (!result.ok) {
+    const raw = result.errorMessage || t("v2.platformConfig.validation.failedGeneric")
+    validationError.value = sanitizeSensitiveForLog(raw)
+  } else {
+    validationError.value = ""
+  }
+  emit("validated", result)
+}
+
+function handleFormSaved(result: { ok: boolean }) {
+  emit("saved", result)
+}
+</script>
+
+<style scoped lang="stylus">
+@import "../../../assets/v2/variables.styl"
+
+.syp-platform-bridge
+  padding 10px
+  border-radius $syp-sm-card-radius
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  overflow visible
+
+  :deep(.el-form)
+    width 100%
+    max-width 100%
+    overflow visible
+
+  :deep(.el-form-item)
+    margin-right 0
+
+  :deep(.el-form-item__content)
+    min-width 0
+
+  :deep(.el-input),
+  :deep(.el-input__wrapper),
+  :deep(.el-textarea),
+  :deep(.el-select)
+    max-width 100%
+
+  :deep(.legacy-setting-form),
+  :deep(.legacy-cookie-form)
+    font-size 12px
+
+  :deep(.legacy-setting-form .el-form-item),
+  :deep(.legacy-cookie-form .el-form-item)
+    margin-bottom 6px
+
+  :deep(.legacy-setting-form .el-form-item__label),
+  :deep(.legacy-cookie-form .el-form-item__label)
+    min-height 24px
+    padding-right 8px
+    font-size 12px
+    line-height 24px
+
+  :deep(.legacy-setting-form .el-form-item__content),
+  :deep(.legacy-cookie-form .el-form-item__content)
+    min-height 24px
+    gap 4px
+
+  :deep(.legacy-setting-form .el-input__wrapper),
+  :deep(.legacy-setting-form .el-select__wrapper),
+  :deep(.legacy-cookie-form .el-input__wrapper),
+  :deep(.legacy-cookie-form .el-select__wrapper)
+    min-height 24px
+    padding 0 6px
+    border-radius $syp-radius-sm
+
+  :deep(.legacy-setting-form .el-textarea__inner),
+  :deep(.legacy-cookie-form .el-textarea__inner)
+    padding 4px 6px
+    line-height 1.4
+    font-size 12px
+    border-radius $syp-radius-sm
+
+  :deep(.legacy-setting-form .el-input__inner),
+  :deep(.legacy-cookie-form .el-input__inner)
+    font-size 12px
+
+  :deep(.legacy-setting-form .el-radio-group),
+  :deep(.legacy-cookie-form .el-radio-group)
+    gap 4px 8px
+
+  :deep(.legacy-setting-form .el-radio),
+  :deep(.legacy-setting-form .el-checkbox),
+  :deep(.legacy-cookie-form .el-radio),
+  :deep(.legacy-cookie-form .el-checkbox)
+    min-height 20px
+
+  :deep(.legacy-setting-form .el-radio__label),
+  :deep(.legacy-setting-form .el-checkbox__label),
+  :deep(.legacy-cookie-form .el-radio__label),
+  :deep(.legacy-cookie-form .el-checkbox__label)
+    padding-left 4px
+    font-size 12px
+
+  :deep(.legacy-setting-form .el-radio__inner),
+  :deep(.legacy-setting-form .el-checkbox__inner),
+  :deep(.legacy-cookie-form .el-radio__inner),
+  :deep(.legacy-cookie-form .el-checkbox__inner)
+    width 12px
+    height 12px
+
+  :deep(.legacy-setting-form .el-alert),
+  :deep(.legacy-cookie-form .el-alert)
+    --el-alert-padding 4px 6px
+    font-size 12px
+    border-radius $syp-radius-sm
+
+  :deep(.legacy-setting-form .el-button),
+  :deep(.legacy-cookie-form .el-button)
+    min-height 24px
+    padding 0 8px
+    font-size 12px
+    border-radius $syp-radius-sm
+
+  :deep(.el-alert)
+    margin-top 6px
+
+  :deep(.el-button + .el-button)
+    margin-left 6px
+
+.syp-validation-error-bar
+  display flex
+  align-items center
+  justify-content space-between
+  gap 8px
+  margin-top 8px
+  padding 6px 10px
+  border-radius $syp-radius-sm
+  background-color var(--b3-card-error-background, #fdecea)
+  color var(--b3-theme-error, #d32f2f)
+  font-size 12px
+  line-height 1.5
+
+  &__text
+    flex 1 1 0
+    min-width 0
+    word-break break-word
+
+  &__action
+    flex 0 0 auto
+    padding 2px 8px
+    border none
+    border-radius $syp-radius-sm
+    background-color var(--b3-theme-error, #d32f2f)
+    color #fff
+    font-size 12px
+    cursor pointer
+    white-space nowrap
+
+    &:hover
+      opacity 0.85
+</style>

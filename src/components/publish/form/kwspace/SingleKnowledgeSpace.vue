@@ -99,12 +99,12 @@ const initPage = async (showInitSelect: boolean) => {
       value: item.categoryId,
       label: item.categoryName,
     }))
+  }
 
-    // 当前选中
-    if (showInitSelect) {
-      formData.cate.categorySelected = (formData.cateSlugs?.[0] ?? cfg.blogid ?? "") as string
-      logger.debug("读取已有知识空间 =>", { cateSlugs: toRaw(formData.cateSlugs) })
-    }
+  // 当前选中：知识空间为配置存值、编辑时只读，即使分类列表为空也回退到配置的默认专栏
+  if (showInitSelect) {
+    formData.cate.categorySelected = (formData.cateSlugs?.[0] ?? cfg.blogid ?? "") as string
+    logger.debug("读取已有知识空间 =>", { cateSlugs: toRaw(formData.cateSlugs) })
   }
 }
 

@@ -165,6 +165,8 @@ const initForm = async (ptype: PlatformType, subtype: SubPlatformType) => {
       newCfg.authMode = preTmpl.authMode
       newCfg.authUrl = preTmpl.authUrl ?? ""
       newCfg.domain = preTmpl.domain ?? ""
+      newCfg.description = preTmpl.description
+      newCfg.i18n = preTmpl.i18n
       formData.dynCfg = newCfg
       logger.debug("pkey already exists, initialize the new one")
     } else {

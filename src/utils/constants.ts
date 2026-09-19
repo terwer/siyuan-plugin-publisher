@@ -19,6 +19,19 @@ export const aboutUrl = "https://terwer.space/about"
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 
 /**
+ * 最后一个提供 V1 界面的发行版本号。
+ *
+ * V1 已退役，本版起默认使用 V2；偏好里的开关仅作为「确实需要旧界面」时的引导入口，
+ * 指向该版本的下载页。连续三个发行版本之后（Gate D）该开关一并移除。
+ */
+export const V1_LAST_VERSION = "1.41.1"
+
+/**
+ * 最后一个提供 V1 界面的发行版下载地址
+ */
+export const V1_LAST_RELEASE_URL = `https://github.com/terwer/siyuan-plugin-publisher/releases/tag/siyuan-plugin-publisher-v${V1_LAST_VERSION}`
+
+/**
  * 自动映射分类占位符
  */
 export const CATE_AUTO_NAME = "[auto]"
@@ -47,7 +60,10 @@ export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/mid
 /**
  * 新版通用 HTTP 代理，不再免费提供
  *
+ * 注意：不提供默认共享代理地址（防止滥用共享额度），corsAnywhereUrl 需用户自行配置。
+ * 配置指引文档：https://siyuan.wiki/s/20240312153728-paen10j
+ *
  * @since 1.20.2
  * @version 1.20.2
  */
-// export const CORS_PROXT_URL = ""
+export const CORS_PROXY_DOC_URL = "https://siyuan.wiki/s/20240312153728-paen10j"

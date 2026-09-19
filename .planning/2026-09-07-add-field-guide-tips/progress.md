@@ -1,0 +1,730 @@
+# 进度日志：字段级指引接线与回填
+
+## 会话：2026-09-07（立项与规划）
+
+### 背景（本会话此前已完成并推送）
+- `94dc6d26` / `376934d8`：18 份 help 配置 + 22 篇文档草稿的文案口径归一（验证进度类叙述移出用户可见产物），SOP §3 增补第 4 条「文案口径」与 tour 锚点要求。
+- `458ac47a` / `e4a3f592`：GitHub 族 YAML 永久链接能力位 `yamlLinkSupported`（Vuepress2/Vitepress/Astro/Docsify 撤下无效开关），新增 `yamlLinkCapability.spec.ts`；全量 309 测试 + `build:v2` + 宿主复核通过。
+- `c88f930b`：`add-field-guide-tips` OpenSpec change 立项（`openspec validate --strict` 通过）。
+
+### 本次执行
+- 用户否决「延后接线」，要求现在实现并回填已验证平台，且后续验证必须通过该点 → 建立本计划目录并设为 active。
+- 完成评估取证（详见 findings.md 第 1–7 条）：`fields` 零呈现、说明挤在 placeholder、`fields` 键与 tour 锚点分属两套命名空间、`label-width="96px"` 布局约束、pageId 来源已存在、宿主 popper 风险、回归可钉死形式。
+- 制定阶段 0–5，阶段 0 为**宿主弹层去风险**，未定稿前不铺开挂载。
+
+### 用户修正工作方式（关键）
+用户要求：**每完成一个平台 tips 就停下找他验收，通过后才继续；共用层（指导）必须先与一个平台宿主对齐定稿，不要一次性铺开全部**。→ 已把该门禁写入 goal objective（rev 2）与本计划「工作方式」，并把阶段改造成步骤 A–F（A 共用层+试点，B–E 按族分平台，F 收尾）。
+
+### 步骤 A 执行（共用层 + 试点 #11 Vuepress2）
+- 新增 `helpPageIdKey.ts`（`InjectionKey<ComputedRef<string>>`）；`V2PlatformConfigBridge.vue` 抽出 `helpPageId` 并 `provide`，`HelpButton` 改用它（消除第二处拼接）。
+- `FieldGuide.vue`：`pageId` 改为可选 + `inject` 兜底；组件根改 fragment（无 tip 时不留空 div）；`el-tooltip` 加 `:teleported="false"`；图标带 `data-syp-field-guide="<field>"` 便于宿主与测试断言。
+- 挂载：`CommonBlogSetting.vue` 12 处（home/apiUrl/username/三条鉴权行同键 `password`/previewUrl/pageType/`blogid`/picbedService/middlewareUrl/两处 corsAnywhereUrl），`CommonGithubSetting.vue` 12 处（含 `yamlLinkEnabled` 随能力位、`defaultMsg`/`author`/`email`/`site` 高级四项、`imageStorePath`/`imageLinkPath`）；检索关键词行（绑 `formData.ksKeyword`）与验证行按规则不挂。
+- 试点配置 `github-vuepress2.ts` 补 8 个缺项 tip；`defaultMsg`/`author`/`email` 语义按 `zhi-github-middleware` 与 `commonGithubApiAdaptor.ts:39-41` 写（commit message 与提交作者/邮箱），`site` 对 Vuepress2 明确「不写入文章 Front Matter」，`blogid` 说明只读并随 `defaultPath` 同步。
+- 质量：`pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过。
+- 宿主证据（9222 / test 工作空间，`github_Vuepress2-ig1w6`）：20 行全部出现 ⓘ（16 基础 + 4 折叠高级），字段均已填值仍可见；弹层 `panel.contains(popper)=true`（未传送 body），逐行滚入视区后完整可见无裁切；抽样 5 行 tip 文案与 Vuepress2 一致；HelpPanel 未受影响（专属 summary 正常、无回退提示）。截图 `tmp/field-guide-vuepress2-token-tip.png`。
+
+### 错误
+- 首次宿主复核 `iconCount=0`：页面仍跑旧 bundle → 重载 Electron 页面后正常（改 `dist-v2` 后必须 reload 才生效）。
+
+### 用户看图验收：不通过（`a77d5d4c` 试点）
+1. svg 样式错误看不清；2. tips 必须与控件同行，禁止换行。→ 停在步骤 A 修标准，不进入任何新平台。
+
+### 返工（同一天）
+- 同行：`FieldGuide` 由兄弟节点改为**包裹控件**（`el-form-item__content` 默认 `flex-wrap:wrap` + 控件宽 100% 是换行根因），新增 `inline`（开关/单选组紧贴控件）与 `tall`（文本域贴首行）两个变体；`CommonBlogSetting` 13 处、`CommonGithubSetting` 13 处全部改成包裹式。
+- 图标：删掉手写 path，改用官方 `InfoFilled`（该版本无描边版 `Information`），16px、`--el-text-color-regular`、hover 主色、`cursor: help`。
+- 复测（9222 宿主，`github_Vuepress2-ig1w6`，已展开折叠高级）：20 行 `allSameLine=true`、`bad=[]`、`gap=4px`、`svgPx=16x16`、`color=rgb(96,98,102)`；抽样 6 行（home/password/pageType/picbedService/dynYamlCfg/blogid）tip 文案均为该平台专属，`tipInPanel=true`、`tipVisible=true`。
+- 质量：`pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过。
+- 证据截图：`tmp/field-guide-vuepress2-fixed-top.png`、`tmp/field-guide-vuepress2-fixed-bottom.png`。
+
+### 下一步
+**再次停下等用户对步骤 A 的验收**（呈现标准已按两点意见改定）。通过后按 B（#6 Hexo → #7 Hugo → #8 Jekyll → #9 Quartz → #10 Vuepress）逐站推进，每站一停。
+
+### 用户第二轮：功能通过（「可以了」），只要视觉再淡一点
+- 已按 `HelpButton` 的弱化先例定稿：14px + `--el-text-color-placeholder` + hover 主色 + tooltip `show-after 150ms`；宿主实测 `14x14`/`rgb(168,171,178)`、弹层正常。证据 `tmp/field-guide-vuepress2-quiet.png`。
+- 呈现标准就此冻结，作为后续 21 站的统一口径；更强档（仅悬停才淡入）作为备选未启用。
+
+
+### 用户第三轮：标准定稿 + 收工
+- 「保持现在的全行 + 安静档」→ 呈现标准冻结，写入 `task_plan.md`「呈现标准」节与 change `tasks.md` 2.7，作为后续 21 站统一口径；两个更强档（悬停才淡入 / 只给易错字段挂）明确不采用。
+- 指示「同步 hexo 的计划，不开始」→ 已查实并写入 `task_plan.md`「下一站开工清单：#6 Hexo」：现有 12 键无需改名、需补 9 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/高级四项），每条文案依据都指到具体代码行；预期宿主 17→21 个 ⓘ。**未写任何代码、未构建、未开新平台。**
+- 目标保持 paused 状态（等用户回来点头再 resume 开 #6）。
+
+## 会话：2026-09-08（步骤 B：#6 Hexo）
+
+### 环境
+- 用户「拉取最新代码并继续」：`git pull --ff-only` 已是最新（本地 4 个提交即 HEAD），目标 resume 到 rev 4。
+- 思源未运行（9222 与内核端口均无监听）→ 自行以 `C:\Program Files\SiYuan\SiYuan.exe --workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222` 拉起，3 秒后 9222 就绪；本次内核端口 **62677**（每次随机，勿记死）。
+- 工作区核实：`test/data/plugins/siyuan-plugin-publisher -> .../siyuan-plugin-publisher/dist-v2`；`public` 工作区按规则不用于验证。
+
+### 执行
+- 按上轮清单改 `src/helpConfigs/pages/platform-config/common-github-hexo.ts`：新增 9 个 `fields` 键（`yamlLinkEnabled`/`blogid`/`imageStorePath`/`imageLinkPath`/`dynYamlCfg`/`defaultMsg`/`author`/`email`/`site`），并给 `previewPostUrl` 补「开启 YAML永久链接时 permalink 也按此规则生成」。
+- 文案依据：`hexoYamlConverterAdaptor.ts:66-91`（`yamlLinkEnabled` → `permalink`，取自 `previewPostUrl`，支持 `[postid]/[yyyy]/[MM]/[dd]/[cats]`）、`:95-104`（`dynYamlCfg` 最后合并、同名覆盖）、`hexoConfig.ts:31/34/38/39/47/48`、`commonGithubConfig.ts:117`（默认 Bundled → 图片两行会渲染）。
+- 质量：`pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过。
+- 宿主复核（`github_Hexo`，无实例后缀）：基础 **17** 个 ⓘ、展开高级 **21** 个，与预测一致；`notSameLine=[]`；抽样 5 行（`yamlLinkEnabled`/`imageStorePath`/`site`/`blogid`/`dynYamlCfg`）tip 均为 Hexo 专属、`inPanel=true`、`fullyVisible=true`、与控件间距 4px（开关行 inline 紧贴）。证据 `tmp/field-guide-hexo-yamllink.png`。
+
+### 停下等验收
+- 未动其他平台、未加回归尺、未改 SOP/checklist。
+
+## 会话：2026-09-08（#6 Hexo 验收通过 → #7 Hugo）
+
+### 执行
+- `github-hugo.ts` 补 9 键（同 Hexo 组），并**纠正一处错误表述**：Hugo 的 `yamlLinkEnabled` 写的是 `url` 且固定 `/post/<文章别名>.html`，**不读「文章预览规则」**（`hugoYamlConverterAdaptor.ts:37-38`）——原 `previewPostUrl` tip、faq、以及 `docs/draft/platforms/github-hugo.md` 第 33/46 行都写成「与预览规则一致」，已四处一并改准。
+- `imageLinkPath` 文案按 `commonGithubApiAdaptor.ts:315-343` 的三分支口径写（Hugo 的 `images` → 引用为 `/images/<名>` 绝对路径；`./`、`../` 前缀则保留相对）。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（Hugo）
+- test 工作区**没有 Hugo 账号**（早前验证的临时账号已不在）→ 走「添加账号 → GITHUB → Hugo」在当前窗口打开配置页做渲染核验；**未点保存/验证**，返回列表后确认 `github_Hugo` 未落库，无需清理。
+- 基础 **17** 个 ⓘ、展开高级 **21** 个；`notSameLine=[]`；抽样 tip 均为 Hugo 专属（`yamlLinkEnabled` 明确「固定值」、`blogid` 为 `content/post`、`imageLinkPath` 为 `static/images`→`/images/…`、`site` 为「不写作者字段」），`inPanel=true`、`fullyVisible=true`。
+- 量测踩坑：一次探测把上一行未消失的弹层错记给 `site`；改为「先确认无可见 popper 再 hover」后复测通过（口径已写进 findings）。
+- 证据：`tmp/field-guide-hugo-yamllink.png`。
+
+### 停下等验收
+- 未动 #8 Jekyll 及之后平台。
+
+## 会话：2026-09-09（#7 Hugo 放行 → #8 Jekyll）
+
+### 执行
+- `github-jekyll.ts` 补同 9 键，并**再纠正两处错误表述**（都在 help + `docs/draft/platforms/github-jekyll.md` 同步改）：
+  1. `permalink` 是**无条件写入**（`jekyllYamlConverterAdaptor.ts:68`），`yamlLinkEnabled` 只决定取值来源（开启→按「文章预览规则」且仅 `[postid]` 生效，日期/分类占位符那段是注释代码；关闭→固定 `/post/<文章别名>.html`）。原文说「关闭时交给 Jekyll 默认 permalink」不成立。
+  2. `dynYamlCfg` **留空**才自动写 `layout: post` + `published: true`；**一旦填写就只合并用户键**，需自带这两项（`:87-97`）。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主与工具
+- 思源未运行 → 重新以 `--workspace=<test> --remote-debugging-port=9222` 拉起（内核端口本次 59072）。
+- **chrome-devtools MCP 已从本会话工具表消失**（宿主关闭后掉线；恢复需重启 DSH Web，会打断会话，未擅自做）→ 改用 PowerShell `ClientWebSocket` 直连 CDP 的自研通道：`tmp/cdp-eval.ps1`（`Runtime.evaluate`）+ `tmp/cdp-shot.ps1`（`Page.captureScreenshot`），响应路径为 `$result.result.result.value`。
+- 宿主实测（真实账号 `github_Jekyll`，值已填）：标题 Jekyll、基础 **17** ⓘ、展开高级 **21** ⓘ、`notSameLine=[]`；hover 差集口径复核 4 条 tip 为 Jekyll 专属、`inPanel=true`、`fullyVisible=true`；截图 `tmp/field-guide-jekyll-yamllink.png`（弹层内容「Jekyll 始终把 permalink 写入 Front Matter…」已在页面内确认可见）。
+- 量测口径修正：先前写的「等可见 popper 归零再 hover」**不可靠**（EP 隐藏后 `getComputedStyle` 仍判可见，弹层累积 1→2→3，导致 `site` 一度错读 `blogid` 文案）。改为 hover 前后**文本差集**，并另用 `helpRegistry.getField` 在 vitest 里把 **21 个键逐条**核验全绿（临时 spec 跑完即删，未入库）。
+
+### 停下等验收
+- 未动 #9 Quartz 及之后平台。
+
+### 用户授权自行重启（本会话末尾）
+- 「你自己重启并继续验证」→ 已把恢复步骤写进 `task_plan.md`「重启后第一步」；用 WMI `Win32_Process.Create` 以**脱离本进程树**的方式调度 `restart-dsh-web.ps1`（延时约 40 秒），避免被 DSH 一起带走导致重启不发生。
+- 重启会中断本会话；SiYuan（9222）与仓库状态不受影响，`fbbd9ebf` 已推送、工作树干净。
+- 若重启后 MCP 仍不可用：继续用 `tmp/cdp-eval.ps1` / `tmp/cdp-shot.ps1` 的 CDP 直连通道核验，不必再卡住。
+
+## 会话：2026-09-09（重启恢复 → #9 Quartz，含一次跨站修正）
+
+### 恢复
+- 用户「已重启」→ `get_goal` 后 `update_goal resume`（rev 10、active）；`list_pages` 确认 chrome-devtools MCP 已恢复；9222 与 SiYuan 未受影响（内核端口 59072）。
+- 按用户「重启并继续验证」的口径把 #8 Jekyll 记为 ✅ 放行（台账已注明依据）。
+
+### 执行（#9 Quartz）
+- `github-quartz.ts` 补同 9 键 + 改准 `previewPostUrl`。Quartz 与同族两站都不同：`permalink` **仅开关开启时写**（`quartzYamlConverterAdaptor.ts:59-86`），且 `[postid]/[yyyy]/[MM]/[mm]/[dd]/[cats]` 全部生效；`dynYamlCfg` 留空写的是 `enableToc` + `enableBackLinks`（`:89-98`），不是 Jekyll 的 `layout`/`published` → 证实「dynYamlCfg 的实写字段必须逐站读」。
+- **跨站修正**：查实 `allowKnowledgeSpaceChange` 只被 `SinglePublishDoPublish.vue:447` 消费，设置页发布目录 `el-select` 从不禁用（宿主实测 `is-disabled=false`、`input.disabled=false`）→ 前五站 `blogid` 的「只读」表述统一改准（Vuepress2/Hexo/Hugo/Jekyll/Quartz），并在 Jekyll 上复测新文案渲染正确。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核
+- `github_Quartz` 账号是「未启用」，行上是「去授权」不是「管理」→ 首次定位误开了 `fs_LocalSystem` 表单（已记为操作要点）。改走「添加账号 → Quartz 卡片」开临时表单：标题 Quartz、基础 **17** ⓘ、展开 **21** ⓘ、`notSameLine=[]`；**未保存**，返回列表后账号数仍 32、`github_Quartz` 仍「未启用」，未落库。
+- tip 复核 5 条（`yamlLinkEnabled`/`dynYamlCfg`/`blogid`/`imageLinkPath`/`site`）全部 `visible:1 / added:1`、文案为 Quartz 专属、`inPanel` + `fullyVisible`。截图 `tmp/field-guide-quartz-dynyaml.png`。
+- 口径补充：`getComputedStyle` 过滤会把 EP 弹层全滤掉（`added:0`），要用 `style.display !== 'none'`；归属靠 hover 前后文本差集。
+
+### 停下等验收
+- 未动 #10 Vuepress 及之后平台。
+
+## 会话：2026-09-09（#9 Quartz 放行 → #10 Vuepress，GitHub 族收尾）
+
+### 执行
+- `github-vuepress.ts` 补同 9 键 + 改准 `previewPostUrl`；文档草稿 `github-vuepress.md` L34 的「permalink 与文章预览规则一致」改准，并补全该站 front matter 实际字段清单。
+- 该站两处**族内独有**事实（都来自 `vuepressYamlConverterAdaptor.ts`）：
+  1. `:88-92` `permalink` 仅当 `yamlLinkEnabled && wp_slug` 时写，取值**硬编码** `/post/<文章别名>.html`。
+  2. `:94-114` **只有 Vuepress 把 `author` 写进文章头**（`{ name: cfg.author ?? "terwer", link: cfg.site }`，`site` 留空回退 `home + "/" + username`）→ `author`/`site` 的 tip 在本站写「影响文章 Front Matter」，其余五站写「仅作 commit/账号信息」。
+  3. `:121-131` `dynYamlCfg` 留空不补任何字段，且合并晚于 `author` → 同名键会覆盖 `author`（tip 已写明）。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（真实账号 `github_Vuepress`，无需临时开表单）
+- 精确匹配 key 元素（避免 `github_Vuepress2` 干扰）→ 行内有「管理」，直接进：标题 Vuepress、基础 **17** ⓘ、展开高级 **21** ⓘ、`notSameLine=[]`。
+- 6 条 tip 复核（`author`/`site`/`yamlLinkEnabled`/`dynYamlCfg`/`blogid`/`imageLinkPath`）全部 `visible:1 / added:1`、文案为 Vuepress 专属、`inPanel` + `fullyVisible`。截图 `tmp/field-guide-vuepress-author-site.png`。
+- **GitHub 族 6 站（#6 Hexo、#7 Hugo、#8 Jekyll、#9 Quartz、#10 Vuepress、#11 Vuepress2）全部回填并逐站过宿主**；族内差异与方法固化进 `task_plan.md`，#6 Hexo 的旧开工清单已替换为 #1 语雀的「先查实再动笔」清单。
+
+### 停下等验收
+- 未动 C 组（Common 族 5 站）及之后平台。
+
+## 会话：2026-09-09（#10 Vuepress 放行 → C 组 #1 语雀）
+
+### 执行
+- `common-yuque.ts`：`token`→`password`、`knowledgeSpace`→`blogid`（键=配置属性名），补 `previewUrl`/`pageType`，`password` tip 补上「需对目标知识库有写权限 + API 发布要求专业会员」。
+- **改准一处事实错误**：原 tip 与 `docs/draft/platforms/common-yuque.md` L26 写「语雀使用内置图片链路」，实际 `useYuqueApi.ts:68-69` 是 `picgoPicbedSupported=true`、`bundledPicbedSupported=false` → 只有「不使用 / PicGo」两项，无内置图床；`BlogConfig` 默认 `picbedService=None`。tip 与草稿都按实测重写。
+- `registry.spec.ts:103-104` 随改名同步（`'token'` → `'password'`）。
+- `YuqueSetting.vue` 查实**无平台专有行**（只有会员提示 + 共用表单）→ 本站零挂载，共用层已覆盖。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核
+- 8 行全部出现 ⓘ 且 `notSameLine=[]`：`home/apiUrl/username/password/previewUrl/pageType/blogid/picbedService`；鉴权行标签是「鉴权token」但键解析为 `password` ✓，知识库行标签「知识库」解析为 `blogid` ✓。
+- 5 条 tip `added:1` 文案准确，`password` 的「前往生成 Token」链接在弹层内正常渲染；图床选项实测 `["不使用","PicGo 强烈推荐"]`。截图 `tmp/field-guide-yuque-picbed.png`。
+- **踩到并纠正的副作用**：语雀走「添加账号 → 卡片」会**直接落库**一个空账号（`common_Yuque-1ma2ix`，账号数 32→33），与 GitHub 族（Hugo/Quartz 不落库）不同 → 已按行内「删除 → 确认」删回 32 行、只剩原 `common_Yuque`。规矩写进 findings。
+
+### 停下等验收
+- 未动 #2 Notion 及之后平台。
+
+## 会话：2026-09-09（#1 语雀 放行 → C 组 #2 Notion）
+
+### 执行
+- `common-notion.ts`：`token`→`password`、`knowledgeSpace`→`blogid`；`picbedService` tip 改准（只有 不使用/PicGo，补「选不使用则按原地址引用，需公网可访问」）；`blogid` 说明「文章作为所选根页面的子页面创建、已发布不可换根页面」；`previewUrl`/`pageType` 措辞收敛为契约描述。文档草稿 `common-notion.md` 的 根页面/图床 两行同步。
+- `NotionSetting.vue` 查实无专有行 → 零挂载。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（真实账号 `common_Notion`，两个 Notion 账号都是未启用态）
+- 澄清一个按钮语义：`V2AccountList.vue:106-108` 的「管理 / 去授权」是**同一个 `configure` 按钮**，只是文案按 `isAuth` 变 → 未授权账号也能直接进配置页，**不需要**启用账号或新建账号（修正上一站记下的判断，也更安全）。
+- 结果：标题 Notion、**7** 个 ⓘ、`notSameLine=[]`；唯一无 ⓘ 的是「搜索关键词」行（`cateSearchEnabled=true` 会渲染，但绑 `formData.ksKeyword` 非配置属性，按 change 2.5 规则不挂，属标准内显式例外）。
+- 5 条 tip `added:1` 文案准确（含「前往创建 Token」链接渲染）；图床选项实测 `["不使用","PicGo 强烈推荐"]`；账号数核验前后都是 **32**（未误建）。截图 `tmp/field-guide-notion-rootpage.png`。
+
+### 停下等验收
+- 未动 #3 Halo 及之后平台。
+
+## 会话：2026-09-09（#2 Notion 放行 + 「保持现状」定档 → C 组 #3 Halo）
+
+### 标准确认
+- 用户对「搜索关键词行是否挂指引」拍板 **保持现状**：非配置属性的行不挂，步骤 F 的键校验不为此开白名单 → 已写进 change `tasks.md` 2.5 与 findings。
+
+### 执行
+- `common-halo.ts`：**零改名零补键**（现有 7 键与宿主 7 行一一对应），只补准三处：
+  1. `picbedService`：宿主实测三项 `不使用 / PicGo / 当前平台` 且**默认选中「不使用」** → tip 改为三项各自行为 + 默认值（原文暗示默认走内置图床）。
+  2. `password`：doc 链接补 `linkText="Halo 配置说明"`（原先无 linkText 会显示通用「查看详情」）。
+  3. `summary`：改为「图床默认不使用，选当前平台时上传到 Halo 附件」。
+- `HaloSetting.vue` 查实无专有行 → 零挂载；`haloConfig.ts:38` `knowledgeSpaceEnabled=false` → 本站**没有发布目录行**（所以不需要 `blogid` 键，这是族内第一个例外，说明「按族套键集」会出错）。
+- 文档草稿 `common-halo.md` 图床行同步补准。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（真实账号 `common_Halo`）
+- 标题 Halo29、**7 行 = 7 个 ⓘ**、`notSameLine=[]`、`rowsWithoutGuide=[]`；账号数前后都是 32（未误建）。
+- 改后 `picbedService`/`password` tip 实测为新文案且链接文案正确；HelpPanel summary 已是新句、无「暂无专属帮助文档」回退。截图 `tmp/field-guide-halo-picbed.png`。
+
+### 停下等验收
+- 未动 #4 Telegraph 及之后平台。
+
+## 会话：2026-09-09（#3 Halo 放行 → C 组 #4 Telegraph，首次挂专有行）
+
+### 执行
+- `TelegraphSetting.vue`：4 个专有行全部按**包裹式**挂 ⓘ——登录模式（`postType`，`inline`）、Access Token（`accessToken`）、Hash（`saveHash`）、刷新授权（`forceReAuth`，`inline`）；`FieldGuide` 显式 import。
+- `telegraph.ts` 补 6 键：`postType`/`accessToken`/`forceReAuth`/`previewUrl`/`pageType`/`picbedService`（`saveHash`、`corsAnywhereUrl` 原已有）。文案依据：`telegraphConfig.ts:27-42`、`telegraphApiAdaptor.ts:34-37/106-115/168-174/296-306`、`useTelegraphApi.ts:53-60`。
+- 写错又改对的教训：初稿把模式写成「匿名用户 / 登录用户」，宿主实测单选项目实文案是「匿名发布 / 登录发布」→ 两处 tip 已按界面用词改回并重新构建复测。**tip 引用界面元素名必须抄宿主实测文本**。
+- 质量：65 文件 / 309 测试通过（改词后重跑）；`build:v2` 通过。
+
+### 宿主复核
+- 匿名模式 **11 行 = 11 个 ⓘ**；点「登录发布」后 `accessToken` 行出现 → **12 行 = 12 个 ⓘ**；`notSameLine=[]`。
+- 5 条新 tip 实测命中；图床 checked = 不使用（与 tip 一致）；核验完把模式切回「匿名发布」且**未点保存**，账号数前后 32。截图 `tmp/field-guide-telegraph-posttype.png`。
+
+### 停下等验收
+- 未动 #5 Confluence 及之后平台。
+
+## 会话：2026-09-12（#4 Telegraph 放行 → C 组收尾 #5 Confluence）
+
+### 执行
+- `ConfluenceSetting.vue`：「父页面」`el-select` 包裹式挂 ⓘ（`field="parentPageId"`，真实配置属性），显式 import `FieldGuide`。
+- `common-confluence.ts`：`knowledgeSpace`→`blogid`；补 `previewUrl`/`pageType`/`picbedService`；`parentPageId` tip 写明「选项按所选空间在展开时拉取、切换空间会清空已选父页面」（依据 `:51-83`）；文案依据 `confluenceConfig.ts:23-35`、`useConfluenceApi.ts:53/69-77`。
+- 质量：65 文件 / 309 测试通过；`build:v2` 通过。
+
+### 宿主复核（test 工作区无 Confluence 账号 → 临时新建）
+- 环境：思源未运行 → 按既定命令重新拉起（内核端口本次 52582），MCP 可用。
+- 走「添加账号 → Confluence 卡片」：标题 Confluence、**8 行 = 8 个 ⓘ**、`rowsWithoutGuide=[]`、`notSameLine=[]`。
+- 两处实测印证文案：发布格式的 **Markdown 单选 `display:none`、HTML 选中**（平台专属 CSS 隐藏）；图床默认 checked = **「当前平台」**。
+- 5 条 tip（`parentPageId`/`blogid`/`picbedService`/`pageType`/`previewUrl`）`added:1`、在面板内完整可见。截图 `tmp/field-guide-confluence-parentpage.png`。
+- **清理**：Common 族的「添加账号」会持久化（32→33）→ 已按「删除 → 行内『确认』」删回 **32**、`confluenceLeft=0`，工作区复原。
+
+### C 组完成 + 停下等验收
+- Common 族 5 站（#1 语雀、#2 Notion、#3 Halo、#4 Telegraph、#5 Confluence）全部回填并逐站过宿主；未动 D 组（Cookie 族 8 站）。
+
+## 会话：2026-09-12（#5 Confluence 放行 → D 组第 1 站 #27 语雀网页版）
+
+### 查实（先读代码再动笔）
+- `YuquewebSetting.vue`：只有 `#header` 的授权提示 alert + 透传 `cookie-actions`/`main`/`footer` 插槽 → **无平台专有行**，零新挂。
+- `CustomWebSetting.vue`：只是 `CommonBlogSetting` 的透传壳 → Cookie 族的行全部来自共用表单。
+- 全仓 `web/*Setting.vue` 逐个查 `#main`/`#footer`：**9 个网页平台全部为 False** → D 组只需共用层 + 各站 `fields` 键校正（不用逐站挂专有行）。
+- `YuquewebConfig.ts` / `useYuquewebWeb.ts:75-90`：`usernameEnabled=false`、`passwordType=Cookie`、`passwordLabel="Cookie"`、`knowledgeSpaceEnabled=true`（标题「知识库」）、`picgoPicbedSupported=false` + `bundledPicbedSupported=true`、`picbedService=Bundled`；`home`/`apiUrl` 由 hook 固定为 `https://www.yuque.com`；`cateSearchEnabled` 未设 → 无「搜索关键词」行 → 预期 **7 行**。
+- `buildDocPayload`：`format:"markdown"` + `body = post.markdown` → 发布格式 tip 写「按 Markdown 提交」；`getPreviewUrl` 用 `previewUrl` 模板替换 `{login}/{bookSlug}/{slug}`。
+
+### 共用层改动（Cookie 族的挂载口径，本站在此定稿）
+- **问题**：V2 下鉴权行渲染的是 `V2WebCookieAuthPanel`（去登录/自动读取），手动文本框默认折叠；原 `field-guide` 只包文本框 → **折叠态该行没有 ⓘ**，违反「每行真实渲染的行都要有指引」。
+- **改法**：`CommonBlogSetting.vue` 鉴权行改为**整行一条指引**——`<field-guide field="password" tall>` 包住新增的 `.cookie-form-item__body`（内部再放授权面板插槽 + 折叠的手动文本框 + 提示），并加 `.cookie-form-item__body` 纵向堆叠样式。
+- **不变量**：展开/收起手动编辑时该行 ⓘ **恒为 1**（不出现两个）；V1 的 `CookieSetting.vue` 未动（V1 文案与结构零变化）。
+
+### 本次改动
+- `custom-yuqueweb.ts`：`cookie`→`password`、`knowledgeSpace`→`blogid`，补 `home`/`apiUrl`/`pageType`，共 **7 键 = 宿主 7 行**；summary/faq/tour 按最终流程与新文案校准（tour 4 步锚点不变）。
+- `docs/draft/platforms/custom-yuqueweb.md`：字段表按真实渲染的 7 行重写，验证流程写明「关闭登录窗口保存登录态」这一步。
+- 质量：`pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过。
+
+### 宿主复核（真实账号 `custom_Yuqueweb`，test 工作空间 / dist-v2 / 9222）
+- 环境：思源未运行 → 自行以 `--workspace="D:\Users\Administrator\Documents\mydocs\SiyuanWorkspace\test" --remote-debugging-port=9222` 拉起（本次内核端口 **58925**）。
+- 路径：顶栏「发布工具」→ 设置 → 账号列表 → `custom_Yuqueweb` 行「管理」（**未用「添加账号」**，避免落库）。
+- 结果：标题 语雀网页版、**7 行 = 7 个 ⓘ**、`rowsWithoutGuide=[]`；字段键与行一一对应 `home/apiUrl/password/previewUrl/pageType/blogid/picbedService`（Cookie 行标签「Cookie」、知识库行标签「知识库」）。
+- 鉴权行几何：图标 14×14 落在行首行右侧（`body.top+7`）、颜色 `rgb(168,171,178)`；展开手动编辑后 ⓘ 仍为 1（文本框已带 1092 字符 Cookie，未外传）。
+- 7 条 tip 逐条 hover：文案正确、均在 `.syp-panel` 内（`panel.contains(popper)=true`）、在视口内完整可见无裁切（最长的 `password` 弹层 284×84）。
+- 渲染事实核对：发布格式 Markdown `checked=true` 且两项都可见（无平台专属隐藏）；图床 `["不使用","当前平台 推荐"]` 且 checked=「当前平台」（与 tip 一致，无 PicGo 项）。
+- HelpPanel：标题 语雀网页版 + 新 summary + 「查看完整帮助文档」+ 常见问题 3 条（与 `faq` 一致）+ 「开始引导教程」，**无「暂无专属帮助文档」回退**。
+- TourGuide：**4/4 步全部命中真实控件**（Cookie 授权→选择知识库→图片发布→验证并保存），高亮框为真实尺寸（95/48/48/74 px）、弹层均在视口内。
+- 账号数核验：**32 → 32**，`custom_Yuqueweb` 仍「运行中/已启用」，未创建临时账号、未点保存/验证。截图 `tmp/field-guide-yuqueweb-cookie.png`。
+
+### 停下等验收
+- 未动 #28 Halo网页版 及之后 7 站。
+
+## 会话：2026-09-12（#27 待验收期间：F 前置审计 + 兜底清理，未开新平台）
+
+### 为什么不开 #28
+- 用户硬性要求「每站停下等验收」，#27 尚未得到人工放行 → 本轮只做**与平台站无关**的审计与清理，不动 #28 及之后 7 站。
+
+### 做了什么
+1. **第一把回归尺原型跑通**（步骤 F.1 的键尺）：对 12 个已回填平台断言 `fields` 键都能在合并配置实例上取到同名属性 → 全部 `missing=[]`。脚本留档 `tmp/field-guide-key-audit.tmp.spec.ts`（vitest 只扫 `src/`，用前复制过去）。
+2. **兜底解析查实**（`tmp/field-guide-fallback-resolution.diag.spec.ts`）：12 个未拆分平台被 `remaining-t1` 占位配置（只有 helpUrl）精确命中 → 这些页**没有任何 ⓘ**（宿主实测 Vitepress 16 行全 `null`）；只有 `github_Docsify`/`gitlab_Gitlabdocsify`/`system_Siyuan` 落到 `platform-config/_default`，而这三者不在「添加账号」选择器里 → 兜底 fields 不可达。
+3. **`_default.ts` 清理**：删掉永不被解析的死键 `token`（鉴权行三分支都绑 `password`，全仓无 `field="token"`），`password` 说明改为覆盖密码/Token/Cookie；与冻结的键规则一致，也让 F 的键尺不必为它开例外。
+4. **宿主**：顺带用 Vitepress 复现了「添加账号 → 卡片」落库行为 → 账号数 32→33 → 已删回 **32**；宿主保持运行（9222）。
+
+### 质量
+- `pnpm vitest run` 65 文件 / 309 测试通过；`pnpm build:v2` 通过（含 `vue-tsc --noEmit`）。
+- 本轮无平台六格/帮助门禁结论变化；#27 结论与证据见上一节，仍待验收。
+
+## 会话：2026-09-12（第二轮：#27 待验收期间，第二把回归尺原型 + 余 7 站键清单预推）
+
+### 做了什么
+1. **覆盖尺原型**（步骤 F 第二把尺）：从 `CommonBlogSetting.vue` 抽每行渲染条件 + 各族专有行，推出「该站应覆盖的键集」，与各站 `fields` 做差集 → **12 个已回填平台全部 `missing=[] extra=[]`**（键数与宿主实测行数逐站吻合），两把尺互相印证。脚本留档 `tmp/field-guide-family-coverage.diag.spec.ts`。
+2. **余 7 站键校正清单已提前算出**（写入 task_plan 步骤 D 表格）：Halo网页版 +password +previewUrl -cookie；知乎 +username +password +previewUrl +blogid -cookie -knowledgeSpace；CSDN +password +previewUrl -cookie；简书/掘金 +password +previewUrl +blogid -cookie -knowledgeSpace；公众号 +password -cookie；哔哩哔哩 +password +previewUrl +blogid -cookie -knowledgeSpace。各站仍按规矩在宿主逐项确认。
+3. **两条尺子设计结论**（写进 task_plan 步骤 F）：① 尺子②必须用**按平台显式 REQUIRED_FIELD_KEYS 表**，不能从 Config 构造函数推导——平台 hook 运行时改开关（Telegraph 开 `usernameEnabled`、掘金/哔哩哔哩/知乎/简书开 `knowledgeSpaceEnabled`）；② GitHub 族图片两行取决于**当前图床值**（`picbedService === Bundled`），不是「是否支持 Bundled」；宿主内不渲染的 `middlewareUrl`、非 `isCorsProxy` 的 `corsAnywhereUrl` 不进必填集。
+4. 顺带确认 `telegraph.ts` 的 `username` 键不是死键（hook 把 `usernameEnabled` 置真）——避免误删。
+
+### 质量
+- 临时脚本已移出 `src/`（`vue-tsc` 会检查仓库内所有 `.spec.ts`，留 `tmp/` 更安全）。
+- `pnpm vitest run`、`pnpm build:v2` 复跑通过；提交 `a52edae2` 已推送，工作树干净。
+- 本轮不动任何平台站文件、不改六格/帮助门禁结论；#27 仍待人工验收。
+
+## 会话：2026-09-12（第三轮：#27 待验收期间，帮助/文档门禁全量核对 + F.2/F.4 预研）
+
+### 做了什么
+1. **帮助/文档门禁全量核对（22 站）**：`docs/draft/platforms/` 恰 22 个草稿且**全部第 3 行带 `TODO：待替换真实帮助文档链接`**；`registry.spec.ts` 的 `verifiedConfigs` 已含 22 站并断言 `summary`/`fields`/`faq`/`tour` 齐备、不在 `remaining-t1` → SOP §3 第 1、2 项在 22 站无缺口。
+2. **F.2 核实为完成态**：全仓无任何按 `'token'` 取字段说明的用例（Yuque 那条早已用 `password`）；残留 `token` 只在 tour 锚点与 Telegraph 的 `accessToken` 真实属性上 → 不得误删。已更正 task_plan 里 F.2 的状态描述。
+3. **F.4 草稿落地到 `tmp/`**：`tmp/sop-section3-field-guide-draft.md`，含 §3 新增第 5 项（键=绑定属性名 / 鉴权行恒 `password` / 全行覆盖 / 宿主核验步骤 / 回落链 / 两把尺子）、§五 回写补充（备注记「N 行 = N ⓘ」）与 checklist 一行格式；待全部平台验收后再写入 SOP。
+
+### 质量
+- 本轮纯核对与草稿，无代码改动、无平台站文件改动；`vitest`/`build:v2` 状态与上一轮一致（65 文件 / 309 测试、构建通过）。
+- 工作树干净；#27 仍待人工验收。
+
+## 会话：2026-09-12（第四轮：#27 待验收期间，E 组预分析 + 组件全景清点）
+
+### 做了什么
+1. **组件全景清点**：全量扫 `singleplatform/**/*.vue` 的 `field-guide` 与 `el-form-item` 计数 → 真正挂过指引的只有 4 个组件（`CommonBlogSetting` 26、`CommonGithubSetting` 26、`ConfluenceSetting` 2、`TelegraphSetting` 8）；**唯一未挂却含真实行的组件是 `fs/LocalSystemSetting.vue`（3 行）**；其余各站组件都是直通壳或 slot 壳（0 行）。
+2. **E 组工作清单精确化**（覆盖尺扩到 3 站）：博客园缺 `previewUrl`/`pageType`/`picbedService`；Wordpress 键已齐（只需宿主核验）；本地系统键已齐但 3 行未挂指引 → E 组代码工作量只有本地系统那 3 处（前两行文本指引、YAML 类型单选组用 `inline`）。
+3. **修正计划表述**：`impl/MetaweblogSetting.vue`、`metaweblog/WordpressSetting.vue`、`metaweblog/CnblogsSetting.vue` 都是直通 `<common-blog-setting>` 的壳 → 「挂 impl/MetaweblogSetting.vue」不存在，已从 task_plan 删除该表述。
+
+### 质量
+- 本轮仍为只读分析（临时脚本跑完即从 `src/` 移除），未改任何组件、未开平台站；`vitest`/`build:v2` 状态与上一轮一致。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第五轮：#27 待验收期间，宿主回归复核当前构建）
+
+### 做了什么
+1. **宿主回归复核（共用层改动后）**：`f1b67569` 动过共用兜底配置 `_default`，发生在 #27 定稿之后 → 重载桌面端渲染进程（忽略缓存）让插件从磁盘重新加载当前 `dist-v2`，再到 `custom_Yuqueweb` 配置页逐项复核。
+2. **结果全绿**：7 行 = 7 ⓘ、键精确；鉴权行折叠/展开恒 1 个 ⓘ 且字段已有值（1092 字符，只记长度）时指引仍在；7/7 tip 在 `.syp-panel` 内不裁切且为平台专属文案（证明兜底清理未干扰 registry 精确解析）；HelpPanel 显示 summary + 3 FAQ + 开始引导教程、无兜底；TourGuide 4/4 命中真实控件；账号数 32 → 32。
+3. **留档**：截图 `tmp/regression-yuqueweb-after-fallback-cleanup.png`。
+
+### 质量
+- 本轮为宿主只读复核（仅点击「手动编辑」展开/收起与帮助/引导按钮，未点保存、未点验证、未改任何配置），账号数未变。
+- 这条证据补齐了「共用层改动后已验证站点仍正常」的回归链，供步骤 F 汇总。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第六轮：两把回归尺 drop-in 草稿 + checklist SSOT 核对）
+
+### 做了什么
+1. **F 阶段两把尺写成可落地草稿**：`tmp/field-guide-rulers.spec.ts` —— 22 站显式 `REQUIRED_FIELD_KEYS` 表 + `ready` 标记 + 三条用例（键尺、覆盖尺、进度尺）。F 时复制进 `src/helpConfigs/` 并清零 `ready=false` 即可。
+2. **试跑发现真问题**：覆盖尺对 14 个 ready 站全绿；**键尺红** —— 7 个待办 Cookie 站共 11 个键不是配置实例属性（`cookie` ×7、`knowledgeSpace` ×4，实例上根本不存在），且全仓没有任何组件挂 `field="cookie"`/`field="knowledgeSpace"`/`field="token"` → 这些 `tip` 是**永不可达的死文案**。结论：D 组 7 站的改名是「让指引真正存在」，不是措辞美化。
+3. **checklist SSOT 只读核对**：T1「全链路 ✅ 22」行数与名单一致；未测 13 = `remaining-t1` 12 站 + `metaweblog_*`；#1/#21/#25/#29 备注缺 SOP §3 帮助记录属计划内（F.5 统一回写，不改六格）。
+
+### 质量
+- 草稿只在 `tmp/` 里跑过（跑完即从 `src/` 移除），仓库内不留红测；临时文件类型正确（`build:v2` 的 `vue-tsc` 会一起检查）。
+- 提交后工作树干净；#27 仍待人工验收，#28 未开工。
+
+## 会话：2026-09-12（第七轮：tour 锚点有效性全量预核 + 第四把尺）
+
+### 做了什么
+1. **tour 锚点有效性全量预核**：按行渲染条件推导每站「真实存在的锚点集合」，逐站比对 tour 每个步骤的 target → 22 站中 **21 站 `dead=[]`**。
+2. **发现 #21 博客园一处死步骤**：其 tour 某步 target 是 `password`，但该平台是 Token 型、鉴权行锚点为 `token` → 该步定位不到真实控件。根因：`tourAnchors.spec.ts` 的 Token 锚点断言把平台**硬编码为 6 个 GitHub 站**，博客园漏检。→ 归入 E 组 #21 修复；F 阶段把该断言改为按 `passwordType` 数据驱动。
+3. **第四把尺（锚点尺）加入 F drop-in 草稿**并做**变异验证**：把博客园临时标为 ready 后尺子④确实报红 → 证明它能抓到这类缺陷。当前草稿试跑：尺子②③④全绿（覆盖/进度/锚点，各 14 站），尺子①按预期红（11 个死键）。
+
+### 质量
+- 全量 `pnpm vitest run` 65 文件 / 309 测试通过；仓库内无红测（草稿跑完即从 `src/` 移除）；工作树干净。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第八轮：F.5 回写片段 + F.2 改写片段就绪，台账订正）
+
+### 做了什么
+1. **F.5 回写片段逐站备好**（`tmp/sop-section3-field-guide-draft.md` 第五节）：依据验收台账的真实宿主数字生成可粘贴的「字段指引：N 行 = N ⓘ」片段（语雀 8 / Notion 7 / Halo29 7 / Telegraph 匿名 11·登录 12 / Confluence 8 / GitHub 六站 17→21（Vuepress2 20）/ 语雀网页版 7；其余留 `<N>` 待实测）。六格结论不动。
+2. **F.2 `tourAnchors.spec.ts` 数据驱动改写片段备好并在 22 站上预校验**：20 站 `OK`、本地系统无鉴权步骤 `SKIP`、仅 `metaweblog_Cnblogs` 报 `expected=token used=[password]` → 与第七轮锚点预核结论一致。
+3. **台账订正**：#5 Confluence 的用户验收状态由「⬜ 待验收」改为「✅ 放行（用户回复「继续」，随后开工 #27）」，与门禁规则（未验收不得开下一站）和实际推进一致；避免 F 汇总时误以为还有一站挂着。
+
+### 质量
+- 本轮无代码改动（片段只在 `tmp/` 备好），全量测试与构建状态不变；工作树干净。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第九轮：待办站文案预审 + 占位链接清单）
+
+### 做了什么
+1. **10 个待办站文案合规预审**（7 个 Cookie 站 + 博客园/Wordpress/本地系统）：`summary` 与 tour 标题均无验证进度叙述 ✓。
+2. **tour 步骤 ↔ 真实渲染锚点逐一比对**：除已知的博客园 `password` 死步骤外，其余 9 站全部命中 → 各站开工只需改 `fields` 键与文案，**不必动 tour 结构**（每站工作量进一步确定）。
+3. **占位帮助链接清单**：22 个配置里 15 个仍是共享/占位链接（9 个 T1 通用 + 6 个 Halo/通用），7 个已平台专属；文档草稿顶部 TODO 标注齐备 ✓。清单已写入 `tmp/sop-section3-field-guide-draft.md` 第七节，作为 F 阶段交付给用户的「待补真实文档链接」handoff。
+
+### 质量
+- 本轮纯只读审计 + 文档草稿补充，无代码改动；工作树干净。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第十轮：F.3 前置核验——V1/locale 零改动取证 + V1 打包复核）
+
+### 做了什么
+1. **变更面取证**：本 change 全部提交的 diff（`c88f930b^..HEAD`，排除 planning/openspec/docs/tmp）**恰好 21 个文件**，全部落在 V2 帮助/字段指引层（FieldGuide、helpPageIdKey、4 个设置组件、V2PlatformConfigBridge、14 个 help 配置、registry.spec）。
+2. **locales 零改动**：`-- src/i18n src/locales "*.json"` → 空；**V1 零改动**：V1 旧表单 `base/CookieSetting.vue` 与 V1 入口 `Admin.vue` 均不在变更清单 → F.3 的「locales 共享串不动，V1 文案零变化」由口头承诺变为 git 可核验证据。
+3. **V1 打包链路复核**：`python scripts/build.py`（= `pnpm build`）exit 0，产出 `siyuan-plugin-publisher-1.41.1.zip` → 共用组件挂指引后 V1 构建未受影响；`build/` 已在 `.gitignore:34`，工作树保持干净。
+4. **任务 1.1「唯一拼接点」核验**：`V2PlatformConfigBridge.vue:117` 是唯一 `platform-config/${platformKey}` 构造点，第 118 行 `provide` 一次下发，`HelpButton` 与字段指引共用同一值 ✓。
+
+### 质量
+- 本轮为只读取证 + 一次 V1 构建，无源码改动；工作树干净。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第十一轮：宿主复核脚本化，退出码即结论）
+
+### 做了什么
+1. **新增 `tmp/host-field-guide-check.ps1` + `.js`**：一条命令跑完该 change 的全部宿主渲染契约（字段行数/指引数/键清单/无指引行/不同行/一行多条/图标不可见/悬停无弹层/空文案/越出面板/被祖先裁切/未挂面板内/已填值仍不可见），**退出码 0/1 即通过/失败**，支持 `-AllowNoGuide` 声明按规则豁免的行（如 Notion「搜索关键词」）。
+2. **口径修正两处**：① 只有带标签的表单行才算字段行，无标签的「验证 / 保存取消」按钮行单独记 `actionRows`；② 弹层量测**逐行 `scrollIntoView` 后再 hover**，并按「面板 ∩ 视口」判定——修掉了「行在折叠线以下 → 误报被裁切」的假失败。
+3. **语雀网页版（#27）两态实测全绿**：收起态 7 行 = 7 指引、键与冻结键表逐字一致、5 行已填值仍可见、7 条弹层面板内未裁切 → exit 0；展开态（Cookie 文本框 1092 字符，只报长度）鉴权行指引恒为 1、弹层仍全绿 → exit 0。宿主状态已复原为收起。
+
+### 质量
+- 脚本只在 gitignored `tmp/`，不入库；宿主仅做了「展开/收起鉴权面板」的只读交互（未保存、未改配置），账号数不变。
+- #27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第十二轮：SOP §3 宿主判定全部脚本化）
+
+### 做了什么
+1. **新增 `tmp/host-help-gate-check.ps1` + `.js`**：把 SOP §3「帮助引导与文档」环节变成一条命令——帮助面板专属内容（summary/文档入口/FAQ/无回退提示）、面板在 `.syp-v2` 内且未裁切、引导逐步命中真实控件（`__highlight` 可见且尺寸非零、无 `--missing`）、引导正常收尾；退出码即结论。全程只读。
+2. **语雀网页版实跑全绿**：summary 43 字 / 文档入口 8 字 / FAQ 3 条 / 无回退；引导 **4/4 命中**，高亮尺寸与第五轮手工量取完全一致（独立复现）；exit 0。
+3. **失败路径已演练**：构造负例报告跑同一包装脚本，六项未通过逐条列出并 exit 1 ✓（不是只会绿的尺）。
+4. **SOP §3 草稿补入工具行**：两条宿主命令写入该必过项的核验方式，含 `-AllowNoGuide` 豁免用法。
+
+### 质量
+- 两条宿主尺连跑同时 exit 0；跑完宿主无残留（帮助面板 0、引导层 0），全程未改配置、未保存、账号数未变。
+- 脚本只在 gitignored `tmp/`；#27 仍待人工验收；#28 未开工。
+
+## 会话：2026-09-12（第十三轮：宿主尺修假绿 + #28 预制件 + 改前基线）
+
+### 做了什么
+1. **用已知坏页试尺，抓到尺子自身的「假绿」**：原判定按 `.syp-field-guide` 包装器计数，而键名写错时包装器仍在（只是不渲染图标）→ 会把缺陷判成通过。改为只认 `.syp-field-guide__icon[data-syp-field-guide]`，并新增 `emptyWrappers`（已挂载但未渲染指引＝键名/键缺失）；同时修掉 `icon` 为 null 导致的空指针（会让整份报告变成空对象）。
+2. **#28 Halo网页版改前基线（宿主实测）**：6 个字段行只有 4 个指引，未通过项精确点名 `平台Cookie`、`预览规则` 两行，并标为「已挂载但未渲染指引」→ 配置里 `cookie` 不是配置属性且缺 `previewUrl` 键，**宿主当场复现**。
+3. **修复后回归**：语雀网页版两把宿主尺仍 exit 0，账号数仍 32 ✓。
+4. **#28 预制件**：`tmp/station-28-haloweb-patch.md`（精确 diff + 每条文案的源码依据 + 改后应见状态 + 取证命令 + 一处待宿主确认项）。
+
+### 质量
+- 宿主只做只读导航（账号列表 ↔ 配置页、开合鉴权面板），无账号增删、无配置保存；账号数 32 不变。
+- 脚本在 gitignored `tmp/`；#27 仍待人工验收；#28 未开工（仅预制）。
+
+## 会话：2026-09-12（第十四轮：收口复核——build:v2 发现并修掉 tmp 草稿的类型错误）
+
+### 做了什么
+1. **`pnpm build:v2` 一度为红**：`tmp/field-guide-rulers.spec.ts`（F 阶段 drop-in 草稿）里 `ConfigClass` 写成 `new (...args: any[]) => Record<string, unknown>`，而配置类实例没有索引签名 → **TS2419**。教训：**`tmp/*.spec.ts` 也在 `vue-tsc` 的检查范围内**，草稿不能只顾 vitest 能跑。
+2. 修法：`ConfigClass` 放宽为 `new (...args: any[]) => any`，调用处按诊断脚本的写法做一次 `as new (...args: any[]) => Record<string, any>` 断言 → `vue-tsc --noEmit` 无输出、`pnpm build:v2` **exit 0（✓ built）**；草稿四条尺行为不变（尺子①按预期对 7 个待办站报红，②③④全绿）。
+3. **收口复核（当前构建、当前工作树）**：全量 `pnpm vitest run` 通过；`openspec validate add-field-guide-tips --strict` → valid；宿主两把尺在语雀网页版页 `exit 0`；`git status` 干净。
+
+### 状态
+- #27 仍待人工验收；**自动续航轮次已用满**，后续必须由用户放行才能推进 #28–#35、E 组 3 站与 F 收尾。
+- 交接材料齐备：`tmp/station-28-haloweb-patch.md`（#28 预制补丁 + 改前基线 + 验收口径）、`tmp/field-guide-rulers.spec.ts`（F 两把尺 drop-in）、`tmp/sop-section3-field-guide-draft.md`（SOP §3 文本 + checklist 回写片段 + 占位链接清单 + 锚点断言改写片段）、`tmp/host-field-guide-check.ps1` / `tmp/host-help-gate-check.ps1`（宿主两把尺）。
+
+## 会话：2026-09-12（#28 Halo网页版 站点完成，待验收）
+
+### 前情
+- 用户放行 **#27 语雀网页版**（选择「放行 #27，现在开做 #28 Halo网页版（做完即停交证据）」）。
+
+### 做了什么
+1. **改前基线**（宿主实测）：6 个字段行只有 4 个指引，「平台Cookie」「预览规则」两行无指引并被标为「已挂载但未渲染指引」——`cookie` 是实例上不存在的死键。
+2. **应用预制补丁**：`custom-haloweb.ts` 删 `cookie`、补 `password` + `previewUrl`，并按宿主实测改准 `pageType`/`picbedService` 文案（点名真实图床三项与默认「当前平台」、真实按钮名）；`docs/draft/platforms/custom-haloweb.md` 同步补「预览规则」行。
+3. **改后实测**：**6 行 = 6 ⓘ**，键 `home/apiUrl/password/previewUrl/pageType/picbedService`；折叠/展开态鉴权行 ⓘ 恒 1；6 条弹层全部面板内未裁切；HelpPanel（summary 72 字 + FAQ 4 + 无回退）+ 引导 **5/5 命中**。
+4. **宿主尺 flaky 修复**：帮助尺首跑因「重排后弹层仍在旧位置」误报超出视口 → 脚本加「滚动归位 + 复测一拍」，按原失败序列复跑并连跑 3 次全部 exit 0。
+5. **口径澄清**：顶部「默认分类」是 `el-alert` 静态信息条，不是字段行，不计入「每行字段」。
+
+### 门禁与状态
+- `pnpm build:v2` exit 0；`pnpm vitest run` 65 文件 / 309 测试通过；两条宿主尺 exit 0；账号数 32 不变；截图 `tmp/field-guide-haloweb-password-previewurl.png`。
+- **#28 已交付，停下等验收**；#30 知乎未开工。
+
+## 会话：2026-09-12（#30 知乎 站点完成，待验收）
+
+### 前情
+- 用户放行 **#28 Halo网页版**（回复「继续」）。
+
+### 做了什么
+1. **改前基线**（宿主实测）：8 个字段行只有 4 个指引，**用户名 / 平台Cookie / 预览规则 / 专栏** 四行无指引——旧键 `cookie`、`knowledgeSpace` 在实例上都不存在。
+2. **应用补丁**：`custom-zhihu.ts` 删两死键、补 `password`/`blogid`/`username`/`previewUrl`，并按宿主实测改准五处文案（用户名取值来源、鉴权真实按钮名、图床真实两项与默认「当前平台」、`/p/[postid]`、专栏读取与不可换专栏）；summary 与 FAQ 同步；`docs/draft/platforms/custom-zhihu.md` 全表补齐。
+3. **改后实测**：**8 行 = 8 ⓘ**；折叠/展开态鉴权行 ⓘ 恒 1（文本框 434 字符）；8 条弹层面板内未裁切；HelpPanel（summary 46 字 + FAQ 4 + 无回退）+ 引导 **4/4 命中**。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-zhihu-username-blogid.png`。
+
+### 状态
+- **#30 已交付，停下等验收**；#31 CSDN 未开工（下一站预制清单：+`password` +`previewUrl` −`cookie`）。
+
+## 五问重启检查
+| 问题 | 答案 |
+|------|------|
+| 我在哪里？ | 步骤 D（Cookie 族 8 站）第 1 站 **#27 语雀网页版已回填并过宿主，待验收**；本轮补做 F 前置审计（键尺原型 12 站全绿）+ `_default` 死键清理，未开新平台。22 站里已回填 12 站 |
+| 我要去哪里？ | 用户放行 #27 后开 D 组余 7 站（#28 Halo网页版、#30 知乎、#31 CSDN、#32 简书、#33 掘金、#34 微信公众号、#35 哔哩哔哩）：照 #27 口径校正 `cookie`→`password`、`knowledgeSpace`→`blogid` 与缺项 → E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）→ F 收尾（两把回归尺 + SOP §3 + checklist 回写） |
+| 目标是什么？ | `fields` 指引在配置页真实渲染、已验证 22 站全部回填、该点成为后续每站必过项 |
+| 我学到了什么？ | ① Cookie 族的鉴权行是「一条指引服务两个控件」（授权面板 + 手动文本框），必须包整行否则折叠态无 ⓘ；② 网页族 9 个 `*Setting.vue` 都没有专有行，D 组工作量在共用层与 `fields` 键；③ `remaining-t1` 占位配置会精确命中并遮蔽 `_default`，未拆分平台因此完全没有 ⓘ（各站必须自己拆出配置）；④ 「添加账号 → 卡片」与族无关，一律新建实例，前后必须比对账号数 |
+| 我做了什么？ | 试点三轮 + 标准冻结 → Hexo `bf11170e` → Hugo `d6ba322a` → Jekyll `fbbd9ebf` → 重启续航 `92234b1f` → Quartz `894ddb34` → Vuepress `c3f78aa2` → 语雀 `6f745321` → Notion `8afa2318` → Halo `42a32d70` → Telegraph `9c187b9b` → Confluence `7a554a60` → 语雀网页版 `6005e30e` → 本轮 F 前置审计 + `_default` 死键清理（待提交） |
+
+---
+*每完成一个阶段或遇到错误时更新此文件*
+
+## 会话：2026-09-12（#31 CSDN 站点完成，待验收）
+
+### 做了什么
+1. **改前基线**：6 行 = 4 ⓘ，「平台Cookie」「预览规则」无指引（`cookie` 键在实例上不存在）。
+2. **意外收获**：本站宿主打开的是**动态实例** `custom_Csdn-z26fa1o`，既有指引仍能解析 → registry 回落链在真实宿主中成立（该标准此前多为静态验证）。
+3. **应用补丁**：删 `cookie`、补 `password` + `previewUrl`，并按宿主实测改准五处文案（真实按钮名、真实图床两项与默认「当前平台」、`/[userid]/article/details/[postid]`、summary、FAQ2）；文档草稿全表同步。
+4. **改后实测**：6 行 = 6 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 884 字符）；6 条弹层面板内未裁切；HelpPanel（summary 51 字 + FAQ 3 + 无回退）+ 引导 4/4 命中。
+5. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-csdn-password-previewurl.png`。
+
+### 状态
+- **#31 已交付，停下等验收**；#32 简书 未开工（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`）。
+
+## 五问重启检查
+
+## 会话：2026-09-12（#32 简书 站点完成 + 宿主尺 flaky 根因修复，待验收）
+
+### 做了什么
+1. **改前基线**：7 行 = 4 ⓘ，「平台Cookie」「预览规则」「笔记本」无指引。
+2. **应用补丁**：删 `cookie`/`knowledgeSpace`，补 `password`/`blogid`/`previewUrl`，并按宿主实测改准五处文案；summary、FAQ2、文档草稿同步。
+3. **改后实测**：7 行 = 7 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 989 字符）；7 条弹层面板内未裁切；HelpPanel（summary 43 字 + FAQ 3 + 无回退）+ 引导 4/4 命中。
+4. **宿主尺 flaky 根因（重要）**：首跑 4 行报「悬停未出现弹层」属**假失败** —— 宿主窗口被遮挡时合成器不产帧，Vue 的入场过渡停在 `el-fade-in-linear-enter-from`（弹层已挂载、尺寸/文案/定位都对，仅 opacity=0）。真实鼠标 hover + 窗口在前台时 opacity=1（已直接验证）。已修：新增 `tmp/cdp-front.ps1` 先置前，判定改为结构判定，`opacity=0` 降为诊断项 `transitionsFrozen`。
+5. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-jianshu-password-previewurl.png`。
+
+### 状态
+- **#32 已交付，停下等验收**；#33 掘金 未开工（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`）。
+
+## 五问重启检查
+
+## 会话：2026-09-12（#33 掘金 站点完成，待验收）
+
+### 做了什么
+1. **改前基线**：7 行 = 4 ⓘ，「平台Cookie」「预览规则」「分类」无指引。
+2. **应用补丁**：删 `cookie`/`knowledgeSpace`，补 `password`/`blogid`/`previewUrl`；图床文案按实测改为三项齐全 + 默认「当前平台」（不再写易误导的「PicGo 双通道并存」）；summary、FAQ3、文档草稿同步。
+3. **改后实测**：7 行 = 7 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 1391 字符）；7 条弹层面板内未裁切；HelpPanel（summary 47 字 + FAQ 4 + 无回退）+ 引导 4/4 命中。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-juejin-password-blogid.png`。
+
+### 状态
+- **#33 已交付，停下等验收**；#34 微信公众号 未开工（预制清单：+`password` −`cookie`，无预览规则/无发布目录 → 预计 6 行）。
+
+## 五问重启检查
+
+## 会话：2026-09-12（#34 微信公众号 站点完成，待验收）
+
+### 做了什么
+1. **改前基线**：6 行 = 5 ⓘ，只有「平台Cookie」无指引（`cookie` 死键）；本站 `previewUrl` 键本就有。
+2. **应用补丁**：`cookie`→`password`，按宿主实测改准鉴权（含微信扫码登录）、图床（真实两项 + 默认「当前平台」）、`pageType`（默认 HTML）三处文案，summary/FAQ2/文档草稿同步。
+3. **改后实测**：6 行 = 6 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 688 字符）；6 条弹层面板内未裁切；HelpPanel（summary 53 字 + FAQ 3 + 无回退）+ 引导 4/4 命中。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-wechat-password.png`。
+
+### 状态
+- **#34 已交付，停下等验收**；#35 哔哩哔哩 是 D 组最后一站（预制清单：+`password` +`previewUrl` +`blogid` −`cookie` −`knowledgeSpace`），之后进入 E 组 3 站与 F 收尾。
+
+## 五问重启检查
+
+## 会话：2026-09-12（#35 哔哩哔哩 站点完成 —— D 组 8/8 交付，待验收）
+
+### 做了什么
+1. **源码先看后验**：`BilibiliConfig` 构造函数里 `knowledgeSpaceEnabled` 被 `true`→`false` 覆盖，但 hook 运行时又置回 `true`；**以宿主实测为准**（文集行确实渲染，值「远方的灯塔」），因此补 `blogid` 是对的。
+2. **改前基线**：7 行 = 4 ⓘ，「平台Cookie」「预览规则」「文集」无指引。
+3. **应用补丁**：删 `cookie`/`knowledgeSpace`，补 `password`/`blogid`/`previewUrl`，并按宿主实测改准四处文案（鉴权按钮名、图床两项与默认「当前平台」、`/[postid]`、文集）；summary/FAQ2/文档草稿同步。
+4. **改后实测**：7 行 = 7 ⓘ；折叠/展开态鉴权行 ⓘ 恒 1（文本框 1031 字符）；7 条弹层面板内未裁切；HelpPanel（summary 58 字 + FAQ 3 + 无回退）+ 引导 **5/5 命中**。
+5. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-bilibili-password-blogid.png`。
+
+### 状态
+- **D 组 8/8 已交付**（#35 待验收）。下一阶段：E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统），随后 F 收尾（两把尺落地 + SOP §3 + checklist 回写 + 最终全量提交）。
+
+## 五问重启检查
+
+## 会话：2026-09-12（E 组开张：#21 博客园 完成，待验收）
+
+### 做了什么
+1. **改前基线**：7 行 = 4 ⓘ，缺「预览规则」「发布格式」「图床服务」三行指引；**另一处是 tour 死步骤**（target 写 `password`，实测锚点是 `token`）→ 引导只能命中 4/5。
+2. **应用补丁**：补三键；tour target `password`→`token`；`password` 文案按页内 Token 生成地址对齐；FAQ 图床口径改准（该站支持 PicGo）；文档草稿补三行。
+3. **改后实测**：7 行 = 7 ⓘ；**tour 5/5 全命中**；覆盖诊断 `expected=7 actual=7 missing=[]`、`tour=5 dead=[]`。
+4. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变；截图 `tmp/field-guide-cnblogs-previewurl.png`。
+
+### 状态
+- **#21 已交付**（用户 2026-09-14 回复「继续」→ 验收通过）；E 组余下 2 站：#25 Wordpress、#29 本地系统。
+
+## 五问重启检查
+
+## 会话：2026-09-14（E 组第 2 站 #25 Wordpress 完成，待验收）
+
+### 做了什么
+1. **先按预制清单复核「键是否真齐」**：覆盖尺对 `wordpress_Wordpress` 跑出 `expected=7 actual=7 missing=[] extra=[]`，与宿主实测 7 行逐行吻合 → 键这件事本站确实无事可做（`WordpressSetting.vue`/`MetaweblogSetting.vue` 都是直通壳，零新挂）。
+2. **宿主核验时抓到一处文案与事实不符（本站的真缺陷）**：`picbedService` 旧 tip 写「WordPress 图片发布到站点自身的媒体库，也可按站点能力选择外部图床」，读起来像「无论如何都会进媒体库」；查实 `baseExtendApi.ts:605-608`：`不使用`（`PicbedServiceTypeEnum.None`）走 `default` 分支 → **跳过图片处理**，图片按原地址引用；只有 `当前平台` 才经 `metaweblog.newMediaObject`（`metaweblogBlogApiAdaptor.ts:219`）上传到 WordPress 媒体库；`PicGo` 走 PicGo 内核。→ 文案改为点名三个真实选项（`当前平台 推荐` / `PicGo 强烈推荐` / `不使用`）各自行为，FAQ 同口径。
+3. **另两处按宿主实况改准**：`pageType` 旧 tip 只说「按 HTML 发布」，补上「选 Markdown 则直接提交 Markdown 原文」（`baseExtendApi.ts:357-361`），并点名页面上的两个真实选项；`previewUrl` 文案与行标签「预览规则」对齐；`password` 不再把「应用程序密码」写成唯一答案（页内 placeholder 就是「WordPress登录密码」），改为「账号密码 + 建议改用应用程序密码」，tour 第 4 步标题也从「应用程序密码」改为「账号密码」以免自相矛盾。
+4. **文档草稿同步**：补「发布格式」行、图床行改为三选项口径、准备清单与 FAQ 同口径。
+5. **改后实测**：7 行 = 7 个指引，键 `apiUrl/home/pageType/password/picbedService/previewUrl/username`；7 条弹层全部 `.syp-panel` 内、未裁切（最长 283.6x83.6）；**引导 6/6 步全部命中真实控件**（高亮均 739.2x48），HelpPanel summary 45 字 + FAQ 3 条 + 无回退。
+6. **把「过渡未推进」当场证伪（沿用 #32 简书的口径）**：重载宿主后尺子对 7 条 tip 全部记 `transitionsFrozen`（弹层已挂载、有尺寸、有完整文案，但停在 `el-fade-in-linear-enter-from`、`opacity=0`）。用真实指针（`tmp/cdp-mouse.ps1` 派发 `Input.dispatchMouseEvent`）压到图床行的 ⓘ 上并取一帧后复测：class 变成 `el-popper is-light el-tooltip`、`opacity=1`、283.6x83.6、文案 104 字 → **弹层是真绘制的**，`transitionsFrozen` 是宿主渲染节流的诊断项，不是缺陷。截图 `tmp/field-guide-wordpress-picbed.png` 里肉眼可见弹层已绘制。
+7. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变、两条宿主尺 `exit 0`。
+8. **本轮新增工具** `tmp/cdp-reload.ps1`（强制忽略缓存重载渲染进程，让宿主重新从磁盘加载 `dist-v2`）；`pnpm dev:v2` 未运行，改完必须重载宿主才看得到新构建。
+
+### 状态
+- **#25 已交付**（用户 2026-09-14 回复「继续」→ 验收通过）；E 组只剩 #29 本地系统，随后 F 收尾。
+
+## 五问重启检查
+
+## 会话：2026-09-14（E 组第 3 站 #29 本地系统完成 —— E 组 3/3 交付，待验收）
+
+### 做了什么
+1. **改前基线（宿主实测）**：`字段行 5 行 · 指引 2 个 · 键 pageType,picbedService`，宿主尺直接点名 **无指引的行：存储路径 / 媒体存储路径 / YAML类型**（exit 1）。与预制分析完全一致：键早就在 `fields` 里，缺的是**组件层挂载**——`fs/LocalSystemSetting.vue` 的 `#main` 三行没有 `field-guide`（E 组唯一的组件改动点，其余 E 组两站都是直通壳）。
+2. **挂载**：存储路径/媒体存储路径 用包裹式（`<field-guide field="…">` 包住 `el-input`，借助共用组件的 flex 行内布局避免指引被挤到下一行），YAML类型 用 `inline`（9 个单选框，指引紧贴控件而非行尾）。
+3. **按宿主实况改准文案**（不只是挂图标）：
+   · `storePath`：旧的「可使用插件支持的占位符生成实际目录」太含糊 → 写明真实机制 `[auto]`（`constants.ts:24` → `LocalSystemApiAdaptor.ts:163/187`：路径含 `[auto]` 时按文章分类替换）；
+   · `imageStorePath`：写明图片按该目录写成相对链接（`LocalSystemApiAdaptor.ts:302`：绝对媒体路径替换成 `.` 开头）；
+   · `fsYamlType`：点名全部 9 个真实选项，并写明**选具体框架时会委派给该框架的适配链路**（`createDelegateAdaptor`，图片仍重定向回本地文件系统），这是旧文案「匹配…等目标站点」没说清的关键；
+   · `picbedService`：旧文案只描述默认，改为三选项口径（默认「当前平台」写入媒体目录 / PicGo / 不使用跳过图片处理）；
+   · FAQ 由 3 条增至 4 条（补「按分类分文件夹怎么写路径」）；tour 第 1 步文案补默认目录；文档草稿表格改为 5 行真实行名并同步常见问题。
+4. **改后实测**：**5 行 = 5 个指引**，键 `fsYamlType/imageStorePath/pageType/picbedService/storePath`；5 行**全部有值**（存储路径 36 字符、媒体存储路径 `assets`、YAML类型 `默认`、发布格式 Markdown、图床服务 当前平台）且指引均可见；5 条弹层全部 `.syp-panel` 内、未裁切（YAML 文案 137 字 / 283.6x83.6 最高）。
+5. **弹层真绘制复核**：真实指针 hover 存储路径 ⓘ + 取帧 → `opacity=1`、class `el-popper is-light el-tooltip`、284x66/59 字，截图 `tmp/field-guide-localsystem-storepath.png` 肉眼可见（沿用 #25 定的口径：`cdp-front.ps1` 不够，要「真实指针 + 出帧」）。
+6. **帮助链路**：HelpPanel（标题 本地系统 · 在 `.syp-v2` 内 · 视口内 · 未裁切 · summary 83 字 · FAQ 4 条 · 无回退）+ 引导 **5/5 命中**（文章输出目录/媒体目录/YAML 类型/图片处理/验证并保存；YAML 步高亮 748.8x56，其余 748.8x48）。
+7. **覆盖诊断**：`fs_LocalSystem expected=5 actual=5 missing=[] extra=[]`、`tour=5 dead=[]`、鉴权步按设计 `SKIP(no auth step)`（该平台 `passwordType=None`，无鉴权行）。
+8. 门禁：`build:v2` exit 0、`vitest` 65 文件 / 309 测试通过、账号数 32 不变、两条宿主尺 `exit 0`。
+
+### 状态
+- **#29 已交付**（用户 2026-09-14 回复「继续」→ 验收通过）。E 组 3 站（#21 博客园、#25 Wordpress、#29 本地系统）全部交付 → 进入 **F 收尾**。
+- 顺带一提（未改动、不在本 change 范围）：存储路径默认值渲染为 `D:\Users\Administrator/Downloads/syp`，盘符反斜杠与后半段正斜杠混用，来自 `StrUtil.pathJoin`；功能无影响。
+
+## 会话：2026-09-14（F 收尾：两把回归尺落地 + SOP/checklist 回写）
+
+### 做了什么
+1. **两把回归尺落地**（此前只存在于 `tmp/` 草稿，现入库）：
+   · `src/helpConfigs/verifiedPlatformRows.ts` —— 22 站「真实渲染行 → 键集」冻结表（单一数据源，含平台 hook 运行时开关：Telegraph 打开用户名行、四个网页站打开知识空间行、Bili 构造 false 但运行时置回 true）；同时提供 `mergedPlatformConfig()` 与 `renderableTourAnchors()` 两个共用助手，避免两把尺各写一份合并逻辑。
+   · `src/helpConfigs/fieldGuideRulers.spec.ts` —— **尺子①键尺**（`fields` 的键必须是合并后配置实例的真实属性）、**尺子②覆盖尺**（每站必须覆盖冻结键集）、**尺子③守卫尺**（任何带 `fields` 的 platform-config 页都必须在冻结表里 → 将来拆分新平台时漏补表会被当场点名）。草稿里的 `ready` 字段与「未完成清单」用例已删（22 站全完成，留着就是双轨）。
+2. **尺子必须真的会红（变异验证，四组，每组跑完立即还原）**：
+   · 给 `custom_Csdn` 塞实例上不存在的死键 `cookie` → 键尺红，断言直接点名 `custom_Csdn.cookie`；
+   · 删掉 `custom_Csdn` 的 `previewUrl` 键 → 覆盖尺红，点名 `custom_Csdn missing=[previewUrl]`；
+   · 给仍在 `remaining-t1` 的 `github_Vitepress` 塞 `fields` → 守卫尺红，点名 `platform-config/github_Vitepress`；
+   · 把 #21 博客园引导的 `token` 锚点改回 `password` → 引导锚点两条用例同时红（「真实渲染锚点」+「按 passwordType 选鉴权锚点」），正是 #21 当初被抓到的那类死步骤。
+   还原后 `git status` 只剩本次预期改动，无残留。
+3. **引导锚点契约去硬编码**：`tourAnchors.spec.ts` 原来是 `TOKEN_PLATFORM_KEYS` 写死 6 个 GitHub 站 + 只做「锚点 ∈ 已知清单」的浅检查，因此**漏检了博客园这类 Token 站把引导写成 `password` 的死步骤**。改为按 `verifiedPlatformRows.ts` 全站数据驱动：① 每站每步必须命中该站**真实渲染**的锚点（含 hook 开关与 fs 专有锚点）；② 鉴权步必须与该站 `passwordType` 一致（无鉴权步的站跳过）。5 项用例全绿。
+4. **SOP §3 写入「字段指引必须渲染并可核验」**（第 5 条）：标准（每行都要 ⓘ、键 = 该行绑定的配置属性名、以宿主实测为准）、**两套命名空间**（鉴权行键恒为 `password`，引导锚点按 `passwordType` 三选一）、四个可核验点（每行有 ⓘ / 已填值仍可见 / 弹层在 `.syp-panel` 内不裁切 / 动态实例 key 走回落链）、组件层挂载约定、回归尺入口；第 1 条补上「`fields` 键与 tour 锚点不同名」；§5 回写步骤加「字段指引与帮助引导表」一行；附录由 11 站更新为 **22 站**并注明键集不在表里重复维护。
+5. **checklist SSOT 回写**：新增「字段指引与帮助引导（SOP §3.5）— 22 站回写」表（每站「渲染行 = ⓘ」改前 → 改后 + 宿主判定 + 日期）、共用层结论、以及「三类缺陷各得其尺」的说明；修订记录加 2026-09-14 一行；头部「更新」日期同步。**未改动任何平台六格结论**。
+6. **tasks.md 勾选与如实标注**：2.3/2.4/3.2/3.4/5.2/5.3/5.4 依据实测勾选（含查实结论：MetaWeblog/WordPress 族是直通壳、`fs/LocalSystemSetting` 3 行已在 #29 挂完）；4.1（占位符改示例值）**保留未勾**并注明属后续独立切片，4.3（tour 与 fields 去重）标注「部分完成」并说明未做 22 站逐条比对——不把没做的事写成做了。
+
+### 门禁与实测
+- `pnpm vitest run`：**66 文件 / 313 测试通过**（较上一站 +1 文件 +4 测试）；
+- `pnpm build:v2`：**exit 0**（`vue-tsc` 把新增的 3 个文件一并类型检查通过，`dist-v2/index.js` 12,349.63 kB）；
+- `openspec validate add-field-guide-tips --strict`：**valid**；
+- 宿主复跑（`build:v2` 后强制重载 → 重开本地系统配置页 → 两条宿主尺）：字段尺 **exit 0**（5 行 = 5 指引、5 条弹层全部 `面板内=True 未裁切=True`）；帮助尺 **exit 0**（summary 83 字 / FAQ 4 条 / 无回退 / 引导 5/5 命中）；账号数 **32 不变**。
+
+### 状态
+- **F 已交付，停下等验收**。change 尚未 archive（4.1/4.3 未勾，且 archive 需用户另行决定）；campaign 的 22 站 + 收尾已全部完成。
+- 未纳入本轮（诚实标注）：① `tasks.md` 4.1「占位符从长说明改示例值」未开工（22 站字段说明已全落在 `fields`，占位符仍是 `setting.blog.*.tip` 共享串）；② 4.3「三处去重」只做了顺手消重，未做逐站比对。
+
+## 会话：2026-09-15（新会话接手：门禁复跑 + 状态盘点，未开工）
+
+### 环境
+- 分支 `feature/ui-2.0`，HEAD `3e815c89`，工作树干净，本地与 `origin/feature/ui-2.0` 同步（0/0）。
+- 思源未运行（9222 无监听）→ 本轮**未做任何宿主操作**，账号数基线未核验但也未触碰。
+
+### 门禁复跑（全绿）
+- `pnpm vitest run`：**66 文件 / 313 测试通过**；
+- `pnpm build:v2`：**exit 0**（`✓ built in 7.62s`，`dist-v2/index.js` 12,349.63 kB）；
+- `openspec validate add-field-guide-tips --strict`：**valid**。
+
+### 状态盘点（只读核对，与交接文件一致）
+- 22 站专属 help 配置齐备（`platform-config/` 下 22 个平台文件 + `_default` + `remaining-t1`）；`docs/draft/platforms/` 恰 22 篇草稿。
+- `remaining-t1` 仍有 **13 条占位记录**：12 条对应 V2「添加账号」卡片可选平台（`github_Vitepress`/`github_Astro`、GitLab 7 站、`metaweblog_Typecho`/`metaweblog_Jvue`、`wordpress_Wordpressdotcom`）；
+  第 13 条 `metaweblog_Metaweblog` 在 `pre.ts` 的 `metaweblogCfg` 卡片列表里**没有条目**（该列表只有 Cnblogs/Typecho/Jvue），但它**并非不可达**：`getSubtypeList(PlatformType.Metaweblog)` 含 `Metaweblog_Metaweblog`（`dynamicConfig.ts:328`），经「添加账号」向导创建的实例 key 形如 `metaweblog_Metaweblog-<id>`，其 pageId 走 `registry.getPresetPlatformConfig` 回落链命中这条占位（`registry.ts:63-92`）→ 该页目前只有 helpUrl、**零 ⓘ**。清单第 24 行 `metaweblog_*`「有 V2 bridge」即指此路径。
+- `pre.ts` 当前可选平台 key 共 **37 个**；其中落 `_default` 兜底的是 `github_Docsify`/`gitlab_Gitlabdocsify`/`system_Siyuan`（`custom_Flowus` 在 `pre.ts` 中已注释）。
+
+### 台账不一致（发现，未擅自改）
+- `task_plan.md` 里 **#25 Wordpress 与 #29 本地系统仍标「 待验收」**（F 收尾行标「待验收」），但 `progress.md` 已记「用户 2026-09-14 回复『继续』→ 验收通过」→ 属历史台账未回填，待用户确认后订正。
+
+### 状态
+- **未开工任何未授权项**（4.1 / 4.3 / 12 个未拆分平台 / change archive 全部未动）；停下等用户选择下一步。
+
+### 自动续航轮（同日，仍不开工）：选项 3 精确开工清单预备
+- 用户尚未放行任何选项，本轮遵守「禁止擅自开工未授权项」→ **只做只读预分析**，产出选项 3 的逐站清单。
+- 诊断脚本 `tmp/field-guide-unsplit-preanalysis.diag.spec.ts`（跑完即从 `src/` 移除，`git status` 干净）：按与 `verifiedPlatformRows.ts` 同一口径推导 12 站真实渲染行，并逐一核对「pageId 是否已注册 / 是否零 fields 占位 / 动态实例 key 回落链是否可达」→ **12 站 全部 `placeholder=Y(zero fields)`、`dynFallback=Y`**（确认这些页当前零 ⓘ，且回落链成立）。
+- **预计行数**：`github_Vitepress` 20、`github_Astro` 20；GitLab 7 站 21/21/21/21/20/20/20；`metaweblog_Typecho`/`metaweblog_Jvue`/`wordpress_Wordpressdotcom` 各 7。
+- **鉴权两套命名空间逐站确认**：GitHub 族与 GitLab 族均为 Token 型 → `fields` 键 `password`、**引导锚点 `token`**；Typecho/Jvue/Wordpressdotcom 均 `PasswordType_Password` → 键与锚点**都是 `password`**（与博客园相反，勿套模板）。
+- **两处需宿主确认的事实（预分析发现，未下断言）**：① GitLab 族 `getPreviewUrl` 复用 GitHub 的 `/[user]/[repo]/blob/[branch]/[docpath]` 规则且不前置域名（`commonGitlabApiAdaptor.ts:202-213`）→ 查看链接能否打开须逐站实测；② 仅 `gitlab_Gitlabastro` 构造里显式置 `Bundled`，其余 6 站取 `CommonGithubConfig` 默认，图片两行按**当前图床值**渲染 → 行数须宿主实测。
+- 清单已写入 `task_plan.md`「选项 3 开工清单：12 个未拆分平台」节（含 12 站逐站差异表、12 站共同动作 5 步、两处待确认项、工作量提示）。
+
+### 自动续航轮 2（同日，仍不开工）：选项 1（4.1）口径材料预备
+- 用户仍未放行 → 继续只做只读预分析，产出 4.1 的**口径对照表 + 硬约束**，供用户拍板后再动代码。
+- **本次查实的关键硬约束（先前未记录）**：平台 `singleplatform/*/*Setting.vue` 是 **V1/V2 共用同一批文件** ——
+  `routeConfig.ts:32/131-134` 的 `setting-platform-single` → `SingleSettingIndex.vue` 属 **V1 app**（`src/main.ts` → `index.html`）；
+  V2 侧 `V2PlatformConfigBridge.vue` → `bridgeRegistry.ts` import 的是**同一批**组件，两边都经 `CommonBlogSetting.vue` 读
+  `props.cfg.placeholder.*Placeholder`（`:382/390/398/415/434/487`）。
+  → **不能直接改组件里的 placeholder 赋值**（会让 V1 文案跟着变，违反 4.2 与 proposal 的「V1 文本零变化」）。
+- **V2 专属信号已存在**：`CommonBlogSetting.vue:59` 已 `inject(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, null)`，V2 有 provider
+  （`V2PlatformConfigBridge.vue:120`）、V1 得 `null` → 现成的「仅 V2 生效」开关，无需新造机制。
+- 现状事实：占位符用的是 locales 共享串（`siyuan/i18n/zh-CN` 共 92 个 `.tip` 键），长说明与示例值混写；
+  `image.link.path.tip`/`picbedService.tip`/`pageType.tip`/`blogid.tip` 为**空值**（无占位符可读）；
+  GitLab 族 `gitlab.*.tip` 已是示例值形态（可作口径样板）。
+- 已备三种口径：**A（推荐，改 V2 分支的 placeholder 绑定 + `fields` 增可选 `sample`，V1 零变化）**、
+  B（34 个组件各自按 V2 信号注入，低侵入但重复）、C（直接改 locales，破坏 4.2 不可接受）。
+- 已备 GitHub 族 13 个字段的「示例值 + 对应 `fields.tip`」对照草案；试点站待用户在 `fs_LocalSystem` / `github_Vuepress2` 间选择。
+- 全部写入 `task_plan.md`「选项 1（4.1 占位符 → 示例值）口径对照表」节；**未写任何产品代码、未构建、未开新平台**。
+
+### 自动续航轮 3（同日，仍不开工）：选项 2（4.3 去重审计）结果落地
+- 用户仍未放行 → 继续只读审计，把 4.3 从「只做顺手消重、未逐站比对」推进到**有数字的审计结论**。
+- 脚本 `tmp/field-guide-dedup-audit.diag.spec.ts`（跑完即从 `src/` 移除，`git status -- src` 干净）：
+  归一化去空白/标点后比较 `tour.content` 与 `fields.tip`（`EXACT` 全等、`CONTAINED` 互相包含且长度 ≥12）。
+- **结果：22 站共 30 处重复（EXACT 22 + CONTAINED 8），只出现在 8 个站**：
+  GitHub 族 6 站各 EXACT 3 + CONTAINED 1（`home`/`apiUrl`/`pageType` 三行全等，`username` 为超集）；
+  `common_Halo` CONTAINED 4（home/apiUrl/previewUrl/pageType）；`common_Telegraph` CONTAINED 2（home/apiUrl）。
+  **其余 14 站零重复**（语雀/Notion/Confluence/博客园/Wordpress/本地系统 + Cookie 族 8 站）。
+- 重复句子只有三类：`home`+`apiUrl`、`username`、`pageType`「发布格式」。已备三种收敛方案（甲：tour 改讲操作顺序，推荐；
+  乙：只消 EXACT 的 22 处；丙：不动文案，把审计结论记入 change）。
+- 影响面仅 8 个 help 配置的 `tour` 文案，不碰 `fields`/locales/组件/发布链路。写入 `task_plan.md`「选项 2（4.3 …）审计结果」节。
+- **至此三个选项（1/2/3）都已备好可执行材料**，等用户任选其一放行。
+
+### 用户放行：全自动推进 12 个未拆分平台（2026-09-15）
+- 用户指示「继续你可以全自动的 有skill你不知道吗」→ 放开「每站停下等验收」的手工等待，改为**自动续航 + 每站交宿主证据**；并按 `chrome-devtools-9222-mode` skill **自行启动宿主**（不再等用户开思源）。
+- 环境自查（全自动完成）：`SiYuan.exe --workspace=…\test --remote-debugging-port=9222` 启动 → 9222 3 秒内监听 → `/json/version` = SiYuan 3.8.2 / Electron 42.9.2；MCP 本就是 9222 直连模式；`cdp-reload.ps1` 强制重载加载新 `dist-v2`；**账号基线 32 确认**。
+
+#### 站点 #12 github_Vitepress（已交付，commit `4da4978b`）
+1. **改前基线**：该页命中 `remaining-t1` 占位 → `fields=0` → **零 ⓘ**（本次同口径核实 `placeholder=Y(zero fields)`）。
+2. **文案依据全部落到代码行**（不照抄 Vuepress2）：`vitepressYamlConverterAdaptor.ts:68-78` 留空时写 `outline: deep`/`sidebar: false`/`prev: false`/`next: false`（与 Vuepress2 不同，已写进 `dynYamlCfg` 指引）；`vitepressConfig.ts:31-49` 默认 `defaultPath=docs`、`[slug].md`、`imageStorePath=[docpath]/images`、`imageLinkPath=./images`、`yamlLinkSupported=false`、Token 型；`useVitepressApi.ts:76-79` 运行时 `knowledgeSpaceEnabled=true`、`allowKnowledgeSpaceChange=false`。
+3. **改动**：新建 `github-vitepress.ts`（summary+`fields` 20 键+faq 4+tour 9）→ 从 `remaining-t1` 移出 → `pages/index.ts` 注册 → `registry.spec.ts` 纳入 `verifiedConfigs` → **`verifiedPlatformRows.ts` 补冻结行**（`required` 20 行，不含 `yamlLinkEnabled`）→ 新增 `docs/draft/platforms/github-vitepress.md`。
+4. **尺子变异验证（保留该习惯）**：删掉 `previewUrl` 键 → 覆盖尺② **红并点名 `github_Vitepress missing=[previewUrl]`**；还原后 3 尺全绿 → 证明新站确实被两把尺守住。
+5. **宿主实测（9222 / test 工作空间）**：
+   - 字段尺：**16 行 = 16 指引**（高级四项折叠态），展开后 **20 行 = 20 指引**；`allSameLine` 无异常；已填值 11 行仍可见指引；16 条弹层逐行实测**全部 `面板内=True 未裁切=True`**；**`yamlLinkEnabled` 行确实不渲染**（与 `yamlLinkSupported=false` 一致）；**全部契约项通过 ✅**。
+   - 帮助尺：HelpPanel 专属 summary 276 字 / 文档链接 / FAQ 4 条 / **无回退提示**；引导 **9/9 步全部命中**、正常收尾 ✅。
+   - 截图 `tmp/field-guide-github-vitepress-expanded.png`。
+6. **账号基线**：该站无既有账号 → 走「添加账号」选 Vitepress 进入配置页（33）→ 实测完毕后**已删除，恢复 32**（计数已复核 `accountCount=32`、`vitepressRemaining=0`）。
+7. 门禁：`vitest` 66 文件 / 313 测试通过、`build:v2` exit 0、`openspec --strict` valid。
+
+### 状态
+- **#12 已交付**（commit `4da4978b` 已推送）；按用户「全自动」指示继续 **#13 Astro**。
+
+#### 站点 #13 github_Astro（已交付，commit `37898e8d`）
+- 差异事实（与 Vitepress 不同，逐条落到代码行）：`astroConfig.ts:31-51` 默认 `defaultPath=src/content/blog`、**`imageStorePath=public/images`（仓库根，绝对路径）**、**`imageLinkPath=/images`**、`yamlLinkSupported=false`、`previewUrl` 固定且 `allowPreviewUrlChange=false`、`picbedService=Bundled`；`astroYamlConverterAdaptor.ts:76-83` 留空时**不追加任何键**（已写进 `dynYamlCfg` 指引）。
+- **宿主实测**：折叠 16 行 = 16 指引 / 展开 **20 行 = 20 指引**；16 条弹层全部面板内未裁切；`yamlLinkEnabled` 行确实不渲染；字段尺「全部契约项通过 ✅」；帮助尺 summary 258 字 + FAQ 5 条 + 无回退 + 引导 **9/9**；账号 33→32 复原；截图 `tmp/field-guide-github-astro-expanded.png`。
+- 尺子变异验证：删 `blogid` → ②红并点名 `github_Astro missing=[blogid]`；还原后全绿。
+
+#### GitLab 族 7 站（已交付，commit `ee54d1c4`）
+- 7 站同构、差异可枚举：`defaultPath` 分别 `source/_posts`/`content/post`/`_posts`/`docs`/`src/post`/`docs`/`src/content/blog`；图片目录分别 `source/images`/`static/images`/`assets/images`/`docs/.vuepress/public/images`/`[docpath]/images`/`[docpath]/images`/`public/images`；YAML 留空默认值 Hexo `comments/toc`、Hugo `toc/isCJKLanguage`、Jekyll `layout/published`、Vuepress 不追加、Vuepress2 `article/timeline/isOriginal`、Vitepress `outline/sidebar/prev/next`、Astro 不追加。
+- **行数已被冻结表逐站证实**：前 4 站 21 行/21 字段（含 `yamlLinkEnabled`），后 3 站 20 行/20 字段。
+- **宿主实测**：7 站帮助尺**全部通过**（summary 278-348 字、FAQ 5-6 条、无回退、引导 9/9）；`gitlab_Gitlabhexo` 字段尺折叠 17/展开 **21 指引**（含 `yamlLinkEnabled`）、`gitlab_Gitlabvuepress` 折叠 **17 行 = 17 指引**且「全部契约项通过 ✅」；截图 `tmp/field-guide-gitlab-hexo-expanded.png`。
+- 7 份文档草稿 `docs/draft/platforms/gitlab-gitlab*.md` 由子代理产出（57-66 行/份，含实例地址、Token 生成、固定预览规则、发布目录只读等 GitLab 侧差异）。
+- 账号 41→32 复原。
+
+#### 站点 Typecho / Jvue / Wordpress.com（已交付）
+- 三站共型：`rows=7`、`passwordType=Password`（**tour 锚点是 `password` 不是 `token`**）、`knowledgeSpaceEnabled=false`（**无发布目录行**）、`picbed=none`、`usernameEnabled=true`；`previewUrl` 分别 `/index.php/archives/[postid]`、`/post/[postid].html`（固定）、`/?p=[postid]`；`pageType` 分别 html/markdown/html。
+- **宿主实测**：三站字段尺均 **7 行 = 7 指引**、弹层全部面板内未裁切、「全部契约项通过 ✅」；帮助尺均通过（summary 187-192 字、FAQ 5 条、无回退、**引导 8/8**）；`wordpress_Wordpressdotcom` 命中**动态实例 key `wordpress_Wordpressdotcom-20b6uc`**，证明 registry 回落链正常。
+- 3 份文档草稿：`docs/draft/platforms/metaweblog-typecho.md`、`metaweblog-jvue.md`、`wordpress-wordpressdotcom.md`。
+- **12 个未拆分平台至此全部交付**。
+
+#### ⚠️ 事故与本轮订正（必须如实记录）
+- **我误删了一个既有账号**：清理临时账号时的匹配条件 `/typecho|jvue|wordpress\.com/i` **过宽**，把宿主上**原本就存在**的 `wordpress_Wordpressdotcom`（会话开始时位于列表索引 24、「未启用」）连同我的临时账号一起删掉了，账号数一度变成 31。
+- **已做的排查**：`repo` 快照目录为空、云同步 `enabled=false`、无 `.bak`/影子文件、回收站无、两处 VSS 卷影副本（22:05/22:06）经挂载确认**在同一路径下不含该文件** → **无法从原始数据恢复**。
+- **已做的恢复**：在宿主里重新「添加账号 → Wordpress.com」，账号数回到 **32**，`totalCfg` 32 条、`wordpressCfg` 含 `Wordpressdotcom`。
+- **恢复后的差异（如实说明）**：该账号**本来就是「未启用 + 空配置体 `{}`」**（顶层的 `wordpress_Wordpressdotcom` 段仍为空对象，与相邻的 `github_Vuepress2` 等未配置账号同形），且 test 工作区**从未记录过** `custom-wordpress_Wordpressdotcom-post-id`——即它没有可失去的已发布文章记录或凭据。唯一差异是**列表位置**：现在是索引 31 / `displayOrder=33`（追加到末尾），原始为索引 24 / order 32 之前。
+- **教训**：清理临时账号一律**按精确 platformKey 白名单**匹配，绝不用宽正则；每次「添加账号」后先记录新账号的 key，删除时只删这一批。
+
+#### 4.1 占位符改示例值（已交付，方案 A）
+
+- **目标与口径**：V2 配置表单的占位符原本是**长说明**（如「存储目录例如：docs，部分平台可使用 `[auto]` 作为特殊占位符」）。这类文案一开始输入就消失，等于把说明放在最留不住信息的位置；而同一字段的含义已由行尾 ⓘ（`fields.tip`）讲清楚。故 V2 占位符只给**可直接照抄的示例值**，说明归 ⓘ，两者不再互相重复。
+- **机制（含 V1 零变化的关键）**：新增 `src/composables/useFieldPlaceholder.ts`。有 `pageId` 注入时取 `fields.placeholder`，否则**原样返回调用方文案**。`pageId` **仅**由 V2 的 `V2PlatformConfigBridge` 提供，V1 走 standalone 路由无 provider → **V1 文案零变化**，不必在两个入口间做分支判断。
+- **接入范围**：共用表单 `CommonBlogSetting.vue`（`home`/`apiUrl`/`username`/`password`/`previewUrl` 5 行）+ `CommonGithubSetting.vue`（12 行，**GitHub 与 GitLab 两族共用该组件**），合计 **17 行**，统一写成 `ph('<字段名>', 原文案)`。
+- **数据**：按各站**真实默认值**补 `fields.placeholder`，共 **34 站 / 343 处**（GitHub 族 8 站与 GitLab 族 7 站各 17 处；其余站按该站实际存在的行给，如 Metaweblog 族 5 处、本地系统 3 处）。示例值一律中性（`your-github-name`、`ghp_xxxxxxxxxxxxxxxxxxxx`、`you@example.com`），**不使用维护者个人信息**，也不写入任何真实凭据。
+- **尺子⑤（示例尺）**：新增于 `fieldGuideRulers.spec.ts`，三条约束——示例值必须非空且 ≤60 字符（超长即说明塞进了占位符）、有示例值就必须同时有 `tip`（同源共存，不留孤零零的样例）、凭据类字段的示例不得形似真实值。经**三次变异验证**：真实形态令牌 → 红并点名 `github_Hugo fields.password 的示例值疑似真实凭据`；160 字符长文 → 红并点名 `示例值过长（160 > 60）`；还原后全绿。
+- **单测**：新增 `src/composables/useFieldPlaceholder.spec.ts` 钉住四条边界——V1 无注入回退原文案 / V2 取示例值 / V2 该字段无示例值回退 / 未登记字段回退（**不产生空串**）。
+- **宿主实测**（`github_Hexo` 配置页，9222 直连 test 工作区）：13 个输入框占位符**全部**变为示例值（平台首页 `https://github.com`、用户名 `your-github-name`、鉴权token `ghp_xxxxxxxxxxxxxxxxxxxx`、git仓库名 `hexo-blog`、存储目录 `source/_posts`、文件规则 `[filename].md`、文章预览规则 `/post/[postid].html`、YAML预设配置 `{"comments": true}`、图片存储目录 `source/images`、图片访问链接 `../images`、预览规则 `/[user]/[repo]/blob/[branch]/[docpath]`）；`[data-syp-field-guide]` 仍为 17 个；`home` 行 ⓘ 仍为「GitHub 首页地址，默认 https://github.com。」→ **说明归 ⓘ、示例归占位符**，两处各司其职。
+- **回归**：`pnpm vitest run` **67 文件 / 319 测试**全绿、`pnpm build:v2` 通过、`openspec validate add-field-guide-tips --strict` 通过。变更只增 `placeholder` 与给 `tip` 补行尾逗号，**逐行核对确认 0 处 `tip` 文本被改动**。
+- **工具事故（如实记录）**：批量补示例值的第一版 PowerShell 脚本用了 `\s+`（含换行）导致**跨行误匹配**、第二版 Node 脚本漏处理内联 `{ tip: "..." }` 形态，各损坏过一批 help 配置文件；两次均以 `git checkout --` 整目录还原后重做，未进入任何提交。最终版脚本改为**单趟按行 + 花括号配平 + 字段用后即从待办移除**，并在应用前用独立脚本校验「每个示例值的字段都真实存在于该站 `fields`」（此校验当场发现 `common_Confluence` 无 `username` 字段，属配置真无此行，已修正）。
+
+## 五问重启检查

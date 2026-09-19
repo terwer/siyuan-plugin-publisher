@@ -7,17 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { GitlabvitepressApiAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressApiAdaptor.ts"
+import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { GitlabvitepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressYamlConverterAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
-import { GitlabvitepressConfig } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressConfig.ts"
-import { GitlabvitepressYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressYamlConverterAdaptor.ts"
-import { GitlabvitepressApiAdaptor } from "~/src/adaptors/api/gitlab-vitepress/gitlabvitepressApiAdaptor.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 const useGitlabvitepressApi = async (key: string, newCfg?: GitlabvitepressConfig) => {
   // 创建应用日志记录器
@@ -37,7 +38,7 @@ const useGitlabvitepressApi = async (key: string, newCfg?: GitlabvitepressConfig
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<GitlabvitepressConfig>(setting[key], {} as GitlabvitepressConfig)
+    cfg = safeMergeConfig<GitlabvitepressConfig>(setting[key], GitlabvitepressConfig, ["","","","",""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -73,8 +74,6 @@ const useGitlabvitepressApi = async (key: string, newCfg?: GitlabvitepressConfig
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip =
-    "Gitlabvitepress 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   // picbed service
   cfg.picgoPicbedSupported = true

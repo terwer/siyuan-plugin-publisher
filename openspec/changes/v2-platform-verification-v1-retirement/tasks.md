@@ -1,0 +1,64 @@
+# Tasks: v2-platform-verification-v1-retirement
+
+> 进度主表：**仅更新** [platform-checklist.md](./platform-checklist.md)
+
+## 0. 治理（本提案）
+
+- [x] 0.1 创建 OpenSpec 变更 `v2-platform-verification-v1-retirement`
+- [x] 0.2 迁入 `platform-checklist.md` 为 SSOT
+- [x] 0.3 删除 `.qoder/plans/全量平台测试Checklist_0578ad66.md`
+- [x] 0.4 停用 `.planning/` 平行副本，改为指向本变更
+- [x] 0.5 撰写 proposal / design / specs / tasks
+
+## 1. T1 逐平台验证（35）
+
+按 `platform-checklist.md` 顺序；每项失败则在本节下追加子任务或新开 `openspec new change fix-<platform>`。
+
+- [x] 1.1 #1 语雀 API `common_Yuque`（需专业会员，已 ✅）
+- [x] 1.2 #2–#5 Common 其余（Notion、Halo、Telegraph、Confluence）
+- [x] 1.3 #6–#13 Github 八项
+- [x] 1.4 #14–#20 Gitlab 七项
+- [x] 1.5 #21–#24 Metaweblog 四项
+  - [x] 1.5a #21 博客园 `metaweblog_Cnblogs` — T1 全链路 ✅（2026-05-21，用户手测）
+  - [x] 1.5b #22–#24 Typecho、Jvue、Metaweblog 通用
+- [x] 1.6 #25–#26 Wordpress 两项
+  - [x] 1.6a #25 Wordpress `wordpress_Wordpress` — T1 全链路 ✅（2026-05-21，本地 WP，用户手测）
+  - [x] 1.6b #26 Wordpress.com
+- [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（V2C/Pub/Upd/Del/Img 已验通过）
+- [x] 1.7b #28 Halo网页版
+  - [x] 1.7b.1 修复 Halo 网页版 V2C 配置页初始化失败：预置 `authUrl=/login` 不能在未配置站点时直接 `new URL()`；保留 Cookie 授权入口，未填 `home/apiUrl` 时点击登录/读取只提示先填站点地址，填入后由 Web Cookie 共用解析生成真实登录 URL
+  - [x] 1.7b.2 2026-08-14 修 transport 规则：loopback/私网目标有代理条件时走 `siyuan-forward-proxy`（内核 3.7.3 默认允许本机访问，SSRF 由 `SSRFSafeDialer` 兜底）；单测 64 绿、build:v2 通过
+  - [x] 1.7b.3 2026-08-14 本地 Docker Halo 2.20（localhost:8090）devtools 全链路手验：**V2C（forwardProxy 200 + 账号运行中）/ Pub / Upd / Del / Img 五格全部 ✅**
+  - [x] 1.7c #30 知乎 `custom_Zhihu` — V2 Bridge 全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
+  - [x] 1.7d #31 CSDN `custom_Csdn` — V2 Bridge 全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
+  - [x] 1.7e #32–#35 简书、掘金、微信公众号、哔哩哔哩 V2 Bridge 全链路
+- [x] 1.8 #29 本地系统（Electron）— V2 全链路 ✅（2026-05-24，用户手测）
+
+## 2. T2a / T2b / T3
+
+- [x] 2.1 T2a #30–#35：已迁入 T1 V2 Bridge；V1 回退保留至 Gate D，不再要求 V2 Inv
+- [ ] 2.2 T2b #36–#38：Vis/Add（Github Docsify、Gitlab Docsify、小红书；均「无 V2 bridge / pre 注释」，不在 V1 退役门禁内）
+- [ ] 2.3 T3 #39–#54：孤儿与 Fs 占位确认（验收目标为「确认不可用/不暴露」，不在 V1 退役门禁内）
+
+## 3. Gate C — 标记 V1 废弃
+
+- [x] 3.1 Checklist Gate A 全部满足（T1 35/35，2026-09-19）；同表 Gate B 亦满足（T2a 为 0 平台）
+- [x] 3.2 偏好 / README：默认 V2；`useV2UI` 默认改为 `true`，README 中英文去掉「先手动开启新版 UI」步骤并注明旧界面已退役
+- [x] 3.3 保留回退入口：偏好开关保留但**不允许关闭**（关闭即引导到最后一个提供 V1 的发行版 `1.41.1` 下载页），并保留 `useV2UI=false` 在旧版本中的语义
+
+## 4. Gate D — 三版本后移除 iframe
+
+- [ ] 4.1 记录 Gate C 生效版本号
+- [ ] 4.2 第三个发行版后评估 `ui-v2-migration` 等价性
+- [ ] 4.3 删除 iframe/SPA 路由与宿主（独立 PR），并**彻底移除 `useV2UI` 开关**
+- [ ] 4.4 归档本变更；合并 delta 至 `openspec/specs/`
+
+## 修复 backlog（按需追加）
+
+_验收中发现的问题在此登记，完成后勾选并回写 checklist。_
+
+- [x] **#21 博客园 V2C**：MetaWeblog XML-RPC — `indexOf` / `non-text response`；`zhi-blog-api@1.79.0` + `proxyXmlrpc` 专用层（见 `.planning/2026-05-21-cnblogs-xmlrpc-response-text/`）
+- [x] **#32 简书 Img/默认图床**：`JianshuConfig` 默认图床已设为 `PicbedServiceTypeEnum.Bundled`（新增账号默认选中"当前平台 推荐"，spec 已覆盖）；`uploadFile` 增加 qiniu 错误详情；完整 help 配置已补齐（fields/faq/tour 4 步）。真实 PNG 带图发布验证通过；此前失败是测试图片 `icon.png` 实为 WebP 伪装 PNG
+- [x] **#26 Wordpress.com 传输受限**：站点域按客户端特征拒绝 Node fetch；新增 `electron-session-fetch`（宿主网络栈）与用户自备跨域代理两条通路，保留 XML-RPC。见 `openspec/changes/archive/2026-09-19-add-wordpress-com-chromium-transport/`
+- [x] **平台图床默认值缺失**：Typecho / Jvue / Wordpress / Wordpressdotcom / Metaweblog 通用 / Halo / Confluence 默认图床修正为平台图床，新增 `picbedDefaults.spec.ts` 双向覆盖
+- [x] **GitLab 族 `[docpath]` 未解析**：图片曾落到字面量 `[docpath]/images/`；抽出 `resolvePlatformImagePath` 供 GitHub / GitLab 两族共用

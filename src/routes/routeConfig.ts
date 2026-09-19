@@ -10,7 +10,7 @@
 import { RouteRecordRaw } from "vue-router"
 import QuickPublish from "~/src/workers/QuickPublish.vue"
 import SinglePublish from "~/src/pages/SinglePublish.vue"
-import SinglePublishDoPublish from "~/src/components/publish/SinglePublishDoPublish.vue"
+import SinglePublishDoPublish from "~/src/pages/SinglePublishDoPublish.vue"
 import BatchPublish from "~/src/pages/BatchPublish.vue"
 import AiChat from "~/src/pages/AiChat.vue"
 import Test from "~/src/pages/Test.vue"
@@ -34,14 +34,14 @@ import GeneralSetting from "~/src/components/set/GeneralSetting.vue"
 import SiyuanSetting from "~/src/components/set/SiyuanSetting.vue"
 import About from "~/src/pages/About.vue"
 import Admin from "~/src/pages/Admin.vue"
-import QuickPublishSelectPlatform from "~/src/components/publish/QuickPublishSelectPlatform.vue"
+import QuickSelect from "~/src/pages/QuickSelect.vue"
 
 /**
  * 路由配置
  */
 export const routeConfig: RouteRecordRaw[] = [
   // 极速发布
-  { path: "/publish/quickSelect", component: QuickPublishSelectPlatform },
+  { path: "/publish/quickSelect", component: QuickSelect },
   { path: "/workers/quickPublish/:key/:id", component: QuickPublish },
   // 常规发布
   // ?id=<id>

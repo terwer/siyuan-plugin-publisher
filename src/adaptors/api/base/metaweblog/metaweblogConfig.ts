@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
@@ -73,6 +73,18 @@ export class MetaweblogConfig extends CommonBlogConfig {
    */
   public override middlewareUrl = ""
 
+  /**
+   * 是否经宿主自身的网络栈直连（Electron `session.fetch`，即 Chromium 网络栈）。
+   *
+   * 适用于按客户端特征拒绝 Node fetch、但宿主内访问正常的站点（如 WordPress.com）。
+   * 宿主不具备该能力时会自动回退既有通道，不会硬失败。默认关闭，不影响其他 MetaWeblog 平台。
+   *
+   * **与 `isCorsProxy` 互相独立**：本项只表达「经宿主网络栈直连」，是否还需要额外网络条件
+   * 因平台而异，不做任何隐含绑定；若平台同时希望支持用户自备的跨域代理，另开 `isCorsProxy`
+   * 并在其配置项填入代理地址即可（见 `resolveXmlrpcTransport` 的选型规则）。
+   */
+  public isHostSessionFetch = false
+
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(home, apiUrl, username, password, middlewareUrl)
 
@@ -96,5 +108,8 @@ export class MetaweblogConfig extends CommonBlogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+    // MetaWeblog 协议自带 metaWeblog.newMediaObject（见 metaweblogBlogApiAdaptor），
+    // 平台图床可用，新账号默认选「当前平台」；显式选择「不使用」不会被覆盖
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }

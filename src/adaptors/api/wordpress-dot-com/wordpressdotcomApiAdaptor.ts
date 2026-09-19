@@ -13,6 +13,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 import { UserBlog } from "zhi-blog-api"
 import { WordpressdotcomConstants } from "~/src/adaptors/api/wordpress-dot-com/wordpressdotcomConstants.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * WordPress API 适配器
@@ -45,7 +46,7 @@ class WordpressdotcomApiAdaptor extends MetaweblogBlogApiAdaptor {
     return result
   }
 
-  public override async deletePost(postid: string): Promise<boolean> {
+  public override async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const ret = await this.metaweblogCall(WordpressdotcomConstants.METHOD_DELETE_POST, [
       this.cfg.blogid,
       postid,

@@ -22,7 +22,7 @@ import {
 } from "~/src/platforms/dynamicConfig.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -38,6 +38,8 @@ import { Utils } from "~/src/utils/utils.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import PageUtils from "~/common/pageUtils.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
+import { sanitizeCookieArrayForLog, sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { useWebCookieAuthorization, type WebCookieLogoutStatus } from "~/src/composables/useWebCookieAuthorization.ts"
 
 const logger = createAppLogger("publish-platform-setting-list")
 
@@ -47,6 +49,7 @@ const router = useRouter()
 const { getSetting, updateSetting, deleteKey } = usePublishSettingStore()
 const { getPrePlatformKeys } = usePlatformDefine()
 const { isInSiyuanOrSiyuanNewWin, isInChromeExtension } = useSiyuanDevice()
+const webCookieAuthorization = useWebCookieAuthorization()
 
 // datas
 const formData = reactive({
@@ -298,11 +301,12 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   // 设置将要读取的域名
   const cookieCb = async (dynCfg: DynamicConfig, cookies: ElectronCookie[]) => {
     ElMessage.info("验证中，请关注状态，没有授权表示不可用，已授权表示该平台可正常使用...")
-    logger.debug("get cookie result=>", cookies)
+    logger.debug("get cookie result=>", sanitizeCookieArrayForLog(cookies))
     formData.webAuthLoadingMap[dynCfg.platformKey] = true
 
     const appInstance = new PublisherAppInstance()
-    const cfg = (await Adaptors.getCfg(dynCfg.platformKey)) as CommonWebConfig
+    const storedCfg = JsonUtil.safeParse<any>(formData.setting[dynCfg.platformKey], {} as any)
+    const cfg = (await Adaptors.getCfg(dynCfg.platformKey, storedCfg)) as CommonWebConfig
     const apiAdaptor = await Adaptors.getAdaptor(dynCfg.platformKey, cfg)
     const api = Utils.webApi(appInstance, apiAdaptor)
 
@@ -336,18 +340,12 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
       }
     } catch (e) {
       dynCfg.isAuth = false
-      const errMsg = t("main.opt.failure") + "=>" + e
-      logger.error(t("main.opt.failure") + "=>", e)
-      // 过期之后，提醒用户是否需要重新认证
-      const logoutUrl = dynCfg.logoutUrl ?? (cfg as any).logoutUrl
-      if (!StrUtil.isEmptyString(logoutUrl)) {
-        const confurmMsg =
-          errMsg +
-          "，是否需要退出登录？注意：！！！本窗口只负责退出，登录信息填写无效！！！，需要稍后重新点击授权操作登录？"
-        _handleClearAuthConfirm(confurmMsg, logoutUrl)
-      } else {
-        ElMessage.error(errMsg)
-      }
+      const errMsg = t("main.opt.failure") + "=>" + toSafeMessage(e)
+      logger.error(t("main.opt.failure") + "=>", toSafeMessage(e))
+      const confurmMsg =
+        errMsg +
+        "，是否需要退出登录并清除本地授权？注意：该操作只负责退出或清除当前 Cookie 授权状态，需要稍后重新点击授权操作登录。"
+      await _handleClearAuthConfirm(confurmMsg, dynCfg, cfg)
     }
 
     formData.dynamicConfigArray = replacePlatformByKey(formData.dynamicConfigArray, dynCfg.platformKey, dynCfg)
@@ -364,17 +362,73 @@ const _handleValidateOpenBrowserAuth = (dynCfg: DynamicConfig) => {
   openBrowserWindow(dynCfg.authUrl, dynCfg, cookieCb, extraScriptCb)
 }
 
-const _handleClearAuthConfirm = (msg, url: string) => {
-  ElMessageBox.confirm(msg, "温馨提示", {
-    type: "error",
-    icon: markRaw(Warning),
-    confirmButtonText: t("main.opt.ok"),
-    cancelButtonText: t("main.opt.cancel"),
-  } as any)
-    .then(async () => {
-      openBrowserWindow(url)
+const logoutMessageByStatus = (status: WebCookieLogoutStatus) => {
+  switch (status) {
+    case "logout_success":
+      return "退出成功，已清除本地 Cookie 授权状态，请重新授权后再验证。"
+    case "url_fallback":
+      return "已打开平台退出页面，请完成退出后重新授权并验证。"
+    case "no_logout_method":
+      return "当前平台没有可用的退出方式，请在平台侧手动退出后重新授权。"
+    case "platform_not_found":
+      return "未找到当前平台配置，请返回账号列表后重试。"
+    case "not_cookie_platform":
+      return "当前平台不需要 Cookie 授权。"
+    case "persist_failed":
+      return "退出已执行，但本地授权状态保存失败，请重试。"
+    case "logout_failed":
+      return "退出失败，请重新登录平台后重新读取 Cookie。"
+    default:
+      return "退出失败，请重新登录平台后重新读取 Cookie。"
+  }
+}
+
+const toSafeMessage = (error: unknown) => {
+  const message = error instanceof Error ? error.message : String(error ?? "")
+  const sanitized = sanitizeSensitiveForLog(message)
+  return typeof sanitized === "string" ? sanitized : JSON.stringify(sanitized)
+}
+
+const _handleClearAuthConfirm = async (msg: string, dynCfg: DynamicConfig, currentCfg?: WebConfig) => {
+  try {
+    await ElMessageBox.confirm(msg, "温馨提示", {
+      type: "error",
+      icon: markRaw(Warning),
+      confirmButtonText: t("main.opt.ok"),
+      cancelButtonText: t("main.opt.cancel"),
+    } as any)
+
+    formData.webAuthLoadingMap[dynCfg.platformKey] = true
+    const result = await webCookieAuthorization.logout({
+      platformKey: dynCfg.platformKey,
+      currentCfg,
+      dynCfg,
+      setting: formData.setting,
+      dynamicConfigArray: formData.dynamicConfigArray,
     })
-    .catch(() => {})
+
+    if (result.status === "logout_success" && result.dynamicConfigArray) {
+      formData.dynamicConfigArray = result.dynamicConfigArray
+      formData.setting = result.setting as typeof SypConfig
+    }
+
+    if (result.status === "logout_success") {
+      ElMessage.success(logoutMessageByStatus(result.status))
+    } else if (result.status === "url_fallback") {
+      ElMessage.warning(logoutMessageByStatus(result.status))
+    } else {
+      ElMessage.error(logoutMessageByStatus(result.status))
+    }
+  } catch (error) {
+    if (error) {
+      logger.warn("web cookie logout confirm cancelled or failed", {
+        platformKey: dynCfg.platformKey,
+        error: toSafeMessage(error),
+      })
+    }
+  } finally {
+    formData.webAuthLoadingMap[dynCfg.platformKey] = false
+  }
 }
 
 const _handleValidateChromeExtensionAuth = async (dynCfg: DynamicConfig) => {

@@ -23,14 +23,14 @@
  * questions.
  */
 
+import { openTab, showMessage } from "siyuan"
+import { StrUtil } from "zhi-common"
 import { DeviceDetection, DeviceTypeEnum } from "zhi-device"
 import { createSiyuanAppLogger } from "../appLogger"
-import WidgetPageUtils from "../utils/widgetPageUtils.ts"
 import { showIframeDialog } from "../iframeDialog"
 import PublisherPlugin from "../index"
-import { StrUtil } from "zhi-common"
-import { openTab, showMessage } from "siyuan"
-
+import { PreferenceConfigManager } from "../store/preferenceConfigManager"
+import WidgetPageUtils from "../utils/widgetPageUtils.ts"
 /**
  * 挂件相关
  */
@@ -41,6 +41,10 @@ export class WidgetInvoke {
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("widget-invoke")
     this.pluginInstance = pluginInstance
+  }
+
+  private get v2Host() {
+    return this.pluginInstance.v2Host
   }
 
   public async showPublisherBatchPublishDialog() {
@@ -103,6 +107,15 @@ export class WidgetInvoke {
   }
 
   public async showPublisherPublishSettingDialog() {
+    const prefConfig = await PreferenceConfigManager.loadConfig(this.pluginInstance)
+    if (prefConfig.useV2UI) {
+      this.logger.info("V2 UI enabled, showing settings shell in DOM host")
+      await this.v2Host.show({
+        initialView: "settings",
+      })
+      return
+    }
+
     await this.showPage("/setting/publish")
   }
 

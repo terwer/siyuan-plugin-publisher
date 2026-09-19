@@ -10,19 +10,24 @@
 <script setup lang="ts">
 import CustomWebSetting from "~/src/components/set/publish/singleplatform/base/impl/CustomWebSetting.vue"
 import { useVueI18n } from "~/src/composables/useVueI18n.ts"
-import {useWechatWeb} from "~/src/adaptors/web/wechat/useWechatWeb.ts";
-import {WechatConfig} from "~/src/adaptors/web/wechat/wechatConfig.ts";
-import {WechatPlaceholder} from "~/src/adaptors/web/wechat/wechatPlaceholder.ts";
+import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
+import { WechatConfig } from "~/src/adaptors/web/wechat/wechatConfig.ts"
+import { WechatPlaceholder } from "~/src/adaptors/web/wechat/wechatPlaceholder.ts"
 
 const props = defineProps({
   apiType: {
     type: String,
     default: "",
   },
+  enableOnValidated: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const { t } = useVueI18n()
 const { cfg } = await useWechatWeb(props.apiType)
+const emit = defineEmits(["validated", "saved"])
 
 const wechatCfg = cfg as WechatConfig
 const wechatPlaceholder = new WechatPlaceholder()
@@ -34,5 +39,24 @@ wechatCfg.placeholder = wechatPlaceholder
 </script>
 
 <template>
-  <custom-web-setting :api-type="props.apiType" :cfg="wechatCfg" />
+  <custom-web-setting
+    :api-type="props.apiType"
+    :cfg="wechatCfg"
+    :enable-on-validated="props.enableOnValidated"
+    @validated="(result) => emit('validated', result)"
+    @saved="(result) => emit('saved', result)"
+  >
+    <template v-if="$slots['cookie-actions']" #cookie-actions="cookieActions">
+      <slot
+        name="cookie-actions"
+        :cfg="cookieActions.cfg"
+        :dyn-cfg="cookieActions.dynCfg"
+        :setting="cookieActions.setting"
+        :dynamic-config-array="cookieActions.dynamicConfigArray"
+        :is-manual-expanded="cookieActions.isManualExpanded"
+        :toggle-manual-editor="cookieActions.toggleManualEditor"
+        :expand-manual-editor="cookieActions.expandManualEditor"
+      />
+    </template>
+  </custom-web-setting>
 </template>

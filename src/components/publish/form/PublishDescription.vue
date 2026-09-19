@@ -12,7 +12,7 @@ import { useVueI18n } from "~/src/composables/useVueI18n.ts"
 import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
 import { prompt, ShortDescAIResult } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
@@ -84,56 +84,49 @@ const handleMakeDesc = async () => {
       const inputWord = prompt.shortDescPromptStream.content
       const { chat, getChatInput } = useChatGPT()
       formData.desc = ""
-      const chatResp = await chat(inputWord, {
+      await chat(inputWord, {
         name: "desc",
         systemMessage: getChatInput(formData?.md, formData.html),
         stream: true,
         onProgress: (partialResponse) => {
-          formData.desc = partialResponse.text
-          logger.debug("partialResponse=>", partialResponse.text)
+          const text = partialResponse?.text
+          if (!StrUtil.isEmptyString(text)) {
+            formData.desc = text
+          }
+          logger.debug("partialResponse=>", text)
         },
         timeoutMs: 2 * 60 * 1000,
+        silent: true,
       })
-      logger.debug("chatResp=>", chatResp)
-      // formData.desc = chatResp.text
     } else {
       const inputWord = prompt.shortDescPrompt.content
       const { chat, getChatInput } = useChatGPT()
       const chatText = await chat(inputWord, {
         name: "desc",
         systemMessage: getChatInput(formData?.md, formData.html),
+        silent: true,
       })
-      if (StrUtil.isEmptyString(chatText)) {
-        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
-        return
-      }
       const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
-      if (StrUtil.isEmptyString(resJson?.desc)) {
-        throw new Error("文档信息量太少，未能抽取有效信息")
+      if (!StrUtil.isEmptyString(resJson?.desc)) {
+        formData.desc = resJson.desc
+        logger.info("使用AI智能生成的摘要结果 =>", {
+          inputWord: inputWord,
+          chatText: chatText,
+        })
       }
-      formData.desc = resJson.desc
-      logger.info("使用AI智能生成的摘要结果 =>", {
-        inputWord: inputWord,
-        chatText: chatText,
-      })
     }
 
-    // 自部署无监督摘要
-    // if (StrUtil.isEmptyString(formData.html)) {
-    //   throw new Error("正文为空，无法生成摘要")
-    // }
-    // logger.debug("使用人工智能提取摘要", { q: formData.html })
-    // const result = await SmartUtil.autoSummary(formData.html)
-    // logger.debug("auto summary reault =>", result)
-    // if (!StrUtil.isEmptyString(result.errMsg)) {
-    //   throw new Error(result.errMsg)
-    // } else {
-    //   formData.desc = result.result
-    // }
-    // } else {
-    //   formData.desc = HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
-    //   ElMessage.success(`操作成功，未开启人工智能，直接截取文章前${MAX_PREVIEW_LENGTH}个字符作为摘要`)
-    // }
+    // AI 未产生有效摘要（未配置 / 请求失败 / 正文过少）时，回退为本地截取摘要，避免空摘要与误导性报错
+    if (StrUtil.isEmptyString(formData.desc)) {
+      const fallback = !StrUtil.isEmptyString(formData.html)
+        ? HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
+        : HtmlUtil.parseHtml(formData.md || "", MAX_PREVIEW_LENGTH, true)
+      if (StrUtil.isEmptyString(fallback)) {
+        throw new Error("文档信息量太少，未能抽取有效信息")
+      }
+      formData.desc = fallback
+    }
+
     emit("emitSyncDesc", formData.desc)
     ElMessage.success("使用人工智能提取摘要成功")
   } catch (e) {

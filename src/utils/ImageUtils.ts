@@ -89,7 +89,7 @@ class ImageUtils {
    * @param {string} string - 原始字符串
    * @returns {string} 转义后的字符串
    */
-  private static escapeRegExp(string) {
+  public static escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   }
 

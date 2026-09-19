@@ -36,6 +36,7 @@ import { isSiyuanFileExists } from "../utils/utils"
 export class PluginInvoke {
   private logger
   private readonly pluginInstance
+  /** Legacy V1-only entry for opening the standalone PicGo plugin product UI. V2 PicBed settings do not use it. */
   private picgoPluginBase = "/plugins/siyuan-plugin-picgo/#"
   private blogPluginBase = "/plugins/siyuan-blog/app/#"
 
@@ -75,6 +76,7 @@ export class PluginInvoke {
   }
 
   public async showPicbedDialog() {
+    this.logger.warn("Opening legacy standalone PicGo plugin UI; Publisher V2 uses its own headless PicGo settings.")
     const pageId: string | undefined = WidgetPageUtils.getPageId()
     const pageUrl = `${this.picgoPluginBase}/?pageId=${pageId}`
     this.logger.info(`Will open page => ${pageUrl}`)
@@ -82,6 +84,7 @@ export class PluginInvoke {
   }
 
   public async showPicbedSettingDialog() {
+    this.logger.warn("Opening legacy standalone PicGo plugin settings; Publisher V2 uses its own headless PicGo settings.")
     const pageId: string | undefined = WidgetPageUtils.getPageId()
     const pageUrl = `${this.picgoPluginBase}/setting?pageId=${pageId}`
     this.logger.info(`Will open page => ${pageUrl}`)
@@ -89,7 +92,7 @@ export class PluginInvoke {
   }
 
   public async preCheckPicgoPlugin() {
-    // 检测是否安装 picgo 插件
+    // Legacy V1-only: detect the standalone PicGo plugin product before showing its iframe UI.
     return await isSiyuanFileExists(this.pluginInstance.kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
   }
 
