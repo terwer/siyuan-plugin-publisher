@@ -13,7 +13,7 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpressdotcom",
   helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
   summary:
-    "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 WordPress.com 站点。账号使用 WordPress.com 的登录用户名与密码（不是 Token）；「平台首页」填站点地址，API 地址由该地址自动推导；正文默认按 HTML 发布，查看文章链接模板为 /?p=[postid]；WordPress.com 无发布目录概念，因此没有「发布目录」行。访问该站点有两条通路，任选其一：「跨域代理地址」填入你自备的跨域代理服务（无需额外网络条件），或留空由思源宿主自身的网络通道直连站点（需当前网络能打开该站点）。",
+    "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 WordPress.com 站点。账号使用 WordPress.com 的登录用户名与密码（不是 Token）；「平台首页」填站点地址，API 地址由该地址自动推导；正文默认按 HTML 发布，查看文章链接模板为 /?p=[postid]；文章「分类」可在本页选择（验证后下拉列出站点已有分类）。访问该站点有两条通路，任选其一：「跨域代理地址」填入你自备的跨域代理服务（无需额外网络条件），或留空由思源宿主自身的网络通道直连站点（需当前网络能打开该站点）。",
   fields: {
     home: {
       tip: "你的 WordPress.com 站点地址，如 https://yoursite.wordpress.com；填写后会据此类推出 MetaWeblog API 地址。注意：该站点在部分网络环境下无法直接访问，需要能打开它的网络环境（如代理）。",
@@ -56,7 +56,7 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
     },
     {
       q: "为什么没有「发布目录」？",
-      a: "WordPress.com 通过 MetaWeblog 发布时不暴露分类目录选择，文章直接进入站点，因此配置页不提供该行。",
+      a: "WordPress.com 的文章直接发布到站点，不涉及目录概念，因此配置页不提供该行。文章「分类」可以在本页选择：点「验证」后下拉列出站点已有分类，可多选。",
     },
     {
       q: "图片要怎么发布？",

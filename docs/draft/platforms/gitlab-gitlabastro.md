@@ -36,7 +36,7 @@
 
 - Astro 把 `public/` 下的资源**原样拷贝**到构建输出根目录，因此图片放 `public/images`，站点上即以 `/images/<图片名>` 访问。
 - `imageStorePath = public/images` 是**仓库根目录**下的固定路径（不随文章目录变化）。
-- `imageLinkPath = /images` 生成**绝对路径**引用 `/images/<图片名>`（注意与「资源就近放置」的平台不同，这里不是 `./images`）。
+- `imageLinkPath = /images` 生成**绝对路径**引用 `/images/<图片名>`（绝对路径，不是相对资源的 `./images`）。
 - 发布带图文章后，仓库中会出现 `.md` 与 `public/images/<图片名>`。
 
 ## 四、发布目录的限制

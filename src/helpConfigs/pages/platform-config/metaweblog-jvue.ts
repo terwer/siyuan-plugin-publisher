@@ -43,7 +43,7 @@ export const jvueHelpConfig: PageHelpConfig = {
     },
     {
       q: "API 地址要不要手动填？",
-      a: "要。与 Typecho 不同，Jvue 的 API 地址不会从博客首页自动推导，需填入站点提供 XML-RPC 的接口地址。",
+      a: "要。Jvue 的 API 地址需要手动填入站点提供 XML-RPC 的接口地址（通常为站点下的 /xmlrpc），平台首页与它是各自独立的两个字段。",
     },
     {
       q: "图片要怎么发布？",

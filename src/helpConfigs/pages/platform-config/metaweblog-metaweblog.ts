@@ -46,8 +46,8 @@ export const metaweblogHelpConfig: PageHelpConfig = {
   },
   faq: [
     {
-      q: "这个入口和「博客园」「Typecho」等有什么区别？",
-      a: "那些是插件的专用适配入口，会预设好各自的 API 地址形态与查看链接模板。「Metaweblog 通用」不预设这些，需要你按站点实际情况填写，适用于尚未单独适配的 MetaWeblog 博客。",
+      q: "这个入口适合什么博客？",
+      a: "适合任何实现了 MetaWeblog XML-RPC 远程发布、且插件尚未单独适配入口的博客。本入口不预设 API 地址形态与查看链接模板，需要你按站点实际情况填写。",
     },
     {
       q: "API 地址填什么？",

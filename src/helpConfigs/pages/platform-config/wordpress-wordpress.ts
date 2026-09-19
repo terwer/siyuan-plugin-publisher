@@ -9,8 +9,8 @@ export const wordpressHelpConfig: PageHelpConfig = {
   helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
   summary: "发布到自建或托管的 WordPress 站点。当前配置重点是站点地址、账号和图片发布方式。",
   fields: {
-    home: { tip: "WordPress 站点首页地址，如 https://yourblog.com", placeholder: "https://your-wordpress.com" },
-    apiUrl: { tip: "WordPress XML-RPC 端点，通常会从首页自动推导为 https://yourblog.com/xmlrpc.php", placeholder: "https://your-wordpress.com/xmlrpc.php" },
+    home: { tip: "WordPress 站点首页地址，如 https://yourblog.com", placeholder: "https://yourblog.com" },
+    apiUrl: { tip: "WordPress XML-RPC 端点，通常会从首页自动推导为 https://yourblog.com/xmlrpc.php", placeholder: "https://yourblog.com/xmlrpc.php" },
     username: { tip: "WordPress 管理员用户名", placeholder: "your-wordpress-name" },
     password: {
       tip: "WordPress 账号密码；建议改用「应用程序密码」（后台 → 用户 → 编辑 → 应用程序密码 中生成），避免直接使用登录口令",
