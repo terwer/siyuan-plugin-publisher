@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { MetaweblogPlaceholder } from "~/src/adaptors/api/base/metaweblog/metaweblogPlaceholder.ts"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 
@@ -96,5 +96,8 @@ export class MetaweblogConfig extends CommonBlogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+    // MetaWeblog 协议自带 metaWeblog.newMediaObject（见 metaweblogBlogApiAdaptor），
+    // 平台图床可用，新账号默认选「当前平台」；显式选择「不使用」不会被覆盖
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }

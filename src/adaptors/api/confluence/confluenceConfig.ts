@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import { StrUtil } from "zhi-common"
 
@@ -36,6 +36,9 @@ class ConfluenceConfig extends CommonBlogConfig {
     this.placeholder.knowledgeSpaceReadonlyModeTip = ""
     this.picgoPicbedSupported = true
     this.bundledPicbedSupported = true
+    // 已声明支持平台图床（ConfluenceApiAdaptor.newMediaObject 以附件挂页），
+    // 默认值需与能力位一致：新账号默认选「当前平台」；显式选择「不使用」不会被覆盖
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }
 
