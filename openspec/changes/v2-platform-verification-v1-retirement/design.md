@@ -50,11 +50,13 @@
 3. 修复后更新 checklist → ✅，必要时写 `verification-log-*.md`。
 4. T1 全 ✅ → Gate C → **Gate C 与 Gate D 同落 `2.3.0`** → 归档本变更并更新 `openspec/specs/`。
 
-### 5. 版本口径（2026-09-20 用户确认）
+### 5. 版本口径（2026-09-20 用户确认，含一次更正）
 
-- **Gate C 生效版本 = `2.3.0`**：这是「默认 V2、V1 已退役」对外生效的第一个发行版。
-- **Gate D 亦落 `2.3.0`**：V1 **彻底退役**——不留回退开关，也**不给「无法关闭」提示**；原「三版本缓冲」不再需要（`1.41.1` 是最后一个提供 V1 界面的发行版，`V1_LAST_VERSION` 常量随之删除）。
-- 「彻底退役」不等于删掉所有 V1 组件：V2 复用着 `src/components/publish/**`、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts`，这些**保留**。
+- **`2.0.0` = V1 彻底移除**：所有 V1 遗产在该版本清零——iframe 宿主、旧 invoke、旧菜单、`useV2UI` 开关与提示、V1 SPA 在插件侧的全部入口。**顶栏旧菜单无需保留；文档菜单保留**（已迁到 V2）。
+- **唯一允许的例外 = 桥接**：V2 复用着 `src/components/publish/**`、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts`，这些属于 V2 的组成部分，**保留**。
+- **`2.0.0` 需补一条「下载 1.41.1」提示**：V1 用户确需旧界面时的唯一去处。**`2.3.0` 移除该提示**（`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL` 随之删除）。
+- **更正记录**：此前曾把「Gate C 生效版本」记为 `2.3.0`，并据此认为「V1 在 2.3.0 才移除」。用户澄清：**`2.0.0` 都还没发版**，`2.3.0` 是更晚的版本；`2.0.0` 即彻底移除 V1，`2.3.0` 只负责删掉那条下载提示。原「三版本缓冲」的说法不再适用。
+- **浏览器扩展必须一并迁到 2.0**：扩展当前以 V1 SPA 作为弹窗 UI，属「V1 遗产」，须迁移后才能满足「1.0 代码零残留」。
 
 ### 6. V1 移除的功能去处（2026-09-20 用户确认：全部迁到 V2）
 
@@ -76,11 +78,12 @@
 
 ### 7. 挂件 / 扩展 / nginx / vercel 产物（2026-09-20 用户确认：先不动构建链）
 
-`vite.v1.app.config.ts` **不只是 iframe SPA 的入口**：挂件（`widgetBuild` → `widget` + `widget.json`）、浏览器扩展（`extBuild` → `src/extensions`）、`nginxBuild`、`vercelBuild` **四个产物都由它构建**。故：
+`vite.v1.app.config.ts` **不只是 iframe SPA 的入口**：挂件（`widgetBuild` → `widget` + `widget.json`）、浏览器扩展（`extBuild` → `src/extensions`）、`nginxBuild`、`vercelBuild` **四个产物都由它构建**。
 
-- **保留** `vite.v1.app.config.ts`、`src/main.ts`、`src/bootstrap.ts`、`src/routes/routeConfig.ts`、`src/pages/**`、`src/workers/QuickPublish.vue` 与 `widget.json`；
-- 本次只移除**思源插件侧**的 V1 入口（iframe 宿主、旧 invoke、旧菜单、`useV2UI` 开关），并保留 `siyuan/index.ts` 的 `window.syp.alert` 注入（`src/workers/QuickPublish.vue` 仍消费它）；
-- 代价与后续：挂件与扩展产物内的界面仍是旧版。若将来要一并退役或迁移，另开变更。
+- **挂件必须保留**（用户明确要求）：`widget.json` 与挂件构建链不动。
+- **浏览器扩展必须迁到 2.0**（用户明确要求）：扩展的弹窗 UI 当前就是 V1 SPA（`manifest.json` 的 `default_popup: index.html`，`background.js` 提供 `fetchChromeXmlrpc` / `fetchChromeJson` 两条 CORS 旁路）；它属于「V1 遗产」，须迁移后才满足「1.0 代码零残留」。
+- **`nginx` / `vercel` 部署**：同源 SPA 产物，随扩展迁移一并处理。
+- 因此 `vite.v1.app.config.ts`、`src/pages/**`、`src/routes/**`、`src/bootstrap.ts` 的最终去留，取决于扩展迁移的完成情况；迁移完成前**不要删**。
 
 
 ### 8. 删除面（Gate D 执行清单）

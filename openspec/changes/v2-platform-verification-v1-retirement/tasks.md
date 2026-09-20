@@ -50,7 +50,7 @@
 
 口径（2026-09-20 用户确认）：Gate C 与 Gate D 同落 **`2.3.0`**；V1 彻底退役，不回退、不给「无法关闭」提示。取消原「三版本缓冲」，代之以本节 4.2 的硬前置：**迁移面未在 V2 可用并通过宿主手验前，不得执行 4.3 删除面**。
 
-- [x] 4.1 记录 Gate C 生效版本号 = **`2.3.0`**。该发行版是「默认 V2、V1 已退役」对外生效的第一个发行版；最后一个提供 V1 界面的发行版是 `1.41.1`（不同事实，不冲突）
+- [x] 4.1 版本口径（2026-09-20 用户确认并更正）：**`2.0.0` = 彻底移除 V1 全部遗产**（仅保留桥接组件；顶栏旧菜单不保留、文档菜单保留；补「下载 1.41.1」提示）；**`2.3.0` = 移除该下载提示**。此前把「Gate C 生效版本」记为 `2.3.0` 系我方误读（`2.0.0` 尚未发版），记载已更正
 - [x] 4.2 **迁移面**（缺失即功能退化，见 design.md 决策 6）
   - [x] 4.2.0 普查 V1 可达面：确认文档块菜单（`click-editortitleicon`）在 V2 下仍可达且**直调 V1 iframe**，是本次必须迁移的关键项
   - [x] 4.2.1 `V2Host` 增加 `docId` / `initialSection` / `autoPublishPlatformKey`，`V2InitialView` 与 `V2CurrentView` 对齐并新增 `ai_chat`
@@ -62,11 +62,18 @@
   - [x] 4.2.7 宿主手验：文档块菜单两项可达且子菜单列出全部已启用平台；一键入口实测完成「本地系统」发布/更新；「AI聊天」带文档上下文打开；顶栏与宿主设置入口均落 V2；「关于」渲染版本/slogan/依赖
 - [x] 4.3 **删除面**（4.2 手验通过后执行，提交 `176fb662`）
   - [x] 4.3.1 删 iframe 宿主与旧 invoke：`siyuan/iframeDialog.ts`、`siyuan/invoke/pluginInvoke.ts`、`siyuan/invoke/widgetInvoke.ts`、`siyuan/utils/menuUtils.ts`，及随之成为孤儿的 `siyuan/utils/htmlUtils.ts`、`siyuan/utils/utils.ts`、`siyuan/api/{kernel-api,base-kernel-api}.ts`
-  - [x] 4.3.2 **V1 SPA 按用户决定保留**（挂件 / 浏览器扩展 / nginx / vercel 四产物均由 `vite.v1.app.config.ts` 构建，见 design.md 决策 8）；只删了插件侧入口，另删掉仅供 V1 `showTab` 使用的自定义 Tab 注册
-  - [x] 4.3.3 删 `useV2UI` 开关与其关闭提示、`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL`、`preferenceConfigManager` 归一化、`PreferenceSetting.vue` 开关、`helpConfigs` 字段说明与相关 i18n 词条；另修正两处指向已退役世界的文案（偏好页说明、平台配置兜底空态）
+  - [x] 4.3.2 **V1 SPA 暂留**（浏览器扩展的弹窗 UI 仍是它；扩展迁移完成前不得删除，见 4.6）。**挂件必须保留**（用户明确要求）。本次只删插件侧入口，另删掉仅供 V1 `showTab` 使用的自定义 Tab 注册
+  - [x] 4.3.3 删 `useV2UI` 开关与其关闭提示、`preferenceConfigManager` 归一化、`PreferenceSetting.vue` 开关、`helpConfigs` 字段说明与相关 i18n 词条；另修正两处指向已退役世界的文案（偏好页说明、平台配置兜底空态）
   - [x] 4.3.4 保留清单核对：`src/components/publish/**`（含 `V2SinglePublish`/`V2BatchPublish` 桥接的 V1 组件）、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts` 均未删
 - [x] 4.4 回归：`build:v2` ✓、**V1 SPA 构建 `pnpm siyuanBuild` ✓**（保证挂件/扩展产物仍可构建）、单测 70 文件 / 378 用例 ✓、宿主全入口手验 ✓、插件侧 i18n 死键清理 ✓
-- [ ] 4.5 归档本变更；合并 delta 至 `openspec/specs/` —— **待 `2.3.0` 实际发行后进行**（版本号变更属发行动作，不在本次代码改动内）
+- [x] 4.5 补「下载 `1.41.1`」提示（用户要求：这是 V1 移除后唯一需要补的东西）—— 落 `V2About.vue` 的设置分区「关于」，文案「旧版界面已在 2.0.0 中移除…如确需旧界面，可安装最后一个支持它的版本 1.41.1」+ 下载按钮，宿主实测渲染正常（提交 `0295bd2b`）。`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL` 仅为该提示恢复，**「2.3.0 移除提示与这两个常量」**
+- [ ] 4.6 **浏览器扩展迁移到 2.0**（用户明确要求；扩展当前弹窗 UI 即 V1 SPA，属 V1 遗产）
+  - [ ] 4.6.1 盘清扩展实际用到的 SPA 面：`manifest.json`（`default_popup: index.html`）、`background.js`（`fetchChromeXmlrpc` / `fetchChromeJson` CORS 旁路）、以及扩展场景下与「思源宿主 DOM」无关的差异（无 kernel DOM、需自行配置思源地址与 token）
+  - [ ] 4.6.2 决定扩展壳的形态（复用 `V2App` 还是抽出可独立挂载的 V2 外壳）并落地
+  - [ ] 4.6.3 扩展产物构建与手验（Chrome + Firefox MV2）
+  - [ ] 4.6.4 迁移完成后：删除 V1 SPA（`src/main.ts`、`src/bootstrap.ts`、`src/routes/**`、`src/pages/**`、`src/workers/QuickPublish.vue`、`src/utils/directives/iframeResize.ts`）与 `vite.v1.app.config.ts`，并复核挂件/nginx/vercel 链的替代入口
+- [ ] 4.7 归档本变更；合并 delta 至 `openspec/specs/`
+
 
 ## 修复 backlog（按需追加）
 
