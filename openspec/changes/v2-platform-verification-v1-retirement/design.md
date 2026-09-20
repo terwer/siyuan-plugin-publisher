@@ -48,12 +48,51 @@
 1. 在 checklist 标 `❌` / `🟡`。
 2. 在 `tasks.md` 增加修复任务；复杂项可 `openspec new change <fix-xxx>` 独立提案。
 3. 修复后更新 checklist → ✅，必要时写 `verification-log-*.md`。
-4. T1 全 ✅ → Gate C → 三个 release → Gate D → 归档本变更并更新 `openspec/specs/`。
+4. T1 全 ✅ → Gate C → **Gate C 与 Gate D 同落 `2.3.0`** → 归档本变更并更新 `openspec/specs/`。
+
+### 5. 版本口径（2026-09-20 用户确认）
+
+- **Gate C 生效版本 = `2.3.0`**：这是「默认 V2、V1 已退役」对外生效的第一个发行版。
+- **Gate D 亦落 `2.3.0`**：V1 **彻底退役**——不留回退开关，也**不给「无法关闭」提示**；原「三版本缓冲」不再需要（`1.41.1` 是最后一个提供 V1 界面的发行版，`V1_LAST_VERSION` 常量随之删除）。
+- 「彻底退役」不等于删掉所有 V1 组件：V2 复用着 `src/components/publish/**`、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts`，这些**保留**。
+
+### 6. V1 移除的功能去处（2026-09-20 用户确认：全部迁到 V2）
+
+普查发现 V1 并非只藏在 `useV2UI=false` 分支后面——**文档块菜单（`click-editortitleicon`）在 V2 下依然可达，且直接调 V1 iframe**。故移除前必须先把下列入口迁到 V2，否则属功能退化：
+
+| 现有入口 | 现状 | 迁移目标 |
+|----------|------|----------|
+| 文档块菜单 →「快速发布」 | `siyuan/index.ts:161-166` → `MenuUtils.getQuickMenus` → `widgetInvoke.showPublisherQuickPublishDialog` → iframe `/workers/quickPublish/:key/:id` | V2 快速发布面板，且 `V2Host` 需支持**指定文档 id**（当前 `ShowV2HostOptions` 只有 `anchorElement` / `initialView`，`V2InitialView` 只有 `quick_publish` \| `settings`） |
+| 文档块菜单 →「AI聊天」 | `siyuan/index.ts:167-174` → `widgetInvoke.showPublisherAiChatDialog` → iframe `/ai/chat` | 新增 **V2 AI 聊天视图**（移植 `src/pages/AiChat.vue`：聊天、上下文模式、Prompt 管理） |
+| 顶栏旧菜单 →「关于作者」 | `widgetInvoke.showPublisherAboutDialog` → iframe `/about` | 新增 **V2 关于视图**（移植 `src/pages/About.vue`：版本、slogan、作者链接、第三方库列表） |
+| 顶栏旧菜单 →「图床 → 独立 PicGo 插件」 | `pluginInvoke.showPicbedDialog` / `showPicbedSettingDialog` → 外部插件 `siyuan-plugin-picgo` 的 UI | **直接删除**（V2 已有无头 PicGo 设置；该入口代码注释本身已标注 legacy） |
+| 顶栏旧菜单 →「常规设置 / 发布设置 / 文章管理 / 批量分发 / 一键发布」 | `widgetInvoke.*` → iframe 各页 | V2 已有对应视图（`settings` / `manage` / `batch_publish` / `quick_publish`），仅需重接入口 |
+
+**执行结果（2026-09-20 落地，提交 `d9688b9b` 迁移 + `176fb662` 删除）**：五处入口全部迁移并宿主手验通过。两点补充事实：
+
+- **顶栏旧菜单在 V2 下本就不可达**（`useV2UI` 为真时点顶栏直接开 V2 面板），因此该菜单的条目对 V2 用户不构成可达功能；其中「关于作者」「AI 聊天」仍按用户要求补齐了 V2 视图，「扩展功能 → 当前文档ID（复制）/ 发布预览（依赖外部 siyuan-blog 插件）」与「图床 → 独立 PicGo 插件」随菜单一并移除，未在 V2 重建。
+- **文档块菜单的「一次点击即发布」被保留**：`V2Host` 新增 `autoPublishPlatformKey`，面板打开后直接对该平台执行发布（实测完成「本地系统」更新），未退化成「先开面板再点一次」。
+- **AI 聊天内置的 4 条 Prompt 保持可编辑**：V1 的预置项 `isSys` 就是 `false`（其只读分支从未被命中），移植时按真实行为保留，未借机改成只读。
+
+### 7. 挂件 / 扩展 / nginx / vercel 产物（2026-09-20 用户确认：先不动构建链）
+
+`vite.v1.app.config.ts` **不只是 iframe SPA 的入口**：挂件（`widgetBuild` → `widget` + `widget.json`）、浏览器扩展（`extBuild` → `src/extensions`）、`nginxBuild`、`vercelBuild` **四个产物都由它构建**。故：
+
+- **保留** `vite.v1.app.config.ts`、`src/main.ts`、`src/bootstrap.ts`、`src/routes/routeConfig.ts`、`src/pages/**`、`src/workers/QuickPublish.vue` 与 `widget.json`；
+- 本次只移除**思源插件侧**的 V1 入口（iframe 宿主、旧 invoke、旧菜单、`useV2UI` 开关），并保留 `siyuan/index.ts` 的 `window.syp.alert` 注入（`src/workers/QuickPublish.vue` 仍消费它）；
+- 代价与后续：挂件与扩展产物内的界面仍是旧版。若将来要一并退役或迁移，另开变更。
+
+
+### 8. 删除面（Gate D 执行清单）
+
+**删除**：`siyuan/iframeDialog.ts`、`siyuan/invoke/pluginInvoke.ts`、`siyuan/utils/menuUtils.ts`、`siyuan/topbar.ts` 的 `showLegacyMenu`/`addMenu`、`src/routes/routeConfig.ts`、`src/bootstrap.ts`、`iframeResize` 指令、`src/pages/**` 中 V1 SPA 专用页面、V1 SPA 构建入口、`useV2UI` 开关行与关闭提示、`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL`、`preferenceConfigManager` 的 `useV2UI` 归一化、`PreferenceSetting.vue` 的对应开关、相关 i18n 词条与 `helpConfigs` 字段说明。
+
+**保留**：V2 复用的 V1 组件（见决策 5）与 `zhi-blog-api` 适配器层。
 
 ## Risks / Trade-offs
 
 - **长周期表漂移** → 仅改 OpenSpec 内 `platform-checklist.md`；`pre.ts` 变更时同步核对 T1 列表。
-- **Gate D 过早** → 必须满足 Gate A + 三版本缓冲 + `ui-v2-migration` 等价性检查。
+- ~~**Gate D 过早** → 必须满足 Gate A + 三版本缓冲~~ → 2026-09-20 用户决定取消缓冲，Gate C/D 同落 `2.3.0`；**改为要求「迁移先于删除」**：上表五个入口全部在 V2 可用并通过宿主手验后，才允许执行删除面。
 
 ## Migration Plan
 
@@ -61,4 +100,4 @@
 2. `.planning/2026-05-20-v2-platform-verification/` 改为指向本变更的 README。
 3. 按 T1 顺序验收；优先 #27 语雀网页版、高频平台。
 4. Gate C：README / 偏好文案「V1 已废弃」。
-5. Gate D：移除 iframe 路由与相关宿主（单独 PR，引用本变更 Gate 记录）。
+5. **Gate D（`2.3.0`）**：先补齐 V2 的 AI 聊天 / 关于视图与「指定文档」的快速发布，重接文档块菜单与顶栏入口；**迁移手验通过后**再删除 iframe/SPA 路由与宿主、`useV2UI` 开关与提示（单独 PR，引用本变更 Gate 记录）。

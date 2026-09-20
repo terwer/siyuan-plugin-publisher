@@ -36,7 +36,7 @@ After publishing, you can view publishing status, open the published article, or
 3. Add a platform account in **Publishing Settings**, then validate and save it.
 4. Open the document you want to publish, go to **Quick Publish**, choose a platform, and publish.
 
-> The current interface is the default. The previous interface has been retired; to use it, install the last release that shipped it, `1.41.1`.
+> The interface is the new one (V2). The previous interface was removed entirely in `2.3.0`, so this release ships no way back to it; if you really need it, install the last release that had it, `1.41.1`.
 
 ![](./docs/images/publisher-icon.png)
 

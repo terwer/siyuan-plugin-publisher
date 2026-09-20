@@ -46,12 +46,27 @@
 - [x] 3.2 偏好 / README：默认 V2；`useV2UI` 默认改为 `true`，README 中英文去掉「先手动开启新版 UI」步骤并注明旧界面已退役
 - [x] 3.3 保留回退入口：偏好开关保留但**不允许关闭**（关闭即引导到最后一个提供 V1 的发行版 `1.41.1` 下载页），并保留 `useV2UI=false` 在旧版本中的语义
 
-## 4. Gate D — 三版本后移除 iframe
+## 4. Gate D — `2.3.0` 彻底移除 V1（**迁移先于删除**）
 
-- [ ] 4.1 记录 Gate C 生效版本号
-- [ ] 4.2 第三个发行版后评估 `ui-v2-migration` 等价性
-- [ ] 4.3 删除 iframe/SPA 路由与宿主（独立 PR），并**彻底移除 `useV2UI` 开关**
-- [ ] 4.4 归档本变更；合并 delta 至 `openspec/specs/`
+口径（2026-09-20 用户确认）：Gate C 与 Gate D 同落 **`2.3.0`**；V1 彻底退役，不回退、不给「无法关闭」提示。取消原「三版本缓冲」，代之以本节 4.2 的硬前置：**迁移面未在 V2 可用并通过宿主手验前，不得执行 4.3 删除面**。
+
+- [x] 4.1 记录 Gate C 生效版本号 = **`2.3.0`**。该发行版是「默认 V2、V1 已退役」对外生效的第一个发行版；最后一个提供 V1 界面的发行版是 `1.41.1`（不同事实，不冲突）
+- [x] 4.2 **迁移面**（缺失即功能退化，见 design.md 决策 6）
+  - [x] 4.2.0 普查 V1 可达面：确认文档块菜单（`click-editortitleicon`）在 V2 下仍可达且**直调 V1 iframe**，是本次必须迁移的关键项
+  - [x] 4.2.1 `V2Host` 增加 `docId` / `initialSection` / `autoPublishPlatformKey`，`V2InitialView` 与 `V2CurrentView` 对齐并新增 `ai_chat`
+  - [x] 4.2.2 移植 `src/pages/AiChat.vue` → `src/components/v2/V2AiChat.vue`（聊天 / 上下文模式 / Prompt 管理，14 个单测）。**内置 4 条 Prompt 保持 V1 的可编辑状态**（V1 的 `isSys` 就是 false），未借机改成只读
+  - [x] 4.2.3 移植 `src/pages/About.vue` → `src/components/v2/settings/V2About.vue`，并在设置导航新增「关于」分区
+  - [x] 4.2.4 文档块菜单的「发布到..」与「AI聊天」改为开 V2 面板：`siyuan/v2/v2DocMenu.ts`（每平台一项 + `autoPublishPlatformKey` 保留「一次点击即发布」），锚点取 `.protyle-title__icon`
+  - [x] 4.2.5 顶栏点击恒开 V2（`showLegacyMenu`/`addMenu` 已删）；宿主 `openSetting()` 直接开 V2 设置
+  - [x] 4.2.6 独立 PicGo 插件入口随 `pluginInvoke` 一并删除（V2 已有无头 PicGo 设置）
+  - [x] 4.2.7 宿主手验：文档块菜单两项可达且子菜单列出全部已启用平台；一键入口实测完成「本地系统」发布/更新；「AI聊天」带文档上下文打开；顶栏与宿主设置入口均落 V2；「关于」渲染版本/slogan/依赖
+- [x] 4.3 **删除面**（4.2 手验通过后执行，提交 `176fb662`）
+  - [x] 4.3.1 删 iframe 宿主与旧 invoke：`siyuan/iframeDialog.ts`、`siyuan/invoke/pluginInvoke.ts`、`siyuan/invoke/widgetInvoke.ts`、`siyuan/utils/menuUtils.ts`，及随之成为孤儿的 `siyuan/utils/htmlUtils.ts`、`siyuan/utils/utils.ts`、`siyuan/api/{kernel-api,base-kernel-api}.ts`
+  - [x] 4.3.2 **V1 SPA 按用户决定保留**（挂件 / 浏览器扩展 / nginx / vercel 四产物均由 `vite.v1.app.config.ts` 构建，见 design.md 决策 8）；只删了插件侧入口，另删掉仅供 V1 `showTab` 使用的自定义 Tab 注册
+  - [x] 4.3.3 删 `useV2UI` 开关与其关闭提示、`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL`、`preferenceConfigManager` 归一化、`PreferenceSetting.vue` 开关、`helpConfigs` 字段说明与相关 i18n 词条；另修正两处指向已退役世界的文案（偏好页说明、平台配置兜底空态）
+  - [x] 4.3.4 保留清单核对：`src/components/publish/**`（含 `V2SinglePublish`/`V2BatchPublish` 桥接的 V1 组件）、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts` 均未删
+- [x] 4.4 回归：`build:v2` ✓、**V1 SPA 构建 `pnpm siyuanBuild` ✓**（保证挂件/扩展产物仍可构建）、单测 70 文件 / 378 用例 ✓、宿主全入口手验 ✓、插件侧 i18n 死键清理 ✓
+- [ ] 4.5 归档本变更；合并 delta 至 `openspec/specs/` —— **待 `2.3.0` 实际发行后进行**（版本号变更属发行动作，不在本次代码改动内）
 
 ## 修复 backlog（按需追加）
 
