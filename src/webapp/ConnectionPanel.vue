@@ -16,53 +16,53 @@
   不自建存储。
 -->
 <template>
-  <section class="syp-ext-connection">
-    <header class="syp-ext-connection__head">
-      <h1 class="syp-ext-connection__title">思源连接配置</h1>
-      <p class="syp-ext-connection__desc">
+  <section class="syp-web-connection">
+    <header class="syp-web-connection__head">
+      <h1 class="syp-web-connection__title">思源连接配置</h1>
+      <p class="syp-web-connection__desc">
         扩展弹窗里取不到宿主文档，V2 需要通过思源内核 API 读取文档与发布配置，请填写内核地址与 API Token。
       </p>
     </header>
 
-    <label class="syp-ext-connection__field">
-      <span class="syp-ext-connection__label">思源 API 地址</span>
+    <label class="syp-web-connection__field">
+      <span class="syp-web-connection__label">思源 API 地址</span>
       <input
         v-model="apiUrl"
-        class="syp-ext-connection__input"
+        class="syp-web-connection__input"
         type="text"
         placeholder="http://127.0.0.1:6806"
         spellcheck="false"
       />
-      <span class="syp-ext-connection__hint">
+      <span class="syp-web-connection__hint">
         提示：store 每次读取都会用构建期默认值回写该地址（POC 已知限制，见 README-POC）。
       </span>
     </label>
 
-    <label class="syp-ext-connection__field">
-      <span class="syp-ext-connection__label">API Token</span>
+    <label class="syp-web-connection__field">
+      <span class="syp-web-connection__label">API Token</span>
       <input
         v-model="token"
-        class="syp-ext-connection__input"
+        class="syp-web-connection__input"
         type="password"
         placeholder="思源 → 设置 → 关于 → API token"
         spellcheck="false"
       />
     </label>
 
-    <div class="syp-ext-connection__actions">
-      <button type="button" class="syp-ext-connection__btn is-primary" :disabled="saving" @click="save">保存</button>
-      <button type="button" class="syp-ext-connection__btn" @click="reload">重新读取</button>
+    <div class="syp-web-connection__actions">
+      <button type="button" class="syp-web-connection__btn is-primary" :disabled="saving" @click="save">保存</button>
+      <button type="button" class="syp-web-connection__btn" @click="reload">重新读取</button>
     </div>
 
-    <p class="syp-ext-connection__status" role="status" aria-live="polite">{{ status }}</p>
+    <p class="syp-web-connection__status" role="status" aria-live="polite">{{ status }}</p>
 
-    <dl class="syp-ext-connection__meta">
+    <dl class="syp-web-connection__meta">
       <dt>存储位置</dt>
       <dd>window.localStorage（浏览器环境）</dd>
       <dt>存储 key</dt>
       <dd><code>siyuan-cfg</code></dd>
       <dt>localStorage 回读</dt>
-      <dd><code class="syp-ext-connection__raw">{{ persisted }}</code></dd>
+      <dd><code class="syp-web-connection__raw">{{ persisted }}</code></dd>
       <dt>store 中的 token</dt>
       <dd><code>{{ tokenPreview }}</code></dd>
     </dl>
@@ -146,46 +146,46 @@ readPersisted()
 </script>
 
 <style scoped>
-.syp-ext-connection {
+.syp-web-connection {
   display: flex;
   flex-direction: column;
   gap: 12px;
   max-width: 520px;
 }
 
-.syp-ext-connection__title {
+.syp-web-connection__title {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
   color: #1f2329;
 }
 
-.syp-ext-connection__desc {
+.syp-web-connection__desc {
   margin: 6px 0 0;
   font-size: 12px;
   line-height: 1.6;
   color: #646a73;
 }
 
-.syp-ext-connection__field {
+.syp-web-connection__field {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.syp-ext-connection__label {
+.syp-web-connection__label {
   font-size: 12px;
   font-weight: 600;
   color: #1f2329;
 }
 
-.syp-ext-connection__hint {
+.syp-web-connection__hint {
   font-size: 11px;
   line-height: 1.5;
   color: #a1a5ad;
 }
 
-.syp-ext-connection__input {
+.syp-web-connection__input {
   height: 30px;
   padding: 0 8px;
   border: 1px solid #d0d3d6;
@@ -195,17 +195,17 @@ readPersisted()
   background: #ffffff;
 }
 
-.syp-ext-connection__input:focus {
+.syp-web-connection__input:focus {
   outline: none;
   border-color: #1677ff;
 }
 
-.syp-ext-connection__actions {
+.syp-web-connection__actions {
   display: flex;
   gap: 8px;
 }
 
-.syp-ext-connection__btn {
+.syp-web-connection__btn {
   height: 30px;
   padding: 0 14px;
   border: 1px solid #d0d3d6;
@@ -216,25 +216,25 @@ readPersisted()
   cursor: pointer;
 }
 
-.syp-ext-connection__btn.is-primary {
+.syp-web-connection__btn.is-primary {
   border-color: #1677ff;
   background: #1677ff;
   color: #ffffff;
 }
 
-.syp-ext-connection__btn:disabled {
+.syp-web-connection__btn:disabled {
   opacity: 0.6;
   cursor: default;
 }
 
-.syp-ext-connection__status {
+.syp-web-connection__status {
   margin: 0;
   min-height: 18px;
   font-size: 12px;
   color: #1677ff;
 }
 
-.syp-ext-connection__meta {
+.syp-web-connection__meta {
   display: grid;
   grid-template-columns: 110px 1fr;
   gap: 4px 10px;
@@ -246,16 +246,16 @@ readPersisted()
   font-size: 11px;
 }
 
-.syp-ext-connection__meta dt {
+.syp-web-connection__meta dt {
   color: #646a73;
 }
 
-.syp-ext-connection__meta dd {
+.syp-web-connection__meta dd {
   margin: 0;
   word-break: break-all;
 }
 
-.syp-ext-connection__raw {
+.syp-web-connection__raw {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 </style>
