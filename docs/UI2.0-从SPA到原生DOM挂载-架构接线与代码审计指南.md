@@ -1,3 +1,4 @@
+> **历史文档（2026-09-20 备注）**：本文描述的是「V1 SPA 与 V2 并存、由 useV2UI 分流」时期的接线。V1 已在该日整体移除 —— useV2UI 开关与旧菜单、src/pages/**、src/routes/**、vite.v1*.config.ts 均不存在；插件本体由 vite.v2.config.ts 构建到 dist/，挂件/浏览器扩展/nginx/vercel 由通用 V2 壳（src/webapp/** + vite.webapp.config.ts）构建。下文保留当时事实，勿作为现行依据。
 # UI2.0 从 SPA 到原生 DOM 挂载：架构接线与代码审计指南
 
 > 基于仓库 `siyuan-plugin-publisher` 在 **2026-04-27** 的当前代码状态整理。
