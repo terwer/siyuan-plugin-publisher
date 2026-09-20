@@ -52,10 +52,6 @@ if __name__ == "__main__":
 
     if args.platform == 'siyuan':
         dist_name = 'dist'
-        # V1 legacy plugin CJS build
-        zhi_build_cmd = "vite build --config vite.v1.siyuan.config.ts --outDir " + dist_name
-        print(zhi_build_cmd)
-        os.system(zhi_build_cmd)
     elif args.platform == 'widget':
         # 复制挂件需要的其他文件
         dist_folder = f"./{dist_name}/"
@@ -101,6 +97,12 @@ if __name__ == "__main__":
         pass
 
     # vite-build
-    vite_cmd = "vue-tsc --noEmit && vite build --watch --config vite.v1.app.config.ts --outDir " + dist_name
+    # 插件本体走 vite.v2.config.ts（唯一 lib 产出）；其余产物（挂件/扩展/网页版）走通用 V2 壳
+    if args.platform == 'siyuan':
+        vite_cmd = "vue-tsc --noEmit && vite build --watch --config vite.v2.config.ts --outDir " + dist_name
+    else:
+        if args.platform in ('chrome', 'edge', 'firefox'):
+            os.environ["EXT_TYPE"] = args.platform
+        vite_cmd = "vue-tsc --noEmit && vite build --watch --config vite.webapp.config.ts --outDir " + dist_name
     print(vite_cmd)
     os.system(vite_cmd)
