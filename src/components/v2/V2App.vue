@@ -189,6 +189,8 @@
           @back="onBatchPublishBack"
         />
 
+        <V2AiChat v-else-if="isAiChatView" :page-id="quickPublish.state.pageId" @back="backToQuickPublish" />
+
         <section v-else-if="!isSettingsView" class="syp-quick-shell">
           <div class="syp-quick-shell__eyebrow">{{ t("v2.quickPublish.currentDocument") }}</div>
           <h1 class="syp-quick-shell__title">{{ quickPublish.state.docTitle }}</h1>
@@ -313,6 +315,8 @@
           <AiSetting />
         </section>
 
+        <V2About v-else-if="settings.state.section === 'about'" />
+
         <V2PreferenceSettings v-else />
       </UnifiedWorkspaceShell>
 
@@ -343,8 +347,10 @@ import V2SinglePublish from "~/src/components/v2/publish/V2SinglePublish.vue"
 import V2BatchPublish from "~/src/components/v2/publish/V2BatchPublish.vue"
 import V2QuickPublishGrid from "~/src/components/v2/publish/V2QuickPublishGrid.vue"
 import V2ArticleManage from "~/src/components/v2/V2ArticleManage.vue"
+import V2AiChat from "~/src/components/v2/V2AiChat.vue"
 import { type V2PlatformConfigValidationResult } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
 import V2AccountList from "~/src/components/v2/settings/V2AccountList.vue"
+import V2About from "~/src/components/v2/settings/V2About.vue"
 import V2PicBedSettings from "~/src/components/v2/settings/V2PicBedSettings.vue"
 import V2PlatformConfigBridge from "~/src/components/v2/settings/V2PlatformConfigBridge.vue"
 import V2PlatformSelect from "~/src/components/v2/settings/V2PlatformSelect.vue"
@@ -354,7 +360,7 @@ import { useV2ErrorDetails } from "~/src/composables/v2/useV2ErrorDetails.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { useV2PublishValidation } from "~/src/composables/v2/useV2PublishValidation.ts"
 import { useV2QuickPublish } from "~/src/composables/v2/useV2QuickPublish.ts"
-import { useV2Settings } from "~/src/composables/v2/useV2Settings.ts"
+import { useV2Settings, type V2SettingsSection } from "~/src/composables/v2/useV2Settings.ts"
 import { v2MessageError, v2MessageSuccess, v2MessageWarning } from "~/src/composables/v2/v2FloatingUi.ts"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
 import LucideSend from "~icons/lucide/send"
@@ -365,7 +371,14 @@ import LucidePenLine from "~icons/lucide/pen-line"
 import LucideLayers from "~icons/lucide/layers"
 
 const props = defineProps<{
-  initialView?: "quick_publish" | "settings"
+  /** 宿主指定的初始视图，缺省「快速发布」 */
+  initialView?: V2CurrentView
+  /** 宿主指定的初始设置分区，缺省为「账号设置」 */
+  initialSection?: V2SettingsSection
+  /** 宿主指定的当前文档 id；缺省取活动文档（`WidgetPageUtils.getPageId()`） */
+  docId?: string
+  /** 进入快速发布后立即对该平台执行发布（文档块菜单的一键入口） */
+  autoPublishPlatformKey?: string
   onClose?: () => void
 }>()
 
@@ -374,6 +387,7 @@ const isSettingsView = computed(() => currentView.value === "settings")
 const isManageView = computed(() => currentView.value === "manage")
 const isSinglePublishView = computed(() => currentView.value === "single_publish")
 const isBatchPublishView = computed(() => currentView.value === "batch_publish")
+const isAiChatView = computed(() => currentView.value === "ai_chat")
 const isQuickPublishView = computed(() => currentView.value === "quick_publish")
 
 // 管理页「单发/批发/闪发」的右侧滑入面板（列表仍在背后可见）
@@ -414,6 +428,9 @@ const panelTitle = computed(() => {
   }
   if (isBatchPublishView.value) {
     return t("v2.panel.batchPublish")
+  }
+  if (isAiChatView.value) {
+    return t("v2.panel.aiChat")
   }
   return isSettingsView.value ? t("v2.app.panel.settings") : t("v2.app.panel.quickPublish")
 })
@@ -545,8 +562,12 @@ const publishDescription = computed(() => {
 
 onMounted(async () => {
   window.addEventListener("keydown", handleWindowKeydown)
+  // 宿主可指定初始分区（例如顶栏「关于作者」直接落到关于页）
+  if (props.initialSection && props.initialSection !== "account") {
+    await settings.setSection(props.initialSection)
+  }
   try {
-    await quickPublish.init()
+    await quickPublish.init(props.docId)
   } catch (e) {
     initError.value = e instanceof Error ? e.message : String(e ?? t("v2.common.unknownError"))
   }
@@ -554,6 +575,14 @@ onMounted(async () => {
     await settings.loadAccountItems()
   } catch {
     // Settings error is handled internally by the component
+  }
+  // 文档块菜单的一键入口：面板打开后直接对指定平台执行发布
+  const autoKey = props.autoPublishPlatformKey
+  if (autoKey) {
+    const target = quickPublish.state.platformItems.find((item) => item.platformKey === autoKey)
+    if (target) {
+      publishToPlatform(target)
+    }
   }
 })
 
@@ -578,7 +607,7 @@ async function openSettings() {
 
 async function backToQuickPublish() {
   currentView.value = "quick_publish"
-  await quickPublish.init()
+  await quickPublish.init(props.docId)
 }
 
 async function openManage() {

@@ -12,12 +12,19 @@ import { App as VueApp, nextTick } from "vue"
 import { createSiyuanAppLogger } from "~/siyuan/appLogger.ts"
 import PublisherPlugin from "~/siyuan/index.ts"
 import { createV2VueApp, type V2InitialView } from "./createV2App.ts"
+import type { V2SettingsSection } from "~/src/composables/v2/useV2Settings.ts"
 
 const V2_MENU_MOUNT_SELECTOR = ".publisher-v2-menu-content"
 
 interface ShowV2HostOptions {
   anchorElement?: HTMLElement
   initialView?: V2InitialView
+  /** 初始设置分区，缺省「账号设置」 */
+  initialSection?: V2SettingsSection
+  /** 指定当前文档 id；缺省由 V2 自行取活动文档 */
+  docId?: string
+  /** 进入快速发布后立即对该平台执行发布（文档块菜单的一键入口） */
+  autoPublishPlatformKey?: string
 }
 
 /**
@@ -152,6 +159,9 @@ export class V2Host {
 
     const app = createV2VueApp({
       initialView: options.initialView ?? "quick_publish",
+      initialSection: options.initialSection,
+      docId: options.docId,
+      autoPublishPlatformKey: options.autoPublishPlatformKey,
       locale: "plugin",
       messages: {
         plugin: this.pluginInstance.i18n,

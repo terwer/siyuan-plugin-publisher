@@ -10,15 +10,12 @@
 import { App, confirm, getFrontend, IObject, Model, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
-import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 import { ILogger } from "zhi-lib-base"
 import { ConfigManager } from "~/siyuan/store/config.ts"
-import MenuUtils from "~/siyuan/utils/menuUtils.ts"
-import { PluginInvoke } from "~/siyuan/invoke/pluginInvoke.ts"
-import { icons } from "~/siyuan/utils/svg.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
 import { V2Host } from "~/siyuan/v2/v2Host.ts"
+import { buildDocQuickPublishMenus, docMenuIcons } from "~/siyuan/v2/v2DocMenu.ts"
 
 import "./index.styl"
 
@@ -34,8 +31,7 @@ export default class PublisherPlugin extends Plugin {
 
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
-  private readonly widgetInvoke: WidgetInvoke
-  /** 全插件唯一 V2 宿主，避免 Topbar / WidgetInvoke 各建实例导致双 Menu 与卸载竞态 */
+  /** 全插件唯一 V2 宿主，避免 Topbar / 文档菜单各建实例导致双 Menu 与卸载竞态 */
   public readonly v2Host: V2Host
 
   customTabObject: () => Model
@@ -57,11 +53,11 @@ export default class PublisherPlugin extends Plugin {
 
     this.v2Host = new V2Host(this)
     this.topbar = new Topbar(this)
-    this.widgetInvoke = new WidgetInvoke(this)
   }
 
   openSetting(): void {
-    void this.widgetInvoke.showPublisherPublishSettingDialog()
+    // 思源宿主「插件设置」入口：直接打开 V2 设置视图
+    void this.v2Host.show({ initialView: "settings" })
   }
 
   onload() {
@@ -157,19 +153,23 @@ export default class PublisherPlugin extends Plugin {
       return
     }
 
-    // 快速发布
-    const quickMenus = MenuUtils.getQuickMenus(this, this.widgetInvoke, this.publishSetting, pageId)
+    // 面板锚定到用户实际点击的文档标题图标，避免无锚点时铺满窗口
+    const protyleElement = detail?.protyle?.element as HTMLElement | undefined
+    const anchorElement = protyleElement?.querySelector<HTMLElement>(".protyle-title__icon") ?? protyleElement
+
+    // 快速发布：每个已启用平台一项，点击即在 V2 面板内对该文档发布该平台
+    const quickMenus = buildDocQuickPublishMenus(this.publishSetting, this.v2Host, pageId, anchorElement)
     context.push({
-      iconHTML: `<span class="iconfont-icon">${icons.iconPlane}</span>`,
+      iconHTML: `<span class="iconfont-icon">${docMenuIcons.quickPublish}</span>`,
       label: this.i18n.publishToQuick,
       submenu: quickMenus,
     })
     // AI聊天
     context.push({
-      iconHTML: `<span class="iconfont-icon">${icons.iconEye}</span>`,
+      iconHTML: `<span class="iconfont-icon">${docMenuIcons.aiChat}</span>`,
       label: this.i18n.aiChat,
       click: async () => {
-        await this.widgetInvoke.showPublisherAiChatDialog(pageId)
+        await this.v2Host.show({ anchorElement, initialView: "ai_chat", docId: pageId })
       },
     })
   }

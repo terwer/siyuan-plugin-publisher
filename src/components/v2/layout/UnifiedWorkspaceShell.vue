@@ -24,8 +24,8 @@
 import { computed } from "vue"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 
-type V2SettingsSection = "account" | "picbed" | "preference" | "ai"
-export type V2CurrentView = "quick_publish" | "settings" | "manage" | "single_publish" | "batch_publish"
+type V2SettingsSection = "account" | "picbed" | "preference" | "ai" | "about"
+export type V2CurrentView = "quick_publish" | "settings" | "manage" | "single_publish" | "batch_publish" | "ai_chat"
 const { t } = useV2I18n()
 
 const props = defineProps<{
@@ -45,6 +45,7 @@ const navItems: Array<{ key: V2SettingsSection; label: string }> = [
   { key: "picbed", label: t("v2.nav.picbed") },
   { key: "preference", label: t("v2.nav.preference") },
   { key: "ai", label: t("v2.nav.ai") },
+  { key: "about", label: t("v2.nav.about") },
 ]
 
 const activeNavKey = computed(() => props.activeSection ?? "account")

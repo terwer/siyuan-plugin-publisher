@@ -7,29 +7,23 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { Menu, showMessage } from "siyuan"
-import { ConfigManager } from "~/siyuan/store/config.ts"
-import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
-import MenuUtils from "~/siyuan/utils/menuUtils.ts"
+import { showMessage } from "siyuan"
 import { createSiyuanAppLogger } from "./appLogger"
 import PublisherPlugin from "./index"
-import { PluginInvoke } from "./invoke/pluginInvoke"
-import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { icons } from "./utils/svg"
 
 /**
  * 顶部按钮
+ *
+ * V1 的旧菜单（文章管理 / 批量分发 / 常规发布 / 图床 / AI 工具 / 扩展功能 / 关于作者）
+ * 已随 V1 退役移除；这些入口在 V2 面板内都有对应视图，点击顶栏直接打开 V2 面板。
  */
 export class Topbar {
   private logger
   private pluginInstance
-  private widgetInvoke
-  private pluginInvoke
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("topbar")
     this.pluginInstance = pluginInstance
-    this.pluginInvoke = new PluginInvoke(pluginInstance)
-    this.widgetInvoke = new WidgetInvoke(pluginInstance)
   }
 
   private get v2Host() {
@@ -46,20 +40,12 @@ export class Topbar {
     })
 
     topBarElement.addEventListener("click", async () => {
-      const prefSetting = await PreferenceConfigManager.loadConfig(this.pluginInstance)
-
-      if (prefSetting.useV2UI) {
-        try {
-          self.logger.info("V2 UI enabled, showing quick publish panel")
-          await this.showV2QuickPublishPanel(topBarElement)
-          return
-        } catch (e) {
-          self.logger.error("V2 panel failed, falling back to legacy menu:", e)
-          showMessage("新版 UI 启动失败，已回退到旧版菜单", 3000, "error")
-        }
+      try {
+        await self.showV2QuickPublishPanel(topBarElement)
+      } catch (e) {
+        self.logger.error("V2 panel failed to open:", e)
+        showMessage(self.pluginInstance.i18n.publishTool + "：" + (e instanceof Error ? e.message : String(e)), 5000, "error")
       }
-
-      await this.showLegacyMenu(topBarElement, prefSetting)
     })
   }
 
@@ -71,193 +57,5 @@ export class Topbar {
       anchorElement: topBarElement,
       initialView: "quick_publish",
     })
-  }
-
-  private async showLegacyMenu(topBarElement: HTMLElement, prefSetting: any) {
-    const setting = await ConfigManager.loadConfig(this.pluginInstance)
-
-    const quickMenus =
-      prefSetting.showQuickMenu === false
-        ? []
-        : MenuUtils.getQuickMenus(this.pluginInstance, this.widgetInvoke, setting)
-    const extendMenus =
-      prefSetting.showExtendMenu === false ? [] : await MenuUtils.getExtendMenus(this.pluginInstance, this.pluginInvoke)
-
-    await this.addMenu(topBarElement.getBoundingClientRect(), quickMenus, extendMenus, prefSetting)
-    this.logger.info("publisher menu loaded")
-  }
-
-  private async addMenu(rect: DOMRect, quickMenus: any[], extendMenus: any[], prefSetting: any) {
-    const menu = new Menu("publisherMenu")
-
-    // 仪表盘
-    if (prefSetting.showArticleManageMenu !== false) {
-      menu.addItem({
-        icon: `iconPaste`,
-        label: this.pluginInstance.i18n.articleManage + "<sup class='red'>new</sup>",
-        click: () => {
-          // this.widgetInvoke.showPublisherArticleManegeDialog()
-          this.widgetInvoke.showPublisherArticleManegeTab()
-        },
-      })
-      menu.addSeparator()
-    }
-
-    // 一键发布
-    if (prefSetting.showQuickMenu !== false) {
-      menu.addItem({
-        icon: `iconRiffCard`,
-        label: this.pluginInstance.i18n.publishTo,
-        submenu: quickMenus,
-        click: () => {
-          if (!quickMenus) {
-            showMessage("请先在 设置->发布设置配置平台并启用", 7000, "error")
-          }
-        },
-      })
-
-      menu.addSeparator()
-    }
-
-    // 常规发布
-    if (prefSetting.showSingleMenu !== false) {
-      menu.addItem({
-        iconHTML: icons.iconPen,
-        label: this.pluginInstance.i18n.publishNormal,
-        click: () => {
-          this.widgetInvoke.showPublisherSinglePublishDialog()
-        },
-      })
-      menu.addSeparator()
-    }
-
-    // 批量分发
-    if (prefSetting.showBatchMenu !== false) {
-      menu.addItem({
-        iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconMove"></use></svg>`,
-        label: this.pluginInstance.i18n.batchSync,
-        click: () => {
-          this.widgetInvoke.showPublisherBatchPublishDialog()
-        },
-      })
-      menu.addSeparator()
-    }
-
-    // 图床管理
-    if (prefSetting.showExtendMenu !== false) {
-      const isPicgoInstalled = await this.pluginInvoke.preCheckPicgoPlugin()
-      this.logger.info(`isPicgoInstalled=>${isPicgoInstalled}`)
-      if (isPicgoInstalled) {
-        // 图床
-        menu.addItem({
-          iconHTML: icons.iconPicbed,
-          label: this.pluginInstance.i18n.picmanage,
-          submenu: [
-            {
-              iconHTML: icons.iconPicture,
-              label: this.pluginInstance.i18n.picbed,
-              click: async () => {
-                await this.pluginInvoke.showPicbedDialog()
-              },
-            },
-            {
-              iconHTML: icons.iconPicbed,
-              label: this.pluginInstance.i18n.settingPicbed,
-              click: async () => {
-                await this.pluginInvoke.showPicbedSettingDialog()
-              },
-            },
-          ],
-        })
-        menu.addSeparator()
-      }
-    }
-
-    // AI工具
-    if (prefSetting.showAIMenu !== false) {
-      menu.addItem({
-        iconHTML: icons.iconPicbed,
-        label: this.pluginInstance.i18n.aitool,
-        submenu: [
-          // {
-          //   iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconUsers"></use></svg>`,
-          //   label: this.pluginInstance.i18n.aiChat,
-          //   click: () => {
-          //     this.widgetInvoke.showPublisherAiChatDialog()
-          //   },
-          // },
-          {
-            iconHTML: `<svg class="b3-menu__icon" style=""><use xlink:href="#iconAccount"></use></svg>`,
-            label: this.pluginInstance.i18n.aiChat,
-            click: () => {
-              this.widgetInvoke.showPublisherAiChatTab()
-            },
-          },
-        ],
-      })
-      menu.addSeparator()
-    }
-
-    // 扩展功能
-    if (prefSetting.showExtendMenu !== false) {
-      menu.addItem({
-        icon: `iconBazaar`,
-        label: this.pluginInstance.i18n.extendFunction,
-        submenu: extendMenus,
-        click: () => {
-          if (!extendMenus) {
-            showMessage(
-              "扩展功能需配合其他插件产品使用，目前支持在线分享和独立 PicGo 产品。请先下载安装并启用对应扩展插件。",
-              7000,
-              "error"
-            )
-          }
-        },
-      })
-      menu.addSeparator()
-    }
-
-    // 通用设置
-    menu.addItem({
-      icon: "iconSettings",
-      label: this.pluginInstance.i18n.setting,
-      click: () => {},
-      submenu: [
-        {
-          iconHTML: icons.iconPublish,
-          label: this.pluginInstance.i18n.settingPublish,
-          click: () => {
-            this.widgetInvoke.showPublisherPublishSettingDialog()
-          },
-        },
-        {
-          iconHTML: icons.iconPreference,
-          label: this.pluginInstance.i18n.settingGeneral,
-          click: () => {
-            this.widgetInvoke.showPublisherGeneralSettingDialog()
-          },
-        },
-      ],
-    })
-
-    // 关于作者
-    menu.addSeparator()
-    menu.addItem({
-      icon: "iconSparkles",
-      label: this.pluginInstance.i18n.settingAbout,
-      click: () => {
-        this.widgetInvoke.showPublisherAboutDialog()
-      },
-    })
-
-    if (this.pluginInstance.isMobile) {
-      menu.fullscreen()
-    } else {
-      menu.open({
-        x: rect.right,
-        y: rect.bottom,
-        isLeft: true,
-      })
-    }
   }
 }
