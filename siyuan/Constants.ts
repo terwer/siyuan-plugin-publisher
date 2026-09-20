@@ -27,8 +27,3 @@ export const isSiyuanDev = process.env.DEV_MODE === "true"
 
 export const siyuanApiToken = ""
 export const siyuanApiUrl = ""
-
-/**
- * 动态配置key，全系统唯一，请勿更改
- */
-export const DYNAMIC_CONFIG_KEY = "dynamic-config"

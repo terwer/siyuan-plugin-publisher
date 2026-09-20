@@ -117,45 +117,4 @@ describe("V2PreferenceSettings", () => {
     expect(preferenceState.value.allowChangeSlug).toBe(false)
   })
 
-  it("does not switch away from the V2 UI and points to the last V1 release", async () => {
-    preferenceState.value = { useV2UI: true } as Record<string, any>
-    mockSypConfirm.mockResolvedValue(true)
-    const wrapper = mountPreference()
-    const row = wrapper
-      .findAll(".syp-settings-form-row")
-      .find((item) => item.text().includes(zhCN["v2.preference.item.useV2UI.label"]))!
-
-    const checkbox = row.find('input[type="checkbox"]')
-    await checkbox.setValue(false)
-    await flushPromises()
-
-    // 开关保持开启，偏好值不被改写
-    expect((checkbox.element as HTMLInputElement).checked).toBe(true)
-    expect(preferenceState.value.useV2UI).toBe(true)
-    // 给出引导，并在用户同意后打开下载页
-    expect(mockSypConfirm).toHaveBeenCalledWith(
-      expect.objectContaining({
-        title: zhCN["v2.preference.confirm.v1Retired.title"],
-      })
-    )
-    expect(mockOpenPathOrUrl).toHaveBeenCalledWith(
-      expect.stringContaining("siyuan-plugin-publisher-v1.41.1"),
-      expect.anything()
-    )
-  })
-
-  it("opens nothing when the V1 retirement notice is dismissed", async () => {
-    preferenceState.value = { useV2UI: true } as Record<string, any>
-    mockSypConfirm.mockResolvedValue(false)
-    const wrapper = mountPreference()
-    const row = wrapper
-      .findAll(".syp-settings-form-row")
-      .find((item) => item.text().includes(zhCN["v2.preference.item.useV2UI.label"]))!
-
-    await row.find('input[type="checkbox"]').setValue(false)
-    await flushPromises()
-
-    expect(preferenceState.value.useV2UI).toBe(true)
-    expect(mockOpenPathOrUrl).not.toHaveBeenCalled()
-  })
 })

@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { App, confirm, getFrontend, IObject, Model, Plugin } from "siyuan"
+import { App, confirm, getFrontend, IObject, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
 import { Topbar } from "./topbar"
@@ -33,9 +33,6 @@ export default class PublisherPlugin extends Plugin {
   public kernelApi: SiyuanKernelApi
   /** 全插件唯一 V2 宿主，避免 Topbar / 文档菜单各建实例导致双 Menu 与卸载竞态 */
   public readonly v2Host: V2Host
-
-  customTabObject: () => Model
-  public tabInstance: any
 
   private publishSetting: any
   private prefSetting: any
@@ -63,8 +60,6 @@ export default class PublisherPlugin extends Plugin {
   onload() {
     // 初始化菜单
     this.topbar.initTopbar()
-    // 初始化自定义Tab
-    this.initCustomTab()
     // mountFn
     this.mountFn()
   }
@@ -85,20 +80,6 @@ export default class PublisherPlugin extends Plugin {
   // ================
   // private methods
   // ================
-  private initCustomTab() {
-    const that = this
-    this.customTabObject = this.addTab({
-      type: "publisher-plugin-custom-tab",
-      async init() {
-        this.element.innerHTML = `<p>加载中...</p>`
-      },
-      destroy() {
-        delete that.tabInstance
-        that.logger.info("publisher custopm tab destroyed")
-      },
-    })
-  }
-
   private mountFn() {
     const elAlertBox = (msg: string) => {
       confirm("⚠️错误提示", msg, () => {})

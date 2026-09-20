@@ -104,9 +104,6 @@ class PublishPreferenceCfg extends PreferenceConfig {
   // 是否允许修改别名
   public allowChangeSlug?: boolean
 
-  // V2 UI 开关
-  public useV2UI?: boolean
-
   // 发布源笔记本（issue #2044）：按笔记本限定发布来源；空=不限制（向后兼容）
   public publishSourceNotebooks?: string[]
 
@@ -126,9 +123,6 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.showArticleManageMenu = true
     this.ignoreBlockRef = false
     this.allowChangeSlug = false
-
-    // 默认使用 V2 界面；V1 已退役，该项仅保留为「需要旧界面」时的引导入口
-    this.useV2UI = true
 
     this.publishSourceNotebooks = []
   }

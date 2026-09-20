@@ -78,9 +78,6 @@ import { useNotebookOptions } from "~/src/composables/useNotebookOptions.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useV2I18n } from "~/src/composables/v2/useV2I18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
-import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { V1_LAST_RELEASE_URL, V1_LAST_VERSION } from "~/src/utils/constants.ts"
-import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
 import { getSiyuanWidgetId } from "~/src/utils/siyuanUtils.ts"
 
 type PreferenceKey =
@@ -97,7 +94,6 @@ type PreferenceKey =
   | "showArticleManageMenu"
   | "ignoreBlockRef"
   | "allowChangeSlug"
-  | "useV2UI"
   | "publishSourceNotebooks"
 
 interface PreferenceItem {
@@ -117,7 +113,6 @@ interface PreferenceGroup {
 const { t } = useV2I18n()
 const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { isInSiyuanWin, isInSiyuanWidget } = useSiyuanDevice()
-const { kernelApi } = useSiyuanApi()
 const preferenceForm = getPublishPreferenceSetting()
 
 const saveStateMap = reactive<Record<PreferenceKey, "idle" | "saving" | "saved" | "failed">>({} as any)
@@ -231,18 +226,6 @@ const groups: PreferenceGroup[] = [
       },
     ],
   },
-  {
-    title: t("v2.preference.group.experimental.title"),
-    description: t("v2.preference.group.experimental.desc"),
-    items: [
-      {
-        key: "useV2UI",
-        label: t("v2.preference.item.useV2UI.label"),
-        description: t("v2.preference.item.useV2UI.desc"),
-        pluginOnly: true,
-      },
-    ],
-  },
 ]
 
 const visibleGroups = computed(() => {
@@ -277,17 +260,6 @@ async function handleToggle(key: PreferenceKey, event: Event) {
   const target = event.target as HTMLInputElement | null
   const nextValue = target?.checked === true
 
-  // V1 已退役：本版只提供 V2。关闭该开关意味着切回 V1，故不生效，
-  // 而是引导到最后一个提供 V1 的发行版本
-  if (key === "useV2UI" && !nextValue) {
-    if (target) {
-      target.checked = true
-    }
-    preferenceForm.value.useV2UI = true
-    await showV1RetiredNotice()
-    return
-  }
-
   if (key === "allowChangeSlug" && nextValue && preferenceForm.value.allowChangeSlug !== true) {
     const confirmed = await confirmAllowChangeSlug()
     if (!confirmed) {
@@ -309,19 +281,6 @@ async function handleToggle(key: PreferenceKey, event: Event) {
     }, 2000)
   } catch {
     saveStateMap[key] = "failed"
-  }
-}
-
-async function showV1RetiredNotice() {
-  const goDownload = await sypConfirm({
-    title: t("v2.preference.confirm.v1Retired.title"),
-    message: t("v2.preference.confirm.v1Retired.message", { version: V1_LAST_VERSION }),
-    type: "info",
-    confirmButtonText: t("v2.preference.confirm.v1Retired.download"),
-    cancelButtonText: t("main.opt.cancel"),
-  })
-  if (goDownload) {
-    await openPathOrUrl(V1_LAST_RELEASE_URL, kernelApi)
   }
 }
 

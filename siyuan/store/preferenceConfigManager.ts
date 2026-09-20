@@ -57,7 +57,6 @@ export const normalizePreferenceConfig = (raw?: PreferenceConfig): PublishPrefer
   normalized.showArticleManageMenu = Utils.emptyBooleanOrDefault(raw?.showArticleManageMenu, true)
   normalized.ignoreBlockRef = Utils.emptyBooleanOrDefault(raw?.ignoreBlockRef, false)
   normalized.allowChangeSlug = Utils.emptyBooleanOrDefault(raw?.allowChangeSlug, false)
-  normalized.useV2UI = Utils.emptyBooleanOrDefault(raw?.useV2UI, false)
 
   // 发布源笔记本：归一化为非空字符串数组；缺省/非法 → 空数组（不限制）
   normalized.publishSourceNotebooks = Array.isArray(raw?.publishSourceNotebooks)

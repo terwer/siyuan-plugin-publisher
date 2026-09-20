@@ -10,6 +10,5 @@ export const preferenceGeneralHelpConfig: PageHelpConfig = {
   summary: "全局偏好设置，影响所有平台的发布行为。",
   fields: {
     showDocQuickMenu: { tip: "开启后在思源文档菜单中显示快速发布入口" },
-    useV2UI: { tip: "使用新版 V2 界面，体验更流畅的发布流程" },
   },
 }
