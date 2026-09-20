@@ -67,7 +67,7 @@
   - [x] 4.3.4 保留清单核对：`src/components/publish/**`（含 `V2SinglePublish`/`V2BatchPublish` 桥接的 V1 组件）、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts` 均未删
 - [x] 4.4 回归：`build:v2` ✓、**V1 SPA 构建 `pnpm siyuanBuild` ✓**（保证挂件/扩展产物仍可构建）、单测 70 文件 / 378 用例 ✓、宿主全入口手验 ✓、插件侧 i18n 死键清理 ✓
 - [x] 4.5 补「下载 `1.41.1`」提示（用户要求：这是 V1 移除后唯一需要补的东西）—— 落 `V2About.vue` 的设置分区「关于」，文案「旧版界面已在 2.0.0 中移除…如确需旧界面，可安装最后一个支持它的版本 1.41.1」+ 下载按钮，宿主实测渲染正常（提交 `0295bd2b`）。`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL` 仅为该提示恢复，**「2.3.0 移除提示与这两个常量」**
-- [ ] 4.6 **浏览器扩展迁移到 2.0**（用户明确要求；扩展当前弹窗 UI 即 V1 SPA，属 V1 遗产）
+- [x] 4.6 **浏览器扩展迁移到 2.0**（用户明确要求；扩展原弹窗 UI 即 V1 SPA，属 V1 遗产）—— 已完成，提交 `a8d69580`（通用壳）+ 后续构建链与删除提交
   - [x] 4.6.1 只读普查完成（结论如下，均有 `路径:行号` 证据）
     - **`V2App` 不绑定宿主**：不可复用的只有 `siyuan/v2/v2Host.ts`（`import { Menu } from "siyuan"`）；`siyuan/v2/createV2App.ts` 与 `V2App.vue` 都不 import `siyuan`。宿主依赖只有 4 类且全部已是可注入参数：`props.docId`、`props.onClose`、`initialView`/`initialSection`、i18n（`createV2VueApp({ messages, fallbackResolve })`）→ **扩展只需一层薄壳**。
     - **`background.js` 的两条消息通道零调用方**（最后调用方 `src/utils/browser/ChromeUtil.ts` 于 2022-12-03 `ee7a98af` 删除）→ 没有「必须保留的 CORS 旁路」；且 MV3 下 `host_permissions: ["*://*/*"]` 已使扩展页直接 fetch 不受页面同源限制。
@@ -76,11 +76,12 @@
     - **V1 SPA 路由实为 27 条**（此前记为 22）：16 条产品路由在 V2 有对应、11 条为开发测试用、**1 条缺口 = `/setting/siyuan`**（扩展在无宿主时**必须**手填 kernel 地址与 token，否则连自己的账号都读不到）。
     - **扩展只有一个真实功能缺口**：V2 无自有暗色模式（宿主暗色由 `v2Host.ts` 同步），弹窗会恒亮色。
   - [x] 4.6.2 方案选型：**先做方案 A 的最小真机 POC**（扩展独立壳：新入口 html + 独立 vite config + 调 `createV2VueApp` 的壳 main + 连接配置视图），**纯新增文件、零改动 V2 核心、不动挂件与 CI**；以真机结论再决定是否需要方案 B（抽出 `HostCapabilities` 解耦，可顺带覆盖挂件）。方案 C（保留 SPA 路由只换内部 UI）不采用：不收敛任何目标。
-  - [ ] 4.6.3 POC 真机验证三件事：① Chrome MV3 弹窗能否渲染（CSP 下 `useV2I18n` + EP）；② 填 kernel 地址/token 后能否列出账号（含非 loopback `http://` 是否被混合内容拦）；③ 无宿主 DOM 时 V2 产品语义是否成立
-  - [ ] 4.6.4 完整迁移（POC 通过后）：扩展独立壳落地 + `scripts/ext_build.py` / `manifest.json` 改造；**并给挂件与 nginx/vercel 做 V2 壳**（挂件最省事：kernel 与页面同源，无需连接配置 UI）
-  - [ ] 4.6.5 迁移完成后：删除 V1 SPA（`src/main.ts`、`src/bootstrap.ts`、`src/App.vue`、`src/routes/**`、`src/pages/**`、`src/workers/**`、`src/layouts/**`、`src/utils/directives/iframeResize.ts`、`src/assets/style*.css`）与 `vite.v1.app.config.ts`；同步修 `src/composables/usePublishConfig.spec.ts`（它直接 `mount(App)`）、`package.json` 的 `package` 脚本、`.github/workflows/{ci,release-please}.yml`
-  - [ ] 4.6.6 复核 Firefox/MV2 分支（当前**已损坏**：`manifest-v2-for-firefox.json` 的 `default_popup` 指向不存在的 `blog/index.html`，背景脚本全文注释）—— 修好或连同 `package` 脚本一并下线
-  - [ ] 4.6.7 发行包瘦身：`pnpm build` 不再夹带 SPA（`dist/` 由 33.66 MB 回落到与 `dist-v2/` 同量级）
+  - [x] 4.6.3 真机验证完成（真实 Chrome 152 + `Extensions.loadUnpacked`，以 `chrome-extension://` 身份装载）：① 渲染成功、**CSP 违规 0 条**；② 连接配置写入 `127.0.0.1:9999` 后**刷新仍在**（顺带修掉 `useSiyuanSettingStore` 无条件回写 `apiUrl` 的缺陷，见提交 `1d90f10b`），填入真实 token 后 `POST /api/notebook/lsNotebooks` 返回 **200 / 3 个笔记本**、账号列表读出 **48 个账号**；③ 无宿主文档时初始视图为「文章管理」，产品语义成立。**未验**：`chrome.*` 登录窗口/cookie 链路、单 chunk 12 MB 的弹窗加载成本
+  - [x] 4.6.4 通用壳落地：`src/webapp/**` + `vite.webapp.config.ts`（`BUILD_TYPE` → `extension/<type>` / `widget` / `nginx` / `vercel`），`hostAdapter` 判定宿主（扩展/挂件/网页版）决定文档来源与是否显示连接面板；**挂件与 nginx/vercel 一并迁到 V2**（挂件无需连接面板，文档 id 走 `getWidgetId()`）
+  - [x] 4.6.5 V1 SPA 已删除：入口与壳（`index.html`、`main.ts`、`bootstrap.ts`、`App.vue`）、路由 27 条、`pages/**`、`layouts/**`、`workers/**`、`components/test/**`、`styles`、`locales/index.ts`、`iframeResize`、`vite.v1*.config.ts`，以及仅 SPA 可达的 `DrawerBoxBridge`/设置页/平台表单/`CookieSetting`/`FlowusSetting` 等；`usePublishConfig.spec.ts` 改为直接准备 pinia+i18n，不再挂载 `App.vue`
+  - [x] 4.6.6 Firefox/MV2 分支已修好（`manifest-v2-for-firefox.json` 的 popup 指向 V2 产物 `index.html`，删掉全文注释的死背景脚本）；chrome/edge/firefox 三产物均可构建并打包
+  - [x] 4.6.7 发行包已瘦身：`pnpm build` 不再夹带 SPA，`build/siyuan-plugin-publisher-*.zip` 由 **74 项 / 33.66 MB** 降到 **42 项 / 17.90 MB**，无 `index.html` / `chunks/` / `entry.*.js`
+  - [x] 4.6.8 构建链转正：插件 lib 唯一出口 `vite.v2.config.ts` → **`dist/`**（与 `makeLink` 默认值一致，`dist-v2` 退役）；`DEV_MODE` 正式构建置 false（原先恒 true）；脚本的 `--outDir` 必须传绝对路径（Vite 会把相对路径按 config 的 `root` 解析，曾误落到 `src/webapp/`）；修掉 `vercelBuild` 调用不存在的 `python3`
 - [ ] 4.7 归档本变更；合并 delta 至 `openspec/specs/`
 
 

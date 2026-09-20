@@ -81,8 +81,9 @@
 
 ## 工作区事实（已学习）
 
-- **V2 宿主**：`pnpm dev:v2`（调试/watch）、`pnpm build:v2`（构建入口）、`pnpm makeLink:v2`（软链到思源）；产物在 `dist-v2/`。调试由用户自行进行。
-- **V1**：`pnpm dev -p siyuan`、`pnpm makeLink -p siyuan`；产物在 `dist/`。该链路**不会**启动 V2 的 Vite 配置。
+- **构建链（V1 退役后）**：插件本体 `pnpm build:v2`（`vite.v2.config.ts` → `dist/`）；调试/watch 用 `pnpm dev:v2`；软链到思源用 `pnpm makeLink:v2`（等价 `pnpm makeLink`，都指向 `dist/`）。**V1 SPA 与 `vite.v1*.config.ts` 已删除，不存在第二套界面构建。**
+- **四个 web 产物**：挂件 / 浏览器扩展（chrome、edge、firefox）/ nginx / vercel 由同一份通用 V2 壳构建 —— `src/webapp/**` + `vite.webapp.config.ts`（按 `BUILD_TYPE` 落 `widget` / `extension/<type>` / `nginx` / `vercel`）。壳通过 `hostAdapter` 判定宿主（扩展 / 挂件 / 网页版）决定文档来源与是否显示「思源连接配置」。构建脚本传的 `--outDir` 必须是绝对路径（Vite 会把相对路径按 config 的 `root` 解析）。
+- **发布打包**：`pnpm build`（`scripts/build.py`）只构建插件 lib 并打 `build/*.zip`；`pnpm package` 追加四个 web 产物。发行包里**不再包含** SPA。
 - `PicbedServiceTypeEnum.None` 是用户明确选择「无图床」，视为有效值，不是未设置。
 - MetaWeblog 类平台（如博客园）在平台 `*Config` 构造函数里设图床为 `Bundled`（参考 `YuquewebConfig`）。
 - Agent Skills：项目 `.cursor/skills/` 或 `.claude/skills/`；全局 `~/.cursor/skills/` 或 `~/.claude/skills/`。

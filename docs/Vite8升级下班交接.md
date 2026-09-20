@@ -1,3 +1,5 @@
+> **历史文档（2026-09-20 备注）**：本文描述的 ite.v1.app.config.ts / ite.v1.siyuan.config.ts 与 scripts/siyuan_build.py **已在 V1 退役时删除**。当前构建链：插件本体 ite.v2.config.ts → dist/；挂件/扩展/nginx/vercel → ite.webapp.config.ts（按 BUILD_TYPE）。下文保留当时事实，勿作为现行依据。
+
 # Vite 8 升级下班交接
 
 > 日期：2026-05-22  
