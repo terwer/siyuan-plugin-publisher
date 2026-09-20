@@ -19,6 +19,20 @@ export const aboutUrl = "https://terwer.space/about"
 export const DYNAMIC_CONFIG_KEY = "dynamic-config"
 
 /**
+ * 最后一个提供 V1 界面的发行版本号。
+ *
+ * V1 已在 `2.0.0` 中彻底移除，本版不再提供回退入口；此处仅用于「确需旧界面」
+ * 时的下载指引。该指引计划在 `2.3.0` 移除
+ * （见 change `v2-platform-verification-v1-retirement`）。
+ */
+export const V1_LAST_VERSION = "1.41.1"
+
+/**
+ * 最后一个提供 V1 界面的发行版下载地址
+ */
+export const V1_LAST_RELEASE_URL = `https://github.com/terwer/siyuan-plugin-publisher/releases/tag/siyuan-plugin-publisher-v${V1_LAST_VERSION}`
+
+/**
  * 自动映射分类占位符
  */
 export const CATE_AUTO_NAME = "[auto]"
