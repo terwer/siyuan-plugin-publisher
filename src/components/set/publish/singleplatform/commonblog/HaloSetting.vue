@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useHaloApi } from "~/src/adaptors/api/halo/useHaloApi.ts"
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
 import { HaloPlaceholder } from "~/src/adaptors/api/halo/HaloPlaceholder.ts"
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useHaloApi(props.apiType)
 const haloCfg = cfg as HaloConfig
 const haloPlaceholder = new HaloPlaceholder()

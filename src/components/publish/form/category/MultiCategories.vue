@@ -11,13 +11,13 @@
 import { IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { onMounted, reactive, toRaw } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("multi-categories")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   categoryConfig: {

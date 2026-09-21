@@ -11,8 +11,8 @@ import { describe, expect, it } from "vitest"
 import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 import { AuthMode, getSubPlatformTypeByKey, getSubtypeList, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
-import { getV2BridgeComponent, SUPPORTED_V2_BRIDGE_SUBTYPES } from "~/src/components/v2/settings/bridge/bridgeRegistry.ts"
-import { V2_PLATFORM_SELECT_GROUP_DEFS } from "~/src/components/v2/settings/v2PlatformSelectGroups.ts"
+import { getBridgeComponent, SUPPORTED_BRIDGE_SUBTYPES } from "~/src/ui/components/settings/bridge/bridgeRegistry.ts"
+import { PLATFORM_SELECT_GROUP_DEFS } from "~/src/ui/components/settings/platformSelectGroups.ts"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
 import enUS from "~/siyuan/i18n/en_US.json"
 
@@ -29,12 +29,12 @@ describe("yuqueweb platform registration", () => {
     expect(platform?.domain).toBe("yuque.com")
   })
 
-  it("registers V2 bridge component", () => {
-    expect(SUPPORTED_V2_BRIDGE_SUBTYPES.has(SubPlatformType.Custom_Yuqueweb)).toBe(true)
-    expect(getV2BridgeComponent(SubPlatformType.Custom_Yuqueweb)).toBeTruthy()
+  it("registers the bridge component", () => {
+    expect(SUPPORTED_BRIDGE_SUBTYPES.has(SubPlatformType.Custom_Yuqueweb)).toBe(true)
+    expect(getBridgeComponent(SubPlatformType.Custom_Yuqueweb)).toBeTruthy()
   })
 
-  it("registers V2 bridge components for enabled custom web presets", () => {
+  it("registers the bridge components for enabled custom web presets", () => {
     const enabledCustomSubtypes = pre.customCfg.map((item) => item.subPlatformType!)
 
     expect(enabledCustomSubtypes).toEqual(
@@ -42,18 +42,18 @@ describe("yuqueweb platform registration", () => {
     )
 
     for (const subtype of enabledCustomSubtypes) {
-      expect(SUPPORTED_V2_BRIDGE_SUBTYPES.has(subtype)).toBe(true)
-      expect(getV2BridgeComponent(subtype)).toBeTruthy()
+      expect(SUPPORTED_BRIDGE_SUBTYPES.has(subtype)).toBe(true)
+      expect(getBridgeComponent(subtype)).toBeTruthy()
     }
   })
 
-  it("keeps custom web platforms visible in the V2 add-account platform selector", () => {
-    const visibleGroups = V2_PLATFORM_SELECT_GROUP_DEFS.map((group) => group.key)
+  it("keeps custom web platforms visible in the add-account platform selector", () => {
+    const visibleGroups = PLATFORM_SELECT_GROUP_DEFS.map((group) => group.key)
 
     expect(visibleGroups).toContain(PlatformType.Custom)
   })
 
-  it("provides V2 i18n labels for the custom web platform group", () => {
+  it("provides i18n labels for the custom web platform group", () => {
     expect(zhCN["setting.platform.custom"]).toBeTruthy()
     expect(enUS["setting.platform.custom"]).toBeTruthy()
   })

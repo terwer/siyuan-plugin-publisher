@@ -11,9 +11,9 @@
 import { markRaw, reactive } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { Warning } from "@element-plus/icons-vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   useAi: {

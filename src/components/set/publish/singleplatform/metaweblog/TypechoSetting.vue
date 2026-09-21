@@ -8,7 +8,7 @@
   -->
 
 <script lang="ts" setup>
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
 import { StrUtil } from "zhi-common"
 import TypechoUtils from "~/src/adaptors/api/typecho/typechoUtils.ts"
@@ -34,7 +34,7 @@ const onHomeChange = (value: string, cfg: TypechoConfig) => {
   }
 }
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useTypechoApi(props.apiType)
 const tcCfg = cfg as TypechoConfig
 const tcPlaceholder = new TypechoPlaceholder()

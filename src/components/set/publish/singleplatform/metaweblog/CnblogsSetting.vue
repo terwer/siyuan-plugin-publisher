@@ -7,7 +7,7 @@
   -  of this license document, but changing it is not allowed.
   -->
 <script lang="ts" setup>
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useCnblogsApi } from "~/src/adaptors/api/cnblogs/useCnblogsApi.ts"
 import MetaweblogSetting from "~/src/components/set/publish/singleplatform/base/impl/MetaweblogSetting.vue"
 import { CnblogsPlaceholder } from "~/src/adaptors/api/cnblogs/cnblogsPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useCnblogsApi(props.apiType)
 
 const cnblogsCfg = cfg as CnblogsConfig

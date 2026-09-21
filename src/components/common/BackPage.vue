@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 // uses
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { inject, ref, computed } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
@@ -18,9 +18,9 @@ import { StrUtil } from "zhi-common"
 import { routeLocationKey, routerKey } from "vue-router"
 
 const logger = createAppLogger("back-page")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
-// 容错获取 router：V1 有 vue-router，V2（无 vue-router 环境）安全返回 undefined，不抛错。
+// 容错获取 router：V1 有 vue-router，当前界面（无 vue-router 环境）安全返回 undefined，不抛错。
 const router = inject(routerKey, undefined)
 const route = inject(routeLocationKey, undefined)
 

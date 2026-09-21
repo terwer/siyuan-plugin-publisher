@@ -14,8 +14,8 @@ import { Topbar } from "./topbar"
 import { ILogger } from "zhi-lib-base"
 import { ConfigManager } from "~/siyuan/store/config.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
-import { V2Host } from "~/siyuan/v2/v2Host.ts"
-import { buildDocQuickPublishMenus, docMenuIcons } from "~/siyuan/v2/v2DocMenu.ts"
+import { PluginHost } from "~/siyuan/host/pluginHost.ts"
+import { buildDocQuickPublishMenus, docMenuIcons } from "~/siyuan/host/docMenu.ts"
 
 import "./index.styl"
 
@@ -31,8 +31,8 @@ export default class PublisherPlugin extends Plugin {
 
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
-  /** 全插件唯一 V2 宿主，避免 Topbar / 文档菜单各建实例导致双 Menu 与卸载竞态 */
-  public readonly v2Host: V2Host
+  /** 全插件唯一插件宿主，避免 Topbar / 文档菜单各建实例导致双 Menu 与卸载竞态 */
+  public readonly pluginHost: PluginHost
 
   private publishSetting: any
   private prefSetting: any
@@ -48,13 +48,13 @@ export default class PublisherPlugin extends Plugin {
     const siyuanConfig = new SiyuanConfig("", "")
     this.kernelApi = new SiyuanKernelApi(siyuanConfig)
 
-    this.v2Host = new V2Host(this)
+    this.pluginHost = new PluginHost(this)
     this.topbar = new Topbar(this)
   }
 
   openSetting(): void {
-    // 思源宿主「插件设置」入口：直接打开 V2 设置视图
-    void this.v2Host.show({ initialView: "settings" })
+    // 思源宿主「插件设置」入口：直接打开 设置视图
+    void this.pluginHost.show({ initialView: "settings" })
   }
 
   onload() {
@@ -70,7 +70,7 @@ export default class PublisherPlugin extends Plugin {
   }
 
   onunload() {
-    void this.v2Host.close()
+    void this.pluginHost.close()
     // unmountFn
     this.unmountFn()
     // offEvent
@@ -138,8 +138,8 @@ export default class PublisherPlugin extends Plugin {
     const protyleElement = detail?.protyle?.element as HTMLElement | undefined
     const anchorElement = protyleElement?.querySelector<HTMLElement>(".protyle-title__icon") ?? protyleElement
 
-    // 快速发布：每个已启用平台一项，点击即在 V2 面板内对该文档发布该平台
-    const quickMenus = buildDocQuickPublishMenus(this.publishSetting, this.v2Host, pageId, anchorElement)
+    // 快速发布：每个已启用平台一项，点击即在 面板内对该文档发布该平台
+    const quickMenus = buildDocQuickPublishMenus(this.publishSetting, this.pluginHost, pageId, anchorElement)
     context.push({
       iconHTML: `<span class="iconfont-icon">${docMenuIcons.quickPublish}</span>`,
       label: this.i18n.publishToQuick,
@@ -150,7 +150,7 @@ export default class PublisherPlugin extends Plugin {
       iconHTML: `<span class="iconfont-icon">${docMenuIcons.aiChat}</span>`,
       label: this.i18n.aiChat,
       click: async () => {
-        await this.v2Host.show({ anchorElement, initialView: "ai_chat", docId: pageId })
+        await this.pluginHost.show({ anchorElement, initialView: "ai_chat", docId: pageId })
       },
     })
   }

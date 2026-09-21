@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useJekyllApi } from "~/src/adaptors/api/jekyll/useJekyllApi.ts"
 import { JekyllConfig } from "~/src/adaptors/api/jekyll/jekyllConfig.ts"
 import { JekyllPlaceholder } from "~/src/adaptors/api/jekyll/jekyllPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useJekyllApi(props.apiType)
 const jekyllCfg = cfg as JekyllConfig
 const jekyllPlaceholder = new JekyllPlaceholder()

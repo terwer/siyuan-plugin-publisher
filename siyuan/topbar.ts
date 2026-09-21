@@ -16,7 +16,7 @@ import { icons } from "./utils/svg"
  * 顶部按钮
  *
  * V1 的旧菜单（文章管理 / 批量分发 / 常规发布 / 图床 / AI 工具 / 扩展功能 / 关于作者）
- * 已随 V1 退役移除；这些入口在 V2 面板内都有对应视图，点击顶栏直接打开 V2 面板。
+ * 已随 V1 退役移除；这些入口在 面板内都有对应视图，点击顶栏直接打开 面板。
  */
 export class Topbar {
   private logger
@@ -26,8 +26,8 @@ export class Topbar {
     this.pluginInstance = pluginInstance
   }
 
-  private get v2Host() {
-    return this.pluginInstance.v2Host
+  private get pluginHost() {
+    return this.pluginInstance.pluginHost
   }
 
   public initTopbar() {
@@ -41,19 +41,19 @@ export class Topbar {
 
     topBarElement.addEventListener("click", async () => {
       try {
-        await self.showV2QuickPublishPanel(topBarElement)
+        await self.showQuickPublishPanel(topBarElement)
       } catch (e) {
-        self.logger.error("V2 panel failed to open:", e)
+        self.logger.error("panel failed to open:", e)
         showMessage(self.pluginInstance.i18n.publishTool + "：" + (e instanceof Error ? e.message : String(e)), 5000, "error")
       }
     })
   }
 
   /**
-   * 显示 V2 快速发布面板
+   * 显示 快速发布面板
    */
-  private async showV2QuickPublishPanel(topBarElement: HTMLElement) {
-    await this.v2Host.show({
+  private async showQuickPublishPanel(topBarElement: HTMLElement) {
+    await this.pluginHost.show({
       anchorElement: topBarElement,
       initialView: "quick_publish",
     })

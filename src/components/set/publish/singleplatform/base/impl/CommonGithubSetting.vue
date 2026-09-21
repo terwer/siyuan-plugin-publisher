@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 // props
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { onBeforeMount, reactive, toRaw } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PicbedServiceTypeEnum } from "zhi-blog-api"
@@ -30,8 +30,8 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
-// V2 平台配置页的占位符只给示例值，字段含义由行尾 ⓘ 承担；非 V2 场景返回原文案
+const { t } = useAppI18n()
+// 平台配置页的占位符只给示例值，字段含义由行尾 ⓘ 承担；其余场景返回原文案
 const ph = useFieldPlaceholder()
 
 const formData = reactive({

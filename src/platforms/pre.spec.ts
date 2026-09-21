@@ -46,7 +46,7 @@ describe("platform presets", () => {
     expect(visiblePresetPlatforms.every((item) => !item.description?.trim())).toBe(true)
   })
 
-  it("keeps V2-visible platform descriptions in pre.ts as i18n mappings rather than a separate map", () => {
+  it("keeps app-visible platform descriptions in pre.ts as i18n mappings rather than a separate map", () => {
     expect(pre.commonCfg.find((item) => item.platformKey === "common_Yuque")?.i18n?.description).toBe(
       "setting.platform.common.yuque.desc"
     )

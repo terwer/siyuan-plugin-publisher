@@ -6,7 +6,6 @@
 
 # build
 dist
-dist-v2
 lib
 !src/lib
 node_modules

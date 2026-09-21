@@ -8,18 +8,18 @@
  */
 
 /**
- * 通用 V2 壳的宿主适配。
+ * 通用壳的宿主适配。
  *
  * 同一个壳要服务四种「没有思源插件宿主」的产物：
  * - `extension`：浏览器扩展弹窗，`chrome-extension://` 身份，没有宿主文档，必须手填内核地址与 Token；
  * - `widget`：思源挂件（iframe 内），父窗口就是思源，内核地址可由 origin 推得、当前文档可由父窗口读得；
  * - `web`：`nginx` / `vercel` 部署的网页版，与扩展同样没有宿主，需要手填内核地址；
  *
- * 这里只做「能力判定」，不碰 V2 本体——V2 的宿主依赖全部是可注入参数
- * （`docId` / `initialView` / i18n / `onClose`，见 `siyuan/v2/createV2App.ts`）。
+ * 这里只做「能力判定」，不碰 应用本体——应用的宿主依赖全部是可注入参数
+ * （`docId` / `initialView` / i18n / `onClose`，见 `siyuan/host/createApp.ts`）。
  */
 import { SiyuanDevice } from "zhi-device"
-import type { V2InitialView } from "~/siyuan/v2/createV2App.ts"
+import type { InitialView } from "~/siyuan/host/createApp.ts"
 import { getWidgetId } from "~/src/utils/widgetUtils.ts"
 
 export type WebShellHost = "extension" | "widget" | "web"
@@ -43,7 +43,7 @@ export const detectWebShellHost = (): WebShellHost => {
  * 取宿主当前的文档 id。
  *
  * 只有挂件能取到：它嵌在思源文档里，父窗口的 `protyle` 就是当前文档。
- * 扩展与网页版没有宿主文档，返回空串，由 V2 走「未检测到文档」分支。
+ * 扩展与网页版没有宿主文档，返回空串，由应用 走「未检测到文档」分支。
  */
 export const resolveHostDocId = (host: WebShellHost): string => {
   if (host !== "widget") {
@@ -70,7 +70,7 @@ export const needsConnectionPanel = (host: WebShellHost): boolean => host !== "w
  * 有宿主文档（挂件）→ 直接进快速发布；没有（扩展/网页版）→ 进文章管理，
  * 让用户从内核的笔记本里挑文档再发布。否则会停在「请先打开一个文档」的死路上。
  */
-export const resolveInitialView = (docId: string): V2InitialView => (docId ? "quick_publish" : "manage")
+export const resolveInitialView = (docId: string): InitialView => (docId ? "quick_publish" : "manage")
 
 /** 供壳与排障使用 */
 export const describeHost = (host: WebShellHost): string => {

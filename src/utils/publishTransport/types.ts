@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-/** V2 发布传输通道（XML / multipart / 预留 JSON） */
+/** 发布传输通道（XML / multipart / 预留 JSON） */
 type PublishTransportKind =
   | "plugin-node-fetch"
   | "siyuan-forward-proxy"

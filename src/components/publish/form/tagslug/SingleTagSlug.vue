@@ -13,10 +13,10 @@ import { StrUtil } from "zhi-common"
 import { TagInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 
 const logger = createAppLogger("single-tag-slugs")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   cfg: {

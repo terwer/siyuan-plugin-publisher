@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { markRaw, onBeforeMount, reactive, ref } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -42,7 +42,7 @@ const props = defineProps({
 })
 
 // uses
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { getSetting } = usePublishSettingStore()
 
 // emits

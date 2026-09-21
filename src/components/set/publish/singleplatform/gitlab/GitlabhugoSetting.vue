@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useGitlabhugoApi } from "~/src/adaptors/api/gitlab-hugo/useGitlabhugoApi.ts"
 import { GitlabhugoConfig } from "~/src/adaptors/api/gitlab-hugo/gitlabhugoConfig.ts"
 import { GitlabhugoPlaceholder } from "~/src/adaptors/api/gitlab-hugo/gitlabhugoPlaceholder.ts"
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useGitlabhugoApi(props.apiType)
 const hugoCfg = cfg as GitlabhugoConfig
 const hugoPlaceholder = new GitlabhugoPlaceholder()

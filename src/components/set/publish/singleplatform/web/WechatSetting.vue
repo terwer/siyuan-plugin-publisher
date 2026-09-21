@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import CustomWebSetting from "~/src/components/set/publish/singleplatform/base/impl/CustomWebSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useWechatWeb } from "~/src/adaptors/web/wechat/useWechatWeb.ts"
 import { WechatConfig } from "~/src/adaptors/web/wechat/wechatConfig.ts"
 import { WechatPlaceholder } from "~/src/adaptors/web/wechat/wechatPlaceholder.ts"
@@ -25,7 +25,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useWechatWeb(props.apiType)
 const emit = defineEmits(["validated", "saved"])
 

@@ -11,13 +11,13 @@
 import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { computed, onMounted, reactive, ref, toRaw } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 
 const logger = createAppLogger("single-knowledge-space")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   knowledgeSpaceConfig: {

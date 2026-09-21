@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { reactive, watch } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
@@ -17,7 +17,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { prompt, TitleAIResult } from "~/src/ai/prompt.ts"
 
 const logger = createAppLogger("publish-title")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   useAi: {

@@ -9,12 +9,12 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 
 defineOptions({ name: "HelpPanel" })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   pageId: { type: String, required: true },
@@ -38,10 +38,10 @@ const hasFaq = computed(() => {
   return Array.isArray(faqData) && faqData.length > 0
 })
 
-// Find .syp-v2 as teleport target (avoids .syp-panel overflow:hidden clipping)
+// Find .syp-app as teleport target (avoids .syp-panel overflow:hidden clipping)
 const teleportTarget = computed<HTMLElement | null>(() => {
   if (!props.triggerEl) return null
-  return (props.triggerEl as HTMLElement).closest(".syp-v2") as HTMLElement | null
+  return (props.triggerEl as HTMLElement).closest(".syp-app") as HTMLElement | null
 })
 
 const PANEL_WIDTH = 380
@@ -133,13 +133,13 @@ const onStartTour = () => {
 
         <!-- Default fallback -->
         <div v-if="isDefault" class="syp-help-panel-popover__section">
-          <p class="syp-help-panel-popover__fallback-text">{{ t("v2.help.notConfigured") }}</p>
+          <p class="syp-help-panel-popover__fallback-text">{{ t("help.notConfigured") }}</p>
         </div>
 
         <!-- Help URL link -->
         <div class="syp-help-panel-popover__section">
           <el-link type="primary" :underline="false" @click="onOpenHelpUrl">
-            <span class="syp-help-panel-popover__link-text">{{ t("v2.help.viewFullDoc") }}</span>
+            <span class="syp-help-panel-popover__link-text">{{ t("help.viewFullDoc") }}</span>
             <el-icon class="syp-help-panel-popover__link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path fill="currentColor" d="M851.456 176.64H172.544A96 96 0 0 0 76.8 272.64v481.28a96 96 0 0 0 95.744 96h678.912a96 96 0 0 0 95.744-96V272.64a96 96 0 0 0-95.744-96M172.544 240.64h678.912a32 32 0 0 1 31.744 32v81.92H140.8v-81.92a32 32 0 0 1 31.744-32m678.912 544H172.544a32 32 0 0 1-31.744-32V420.48h742.4v332.16a32 32 0 0 1-31.744 32"/></svg>
             </el-icon>
@@ -148,7 +148,7 @@ const onStartTour = () => {
 
         <!-- FAQ -->
         <div v-if="hasFaq" class="syp-help-panel-popover__section">
-          <h4 class="syp-help-panel-popover__section-title">{{ t("v2.help.faq") }}</h4>
+          <h4 class="syp-help-panel-popover__section-title">{{ t("help.faq") }}</h4>
           <div v-for="(item, index) in config.faq" :key="index" class="syp-help-panel-popover__faq-item">
             <p class="syp-help-panel-popover__faq-q">{{ item.q }}</p>
             <p class="syp-help-panel-popover__faq-a">{{ item.a }}</p>
@@ -158,7 +158,7 @@ const onStartTour = () => {
         <!-- Start Tour -->
         <div v-if="hasTour" class="syp-help-panel-popover__section syp-help-panel-popover__tour-section">
           <el-button type="primary" class="syp-help-panel-popover__tour-btn" @click="onStartTour">
-            {{ t("v2.help.startTour") }}
+            {{ t("help.startTour") }}
           </el-button>
         </div>
       </div>

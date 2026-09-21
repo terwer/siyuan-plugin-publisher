@@ -12,14 +12,14 @@ import { CategoryTypeEnum } from "zhi-blog-api"
 import { reactive, toRaw, watch } from "vue"
 import { ICategoryConfig, IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { CategoryAIResult, prompt } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
 
 const logger = createAppLogger("publish-categories")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   useAi: {

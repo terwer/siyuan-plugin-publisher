@@ -124,7 +124,7 @@ describe("CommonBlogSetting Cookie field", () => {
     expect(wrapper.find(".alert-stub").attributes("data-type")).toBe("warning")
   })
 
-  it("exposes a cookie-actions slot near the editable Cookie field without rendering V2 UI by default", async () => {
+  it("exposes a cookie-actions slot near the editable Cookie field without rendering the app UI by default", async () => {
     mockGetSetting.mockResolvedValue({})
     mockUpdateSetting.mockResolvedValue(undefined)
 
@@ -212,7 +212,7 @@ describe("CommonBlogSetting Cookie field", () => {
     expect(slotWrapper.text()).toContain("Cookie actions slot")
   })
 
-  it("lets the injected V2 cookie slot toggle the manual Cookie editor on demand", async () => {
+  it("lets the injected cookie slot toggle the manual Cookie editor on demand", async () => {
     mockGetSetting.mockResolvedValue({})
     mockUpdateSetting.mockResolvedValue(undefined)
 

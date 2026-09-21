@@ -10,7 +10,7 @@
 <!--
   扩展壳的「思源连接配置」面板（POC）。
 
-  V2 的分区只有 account / picbed / preference / ai / about，没有 `/setting/siyuan` 的对应物；
+  界面的分区只有 account / picbed / preference / ai / about，没有 `/setting/siyuan` 的对应物；
   扩展必须能填写内核地址与 Token，因此本面板直接复用既有 store
   `useSiyuanSettingStore`（内部为 vueuse `useStorage`，浏览器环境落 `window.localStorage`），
   不自建存储。
@@ -20,7 +20,7 @@
     <header class="syp-web-connection__head">
       <h1 class="syp-web-connection__title">思源连接配置</h1>
       <p class="syp-web-connection__desc">
-        扩展弹窗里取不到宿主文档，V2 需要通过思源内核 API 读取文档与发布配置，请填写内核地址与 API Token。
+        扩展弹窗里取不到宿主文档，界面需要通过思源内核 API 读取文档与发布配置，请填写内核地址与 API Token。
       </p>
     </header>
 

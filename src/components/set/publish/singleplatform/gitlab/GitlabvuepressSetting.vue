@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { StrUtil } from "zhi-common"
 import { useGitlabvuepressApi } from "~/src/adaptors/api/gitlab-vuepress/useGitlabvuepressApi.ts"
 import { GitlabvuepressConfig } from "~/src/adaptors/api/gitlab-vuepress/gitlabvuepressConfig.ts"
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useGitlabvuepressApi(props.apiType)
 const vuepressCfg = cfg as GitlabvuepressConfig
 const vuepressPlaceholder = new GitlabvuepressPlaceholder()

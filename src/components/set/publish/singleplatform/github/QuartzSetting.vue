@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useQuartzApi } from "~/src/adaptors/api/quartz/useQuartzApi.ts"
 import { QuartzConfig } from "~/src/adaptors/api/quartz/quartzConfig.ts"
 import { QuartzPlaceholder } from "~/src/adaptors/api/quartz/quartzPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useQuartzApi(props.apiType)
 const quartzCfg = cfg as QuartzConfig
 const quartzPlaceholder = new QuartzPlaceholder()

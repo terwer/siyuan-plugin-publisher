@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -20,7 +20,7 @@ import { ITagConfig } from "~/src/types/ITagConfig.ts"
 import { TagInfo } from "zhi-blog-api"
 
 const logger = createAppLogger("publish-tags")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   useAi: {

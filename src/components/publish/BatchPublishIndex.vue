@@ -14,7 +14,7 @@ import PublishPlatform from "~/src/components/publish/form/PublishPlatform.vue"
 import { markRaw, onMounted, reactive, ref, toRaw } from "vue"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { StrUtil } from "zhi-common"
 import { pre } from "~/src/platforms/pre.ts"
@@ -45,7 +45,7 @@ const props = defineProps({
 })
 
 // uses
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { doSinglePublish, doSingleDelete, doForceSingleDelete, initPublishMethods } = usePublish()
 const { blogApi } = useSiyuanApi()
 const { getPublishCfg } = usePublishConfig()

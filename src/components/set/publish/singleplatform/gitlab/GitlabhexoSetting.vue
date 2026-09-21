@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { GitlabhexoConfig } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoConfig.ts"
 import { GitlabhexoPlaceholder } from "~/src/adaptors/api/gitlab-hexo/gitlabhexoPlaceholder.ts"
 import { useGitlabhexoApi } from "~/src/adaptors/api/gitlab-hexo/useGitlabhexoApi.ts"
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useGitlabhexoApi(props.apiType)
 const hexoCfg = cfg as GitlabhexoConfig
 const hexoPlaceholder = new GitlabhexoPlaceholder()

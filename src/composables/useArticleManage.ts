@@ -69,7 +69,7 @@ const MAX_PAGE_SIZE = 8
  * 发布源笔记本多选（初值取偏好、变更持久化并刷新）。
  * 所有导航动作以事件抛出，不含 router/iframe。
  *
- * V1 `Admin.vue` 与 V2 管理视图均为薄封装，共用此组合式函数。
+ * V1 `Admin.vue` 与当前管理视图均为薄封装，共用此组合式函数。
  *
  * @public
  */

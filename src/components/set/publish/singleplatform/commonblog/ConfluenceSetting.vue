@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
 import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useConfluenceApi } from "~/src/adaptors/api/confluence/useConfluenceApi.ts"
 import { ConfluenceConfig } from "~/src/adaptors/api/confluence/confluenceConfig.ts"
 import { ConfluencePlaceholder } from "~/src/adaptors/api/confluence/confluencePlaceholder.ts"
@@ -26,7 +26,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useConfluenceApi(props.apiType)
 const confluenceCfg = cfg as ConfluenceConfig
 const confluencePlaceholder = new ConfluencePlaceholder()

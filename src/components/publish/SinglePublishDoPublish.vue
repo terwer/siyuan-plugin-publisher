@@ -14,7 +14,7 @@ import { usePublish } from "~/src/composables/usePublish.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { BlogConfig, PageEditMode, Post, PostStatusEnum } from "zhi-blog-api"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { DynamicConfig, getDynYamlKey, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { ElMessage, ElMessageBox } from "element-plus"
@@ -39,7 +39,7 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 
 const logger = createAppLogger("single-publish-do-publish")
 
-// props（已是无 vue-router 的解耦外壳；V1 路由页从 useRoute 取参传入，V2 直接传入）
+// props（已是无 vue-router 的解耦外壳；V1 路由页从 useRoute 取参传入，当前界面直接传入）
 // 注意：不能用 `key` 作为 prop 名——`key` 是 Vue 保留属性，Vue 不会把它作为 prop 传入，会直接导致平台 key 丢失。
 const props = defineProps({
   platformKey: {
@@ -63,7 +63,7 @@ const props = defineProps({
 const emit = defineEmits(["back"])
 
 // uses
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { kernelApi } = useSiyuanApi()
 const { doSinglePublish, doSingleDelete, initPublishMethods, doForceSingleDelete } = usePublish()
 const { getPublishCfg } = usePublishConfig()

@@ -8,12 +8,12 @@
  */
 
 /**
- * 通用 V2 壳的构建配置：浏览器扩展 / 思源挂件 / 网页版（nginx、vercel）共用一份。
+ * 通用壳的构建配置：浏览器扩展 / 思源挂件 / 网页版（nginx、vercel）共用一份。
  *
  * 取代原先的 `vite.v1.app.config.ts`（它构建的是 V1 SPA）。差别：
- * - 入口是 `src/webapp/index.html`（V2 壳），不再有 vue-router 与 `src/pages/**`；
+ * - 入口是 `src/webapp/index.html`（应用壳），不再有 vue-router 与 `src/pages/**`；
  * - 产物按 `BUILD_TYPE` 落到各自的目录，与既有 `scripts/*.py` 的约定一致；
- * - 不 external `siyuan`：壳链路完全不 import 它（只有 `siyuan/v2/v2Host.ts` 才 import）。
+ * - 不 external `siyuan`：壳链路完全不 import 它（只有 `siyuan/host/pluginHost.ts` 才 import）。
  *
  * 用法：
  *   BUILD_TYPE=extension EXT_TYPE=chrome pnpm exec vite build --config vite.webapp.config.ts
@@ -53,7 +53,7 @@ const resolveTarget = (): { outDir: string; base: string } => {
     case "nginx":
       return { outDir: "nginx", base: "/" }
     case "vercel":
-      // 注意：不要用 dist —— 那是插件 lib 的历史产物目录（vite.v2.config.ts 用 dist-v2）
+      // 注意：不要用 dist —— 那是插件 lib 的产物目录
       return { outDir: "vercel", base: "/" }
     default:
       return { outDir: "webapp", base: "/" }
@@ -122,7 +122,7 @@ export default defineConfig({
     Icons({
       autoInstall: true,
     }),
-    // V2 与桥接组件里有大量无 import 的 kebab-case 组件（el-* 等），漏配只会在运行时炸
+    // 应用与桥接组件里有大量无 import 的 kebab-case 组件（el-* 等），漏配只会在运行时炸
     AutoImport({
       resolvers: [ElementPlusResolver()],
       dts: false,

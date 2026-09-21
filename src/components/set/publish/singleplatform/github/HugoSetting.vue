@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useHugoApi } from "~/src/adaptors/api/hugo/useHugoApi.ts"
 import { HugoConfig } from "~/src/adaptors/api/hugo/hugoConfig.ts"
 import { HugoPlaceholder } from "~/src/adaptors/api/hugo/hugoPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useHugoApi(props.apiType)
 const hugoCfg = cfg as HugoConfig
 const hugoPlaceholder = new HugoPlaceholder()

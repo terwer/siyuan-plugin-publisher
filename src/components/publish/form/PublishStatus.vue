@@ -9,11 +9,11 @@
 
 <script setup lang="ts">
 import { Post, PostStatusEnum } from "zhi-blog-api"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { reactive } from "vue"
 import { DateUtil } from "zhi-common"
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   modelValue: {

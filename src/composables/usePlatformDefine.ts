@@ -8,7 +8,7 @@
  */
 
 import { DynamicConfig, getSubPlatformTypeByKey, PlatformType, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { mainPre, pre } from "~/src/platforms/pre.ts"
 
 export type PreI18nResolver = (key: string) => string
@@ -71,7 +71,7 @@ export const localizePrePlatforms = <T extends LocalizablePrePlatform>(platforms
  * @since 0.9.0
  */
 export const usePlatformDefine = () => {
-  const { t } = useVueI18n()
+  const { t } = useAppI18n()
 
   const platformTypeList = mainPre(t)
 

@@ -9,17 +9,17 @@
 
 <script setup lang="ts">
 import { computed } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import type { SiyuanAiProvider } from "~/src/models/publishPreferenceCfg.ts"
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { getPublishPreferenceSetting, getSisyuanAiProviders, selectSisyuanAiModel } = usePreferenceSettingStore()
 
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
 
 /**
- * 思源笔记 AI providers（启用且含可用模型）。V1/V2 共用，V2 亦复用本组件。
+ * 思源笔记 AI providers（启用且含可用模型）。V1 与当前界面共用。
  */
 const siyuanProviders = computed<SiyuanAiProvider[]>(() => getSisyuanAiProviders())
 
@@ -39,7 +39,7 @@ const handleModelChange = (modelId: string) => {
 
 <template>
   <el-form label-width="135px" class="ai-setting-form">
-    <!-- 思源笔记 AI 模型选择（V1/V2 共用组件核心交互） -->
+    <!-- 思源笔记 AI 模型选择（V1 与当前界面共用组件核心交互） -->
     <el-form-item v-if="useSiyuanCfg" :label="t('pref.setting.ai.model')">
       <div class="ai-model-group">
         <el-select

@@ -24,7 +24,7 @@ import { SiyuanAttr } from "zhi-siyuan-api"
 import Adaptors from "~/src/adaptors"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
@@ -47,7 +47,7 @@ const usePublish = () => {
   const logger = createAppLogger("use-publish")
 
   // uses
-  const { t } = useVueI18n()
+  const { t } = useAppI18n()
   const { updateSetting } = usePublishSettingStore()
   const { kernelApi, blogApi } = useSiyuanApi()
   const { getPublishApi } = usePublishConfig()

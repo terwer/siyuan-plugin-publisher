@@ -48,8 +48,8 @@ vi.mock("~/src/composables/usePublishConfig.ts", () => ({
   }),
 }))
 
-vi.mock("~/src/composables/useVueI18n.ts", () => ({
-  useVueI18n: () => ({
+vi.mock("~/src/ui/composables/useAppI18n.ts", () => ({
+  useAppI18n: () => ({
     t: (key: string) => key,
   }),
 }))

@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
@@ -17,7 +17,7 @@ import { prompt, ShortDescAIResult } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 
 const logger = createAppLogger("publish-description")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   useAi: {

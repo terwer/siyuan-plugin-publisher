@@ -14,13 +14,13 @@ import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlo
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
-import { V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/components/v2/settings/bridge/platformConfigActionBridge.ts"
+import { PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/ui/components/settings/bridge/platformConfigActionBridge.ts"
 import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
 import { useFieldPlaceholder } from "~/src/composables/useFieldPlaceholder.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynCfgByKey, setDynamicJsonCfg } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -34,11 +34,11 @@ const logger = createAppLogger("commonblog-setting")
 const appInstance = new PublisherAppInstance()
 
 // uses
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { getSetting, updateSetting } = usePublishSettingStore()
 const { getPicbedServiceType } = usePicgoBridge()
 const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
-// V2 平台配置页的占位符只给示例值，字段含义由行尾 ⓘ 承担；非 V2 场景返回原文案
+// 平台配置页的占位符只给示例值，字段含义由行尾 ⓘ 承担；其余场景返回原文案
 const ph = useFieldPlaceholder()
 
 const props = defineProps({
@@ -59,19 +59,19 @@ const props = defineProps({
 
 // emits
 const emit = defineEmits(["onHomeChange", "onApiUrlChange", "onUsernameChange", "validated", "saved"])
-const v2ActionBridge = inject(V2_PLATFORM_CONFIG_ACTION_BRIDGE_KEY, null)
+const ActionBridge = inject(PLATFORM_CONFIG_ACTION_BRIDGE_KEY, null)
 
 const emitValidated = (result: any) => {
-  if (v2ActionBridge?.onValidated) {
-    v2ActionBridge.onValidated(result)
+  if (ActionBridge?.onValidated) {
+    ActionBridge.onValidated(result)
     return
   }
   emit("validated", result)
 }
 
 const emitSaved = (result: any) => {
-  if (v2ActionBridge?.onSaved) {
-    v2ActionBridge.onSaved(result)
+  if (ActionBridge?.onSaved) {
+    ActionBridge.onSaved(result)
     return
   }
   emit("saved", result)
@@ -192,11 +192,11 @@ const valiConf = async () => {
   if (!formData.cfg.apiStatus) {
     const errMsg2 = t("setting.blog.vali.error") + `=>${validationErrorDetail}`
     logger.error(errMsg2)
-    if (!v2ActionBridge) {
+    if (!ActionBridge) {
       ElMessage.error(errMsg2)
     }
   } else {
-    if (!v2ActionBridge) {
+    if (!ActionBridge) {
       ElMessage.success(t("main.opt.success"))
     }
   }

@@ -37,4 +37,4 @@ if __name__ == "__main__":
 
     os.environ['BUILD_TYPE'] = 'siyuan'
 
-    os.system("vite build --config vite.v2.config.ts")
+    os.system("vite build --config vite.config.ts")

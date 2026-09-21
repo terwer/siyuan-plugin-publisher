@@ -9,13 +9,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 import type { TourStep } from "~/src/types/IPageHelpConfig"
 
 defineOptions({ name: "TourGuide" })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 
 const props = defineProps({
   pageId: { type: String, required: true },
@@ -35,7 +35,7 @@ const isMissing = ref(false)
 
 const teleportTarget = computed<HTMLElement | null>(() => {
   if (!props.triggerEl) return null
-  return (props.triggerEl as HTMLElement).closest(".syp-v2") as HTMLElement | null
+  return (props.triggerEl as HTMLElement).closest(".syp-app") as HTMLElement | null
 })
 
 // Position state
@@ -222,14 +222,14 @@ defineExpose({ isCompleted })
       <!-- Fallback when target element is missing -->
       <div v-else-if="isMissing" class="syp-tour-overlay__popover syp-tour-overlay__popover--missing" :style="popoverStyle">
         <div class="syp-tour-overlay__popover-header">
-          <span class="syp-tour-overlay__popover-title">{{ t("v2.help.tourStepNotFound") }}</span>
+          <span class="syp-tour-overlay__popover-title">{{ t("help.tourStepNotFound") }}</span>
         </div>
         <div class="syp-tour-overlay__popover-body">
-          <p class="syp-tour-overlay__popover-content">{{ t("v2.help.tourStepNotFoundDesc") }}</p>
+          <p class="syp-tour-overlay__popover-content">{{ t("help.tourStepNotFoundDesc") }}</p>
         </div>
         <div class="syp-tour-overlay__popover-footer">
           <el-button size="small" @click="cancel">{{ t("common.skip") }}</el-button>
-          <el-button size="small" type="primary" @click="skipToNext">{{ t("v2.help.tourSkipStep") }}</el-button>
+          <el-button size="small" type="primary" @click="skipToNext">{{ t("help.tourSkipStep") }}</el-button>
         </div>
       </div>
     </div>

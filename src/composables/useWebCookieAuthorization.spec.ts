@@ -108,7 +108,7 @@ describe("authorizeWebCookie", () => {
     expect(updateSetting).toHaveBeenCalledWith(setting)
   })
 
-  it("does not enable the platform after successful V2 Cookie authorization", async () => {
+  it("does not enable the platform after successful Cookie authorization", async () => {
     const dynCfg = createDynCfg({ isEnabled: false })
     const cfg = createCfg()
     const setting: Record<string, any> = {

@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useHexoApi } from "~/src/adaptors/api/hexo/useHexoApi.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoPlaceholder } from "~/src/adaptors/api/hexo/hexoPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useHexoApi(props.apiType)
 const hexoCfg = cfg as HexoConfig
 const hexoPlaceholder = new HexoPlaceholder()

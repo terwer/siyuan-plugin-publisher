@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useNotionApi } from "~/src/adaptors/api/notion/useNotionApi.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { NotionPlaceholder } from "~/src/adaptors/api/notion/notionPlaceholder.ts"
@@ -21,7 +21,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useNotionApi(props.apiType)
 const notionCfg = cfg as NotionConfig
 const notionPlaceholder = new NotionPlaceholder()

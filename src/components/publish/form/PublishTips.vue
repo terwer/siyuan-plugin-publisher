@@ -14,9 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 </script>
 
 <style scoped lang="stylus">

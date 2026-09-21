@@ -8,15 +8,15 @@
  */
 
 /**
- * 通用 V2 壳入口：浏览器扩展 / 思源挂件 / 网页版（nginx、vercel）共用一份。
+ * 通用壳入口：浏览器扩展 / 思源挂件 / 网页版（nginx、vercel）共用一份。
  *
- * 与思源插件本体（`siyuan/index.ts` + `siyuan/v2/v2Host.ts`）的区别只有一个：
+ * 与思源插件本体（`siyuan/index.ts` + `siyuan/host/pluginHost.ts`）的区别只有一个：
  * 后者要把 Vue 挂进思源的 popup DOM，因此依赖 `siyuan` 包的 `Menu`；本壳没有宿主可挂，
- * 所以直接用 `createV2VueApp`（它不 import `siyuan`），宿主差异全部由 `hostAdapter` 判定。
+ * 所以直接用 `createApp`（它不 import `siyuan`），宿主差异全部由 `hostAdapter` 判定。
  */
-import { createApp } from "vue"
+import { createApp as createVueApp } from "vue"
 import zhCN from "~/siyuan/i18n/zh_CN.json"
-import { createV2VueApp } from "~/siyuan/v2/createV2App.ts"
+import { createApp } from "~/siyuan/host/createApp.ts"
 import ConnectionPanel from "./ConnectionPanel.vue"
 import {
   describeHost,
@@ -41,13 +41,13 @@ const withConnectionPanel = needsConnectionPanel(host)
 // 扩展弹窗按固定宽度开窗，网页版/挂件铺满容器（见 index.html 的 body 类）
 document.body.classList.add(host === "extension" ? "is-popup" : "is-page")
 
-const v2Pane = requireElement("syp-web-v2")
+const Pane = requireElement("syp-web")
 const connectionPane = requireElement("syp-web-connection")
 const toggleButton = requireElement("syp-web-toggle") as HTMLButtonElement
 const titleEl = document.querySelector<HTMLElement>(".syp-web-shell__title")
 
-// 1、V2 主界面
-const v2App = createV2VueApp({
+// 1、主界面
+const App = createApp({
   locale: "plugin",
   messages: {
     plugin: zhCN,
@@ -58,20 +58,20 @@ const v2App = createV2VueApp({
     window.close()
   },
 })
-v2App.mount(v2Pane)
+App.mount(Pane)
 
 // 2、思源连接配置：仅扩展与网页版需要（挂件与思源同源，内核地址由 origin 推得）
-let connectionApp: ReturnType<typeof createApp> | null = null
+let connectionApp: ReturnType<typeof createVueApp> | null = null
 let showingConnection = false
 
 const applyPaneVisibility = () => {
   connectionPane.hidden = !showingConnection
-  v2Pane.hidden = showingConnection
+  Pane.hidden = showingConnection
   toggleButton.textContent = showingConnection ? "返回发布界面" : "连接配置"
 }
 
 if (withConnectionPanel) {
-  connectionApp = createApp(ConnectionPanel)
+  connectionApp = createVueApp(ConnectionPanel)
   connectionApp.mount(connectionPane)
   toggleButton.addEventListener("click", () => {
     showingConnection = !showingConnection
@@ -79,7 +79,7 @@ if (withConnectionPanel) {
   })
   applyPaneVisibility()
 } else {
-  // 挂件不需要连接配置：去掉入口与面板，只留 V2
+  // 挂件不需要连接配置：去掉入口与面板，只留主界面
   toggleButton.remove()
   connectionPane.remove()
 }
@@ -94,6 +94,6 @@ if (titleEl) {
   docId,
   initialView: resolveInitialView(docId),
   withConnectionPanel,
-  v2App,
+  App,
   connectionApp,
 }

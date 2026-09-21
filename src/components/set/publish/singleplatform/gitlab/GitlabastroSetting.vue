@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { GitlabastroConfig } from "~/src/adaptors/api/gitlab-astro/gitlabastroConfig.ts"
 import { GitlabastroPlaceholder } from "~/src/adaptors/api/gitlab-astro/gitlabastroPlaceholder.ts"
 import { useGitlabastroApi } from "~/src/adaptors/api/gitlab-astro/useGitlabastroApi.ts"
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useGitlabastroApi(props.apiType)
 const astroCfg = cfg as GitlabastroConfig
 const astroPlaceholder = new GitlabastroPlaceholder()

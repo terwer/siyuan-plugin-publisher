@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useAstroApi } from "~/src/adaptors/api/astro/useAstroApi.ts"
 import { AstroConfig } from "~/src/adaptors/api/astro/astroConfig.ts"
 import { AstroPlaceholder } from "~/src/adaptors/api/astro/astroPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useAstroApi(props.apiType)
 const astroCfg = cfg as AstroConfig
 const astroPlaceholder = new AstroPlaceholder()

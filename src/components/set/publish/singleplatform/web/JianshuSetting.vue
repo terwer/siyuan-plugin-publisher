@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import CustomWebSetting from "~/src/components/set/publish/singleplatform/base/impl/CustomWebSetting.vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useJianshuWeb } from "~/src/adaptors/web/jianshu/useJianshuWeb.ts"
 import { JianshuConfig } from "~/src/adaptors/web/jianshu/jianshuConfig.ts"
 import { JianshuPlaceholder } from "~/src/adaptors/web/jianshu/jianshuPlaceholder.ts"
@@ -25,7 +25,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useJianshuWeb(props.apiType)
 const emit = defineEmits(["validated", "saved"])
 

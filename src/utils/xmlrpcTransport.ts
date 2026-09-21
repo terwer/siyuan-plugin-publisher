@@ -64,7 +64,7 @@ interface XmlrpcTransportHandlers {
  * 1. **cors-proxy-fetch** — 平台声明 CORS 受限**且用户已配置跨域代理地址**（经用户自备代理转发）
  * 2. **electron-session-fetch** — 平台声明宿主会话直传且宿主具备该能力（经宿主自身的网络栈直连）
  * 3. **middleware-fetch** — 其余 `isCorsProxy`（未配代理地址时的既有行为）
- * 4. **plugin-node-fetch** — 有插件直传能力时一律直连，禁止套思源 forwardProxy（Electron/V2、本地 WP、公网博客园均适用）
+ * 4. **plugin-node-fetch** — 有插件直传能力时一律直连，禁止套思源 forwardProxy（Electron 宿主、本地 WP、公网博客园均适用）
  * 5. **siyuan-forward-proxy** — 无直传能力且 `isUseSiyuanProxy || forceProxy` 时（loopback/私网目标也可：思源内核默认模式允许访问本机）
  * 6. **middleware-fetch** — 浏览器 + CORS 中间件回退（无代理条件时）
  *

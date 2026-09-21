@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { onMounted, reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -21,7 +21,7 @@ import Adaptors from "~/src/adaptors"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 
 const logger = createAppLogger("source-mode")
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { handlePicgo } = usePicgoBridge()
 
 const props = defineProps({

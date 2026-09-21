@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useArticleManage, ArticleManageAction } from "~/src/composables/useArticleManage.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
@@ -34,7 +34,7 @@ const emit = defineEmits<{
   action: [payload: ArticleManageAction]
 }>()
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { state, isWidgetEmpty, reload, setKeyword, setShowPublished, setPage, setNotebooks } = useArticleManage()
 const keywordRef = ref(state.keyword)
 

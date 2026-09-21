@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { StrUtil } from "zhi-common"
 import { useGitlabjekyllApi } from "~/src/adaptors/api/gitlab-jekyll/useGitlabjekyllApi.ts"
 import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
@@ -22,7 +22,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useGitlabjekyllApi(props.apiType)
 const jekyllCfg = cfg as GitlabjekyllConfig
 const jekyllPlaceholder = new GitlabjekyllPlaceholder()

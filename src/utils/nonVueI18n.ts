@@ -8,14 +8,13 @@
  */
 
 import { DEFAULT_SIYUAN_LANG } from "~/src/constants/lang.ts"
-import enUS from "~/src/locales/en_US.ts"
-import zhCN from "~/src/locales/zh_CN.ts"
+import enUS from "~/siyuan/i18n/en_US.json"
+import zhCN from "~/siyuan/i18n/zh_CN.json"
 
 /**
  * 给 adaptor、API class、普通工具函数等「非 Vue setup / 非组件上下文」使用的 i18n 解析器。
  *
- * 注意：这里不维护第二份文案，只读取现有 src/locales/*。
- * Vue 组件和 composable 里仍然优先使用 useVueI18n() / useV2I18n()。
+ * 全插件只有一份文案：`siyuan/i18n/*.json`。Vue 组件与 composable 用 `useAppI18n()`。
  */
 const resolveFromObject = (source: Record<string, any> | undefined, key: string) => {
   if (!source || !key) {

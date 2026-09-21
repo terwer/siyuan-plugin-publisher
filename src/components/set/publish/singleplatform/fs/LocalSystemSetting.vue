@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import CommonBlogSetting from "~/src/components/set/publish/singleplatform/base/CommonBlogSetting.vue"
 import FieldGuide from "~/src/components/common/help/FieldGuide.vue"
 import { useLocalSystemApi } from "~/src/adaptors/fs/LocalSystem/useLocalSystemApi.ts"
@@ -23,7 +23,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useLocalSystemApi(props.apiType)
 const localFsCfg = cfg as LocalSystemConfig
 const localFsPlaceholder = new LocalSystemPlaceholder()

@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useVitepressApi } from "~/src/adaptors/api/vitepress/useVitepressApi.ts"
 import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
 import { VitepressPlaceholder } from "~/src/adaptors/api/vitepress/vitepressPlaceholder.ts"
@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useVitepressApi(props.apiType)
 const vitepressCfg = cfg as VitepressConfig
 const vitepressPlaceholder = new VitepressPlaceholder()

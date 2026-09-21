@@ -12,7 +12,7 @@ import CustomWebSetting from "~/src/components/set/publish/singleplatform/base/i
 import { YuquewebConfig } from "~/src/adaptors/web/yuqueweb/YuquewebConfig.ts"
 import { YuquewebWebPlaceholder } from "~/src/adaptors/web/yuqueweb/YuquewebWebPlaceholder.ts"
 import { useYuquewebWeb } from "~/src/adaptors/web/yuqueweb/useYuquewebWeb.ts"
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 
 const props = defineProps({
   apiType: {
@@ -25,7 +25,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useYuquewebWeb(props.apiType)
 const emit = defineEmits(["validated", "saved"])
 

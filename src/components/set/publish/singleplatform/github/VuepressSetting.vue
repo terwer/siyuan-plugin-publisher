@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { useVueI18n } from "~/src/composables/useVueI18n.ts"
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useVuepressApi } from "~/src/adaptors/api/vuepress/useVuepressApi.ts"
 import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
 import { VuepressPlaceholder } from "~/src/adaptors/api/vuepress/vuepressPlaceholder.ts"
@@ -21,7 +21,7 @@ const props = defineProps({
   },
 })
 
-const { t } = useVueI18n()
+const { t } = useAppI18n()
 const { cfg } = await useVuepressApi(props.apiType)
 const vuepressCfg = cfg as VuepressConfig
 const vuepressPlaceholder = new VuepressPlaceholder()

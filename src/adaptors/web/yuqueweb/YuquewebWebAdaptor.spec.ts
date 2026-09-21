@@ -11,7 +11,7 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { YuquewebConfig } from "~/src/adaptors/web/yuqueweb/YuquewebConfig.ts"
 import { YuquewebWebAdaptor } from "~/src/adaptors/web/yuqueweb/YuquewebWebAdaptor.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import zhCN from "~/src/locales/zh_CN.ts"
+import zhCN from "~/siyuan/i18n/zh_CN.json"
 import { MediaObject, Post } from "zhi-blog-api"
 import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 
