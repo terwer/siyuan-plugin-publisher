@@ -705,7 +705,7 @@
 
 ### 8.1.1 术语定义
 
-- **SPA 代码**：指基于 `iframeDialog.ts` + Vue Router + `src/pages/*` + `src/components/set/*` 的历史页面体系，包含路由配置、页面组件、对话框逻辑和旧设置表单
+- **SPA 代码**：指基于 `iframeDialog.ts` + Vue Router + `src/pages/*` + `src/ui/components/set/*` 的历史页面体系，包含路由配置、页面组件、对话框逻辑和旧设置表单
 - **新界面架构**：指基于 `PluginHost`（思源原生 Menu 挂载）+ `createApp`（Vue 工厂）+ `UnifiedWorkspaceShell`（统一工作壳）+ `src/ui/components/*` 的原生 DOM 挂载体系
 - **桥接组件**：指 `PlatformConfigBridge` 通过 `bridgeRegistry.ts` 复用的旧平台配置组件（如 `WordpressSetting.vue`、`CnblogsSetting.vue` 等），这些组件被旧界面 SPA 和新界面同时引用
 - **功能等价性**：界面实现覆盖对应 SPA 页面的全部用户可见功能和交互路径，用户可以在不感知差异的情况下完成相同任务
@@ -857,7 +857,7 @@ i18n 收敛率 = 已镜像到 siyuan/i18n 的界面 key 数 / 界面总 key 数
 
 **Phase 4 —— 桥接替换（长期）**
 - 目标：用原生平台配置表单逐步替换 `PlatformConfigBridge` 对旧组件的依赖
-- SPA 状态：可逐步移除 `src/components/set/publish/singleplatform/*` 中已被替换的组件
+- SPA 状态：可逐步移除 `src/ui/components/set/publish/singleplatform/*` 中已被替换的组件
 - 判定条件：某平台子类型的原生表单已实现、通过测试，且该平台在旧界面中已无直接引用
 
 **Phase 5 —— 终局清理（稳定发布后）**

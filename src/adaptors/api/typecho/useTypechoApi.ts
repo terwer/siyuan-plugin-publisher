@@ -17,7 +17,7 @@ import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/typechoApiAdaptor.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 /**
  * 使用Typecho API的自定义hook
@@ -53,7 +53,7 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
       const typechoApiUrl = Utils.emptyOrDefault(process.env.VITE_TYPECHO_API_URL, "http://your-typecho-home.com/")
       const typechoUsername = Utils.emptyOrDefault(process.env.VITE_TYPECHO_USERNAME, "")
       const typechoAuthToken = Utils.emptyOrDefault(process.env.VITE_TYPECHO_AUTH_TOKEN, "")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new TypechoConfig(typechoApiUrl, typechoUsername, typechoAuthToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

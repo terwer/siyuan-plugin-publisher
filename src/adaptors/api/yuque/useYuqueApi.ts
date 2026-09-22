@@ -16,7 +16,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
@@ -44,7 +44,7 @@ const useYuqueApi = async (key: string, newCfg?: YuqueConfig) => {
       // 从环境变量获取 Yuque API 的 URL、认证令牌和其他配置信息
       const yuqueUsername = Utils.emptyOrDefault(process.env.VITE_YUQUE_USERNAME, "")
       const yuqueAuthToken = Utils.emptyOrDefault(process.env.VITE_YUQUE_AUTH_TOKEN, "")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new YuqueConfig(yuqueUsername, yuqueAuthToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

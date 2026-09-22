@@ -23,11 +23,11 @@
 ### 本次执行
 - #10 Vuepress 收尾：Del 在 sha 稳定后重试成功（提交 `225cc85`），六格 + help/tour 全绿，checklist 回写并推送 `944752b7`。
 - #11 Vuepress2 全链路 ✅（Electron test 工作空间 / dist / 9222，目标 `terwer/vuepress2-blog` main，`src/post`）：
-  - V2C：新建账号为动态实例 key `github_Vuepress2-ig1w6`（预置 key 已有空配置）→ 验证通过、运行中、`apiStatus=true`、发布目录自动拉取 `src/post`。
+  - Cfg：新建账号为动态实例 key `github_Vuepress2-ig1w6`（预置 key 已有空配置）→ 验证通过、运行中、`apiStatus=true`、发布目录自动拉取 `src/post`。
   - Pub `11b01c5` / Upd `0009677`(blob `1f76bf55`) / Del `9f20441` 首次即成功；查看 blob 200。
   - Img：资源就近契约实证——图片落 `src/post/images/`，正文 `./images/<名>`，raw 200。
   - 该平台转换器不读 `yamlLinkEnabled`（不写 permalink），表单「YAML永久链接」对 Vuepress2 无效果。
-  - 仓库复核：368 篇真实文章、`src/.vuepress/config.ts`、就近图片均未被误删。
+  - 仓库复核：368 篇真实文章、`vite.webapp.config.ts`、就近图片均未被误删。
 - 代码侧产物（本站新建）：`github-vuepress2.ts` help 配置、`docs/draft/platforms/github-vuepress2.md`、注册/移出 remaining-t1/纳入 verifiedConfigs、`vuepress2ImagePath.spec.ts`。
 - **共用层缺陷两处（宿主引导复验时暴露，均已修）**：
   1. 引导锚点写错：`defaultPath` 锚点根本不存在（真实为 `knowledgeSpace`）；Token 型平台鉴权行锚点是 `token` 不是 `password`。影响 hexo/hugo/jekyll/quartz/vuepress/vuepress2 六个配置（前五个此前记录为「9 步全部可定位」，实际第 4/5 步高亮框为空）→ 全部改正 + 新增 `tourAnchors.spec.ts` 回归。
@@ -43,7 +43,7 @@
 - 拉取远端：#9 Quartz 已全链路 ✅（远端 commit），#10 Vuepress 代码侧产物（help/docs/注册/verifiedConfigs）已随 `5393fbdb` 拉入；宿主六格未验，本次补验。
 - 目标仓库确认：用户指明 `D:\...\myproject\terwer.github.io` 即 Vuepress1（Vdoing，`vuepress@1.9.5`）博客 → GitHub `terwer/terwer.github.io` **main 分支**、存储目录 `docs`（与 #8 Jekyll 的 gh-pages 分支同仓不同分支互不冲突）。
 - #10 Vuepress 六格 + 帮助引导全链路 ✅（Electron test 工作空间 / dist / 9222）：
-  - V2C：新增账号 `github_Vuepress`（terwer/terwer.github.io/main/docs/[filename].md，PAT，图床「当前平台」），「验证」通过，「配置已保存并验证通过」，账号「运行中」，blogid=docs 自动拉取。
+  - Cfg：新增账号 `github_Vuepress`（terwer/terwer.github.io/main/docs/[filename].md，PAT，图床「当前平台」），「验证」通过，「配置已保存并验证通过」，账号「运行中」，blogid=docs 自动拉取。
   - Pub：`docs/掘金-V2-验证测试-更新.md`（frontmatter title/date/meta/tags/permalink `/post/nuggets-v2-verification-test---update-ztyowq.html`/author + `![cat](/images/cat-…jpg)`），提交 `7fe6740`。
   - Upd：改正文「发布验证完成。（已更新 Vuepress 内容）」→ 新提交 `2cac735` 真实变更。
   - Img：cat 图上传 `docs/.vuepress/public/images/`，引用绝对 `/images/<名>`（raw 200；站点域名当前部署 Jekyll，站点 `/images` 404 属部署口径）。
@@ -60,7 +60,7 @@
 
 ### 本次执行
 - #9 Quartz 六格 + 帮助引导全链路 ✅（Electron test 工作空间 / dist / 9222）：
-  - V2C：新增账号 `github_Quartz`（terwer/quartz-blog/main/content/[filename].md，PAT，图床「当前平台推荐」），「验证」通过，「配置已保存并验证通过」，账号「运行中/已启用」，发布目录自动拉取 content。
+  - Cfg：新增账号 `github_Quartz`（terwer/quartz-blog/main/content/[filename].md，PAT，图床「当前平台推荐」），「验证」通过，「配置已保存并验证通过」，账号「运行中/已启用」，发布目录自动拉取 content。
   - Pub：`content/Halo图片上传测试.md`（frontmatter title/date/updated/permalink `/post/halo-image-upload-test-z9puw4.html`/enableToc/enableBackLinks + `![图](/assets/images/image-…png)`）。
   - Upd：点「更新」→ 新提交，内容真实变更（`updated:2026-09-07 10:18:30`）。
   - Img：图床「当前平台」cat 图上传 `assets/images/image-…png`，引用绝对 `/assets/images/<名>`。
@@ -82,7 +82,7 @@
 
 ### 本次执行
 - #7 Hugo 六格 + 帮助引导全链路 ✅（Electron test 工作空间 / dist / 9222）：
-  - V2C：新增账号 `github_Hugo-z1y7ssd`（terwer/hugo-blog/main/content/post，PAT），「验证」通过，"配置已保存并验证通过"，账号「运行中/已启用」，发布目录自动拉取 content/post。
+  - Cfg：新增账号 `github_Hugo-z1y7ssd`（terwer/hugo-blog/main/content/post，PAT），「验证」通过，"配置已保存并验证通过"，账号「运行中/已启用」，发布目录自动拉取 content/post。
   - Pub：`content/post/halo-image-upload-test-1plnjn.md`（frontmatter + YAML 永久链接 + `/images/…png`），提交 `2ab9e55`。
   - Upd：新提交 `6016692`。
   - Img：图床「当前平台」cat 图上传 `static/images/image-…png`（提交 `03a554d`），引用绝对 `/images/…`。
@@ -107,7 +107,7 @@
 ## 测试结果
 | 测试 | 输入 | 预期结果 | 实际结果 | 状态 |
 |------|------|---------|---------|------|
-| #7 Hugo V2C | terwer/hugo-blog/main/content/post + PAT | 验证通过 | "配置已保存并验证通过"，运行中/已启用，发布目录拉取 content/post | ✅ |
+| #7 Hugo Cfg | terwer/hugo-blog/main/content/post + PAT | 验证通过 | "配置已保存并验证通过"，运行中/已启用，发布目录拉取 content/post | ✅ |
 | #7 Hugo Pub | 快速发布「Halo 图片上传测试」 | repo 新增 .md | `content/post/halo-image-upload-test-1plnjn.md`（提交 2ab9e55） | ✅ |
 | #7 Hugo Upd | 点「更新」 | 新提交 | 6016692 | ✅ |
 | #7 Hugo Img | 图床「当前平台」 | 图传 static/images + /images 引用 | 图上传（03a554d），引用 /images；hugo.terwer.space 可显示 | ✅ |

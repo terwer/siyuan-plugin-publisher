@@ -17,7 +17,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useAstroApi = async (key: string, newCfg?: AstroConfig) => {
@@ -47,7 +47,7 @@ const useAstroApi = async (key: string, newCfg?: AstroConfig) => {
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITHUB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITHUB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITHUB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new AstroConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[slug].md"
       logger.info("Configuration is empty, using default environment variables.")

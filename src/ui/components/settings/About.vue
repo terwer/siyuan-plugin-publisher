@@ -29,10 +29,10 @@
       </div>
     </div>
 
-    <div class="syp-about-legacy">
-      <div class="syp-about-legacy__text">{{ t("about.legacy.desc", { version: legacyVersion }) }}</div>
-      <button type="button" class="syp-btn syp-btn-secondary" @click="openLegacyDownload">
-        {{ t("about.legacy.download", { version: legacyVersion }) }}
+    <div class="syp-about-previous-ui">
+      <div class="syp-about-previous-ui__text">{{ t("about.previousUi.desc", { version: previousUiVersion }) }}</div>
+      <button type="button" class="syp-btn syp-btn-secondary" @click="openPreviousReleaseDownload">
+        {{ t("about.previousUi.download", { version: previousUiVersion }) }}
       </button>
     </div>
 
@@ -55,7 +55,7 @@
 import { dependencies as allDependencies, version as appVersion } from "../../../../package.json"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { aboutUrl, V1_LAST_RELEASE_URL, V1_LAST_VERSION } from "~/src/utils/constants.ts"
+import { aboutUrl, PREVIOUS_UI_RELEASE_URL, PREVIOUS_UI_LAST_VERSION } from "~/src/utils/constants.ts"
 import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
 
 const { t } = useAppI18n()
@@ -71,11 +71,11 @@ const packageJsonUrl = "https://github.com/terwer/siyuan-plugin-publisher/blob/m
  * 旧版界面的下载指引。
  *
  * 旧界面已在本版彻底移除，这里只提供「确需旧界面」时的去处；**计划在 2.3.0 移除整块内容**
- * （含 `V1_LAST_VERSION` / `V1_LAST_RELEASE_URL` 两个常量）。
+ * （含 `PREVIOUS_UI_LAST_VERSION` / `PREVIOUS_UI_RELEASE_URL` 两个常量）。
  */
-const legacyVersion = V1_LAST_VERSION
-const openLegacyDownload = async () => {
-  await openPathOrUrl(V1_LAST_RELEASE_URL, kernelApi)
+const previousUiVersion = PREVIOUS_UI_LAST_VERSION
+const openPreviousReleaseDownload = async () => {
+  await openPathOrUrl(PREVIOUS_UI_RELEASE_URL, kernelApi)
 }
 </script>
 
@@ -132,7 +132,7 @@ const openLegacyDownload = async () => {
     &:hover
       text-decoration underline
 
-.syp-about-legacy
+.syp-about-previous-ui
   display flex
   align-items center
   justify-content space-between

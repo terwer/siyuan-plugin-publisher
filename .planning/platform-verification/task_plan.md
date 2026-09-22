@@ -1,7 +1,7 @@
 # 任务计划：V2 全平台验证（T1 全链路）
 
 ## 目标
-按 openspec/changes/platform-verification/platform-checklist.md（SSOT）自上而下完成 T1 全部 35 个平台的 V2 验证（每站六格 V2C/Pub/Upd/Del/Img/查看 + SOP §3 help/tour/doc），通过/失败实时回写 checklist；全部完成后再归档 OpenSpec change。
+按 openspec/changes/platform-verification/platform-checklist.md（SSOT）自上而下完成 T1 全部 35 个平台的 V2 验证（每站六格 Cfg/Pub/Upd/Del/Img/查看 + SOP §3 help/tour/doc），通过/失败实时回写 checklist；全部完成后再归档 OpenSpec change。
 
 ## 当前阶段
 阶段 3（逐个平台宿主手验）**暂停中** —— 插入独立任务 `add-field-guide-tips`（字段级指引接线 + 已验证平台回填），见 `.planning/2026-09-07-add-field-guide-tips/`；该任务完成后回到本计划继续 #12。
@@ -43,7 +43,7 @@
 
 ## 每站标准流程（从本计划快速恢复）
 1. 读 checklist 该行 + 适配器代码（`src/adaptors/api/<platform>/`），确认图片/permalink/字段语义。
-2. 建/改 help 配置 `src/helpConfigs/pages/platform-config/<platform>.ts`（helpUrl+summary+fields+faq+tour）→ 注册进 `/pages/index.ts` → 移出 `remaining-t1.ts` → 纳入 `verifiedConfigs`（registry.spec.ts）；写 `docs/draft/platforms/<platform>.md`。
+2. 建/改 help 配置 `src/helpConfigs/pages/platform-config/<platform>.ts`（helpUrl+summary+fields+faq+tour）→ 注册进 `/pages/index.ts` → 移出 `platform-config/_default.ts` → 纳入 `verifiedConfigs`（registry.spec.ts）；写 `docs/draft/platforms/<platform>.md`。
 3. `pnpm build` + 相关单测通过。
 4. 宿主（Electron，test 工作空间 / dist / 9222）六格手验 + HelpPanel/TourGuide。
 5. checklist 该行回写 ✅/说明 + 修订记录 + T1 小结更新；英文 Conventional Commit。

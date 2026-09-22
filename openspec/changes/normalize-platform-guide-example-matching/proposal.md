@@ -25,5 +25,5 @@
 ## Impact
 
 - 代码：`src/platforms/dynamicConfig.ts`、`src/helpConfigs/registry.ts`、相关测试。
-- 清理：删除自造 `src/helpConfigs/exampleMatching.ts`，撤销 `PageHelpConfig.examples` 类型扩展和语雀示例配置。
+- 清理：删除自造 `src/helpConfigs/registry.ts`，撤销 `PageHelpConfig.examples` 类型扩展和语雀示例配置。
 - 不影响：发布适配器、平台桥接、平台配置存储、远端发布 API。

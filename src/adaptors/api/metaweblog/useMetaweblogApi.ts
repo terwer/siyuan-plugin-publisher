@@ -16,7 +16,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 /**
@@ -53,7 +53,7 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
       const metaweblogApiUrl = ""
       const metaweblogUsername = ""
       const metaweblogAuthToken = ""
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
 
       cfg = new MetaweblogConfig("", metaweblogApiUrl, metaweblogUsername, metaweblogAuthToken, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")

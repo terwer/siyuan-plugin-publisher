@@ -8,7 +8,7 @@
 
 **Goals**
 
-- 以 `platform-checklist.md` 为 SSOT，逐平台记录 V2C/Pub/Upd/Del/Img。
+- 以 `platform-checklist.md` 为 SSOT，逐平台记录 Cfg/Pub/Upd/Del/Img。
 - 失败项在 `tasks.md` 登记并拆为可交付修复（可新开子变更或在本变更追加任务）。
 - T1 全部 ✅ 后执行 Gate C（旧界面废弃声明），Gate D 在 3 个版本后删 iframe。
 
@@ -53,7 +53,7 @@
 ### 5. 版本口径（2026-09-20 用户确认，含一次更正）
 
 - **`2.0.0` = 旧界面彻底移除**：所有旧界面遗产在该版本清零——iframe 宿主、旧 invoke、旧菜单、「旧界面开关」及其提示、旧界面 SPA 在插件侧的全部入口。**顶栏旧菜单无需保留；文档菜单保留**（已迁到当前界面）。
-- **唯一允许的例外 = 桥接**：界面复用着 `src/components/publish/**`、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts`，这些属于当前界面的组成部分，**保留**。
+- **唯一允许的例外 = 桥接**：界面复用着 `src/ui/components/publish/**`、`src/ui/components/bridge/common/ArticleManageList.vue`、`src/ui/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts`，这些属于当前界面的组成部分，**保留**。
 - **`2.0.0` 需补一条「下载 1.41.1」提示**：用户确需旧界面时的唯一去处。**`2.3.0` 移除该提示**（`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL` 随之删除）。
 - **更正记录**：此前曾把「Gate C 生效版本」记为 `2.3.0`，并据此认为「旧界面在 2.3.0 才移除」。用户澄清：**`2.0.0` 都还没发版**，`2.3.0` 是更晚的版本；`2.0.0` 即彻底移除旧界面，`2.3.0` 只负责删掉那条下载提示。原「三版本缓冲」的说法不再适用。
 - **浏览器扩展必须一并迁到 2.0**：扩展当前以旧界面 SPA 作为弹窗 UI，属「旧界面遗产」，须迁移后才能满足「1.0 代码零残留」。

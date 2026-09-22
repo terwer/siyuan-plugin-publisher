@@ -10,7 +10,7 @@
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { CommonFetchClient } from "zhi-fetch-middleware"
-import { isDev, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { isDev, SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Deserializer, Serializer, XmlrpcUtil } from "simple-xmlrpc"
@@ -44,7 +44,7 @@ const useProxy = (
    */
   const appInstance = new PublisherAppInstance()
   const apiUrl = ""
-  middlewareUrl = middlewareUrl ?? LEGENCY_SHARED_PROXT_MIDDLEWARE
+  middlewareUrl = middlewareUrl ?? SHARED_PROXY_MIDDLEWARE
   corsProxyUrl = corsProxyUrl ?? ""
   const commonFetchClient = new CommonFetchClient(appInstance, apiUrl, middlewareUrl, isDev)
   const serializer = new Serializer(appInstance)

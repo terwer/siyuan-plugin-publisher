@@ -29,7 +29,7 @@
 ## 2. Phase 2 — 界面状态机 + 集中导航
 
 - [x] 2.1 `currentView` 扩为 5 视图：`"quick_publish" | "single_publish" | "batch_publish" | "manage" | "settings"`（`App.vue`）
-- [x] 2.2 `UnifiedWorkspaceShell.vue` `currentView` 联合类型同步扩展（导出 `V2CurrentView`）
+- [x] 2.2 `UnifiedWorkspaceShell.vue` `currentView` 联合类型同步扩展（导出 `CfgurrentView`）
 - [x] 2.3 集中导航：`openSettings`/`openManage`/`openManageSingle`/`openManageBatch`/`openManageFlash`/`openSinglePublishForCurrent` + 返回处理（`backFromManage`/`onSinglePublishBack`/`onBatchPublishBack`），**不使用 vue-router**
 - [x] 2.4 状态机/接线无新增组合式（界面复用既有成熟实现后不再重写发布引擎，删除 `useSinglePublish`/`useBatchPublish` 及其 spec）
 

@@ -32,7 +32,7 @@ This audit records the current help/guide matching state before adding example-l
 | `custom-zhihu.ts` | `platform-config/custom_Zhihu` | `20240330142711-bc3gjg0` | summary/fields/faq/tour | Medium: cookie auth + platform image flow are separate examples. |
 | `custom-csdn.ts` | `platform-config/custom_Csdn` | `20240330142711-bc3gjg0` | summary/fields/faq/tour | Medium: cookie auth + title/platform image validation can diverge. |
 | `fs-local-system.ts` | `platform-config/fs_LocalSystem` | `20240330142711-bc3gjg0` | summary/fields/faq/tour | Low/medium: multiple file/path examples possible. |
-| `remaining-t1.ts` | many T1 page IDs | mixed | helpUrl only | High fallback dependency; must keep page-level fallback unchanged. |
+| `platform-config/_default.ts` | many T1 page IDs | mixed | helpUrl only | High fallback dependency; must keep page-level fallback unchanged. |
 
 ## User-Reported Defect Shape
 

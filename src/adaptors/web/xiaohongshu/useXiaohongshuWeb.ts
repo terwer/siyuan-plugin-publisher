@@ -12,7 +12,7 @@ import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { XiaohongshuWebAdaptor } from "./XiaohongshuWebAdaptor"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { Utils } from "~/src/utils/utils"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { XiaohongshuConfig } from "~/src/adaptors/web/xiaohongshu/xiaohongshuConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
@@ -45,14 +45,14 @@ const useXiaohongshuWeb = async (key?: string, newCfg?: XiaohongshuConfig) => {
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取小红书的cookie
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       const xiaohongshuCookie = Utils.emptyOrDefault(process.env.VITE_XIAOHONGSHU_AUTH_TOKEN, "")
       cfg = new XiaohongshuConfig(xiaohongshuCookie, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
       logger.info("Using configuration from settings...")
     }
-    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {
       cfg.middlewareUrl = middlewareUrl
     }

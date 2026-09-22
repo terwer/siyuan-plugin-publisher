@@ -12,7 +12,7 @@ import { RemovableRef, StorageSerializers } from "@vueuse/core"
 import { readonly } from "vue"
 import { SiyuanDevice } from "zhi-device"
 import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { StrUtil } from "zhi-common"
 
@@ -36,7 +36,7 @@ const useSiyuanSettingStore = () => {
   const getSiyuanSetting = (): RemovableRef<SiyuanConfig> => {
     const baseUrl = "http://127.0.0.1:6806"
     const token = ""
-    const middlewareUrl = LEGENCY_SHARED_PROXT_MIDDLEWARE
+    const middlewareUrl = SHARED_PROXY_MIDDLEWARE
     // 统一自动读取思源地址
     let origin: string
     const win = SiyuanDevice.siyuanWindow()

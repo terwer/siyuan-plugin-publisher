@@ -19,18 +19,18 @@ The project SHALL maintain exactly one authoritative platform verification check
 
 ### Requirement: T1 platforms SHALL complete the full-path matrix
 
-For each platform listed in T1 (interface bridge platforms per `bridgeRegistry.ts`), the system SHALL be verified for: V2C (configure + validate + `canPublish`), Pub, Upd, Del, and Img (success or documented `success_with_warnings`).
+For each platform listed in T1 (interface bridge platforms per `bridgeRegistry.ts`), the system SHALL be verified for: Cfg (configure + validate + `canPublish`), Pub, Upd, Del, and Img (success or documented `success_with_warnings`).
 
 #### Scenario: T1 platform passes full verification
 
 - **GIVEN** a T1 platform account with valid credentials
 - **WHEN** the verifier completes the quick publish flows in the interface
-- **THEN** all five columns V2C/Pub/Upd/Del/Img are marked ✅ in the checklist
+- **THEN** all five columns Cfg/Pub/Upd/Del/Img are marked ✅ in the checklist
 - **AND** `pnpm build` succeeds for the release under test
 
 #### Scenario: T1 platform fails one step
 
-- **GIVEN** any of V2C/Pub/Upd/Del/Img fails
+- **GIVEN** any of Cfg/Pub/Upd/Del/Img fails
 - **WHEN** the failure is recorded
 - **THEN** the checklist marks the failing cells ❌ or 🟡
 - **AND** a corresponding task is added to `tasks.md` or a child OpenSpec change is created
@@ -78,5 +78,5 @@ When a formerly T2a Web Cookie platform is wired into `bridgeRegistry.ts` and be
 
 - **WHEN** a user opens «add platform» in the interface
 - **THEN** `custom_Zhihu` and `custom_Csdn` are offered via the interface bridge
-- **AND** their V2C/Pub/Upd/Del/Img results are tracked in the T1 checklist
+- **AND** their Cfg/Pub/Upd/Del/Img results are tracked in the T1 checklist
 - **AND** legacy interface configuration fallback remains functional until Gate D

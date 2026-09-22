@@ -9,19 +9,19 @@
 
 | # | platformKey | Verification status | Help status | Notes |
 |---|-------------|---------------------|-------------|-------|
-| 1 | `common_Yuque` | V2C/Pub/Upd/Del/Img ✅ | Dedicated config exists; needs richer tour/FAQ polish | API mode requires Yuque Professional membership; policy limitation is not plugin blocking. |
-| 21 | `metaweblog_Cnblogs` | V2C/Pub/Upd/Del/Img ✅ | Complete sample config exists | Keep as reference shape for `summary / fields / faq / tour`. |
-| 25 | `wordpress_Wordpress` | V2C/Pub/Upd/Del/Img ✅ | Dedicated config exists; needs tour and image/fetch notes | Local WordPress V2 full path verified with `plugin-node-fetch`. |
-| 27 | `custom_Yuqueweb` | V2C/Pub/Upd/Del/Img ✅ | Dedicated config exists; needs richer Cookie/web notes and tour where anchors exist | Cookie auth, image publish, and error details verified. |
-| 29 | `fs_LocalSystem` | V2C/Pub/Upd/Del/Img ✅ | Still in `remaining-t1.ts`; must split out | Electron V2 full path verified by user. |
-| 30 | `custom_Zhihu` | V2C/Pub/Upd/Del/Img ✅ | Still in `remaining-t1.ts`; must split out | Platform image hosting verified; OSS SDK explicit loading fix captured. |
-| 31 | `custom_Csdn` | V2C/Pub/Upd/Del/Img ✅ | Still in `remaining-t1.ts`; must split out | Platform image hosting verified; default Bundled image hosting fix captured. |
+| 1 | `common_Yuque` | Cfg/Pub/Upd/Del/Img ✅ | Dedicated config exists; needs richer tour/FAQ polish | API mode requires Yuque Professional membership; policy limitation is not plugin blocking. |
+| 21 | `metaweblog_Cnblogs` | Cfg/Pub/Upd/Del/Img ✅ | Complete sample config exists | Keep as reference shape for `summary / fields / faq / tour`. |
+| 25 | `wordpress_Wordpress` | Cfg/Pub/Upd/Del/Img ✅ | Dedicated config exists; needs tour and image/fetch notes | Local WordPress V2 full path verified with `plugin-node-fetch`. |
+| 27 | `custom_Yuqueweb` | Cfg/Pub/Upd/Del/Img ✅ | Dedicated config exists; needs richer Cookie/web notes and tour where anchors exist | Cookie auth, image publish, and error details verified. |
+| 29 | `fs_LocalSystem` | Cfg/Pub/Upd/Del/Img ✅ | Still in `platform-config/_default.ts`; must split out | Electron V2 full path verified by user. |
+| 30 | `custom_Zhihu` | Cfg/Pub/Upd/Del/Img ✅ | Still in `platform-config/_default.ts`; must split out | Platform image hosting verified; OSS SDK explicit loading fix captured. |
+| 31 | `custom_Csdn` | Cfg/Pub/Upd/Del/Img ✅ | Still in `platform-config/_default.ts`; must split out | Platform image hosting verified; default Bundled image hosting fix captured. |
 
 ### In-progress platform
 
 | # | platformKey | Verification status | Help action |
 |---|-------------|---------------------|-------------|
-| 28 | `custom_Haloweb` | V2C 🟡, Pub/Upd/Del/Img ⬜ | Do not mark help coverage complete yet. Capture V2C known `authUrl=/login` relative URL guidance, then complete full help after manual verification. |
+| 28 | `custom_Haloweb` | Cfg 🟡, Pub/Upd/Del/Img ⬜ | Do not mark help coverage complete yet. Capture Cfg known `authUrl=/login` relative URL guidance, then complete full help after manual verification. |
 
 ### Current implementation constraints
 

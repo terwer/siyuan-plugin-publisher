@@ -24,19 +24,19 @@
 - [x] 1.6 #25–#26 Wordpress 两项
   - [x] 1.6a #25 Wordpress `wordpress_Wordpress` — T1 全链路 ✅（2026-05-21，本地 WP，用户手测）
   - [x] 1.6b #26 Wordpress.com
-- [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（V2C/Pub/Upd/Del/Img 已验通过）
+- [x] 1.7a #27 语雀网页版 `custom_Yuqueweb`（Cfg/Pub/Upd/Del/Img 已验通过）
 - [x] 1.7b #28 Halo网页版
-  - [x] 1.7b.1 修复 Halo 网页版 V2C 配置页初始化失败：预置 `authUrl=/login` 不能在未配置站点时直接 `new URL()`；保留 Cookie 授权入口，未填 `home/apiUrl` 时点击登录/读取只提示先填站点地址，填入后由 Web Cookie 共用解析生成真实登录 URL
+  - [x] 1.7b.1 修复 Halo 网页版 Cfg 配置页初始化失败：预置 `authUrl=/login` 不能在未配置站点时直接 `new URL()`；保留 Cookie 授权入口，未填 `home/apiUrl` 时点击登录/读取只提示先填站点地址，填入后由 Web Cookie 共用解析生成真实登录 URL
   - [x] 1.7b.2 2026-08-14 修 transport 规则：loopback/私网目标有代理条件时走 `siyuan-forward-proxy`（内核 3.7.3 默认允许本机访问，SSRF 由 `SSRFSafeDialer` 兜底）；单测 64 绿、build:v2 通过
-  - [x] 1.7b.3 2026-08-14 本地 Docker Halo 2.20（localhost:8090）devtools 全链路手验：**V2C（forwardProxy 200 + 账号运行中）/ Pub / Upd / Del / Img 五格全部 ✅**
-  - [x] 1.7c #30 知乎 `custom_Zhihu` — 界面桥接全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
-  - [x] 1.7d #31 CSDN `custom_Csdn` — 界面桥接全链路 ✅（2026-05-24，用户手测：V2C/Pub/Upd/Del/Img）
+  - [x] 1.7b.3 2026-08-14 本地 Docker Halo 2.20（localhost:8090）devtools 全链路手验：**Cfg（forwardProxy 200 + 账号运行中）/ Pub / Upd / Del / Img 五格全部 ✅**
+  - [x] 1.7c #30 知乎 `custom_Zhihu` — 界面桥接全链路 ✅（2026-05-24，用户手测：Cfg/Pub/Upd/Del/Img）
+  - [x] 1.7d #31 CSDN `custom_Csdn` — 界面桥接全链路 ✅（2026-05-24，用户手测：Cfg/Pub/Upd/Del/Img）
   - [x] 1.7e #32–#35 简书、掘金、微信公众号、哔哩哔哩界面桥接全链路
 - [x] 1.8 #29 本地系统（Electron）— 全链路 ✅（2026-05-24，用户手测）
 
 ## 2. T2a / T2b / T3
 
-- [x] 2.1 T2a #30–#35：已迁入 T1 界面桥接；旧界面回退保留至 Gate D，不再要求 V2 Inv
+- [x] 2.1 T2a #30–#35：已迁入 T1 界面桥接；旧界面回退保留至 Gate D，不再要求 Inv
 - [x] 2.2 T2b #36–#38：Vis/Add（Github Docsify、Gitlab Docsify、小红书；均「未桥接入界面 / pre 注释」，不在旧界面退役门禁内）—— 2026-09-20 确认：三站 Vis/Add 均为 ❌（不可用/不暴露）。Docsify ×2 全仓无任何设置界面（旧界面与现行界面都从未提供添加入口），小红书入口为注释状态；静态比对了 `SubPlatformType` 枚举 vs `pre.ts` 活跃注册，宿主实测界面选择器 35 项均不含三者
 - [x] 2.3 T3 #39–#54：孤儿与 Fs 占位确认（验收目标为「确认不可用/不暴露」，不在旧界面退役门禁内）—— 2026-09-20 确认：api 孤儿 3（Liandi 不存在；Siyuan/Yuque 已转正式平台）+ web 孤儿 4（Flowus 已彻底移除；Wechat 已转正式平台；Weibo/Wuaipojie 不存在）+ Fs 枚举占位 9（枚举在、`pre.ts` 无注册，故不暴露）。判定基准：枚举 47 成员中未注册者仅 9 个 Fs 占位 + 哨兵 `NONE`
 
@@ -53,10 +53,10 @@
 - [x] 4.1 版本口径（2026-09-20 用户确认并更正）：**`2.0.0` = 彻底移除旧界面全部遗产**（仅保留桥接组件；顶栏旧菜单不保留、文档菜单保留；补「下载 1.41.1」提示）；**`2.3.0` = 移除该下载提示**。此前把「Gate C 生效版本」记为 `2.3.0` 系我方误读（`2.0.0` 尚未发版），记载已更正
 - [x] 4.2 **迁移面**（缺失即功能退化，见 design.md 决策 6）
   - [x] 4.2.0 普查旧界面可达面：确认文档块菜单（`click-editortitleicon`）在当前界面下仍可达且**直调旧界面 iframe**，是本次必须迁移的关键项
-  - [x] 4.2.1 `PluginHost` 增加 `docId` / `initialSection` / `autoPublishPlatformKey`，`V2InitialView` 与 `V2CurrentView` 对齐并新增 `ai_chat`
-  - [x] 4.2.2 移植 `src/pages/AiChat.vue` → `src/ui/components/V2AiChat.vue`（聊天 / 上下文模式 / Prompt 管理，14 个单测）。**内置 4 条 Prompt 保持旧界面的可编辑状态**（旧界面的 `isSys` 就是 false），未借机改成只读
-  - [x] 4.2.3 移植 `src/pages/About.vue` → `src/ui/components/settings/V2About.vue`，并在设置导航新增「关于」分区
-  - [x] 4.2.4 文档块菜单的「发布到..」与「AI聊天」改为开界面面板：`siyuan/host/v2DocMenu.ts`（每平台一项 + `autoPublishPlatformKey` 保留「一次点击即发布」），锚点取 `.protyle-title__icon`
+  - [x] 4.2.1 `PluginHost` 增加 `docId` / `initialSection` / `autoPublishPlatformKey`，`V2InitialView` 与 `CfgurrentView` 对齐并新增 `ai_chat`
+  - [x] 4.2.2 移植 AI 聊天视图 → `src/ui/components/AiChat.vue`（聊天 / 上下文模式 / Prompt 管理，14 个单测）。**内置 4 条 Prompt 保持旧界面的可编辑状态**（旧界面的 `isSys` 就是 false），未借机改成只读
+  - [x] 4.2.3 移植关于视图 → `src/ui/components/settings/About.vue`，并在设置导航新增「关于」分区
+  - [x] 4.2.4 文档块菜单的「发布到..」与「AI聊天」改为开界面面板：`siyuan/host/docMenu.ts`（每平台一项 + `autoPublishPlatformKey` 保留「一次点击即发布」），锚点取 `.protyle-title__icon`
   - [x] 4.2.5 顶栏点击恒开界面（`showLegacyMenu`/`addMenu` 已删）；宿主 `openSetting()` 直接开界面设置
   - [x] 4.2.6 独立 PicGo 插件入口随 `pluginInvoke` 一并删除（当前界面已有无头 PicGo 设置）
   - [x] 4.2.7 宿主手验：文档块菜单两项可达且子菜单列出全部已启用平台；一键入口实测完成「本地系统」发布/更新；「AI聊天」带文档上下文打开；顶栏与宿主设置入口均落界面；「关于」渲染版本/slogan/依赖
@@ -64,13 +64,13 @@
   - [x] 4.3.1 删 iframe 宿主与旧 invoke：`siyuan/iframeDialog.ts`、`siyuan/invoke/pluginInvoke.ts`、`siyuan/invoke/widgetInvoke.ts`、`siyuan/utils/menuUtils.ts`，及随之成为孤儿的 `siyuan/utils/htmlUtils.ts`、`siyuan/utils/utils.ts`、`siyuan/api/{kernel-api,base-kernel-api}.ts`
   - [x] 4.3.2 **旧界面 SPA 暂留**（浏览器扩展的弹窗 UI 仍是它；扩展迁移完成前不得删除，见 4.6）。**挂件必须保留**（用户明确要求）。本次只删插件侧入口，另删掉仅供旧界面 `showTab` 使用的自定义 Tab 注册
   - [x] 4.3.3 删 「旧界面开关」与其关闭提示、`preferenceConfigManager` 归一化、`PreferenceSetting.vue` 开关、`helpConfigs` 字段说明与相关 i18n 词条；另修正两处指向已退役世界的文案（偏好页说明、平台配置兜底空态）
-  - [x] 4.3.4 保留清单核对：`src/components/publish/**`（含 `SinglePublish`/`BatchPublish` 桥接的复用组件）、`src/components/common/ArticleManageList.vue`、`src/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts` 均未删
+  - [x] 4.3.4 保留清单核对：`src/ui/components/publish/**`（含 `SinglePublish`/`BatchPublish` 桥接的复用组件）、`src/ui/components/bridge/common/ArticleManageList.vue`、`src/ui/components/set/publish/singleplatform/**`、`siyuan/utils/widgetPageUtils.ts` 均未删
 - [x] 4.4 回归：`build:v2` ✓、**旧界面 SPA 构建 `pnpm siyuanBuild` ✓**（保证挂件/扩展产物仍可构建）、单测 70 文件 / 378 用例 ✓、宿主全入口手验 ✓、插件侧 i18n 死键清理 ✓
 - [x] 4.5 补「下载 `1.41.1`」提示（用户要求：这是旧界面移除后唯一需要补的东西）—— 落 `V2About.vue` 的设置分区「关于」，文案「旧版界面已在 2.0.0 中移除…如确需旧界面，可安装最后一个支持它的版本 1.41.1」+ 下载按钮，宿主实测渲染正常（提交 `0295bd2b`）。`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL` 仅为该提示恢复，**「2.3.0 移除提示与这两个常量」**
 - [x] 4.6 **浏览器扩展迁移到 2.0**（用户明确要求；扩展原弹窗 UI 即旧界面 SPA，属旧界面遗产）—— 已完成，提交 `a8d69580`（通用壳）+ 后续构建链与删除提交
   - [x] 4.6.1 只读普查完成（结论如下，均有 `路径:行号` 证据）
     - **`App` 不绑定宿主**：不可复用的只有 `siyuan/host/pluginHost.ts`（`import { Menu } from "siyuan"`）；`siyuan/host/createApp.ts` 与 `App.vue` 都不 import `siyuan`。宿主依赖只有 4 类且全部已是可注入参数：`props.docId`、`props.onClose`、`initialView`/`initialSection`、i18n（`createApp({ messages, fallbackResolve })`）→ **扩展只需一层薄壳**。
-    - **`background.js` 的两条消息通道零调用方**（最后调用方 `src/utils/browser/ChromeUtil.ts` 于 2022-12-03 `ee7a98af` 删除）→ 没有「必须保留的 CORS 旁路」；且 MV3 下 `host_permissions: ["*://*/*"]` 已使扩展页直接 fetch 不受页面同源限制。
+    - **`background.js` 的两条消息通道零调用方**（最后调用方 `ChromeUtil.ts` 于 2022-12-03 `ee7a98af` 删除）→ 没有「必须保留的 CORS 旁路」；且 MV3 下 `host_permissions: ["*://*/*"]` 已使扩展页直接 fetch 不受页面同源限制。
     - **`vite.v1.app.config.ts` 有 5 个消费者**（此前记为 4）：扩展 / 挂件 / nginx / vercel **+ 插件发行包自己**（`scripts/build.py:38` = `pluginBuild && siyuanBuild`）。
     - **现状即负债**：`pnpm build` 把整套 SPA 打进发行包 —— `dist/` 实测 **74 文件 / 33.66 MB**（含 `index.html`、`chunks/chunk.vendor_chatgpt.js` 5.39 MB），插件运行期完全用不到；对照 `dist/` 34 文件 / 18.40 MB。
     - **旧界面 SPA 路由实为 27 条**（此前记为 22）：16 条产品路由在当前界面有对应、11 条为开发测试用、**1 条缺口 = `/setting/siyuan`**（扩展在无宿主时**必须**手填 kernel 地址与 token，否则连自己的账号都读不到）。

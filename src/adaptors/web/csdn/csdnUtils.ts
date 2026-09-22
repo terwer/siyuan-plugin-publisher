@@ -9,7 +9,7 @@
 
 import * as cheerio from "cheerio"
 import KatexUtils from "~/src/utils/katexUtils.ts"
-import { LEGENCY_SHARED_API } from "~/src/utils/constants.ts"
+import { SHARED_SERVICE_API } from "~/src/utils/constants.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
 import { hmacSha256Base64 } from "~/src/utils/cryptoUtils.ts"
 
@@ -148,7 +148,7 @@ class CsdnUtils {
    * @param html
    */
   public static async processPrismjs(adaptorInstance: CsdnWebAdaptor, html: string): Promise<string> {
-    const apiUrl = `${LEGENCY_SHARED_API}/prismjs`
+    const apiUrl = `${SHARED_SERVICE_API}/prismjs`
     // const apiUrl = `http://localhost:3000/api/prismjs`
     const contentType = "application/json"
     const headers = {

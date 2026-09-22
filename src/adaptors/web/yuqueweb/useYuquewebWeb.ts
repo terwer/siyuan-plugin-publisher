@@ -15,7 +15,7 @@ import { DynamicJsonCfg, getDynCfgByKey, getDynPostidKey } from "~/src/platforms
 import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { DYNAMIC_CONFIG_KEY, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { DYNAMIC_CONFIG_KEY, SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import type { ISypConfig } from "~/syp.config"
 import { CategoryTypeEnum, PicbedServiceTypeEnum } from "zhi-blog-api"
@@ -47,7 +47,7 @@ const useYuquewebWeb = async (key?: string, newCfg?: YuquewebConfig) => {
     cfg = safeMergeConfig<YuquewebConfig>(setting[key], YuquewebConfig, [""])
 
     if (ObjectUtil.isEmptyObject(setting[key])) {
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new YuquewebConfig("", middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")
     } else {
@@ -62,7 +62,7 @@ const useYuquewebWeb = async (key?: string, newCfg?: YuquewebConfig) => {
       logger.info("authUrl has changed, update cfg.home and cfg.apiUrl")
     }
 
-    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {
       cfg.middlewareUrl = middlewareUrl
     }

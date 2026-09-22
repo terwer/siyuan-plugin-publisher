@@ -14,7 +14,7 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
 import { JvueApiAdaptor } from "~/src/adaptors/api/jvue/jvueApiAdaptor.ts"
@@ -54,7 +54,7 @@ export const useJvueApi = async (key?: string, newCfg?: JvueConfig) => {
       const jvueApiUrl = Utils.emptyOrDefault(process.env.VITE_JVUE_API_URL, "")
       const jvueUsername = Utils.emptyOrDefault(process.env.VITE_JVUE_USERNAME, "")
       const jvueAuthToken = Utils.emptyOrDefault(process.env.VITE_JVUE_PASSWORD, "")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new JvueConfig(jvueHome, jvueApiUrl, jvueUsername, jvueAuthToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

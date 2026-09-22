@@ -11,6 +11,10 @@ import { describe, expect, it } from "vitest"
 import baseWebApiSource from "~/src/adaptors/web/base/baseWebApi.ts?raw"
 import baseBlogApiSource from "~/src/adaptors/api/base/baseBlogApi.ts?raw"
 
+/**
+ * 这些标识符只允许出现在 facade 内部，不得渗回使用层的 webFetch / apiFetch。
+ * 它们是当前传输体系里的活跃实现，一旦出现在这两个薄封装里就说明职责被绕开了。
+ */
 const forbiddenInJsonFetch = [
   "resolveJsonFetchTransport",
   "resolvePublishTransport",
@@ -20,9 +24,9 @@ const forbiddenInJsonFetch = [
   "isLoopbackOrLocalTargetUrl",
   "pluginNodeFetch:",
   "siyuanForwardProxy:",
-  "corsMiddleware:",
-  "Using legency",
-  "Using cors",
+  "publishTransport",
+  "resolveTransport",
+  "middleware-fetch",
 ]
 
 function readMethodBody(source: string, methodName: string): string {

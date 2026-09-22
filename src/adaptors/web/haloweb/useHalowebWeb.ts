@@ -15,7 +15,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { DYNAMIC_CONFIG_KEY, LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { DYNAMIC_CONFIG_KEY, SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { DynamicJsonCfg, getDynCfgByKey, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PRE_CONSTANTS } from "~/src/platforms/PreConstants.ts"
 import { ISypConfig } from "~/syp.config"
@@ -56,7 +56,7 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (isStoredCfgEmpty) {
       // 从环境变量获取Csdn的cookie
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new HalowebConfig(authOrigin, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.debug("Configuration is empty, using default environment variables.")
@@ -70,7 +70,7 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
       logger.info("Using configuration from settings...")
     }
     // 下面是强制设置的配置
-    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {
       cfg.middlewareUrl = middlewareUrl
     }

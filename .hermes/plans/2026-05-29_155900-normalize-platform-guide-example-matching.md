@@ -33,8 +33,8 @@
 
 - `openspec/changes/normalize-platform-guide-example-matching/mapping-audit.md`
 - `src/types/IPageHelpConfig.ts`
-- `src/helpConfigs/exampleMatching.ts` 或同等位置
-- `src/helpConfigs/exampleMatching.spec.ts`
+- `src/helpConfigs/registry.ts` 或同等位置
+- `src/helpConfigs/registry.spec.ts`
 - 1-2 个 `src/helpConfigs/pages/platform-config/*.ts` 样板平台配置
 - `src/helpConfigs/registry.spec.ts` 或新增 targeted spec
 - `openspec/changes/normalize-platform-guide-example-matching/tasks.md`
@@ -51,7 +51,7 @@
 
 ## 验证策略与命令
 
-- `pnpm vitest run src/helpConfigs/exampleMatching.spec.ts`
+- `pnpm vitest run src/helpConfigs/registry.spec.ts`
 - 如修改 registry 测试：`pnpm vitest run src/helpConfigs/registry.spec.ts`
 - `pnpm build`
 - `openspec status --change normalize-platform-guide-example-matching --json`

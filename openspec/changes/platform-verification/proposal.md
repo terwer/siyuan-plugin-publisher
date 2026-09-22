@@ -6,7 +6,7 @@
 
 - 建立 **OpenSpec 为唯一真相源（SSOT）**：本变更目录下的 `platform-checklist.md` 为全平台验证主表；`.planning/` 与 `.qoder/plans/` 不再维护平行副本。
 - 按 T1/T2a/T2b/T3 分层验收 54 项平台（T1=29 个已桥接入界面的平台完整链路）。
-- 验证口径：V2C / Pub / Upd / Del / Img（及 T2a 的 V1C、Inv）；失败项在本变更 `tasks.md` 中开子任务修复。
+- 验证口径：Cfg / Pub / Upd / Del / Img（及 T2a 的 Inv）；失败项在本变更 `tasks.md` 中开子任务修复。
 - **语雀 API**（`common_Yuque`）：需语雀专业会员属平台政策，**不计入插件阻塞**；持会员账号验收通过即记 ✅（#1 已验）。
 - 全部 T1 通过后：**Gate C** 标记旧界面废弃（默认新界面，保留旧界面开关关闭时回退至 Gate D 前）。
 - **Gate D**：连续 **3 个发行版本** 后移除旧界面的 iframe/SPA 宿主路径（对齐 `refactor-ui-foundation`）。

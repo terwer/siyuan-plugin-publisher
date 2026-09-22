@@ -22,7 +22,7 @@ A platform-specific help config SHALL include enough information for a user to c
 
 #### Scenario: Complete platform help config is added
 
-- **WHEN** a platform is promoted from `remaining-t1.ts` to a dedicated help config file
+- **WHEN** a platform is promoted from `platform-config/_default.ts` to a dedicated help config file
 - **THEN** the config SHALL include a `summary`
 - **AND** it SHALL include `fields` for the platform's high-risk configuration inputs
 - **AND** it SHALL include at least one `faq` entry when verification identified a real pitfall, policy limit, or troubleshooting path
@@ -41,7 +41,7 @@ The help coverage workflow SHALL use the same practical priority as platform ver
 
 - **WHEN** this change is applied
 - **THEN** the implementation SHALL first audit already verified T1 platforms for help coverage gaps
-- **AND** it SHALL prioritize platforms whose help config is still only represented in `remaining-t1.ts`
+- **AND** it SHALL prioritize platforms whose help config is still only represented in `platform-config/_default.ts`
 
 #### Scenario: New platform verification completes later
 
@@ -51,7 +51,7 @@ The help coverage workflow SHALL use the same practical priority as platform ver
 
 ### Requirement: Help coverage SHALL remain separate from verification SSOT
 
-The platform verification checklist SHALL remain the SSOT for V2C/Pub/Upd/Del/Img status, while this change SHALL track help coverage separately.
+The platform verification checklist SHALL remain the SSOT for Cfg/Pub/Upd/Del/Img status, while this change SHALL track help coverage separately.
 
 #### Scenario: Help coverage is updated
 

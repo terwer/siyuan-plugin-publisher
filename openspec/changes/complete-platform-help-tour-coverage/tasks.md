@@ -7,7 +7,7 @@
 
 - [x] 0.1 创建 OpenSpec 变更 `complete-platform-help-tour-coverage`
 - [x] 0.2 明确本变更是 `platform-help-guide-system` 归档后的覆盖补全，不重做帮助框架
-- [x] 0.3 确认当前覆盖基线：博客园完整；WordPress/语雀/Halo/语雀网页版/HaloWeb 独立配置；其余 T1 多数仍在 `remaining-t1.ts`
+- [x] 0.3 确认当前覆盖基线：博客园完整；WordPress/语雀/Halo/语雀网页版/HaloWeb 独立配置；其余 T1 多数仍在 `platform-config/_default.ts`
 - [x] 0.4 建立帮助覆盖记录文件 `coverage-log.md`，记录每个平台补齐依据与验证日期
 
 ## 1. 已验证平台覆盖审计
@@ -16,13 +16,13 @@
 - [x] 1.2 审计 #1 语雀 API `common_Yuque`：补齐 summary/fields/faq/tour，记录专业会员政策口径
 - [x] 1.3 审计 #25 WordPress `wordpress_Wordpress`：补齐 XML-RPC/API URL、用户名、应用密码或 Token、图床建议
 - [x] 1.4 审计 #27 语雀网页版 `custom_Yuqueweb`：补齐 Cookie 授权、图片上传、错误详情说明
-- [x] 1.5 审计 #29 本地系统 `fs_LocalSystem`：从 `remaining-t1.ts` 拆出独立配置，补齐本地路径/YAML/图片处理说明
-- [x] 1.6 审计 #30 知乎 `custom_Zhihu`：从 `remaining-t1.ts` 拆出独立配置，补齐 Cookie 授权、平台图床、OSS SDK 注意事项
-- [x] 1.7 审计 #31 CSDN `custom_Csdn`：从 `remaining-t1.ts` 拆出独立配置，补齐 Cookie 授权、Bundled 图床、发布限制说明
+- [x] 1.5 审计 #29 本地系统 `fs_LocalSystem`：从 `platform-config/_default.ts` 拆出独立配置，补齐本地路径/YAML/图片处理说明
+- [x] 1.6 审计 #30 知乎 `custom_Zhihu`：从 `platform-config/_default.ts` 拆出独立配置，补齐 Cookie 授权、平台图床、OSS SDK 注意事项
+- [x] 1.7 审计 #31 CSDN `custom_Csdn`：从 `platform-config/_default.ts` 拆出独立配置，补齐 Cookie 授权、Bundled 图床、发布限制说明
 
 ## 2. 当前进行中平台
 
-- [ ] 2.1 等 #28 Halo 网页版 `custom_Haloweb` V2C/Pub/Upd/Del/Img 手验完成后，补齐 `custom-haloweb.ts` 的最新配置与 FAQ
+- [ ] 2.1 等 #28 Halo 网页版 `custom_Haloweb` Cfg/Pub/Upd/Del/Img 手验完成后，补齐 `custom-haloweb.ts` 的最新配置与 FAQ
 - [ ] 2.2 如果 #28 验证中发现新的失败模式，同步写入 `custom-haloweb.ts` 的 FAQ 或 `coverage-log.md`
 
 ## 3. 后续平台联动规则

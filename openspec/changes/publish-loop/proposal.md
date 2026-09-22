@@ -45,7 +45,7 @@
 
 ## Impact
 
-- 本仓库：`src/components/publish/*`（解耦既有发布外壳：`SinglePublishDoPublish`/`SinglePublishSelectPlatform`/`QuickPublishSelectPlatform`）、`src/components/common/BackPage.vue`（router 容错）、`src/pages/SinglePublish.vue` / `BatchPublish.vue`（薄壳接线）与新增 `src/pages/SinglePublishDoPublish.vue` / `QuickSelect.vue`（路由取参包装）、`src/routes/routeConfig.ts`（改装）、`src/ui/components/App.vue`（状态机+集中导航）、`src/ui/components/layout/UnifiedWorkspaceShell.vue`（currentView 联合类型扩展）、`src/ui/components/ArticleManage.vue`（单发/批发动作改写）、`src/ui/components/publish/SinglePublish.vue` / `BatchPublish.vue`（重写为复用壳）。
+- 本仓库：`src/ui/components/publish/*`（解耦既有发布外壳：`SinglePublishDoPublish`/`SinglePublishSelectPlatform`/`QuickPublishSelectPlatform`）、`src/ui/components/bridge/common/BackPage.vue`（router 容错）、`src/ui/components/publish/SinglePublish.vue` / `BatchPublish.vue`（薄壳接线）与新增 `src/ui/components/bridge/publish/SinglePublishDoPublish.vue` / `QuickSelect.vue`（路由取参包装）、`src/ui/components/App.vue`（改装）、`src/ui/components/App.vue`（状态机+集中导航）、`src/ui/components/layout/UnifiedWorkspaceShell.vue`（currentView 联合类型扩展）、`src/ui/components/ArticleManage.vue`（单发/批发动作改写）、`src/ui/components/publish/SinglePublish.vue` / `BatchPublish.vue`（重写为复用壳）。
 - 复用但**不修改**共用层：`src/composables/usePublish.ts`、`src/ui/composables/useQuickPublish.ts`、`src/ui/composables/useArticleManage.ts`；既有发布表单组件链虽作外壳解耦，但**逻辑/样式/功能零变化**。
 - **不影响**发布传输层（XML-RPC/multipart/JSON）、平台适配器、平台配置存储格式与 `normalizePlatformKey()` 标准。
 - **关键约束**：解耦既有发布外壳后，**旧界面单发/批发的行为必须回归无退化**（平台选择、标签/分类/Slug 编辑、发布/更新/预览、结果回显逐项对照）。

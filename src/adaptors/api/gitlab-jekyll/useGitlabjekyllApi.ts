@@ -17,7 +17,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
@@ -47,7 +47,7 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITLAB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITLAB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new GitlabjekyllConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
       logger.info("Configuration is empty, using default environment variables.")

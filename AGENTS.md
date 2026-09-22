@@ -60,10 +60,10 @@
   - JSON/API → `createJsonFetchClient(...).fetch(...)`（`jsonFetchClient.ts`）；`BaseWebApi.webFetch` / `BaseBlogApi.apiFetch` 仅委托 facade
   - FormData 构造 → `FormDataHostUtil`
   - 允许 break change，直接重构到位
-- 平台验证：**按 checklist 表从上到下顺序推进**（SSOT：`openspec/changes/platform-verification/platform-checklist.md`，AGENTS.md 不另记批次顺序）；每站六格 **V2C / Pub / Upd / Del / Img / 查看**；通过/失败均记入 checklist SSOT。其中「**查看**」= 发布后点「查看文章」，**必须验证链接能正常打开文章**，若提示登录/失效视为 bug 需修复（如公众号会话 token 轮换→「请重新登录」）。
+- 平台验证：**按 checklist 表从上到下顺序推进**（SSOT：`openspec/changes/platform-verification/platform-checklist.md`，AGENTS.md 不另记批次顺序）；每站六格 **Cfg / Pub / Upd / Del / Img / 查看**；通过/失败均记入 checklist SSOT。其中「**查看**」= 发布后点「查看文章」，**必须验证链接能正常打开文章**，若提示登录/失效视为 bug 需修复（如公众号会话 token 轮换→「请重新登录」）。
 - **每站验证必须同时覆盖「帮助引导与文档」环节，禁止遗漏**（SOP 第三节，`docs/draft/platform-verification-sop.md`）：① 平台独立 help 配置（`src/helpConfigs/pages/platform-config/<platform>.ts`，须含 `helpUrl`+`summary`+`fields`+`faq`+`tour`，缺则补；由 `registry.spec.ts` 的 `verifiedConfigs` 与 `verifiedPlatformRows.ts` 冻结行强制约束）；② `docs/draft/platforms/<platform>.md` 文档草稿（占位 helpUrl 顶部标 `TODO：待替换真实帮助文档链接`）；③ 宿主验证：该平台配置页 HelpPanel/TourGuide 正常展示。此三项与五格同等计入通过/失败，一并写回 checklist SSOT。
 - **禁止在提交内容中描述对平台的逆向/观测方法**：代码注释、文档、提交信息均不得出现「逆向、实测、观测、抓包、探测、探针、编辑器反向/对照、复现」等反向工程/观察平台机制的措辞（版权与合规风险）。**处理方式**：这类"如何获知机制"的内容在写入/提交前，先**备份到 `tmp/`（gitignored，不提交）**——仓库根 `tmp/` 已在 `.gitignore`（行 17），用于后续实现参考但绝不会入库；提交/文档里只保留中性的事实契约与验证结论。重要研究素材不要直接删除，先入 `tmp/` 留档。
-- **Cookie 授权平台 → V2C 标准流程（固化规则，与用户对齐，勿颠倒/跳过）**：对 Cookie 授权类网页平台（**微信公众号 / 掘金 / 知乎 / 简书 / CSDN / 语雀网页版 / Halo网页版** 等，配置页含「去授权/去登录 + 自动读取 Cookie」），在宿主做 V2C 严格按此顺序：
+- **Cookie 授权平台 → Cfg 标准流程（固化规则，与用户对齐，勿颠倒/跳过）**：对 Cookie 授权类网页平台（**微信公众号 / 掘金 / 知乎 / 简书 / CSDN / 语雀网页版 / Halo网页版** 等，配置页含「去授权/去登录 + 自动读取 Cookie」），在宿主做 Cfg 严格按此顺序：
   1. 配置页点「**去授权 / 去登录**」→ 插件打开该平台登录窗口（扫码/账号登录）。
   2. 用户用平台账号登录成功。
   3. **关闭该登录窗口**——此步触发插件把登录态 **Cookie 保存**到本地（关键一步，勿跳过、勿直接关宿主页、勿在未关窗时点别的）。

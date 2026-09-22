@@ -4,8 +4,8 @@
 
 - `metaweblog_Cnblogs` 已有完整帮助配置，包含 `summary / fields / faq / tour`。
 - WordPress、语雀、Halo、语雀网页版、HaloWeb 已拆为独立配置文件。
-- 其余 T1 平台集中在 `remaining-t1.ts`，大多只有 `helpUrl`。
-- `platform-verification` 正在逐平台验证 V2C/Pub/Upd/Del/Img，并已形成唯一主表 `platform-checklist.md`。
+- 其余 T1 平台集中在 `platform-config/_default.ts`，大多只有 `helpUrl`。
+- `platform-verification` 正在逐平台验证 Cfg/Pub/Upd/Del/Img，并已形成唯一主表 `platform-checklist.md`。
 
 本变更是帮助系统的覆盖补全，不重做帮助框架。
 
@@ -17,12 +17,12 @@
 - 建立“平台验证完成后同步补帮助”的固定流程。
 - 以博客园为样板，为每个平台逐步补齐 `summary`、关键 `fields`、`faq` 与可用的 `tour`。
 - 保持帮助覆盖与平台验证节奏一致，避免过期或猜测型文案。
-- 保留 `remaining-t1.ts` 作为未补齐平台的轻量兜底清单。
+- 保留 `platform-config/_default.ts` 作为未补齐平台的轻量兜底清单。
 
 **Non-Goals:**
 
 - 不重构 HelpRegistry、HelpPanel、FieldGuide、TourGuide 基础架构。
-- 不把帮助覆盖状态混入 `platform-verification/platform-checklist.md` 的 V2C/Pub/Upd/Del/Img 状态。
+- 不把帮助覆盖状态混入 `platform-verification/platform-checklist.md` 的 Cfg/Pub/Upd/Del/Img 状态。
 - 不为未验证平台编写看似完整但未经验证的操作步骤。
 - 不修改平台发布适配器、传输层或配置存储格式。
 
@@ -48,7 +48,7 @@
 
 ### 3. 独立配置优先，remaining-t1 保持兜底
 
-当某个平台达到完整覆盖标准时，应从 `remaining-t1.ts` 拆出独立文件，并在 `pages/index.ts` 注册。未补齐平台继续留在 `remaining-t1.ts`，仅作为 helpUrl 兜底。
+当某个平台达到完整覆盖标准时，应从 `platform-config/_default.ts` 拆出独立文件，并在 `pages/index.ts` 注册。未补齐平台继续留在 `platform-config/_default.ts`，仅作为 helpUrl 兜底。
 
 理由：独立文件便于维护真实经验；兜底数组避免一开始就制造大量空壳文件。
 
@@ -58,7 +58,7 @@
 
 ### 5. 帮助覆盖不改变平台验证 SSOT
 
-`platform-checklist.md` 继续只记录 V2C/Pub/Upd/Del/Img。帮助覆盖在本变更 `tasks.md` 中跟踪，必要时可写 `coverage-log-YYYY-MM-DD.md`，但不作为平台验证通过条件的替代。
+`platform-checklist.md` 继续只记录 Cfg/Pub/Upd/Del/Img。帮助覆盖在本变更 `tasks.md` 中跟踪，必要时可写 `coverage-log-YYYY-MM-DD.md`，但不作为平台验证通过条件的替代。
 
 ## Risks / Trade-offs
 

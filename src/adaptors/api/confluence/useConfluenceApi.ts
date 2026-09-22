@@ -16,7 +16,7 @@ import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
@@ -48,7 +48,7 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
       // 从环境变量获取 Confluence API 的 URL、认证令牌和其他配置信息
       const confluenceHome = Utils.emptyOrDefault(process.env.VITE_CONFLUENCE_HOME, "")
       const confluenceAuthToken = Utils.emptyOrDefault(process.env.VITE_CONFLUENCE_AUTH_TOKEN, "")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new ConfluenceConfig(confluenceHome, confluenceHome, confluenceAuthToken, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
       logger.info("Configuration is empty, using default environment variables.")

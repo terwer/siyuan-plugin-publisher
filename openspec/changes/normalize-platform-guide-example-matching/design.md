@@ -1,6 +1,6 @@
 ## Context
 
-当前平台帮助系统以 `PageHelpConfig` 为主要载体，已经支持 `summary / fields / faq / tour / helpUrl` 等信息。上一轮 `complete-platform-help-tour-coverage` 把若干已验证平台从 `remaining-t1.ts` 轻量配置提升为独立配置。
+当前平台帮助系统以 `PageHelpConfig` 为主要载体，已经支持 `summary / fields / faq / tour / helpUrl` 等信息。上一轮 `complete-platform-help-tour-coverage` 把若干已验证平台从 `platform-config/_default.ts` 轻量配置提升为独立配置。
 
 用户指出的关键事实是：平台本身已经有 `src/platforms` 目录作为 SSOT，其中 `DynamicConfig.platformKey`、`getNewPlatformKey()`、`getSubPlatformTypeByKey()` 已经定义了动态平台 key 形态。典型实例 key 是 `common_Yuque-z2jom6d` 或 `custom_Zhihu-z2jom6d`，前半段是预置平台 key，后半段是实例 id/hash。
 
@@ -54,7 +54,7 @@ custom_Zhihu -> SubPlatformType.Custom_Zhihu
 
 ### Decision 4: 回滚自造示例匹配结构
 
-`PageHelpConfig.examples`、`PageHelpExampleMatch` 和 `src/helpConfigs/exampleMatching.ts` 属于重复造轮子，应删除。语雀 API 与语雀网页版不再在 help config 中维护人造 examples 数组。
+`PageHelpConfig.examples`、`PageHelpExampleMatch` 和 `src/helpConfigs/registry.ts` 属于重复造轮子，应删除。语雀 API 与语雀网页版不再在 help config 中维护人造 examples 数组。
 
 ## Risks / Trade-offs
 

@@ -220,7 +220,7 @@ export const myPageConfig: PageHelpConfig = {
 
 **Step 2 — Register in the Registry**
 
-In `src/helpConfigs/init.ts`, import and register:
+In `src/helpConfigs/pages/index.ts`, import and register:
 
 ```ts
 import { helpRegistry } from "./registry"
@@ -243,16 +243,14 @@ Then reference `"[data-syp-tour='apiUrl']"` in the tour config.
 
 ### Internationalization
 
-Help system text uses the `v2.help.*` i18n key namespace. See `src/locales/en_US.ts` and `src/locales/zh_CN.ts`.
+Help system text uses the `help.*` i18n key namespace. See `siyuan/i18n/en_US.json` and `siyuan/i18n/zh_CN.json`.
 
-## Legacy UI Development (Deprecated, maintenance reference only)
-
-The legacy UI outputs to `dist/`, built via legacy `scripts/build.py` / `scripts/dev.py`.
+## Local development
 
 ```bash
-pnpm dev -p siyuan
-pnpm makeLink -p siyuan
-pnpm build
+pnpm dev        # vite build --watch --config vite.config.ts
+pnpm makeLink   # link into a SiYuan workspace (interactive)
+pnpm build      # vue-tsc + build and package the plugin
 ```
 
 ## Package
@@ -267,14 +265,14 @@ Artifacts structure
 ├── build
   ├── package.zip
   ├── package-widget.zip
-  ├── siyuan-plugin-publisher-1.23.5.zip
-  ├── siyuan-publisher-nginx-1.23.5
-  ├── sy-post-publisher-chrome-1.23.5.zip
-  ├── sy-post-publisher-firefox-1.23.5.zip
-  └── sy-post-publisher-widget-1.23.5.zip
+  ├── siyuan-plugin-publisher-<version>.zip
+  ├── siyuan-publisher-nginx-<version>.zip
+  ├── sy-post-publisher-chrome-<version>.zip
+  ├── sy-post-publisher-firefox-<version>.zip
+  └── sy-post-publisher-widget-<version>.zip
 ```
 
-## Sync to legacy widget repo
+## Sync to the widget repo
 
 ```bash
 pnpm syncWidgetRepo

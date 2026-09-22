@@ -219,7 +219,7 @@ export const myPageConfig: PageHelpConfig = {
 
 **第二步 — 注册到 Registry**
 
-在 `src/helpConfigs/init.ts` 中 import 并注册：
+在 `src/helpConfigs/pages/index.ts` 中 import 并注册：
 
 ```ts
 import { helpRegistry } from "./registry"
@@ -242,16 +242,14 @@ Tour 步骤通过 `data-syp-tour` 属性锚定目标元素。在目标表单组�
 
 ### 国际化
 
-帮助系统相关文本的 i18n key 命名空间为 `v2.help.*`，参见 `src/locales/zh_CN.ts` 和 `src/locales/en_US.ts`。
+帮助系统相关文本的 i18n key 命名空间为 `help.*`，参见 `siyuan/i18n/zh_CN.json` 和 `siyuan/i18n/en_US.json`。
 
-## 旧界面开发（已废弃，仅维护参考）
-
-旧界面输出到 `dist/`，通过旧 `scripts/build.py` / `scripts/dev.py` 构建。
+## 本地开发
 
 ```bash
-pnpm dev -p siyuan
-pnpm makeLink -p siyuan
-pnpm build
+pnpm dev        # vite build --watch --config vite.config.ts
+pnpm makeLink   # 软链到思源工作区（交互式选择工作区）
+pnpm build      # vue-tsc + 构建并打包插件
 ```
 
 ## 打包
@@ -266,14 +264,14 @@ pnpm package
 ├── build
   ├── package.zip
   ├── package-widget.zip
-  ├── siyuan-plugin-publisher-1.23.5.zip
-  ├── siyuan-publisher-nginx-1.23.5
-  ├── sy-post-publisher-chrome-1.23.5.zip
-  ├── sy-post-publisher-firefox-1.23.5.zip
-  └── sy-post-publisher-widget-1.23.5.zip
+  ├── siyuan-plugin-publisher-<version>.zip
+  ├── siyuan-publisher-nginx-<version>.zip
+  ├── sy-post-publisher-chrome-<version>.zip
+  ├── sy-post-publisher-firefox-<version>.zip
+  └── sy-post-publisher-widget-<version>.zip
 ```
 
-## 同步到旧版 widget 仓库
+## 同步到 widget 仓库
 
 ```bash
 pnpm syncWidgetRepo

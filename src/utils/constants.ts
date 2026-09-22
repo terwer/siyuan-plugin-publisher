@@ -25,12 +25,12 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
  * 展示在设置的「关于」页。**该指引与这两个常量计划在 2.3.0 一并移除**
  * （见 change `platform-verification`）。
  */
-export const V1_LAST_VERSION = "1.41.1"
+export const PREVIOUS_UI_LAST_VERSION = "1.41.1"
 
 /**
  * 最后一个提供旧界面的发行版下载地址
  */
-export const V1_LAST_RELEASE_URL = `https://github.com/terwer/siyuan-plugin-publisher/releases/tag/siyuan-plugin-publisher-v${V1_LAST_VERSION}`
+export const PREVIOUS_UI_RELEASE_URL = `https://github.com/terwer/siyuan-plugin-publisher/releases/tag/siyuan-plugin-publisher-v${PREVIOUS_UI_LAST_VERSION}`
 
 /**
  * 自动映射分类占位符
@@ -43,20 +43,20 @@ export const CATE_AUTO_NAME = "[auto]"
 export const MAX_TITLE_LENGTH = 10
 
 /**
- * 旧的通用接口
+ * 共享服务接口地址
  *
  * @since 1.21.6
  * @version 1.21.6
  */
-export const LEGENCY_SHARED_API = "https://api.terwer.space/api"
+export const SHARED_SERVICE_API = "https://api.terwer.space/api"
 
 /**
- * 旧的通用 HTTP 代理
+ * 共享 HTTP 代理地址
  *
  * @since 1.0.0
  * @version 1.20.0
  */
-export const LEGENCY_SHARED_PROXT_MIDDLEWARE = "https://api.terwer.space/api/middleware"
+export const SHARED_PROXY_MIDDLEWARE = "https://api.terwer.space/api/middleware"
 
 /**
  * 新版通用 HTTP 代理，不再免费提供

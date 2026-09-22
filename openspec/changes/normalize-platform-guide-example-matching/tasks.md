@@ -6,7 +6,7 @@
 
 - [x] 1.1 定位现有平台 key SSOT：`src/platforms/dynamicConfig.ts`、`DynamicConfig.platformKey`、`getNewPlatformKey()`、`getSubPlatformTypeByKey()`。
 - [x] 1.2 确认动态平台实例 key 形态为 `<platform>_<SubPlatform>-<id>`，帮助系统应复用前半段预置平台 key。
-- [x] 1.3 回滚/删除自造 `src/helpConfigs/exampleMatching.ts`。
+- [x] 1.3 回滚/删除自造 `src/helpConfigs/registry.ts`。
 - [x] 1.4 回滚/删除 `PageHelpConfig.examples`、`PageHelpExampleMatch` 等帮助专属示例匹配类型。
 - [x] 1.5 移除语雀 API / 语雀网页版 help config 中的人造 `examples` 配置。
 
