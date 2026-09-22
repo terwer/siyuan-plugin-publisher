@@ -36,7 +36,14 @@ After publishing, you can view publishing status, open the published article, or
 3. Add a platform account in **Publishing Settings**, then validate and save it.
 4. Open the document you want to publish, go to **Quick Publish**, choose a platform, and publish.
 
-> The interface is the new one (V2). The previous interface was removed entirely in `2.3.0`, so this release ships no way back to it; if you really need it, install the last release that had it, `1.41.1`.
+> The interface is the native panel. **The previous interface was removed entirely in `2.0.0`**, so this release ships no way back to it; if you really need it, install the last release that had it, `1.41.1` (Settings → About keeps that download link, scheduled for removal in `2.3.0`).
+
+### What changed in 2.0.0
+
+- **The previous interface is gone**: the old toolbar menu, the old settings pages and the embedded iframe UI are all removed, along with the switch that went back to them.
+- **The browser extension, widget and web builds were rebuilt**: all three now use the same interface. The extension and the web build ask for your SiYuan API address and token under Connection settings on first use; the widget shares the host origin and needs neither.
+- **Your platform accounts are untouched**: accounts, platform settings and published links keep the storage they already had, so nothing needs reconfiguring after the upgrade.
+- **One source of copy**: the two parallel translation sets are merged into one and the languages are fully aligned.
 
 ![](./docs/images/publisher-icon.png)
 
