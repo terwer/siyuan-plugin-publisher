@@ -2,11 +2,11 @@
 
 ### Requirement: Verified platforms SHALL accumulate complete help coverage
 
-For every platform that is marked as verified in `v2-platform-verification-v1-retirement/platform-checklist.md`, the system SHALL provide platform-specific help coverage that captures the verified configuration path and common pitfalls.
+For every platform that is marked as verified in `platform-verification/platform-checklist.md`, the system SHALL provide platform-specific help coverage that captures the verified configuration path and common pitfalls.
 
-#### Scenario: Platform has completed V2 verification
+#### Scenario: Platform has completed platform verification
 
-- **WHEN** a platform has completed its required V2 verification cells in the platform checklist
+- **WHEN** a platform has completed its required verification cells in the platform checklist
 - **THEN** the corresponding `platform-config/<platformKey>` help entry SHALL be reviewed for platform-specific coverage
 - **AND** verified configuration knowledge SHALL be added to a dedicated platform help config when the generic fallback is insufficient
 
@@ -35,7 +35,7 @@ A platform-specific help config SHALL include enough information for a user to c
 
 ### Requirement: Help coverage SHALL follow the platform verification sequence
 
-The help coverage workflow SHALL use the same practical priority as V2 platform verification: verified and high-frequency platforms first, then newly verified platforms as they pass.
+The help coverage workflow SHALL use the same practical priority as platform verification: verified and high-frequency platforms first, then newly verified platforms as they pass.
 
 #### Scenario: Existing verified platforms are audited
 
@@ -56,7 +56,7 @@ The platform verification checklist SHALL remain the SSOT for V2C/Pub/Upd/Del/Im
 #### Scenario: Help coverage is updated
 
 - **WHEN** a platform help config is completed or improved
-- **THEN** `v2-platform-verification-v1-retirement/platform-checklist.md` SHALL NOT be used as the primary help coverage tracker
+- **THEN** `platform-verification/platform-checklist.md` SHALL NOT be used as the primary help coverage tracker
 - **AND** help coverage progress SHALL be recorded in this change's `tasks.md` or supporting coverage notes
 
 #### Scenario: Verification checklist is updated

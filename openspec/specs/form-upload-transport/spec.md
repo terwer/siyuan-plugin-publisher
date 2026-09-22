@@ -2,7 +2,7 @@
 
 ## Purpose
 
-定义 V2 multipart/form-data 图片上传的统一 facade、传输优先级、宿主能力边界与诊断要求，确保 Web/API 适配器只使用简洁单入口而不重复拼装传输分支。
+定义 multipart/form-data 图片上传的统一 facade、传输优先级、宿主能力边界与诊断要求，确保 Web/API 适配器只使用简洁单入口而不重复拼装传输分支。
 ## Requirements
 ### Requirement: Multipart 上传 SHALL 经 formUploadClient facade 单入口
 
@@ -25,7 +25,7 @@
 
 当 `PluginFetchUtil.canUsePluginFetch` 为 true，facade 内部解析 SHALL 选择 `plugin-node-fetch`，且 MUST NOT 对该请求使用思源 `forwardProxy`，即使 `forceProxy` 为 true。
 
-#### Scenario: V2 Electron 上传公网 HTTPS 图片
+#### Scenario: 思源 Electron 宿主上传公网 HTTPS 图片
 
 - **GIVEN** `canUsePluginFetch` 为 true
 - **WHEN** `postJson` 执行
@@ -93,7 +93,7 @@ Web 路径 SHALL 支持经 `postJson` 传入的 `diagnostic`。在通道由 faca
 - **THEN** 错误 diagnostic MUST NOT 显示 `siyuan-forward-proxy` 为已选定通道
 - **AND** `stage` MAY 为 `build-formdata`
 
-#### Scenario: V2 语雀网络阶段失败
+#### Scenario: 语雀网络阶段失败
 
 - **WHEN** `postJson` 失败后展示详情
 - **THEN** diagnostic SHALL 含 facade 写入的真实 transport 与脱敏响应摘要

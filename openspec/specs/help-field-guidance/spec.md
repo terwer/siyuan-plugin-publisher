@@ -54,17 +54,17 @@ TBD - created by archiving change add-field-guide-tips. Update Purpose after arc
 - **AND** 字段提示 SHALL 使用配置属性名（Token 型平台的鉴权值仍存于 `password`）
 - **AND** 两套校验 MUST NOT 相互代替
 
-### Requirement: V2 字段说明以 fields 为单一来源
-系统 SHALL 让 V2 配置页的字段说明只来自平台 `fields`，输入框 placeholder 只承担示例与输入格式。
+### Requirement: 配置页字段说明以 fields 为单一来源
+系统 SHALL 让配置页的字段说明只来自平台 `fields`，输入框 placeholder 只承担示例与输入格式。
 
 #### Scenario: 说明性文案落位
 - **WHEN** 某字段的说明从 placeholder 移入该平台 `fields`
 - **THEN** 该行 placeholder SHALL 改为示例值或输入格式
 - **AND** 该字段的说明 SHALL 通过指引入口可见
-- **AND** 同一段字段说明 MUST NOT 在 V2 表单内出现两份
+- **AND** 同一段字段说明 MUST NOT 在配置表单内出现两份
 
-#### Scenario: 保留 V1 文案
-- **WHEN** V2 表单改用示例值 placeholder
+#### Scenario: 保留旧界面文案
+- **WHEN** 配置表单改用示例值 placeholder
 - **THEN** 系统 MUST NOT 修改共享的 locales 提示串
-- **AND** V1 界面的字段文案 SHALL 保持原样
+- **AND** 旧界面的字段文案 SHALL 保持原样
 

@@ -10,7 +10,7 @@
 
 #### Scenario: 同一会话内 XML-RPC 与 multipart
 
-- **GIVEN** V2 在思源 Electron 中加载插件
+- **GIVEN** 插件在思源 Electron 中加载
 - **WHEN** 用户校验 MetaWeblog 并上传网页版图片
 - **THEN** 两类操作 MAY 均走 `plugin-node-fetch`
 - **AND** 均 MUST NOT 仅因 `forceProxy` 默认走 `forwardProxy`

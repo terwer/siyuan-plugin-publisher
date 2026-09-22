@@ -4,13 +4,13 @@
 
 Publisher 的 HelpPanel、FieldGuide、TourGuide 框架已经通过 `platform-help-guide-system` 上线并归档，但平台配置帮助覆盖仍不均衡。博客园 `metaweblog_Cnblogs` 已有完整 `summary / fields / faq / tour`，其余大量 T1 平台仍集中在 `remaining-t1.ts`，只有 `helpUrl` 级别的兜底。
 
-本计划新起 OpenSpec 变更 `complete-platform-help-tour-coverage`，专门跟踪平台帮助覆盖补全。目标是：已验证平台先补齐；后续 `v2-platform-verification-v1-retirement` 每验证一个平台，就同步补该平台的帮助、字段提示和 TourGuide。
+本计划新起 OpenSpec 变更 `complete-platform-help-tour-coverage`，专门跟踪平台帮助覆盖补全。目标是：已验证平台先补齐；后续 `platform-verification` 每验证一个平台，就同步补该平台的帮助、字段提示和 TourGuide。
 
 ## 2. 当前已确认事实
 
 - 当前项目目录：`/Volumes/workspace/mydocs/siyuan-plugins/siyuan-plugin-publisher`
-- 当前平台验证主线：`openspec/changes/v2-platform-verification-v1-retirement`
-- 平台验证 SSOT：`openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`
+- 当前平台验证主线：`openspec/changes/platform-verification`
+- 平台验证 SSOT：`openspec/changes/platform-verification/platform-checklist.md`
 - 帮助系统归档变更：`openspec/changes/archive/2026-05-27-platform-help-guide-system/`
 - 新建帮助覆盖变更：`openspec/changes/complete-platform-help-tour-coverage/`
 - 完整样板：`src/helpConfigs/pages/platform-config/metaweblog-cnblogs.ts`
@@ -33,7 +33,7 @@ Publisher 的 HelpPanel、FieldGuide、TourGuide 框架已经通过 `platform-he
 3. #28 HaloWeb 完成手验后，补齐最新 FAQ 和字段说明。
 4. 对仍在 `remaining-t1.ts` 的已验证平台，拆出独立 config 文件并注册。
 5. 后续平台每验证通过一个，就同步补齐对应帮助覆盖任务。
-6. 最后运行 registry 测试、`pnpm build:v2`，并在 V2 宿主手验 HelpPanel / FieldGuide / TourGuide。
+6. 最后运行 registry 测试、`pnpm build`，并在宿主手验 HelpPanel / FieldGuide / TourGuide。
 
 ## 5. 拟新增/修改文件清单
 
@@ -64,7 +64,7 @@ Publisher 的 HelpPanel、FieldGuide、TourGuide 框架已经通过 `platform-he
 
 ### Phase 2：#28 HaloWeb 跟进
 
-- 等 `v2-platform-verification-v1-retirement` 中 #28 完成 V2C/Pub/Upd/Del/Img。
+- 等 `platform-verification` 中 #28 完成 V2C/Pub/Upd/Del/Img。
 - 根据真实手验结果更新 `custom-haloweb.ts` 的 summary/fields/faq/tour。
 - 如果出现新失败模式，写入本变更 tasks 或 coverage log。
 
@@ -82,12 +82,12 @@ Publisher 的 HelpPanel、FieldGuide、TourGuide 框架已经通过 `platform-he
 
 ```bash
 pnpm test -- src/helpConfigs/registry.spec.ts
-pnpm build:v2
+pnpm build
 ```
 
 手验：
 
-- V2 宿主打开平台配置页。
+- 宿主打开平台配置页。
 - HelpPanel 可以打开并显示平台专属 summary/FAQ。
 - FieldGuide 在关键字段旁可见。
 - TourGuide 步骤能定位到表单锚点，且不越出插件容器。

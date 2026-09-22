@@ -20,7 +20,7 @@ import { routeLocationKey, routerKey } from "vue-router"
 const logger = createAppLogger("back-page")
 const { t } = useAppI18n()
 
-// 容错获取 router：无 vue-router 环境时安全返回 undefined，不抛错。
+// 容错获取 router/route：由上层按可选依赖注入，未提供时安全返回 undefined，不抛错。
 const router = inject(routerKey, undefined)
 const route = inject(routeLocationKey, undefined)
 

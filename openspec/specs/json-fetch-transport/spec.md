@@ -2,15 +2,15 @@
 
 ## Purpose
 
-定义 V2 JSON/API 发布请求的统一 facade、传输解析优先级、宿主直连与回退边界，确保平台适配器只调用简洁入口，不在 `useProxy` 或业务层新增平行传输分支。
+定义 JSON/API 发布请求的统一 facade、传输解析优先级、宿主直连与回退边界，确保平台适配器只调用简洁入口，不在 `useProxy` 或业务层新增平行传输分支。
 ## Requirements
 ### Requirement: JSON 发布请求 SHALL 经统一 JSON 传输 facade
 
-V2 JSON/API 发布请求 SHALL 经 `publishTransport` 下的统一 JSON 传输 facade 执行。平台适配器 MUST NOT 直接拼装 `PluginFetchUtil`、思源 `forwardProxy`、middleware fallback 的传输选择分支。
+JSON/API 发布请求 SHALL 经 `publishTransport` 下的统一 JSON 传输 facade 执行。平台适配器 MUST NOT 直接拼装 `PluginFetchUtil`、思源 `forwardProxy`、middleware fallback 的传输选择分支。
 
 #### Scenario: 平台适配器发起 JSON 请求
 
-- **WHEN** V2 平台适配器需要发起 JSON/API 请求
+- **WHEN** 平台适配器需要发起 JSON/API 请求
 - **THEN** 适配器 SHALL 调用基类或统一 facade 暴露的单入口方法
 - **AND** 适配器 MUST NOT 内嵌 plugin / forwardProxy / middleware 的选择 if 链
 
@@ -20,7 +20,7 @@ JSON 传输解析 SHALL 复用 `publishTransport/resolveRules` 与 `publishTarge
 
 #### Scenario: Electron 插件宿主发起 JSON 请求
 
-- **GIVEN** V2 在思源 Electron 插件宿主中运行且 `PluginFetchUtil.canUsePluginFetch` 为 true
+- **GIVEN** 插件在思源 Electron 插件宿主中运行且 `PluginFetchUtil.canUsePluginFetch` 为 true
 - **WHEN** JSON facade 执行请求
 - **THEN** 传输 SHALL 优先使用插件宿主直连能力
 - **AND** MUST NOT 仅因 `forceProxy` 而走 `siyuan-forward-proxy`

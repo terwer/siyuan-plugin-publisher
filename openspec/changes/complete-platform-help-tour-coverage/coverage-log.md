@@ -1,7 +1,7 @@
 # Platform Help / Tour Coverage Log
 
 > Change: `complete-platform-help-tour-coverage`
-> Source verification SSOT: `openspec/changes/v2-platform-verification-v1-retirement/platform-checklist.md`
+> Source verification SSOT: `openspec/changes/platform-verification/platform-checklist.md`
 
 ## 2026-05-29 Baseline
 
@@ -25,7 +25,7 @@
 
 ### Current implementation constraints
 
-- `V2PlatformConfigBridge.vue` already renders `HelpButton` with `page-id="platform-config/<platformKey>"`.
+- `PlatformConfigBridge.vue` already renders `HelpButton` with `page-id="platform-config/<platformKey>"`.
 - `CommonBlogSetting.vue` currently has stable `data-syp-tour` anchors for `home`, `apiUrl`, `username`, `password`, and `validate`.
 - `CommonBlogSetting.vue` does not currently mark token/cookie, knowledge-space, preview URL, page type, or image-hosting controls with stable `data-syp-tour` anchors.
 - `FieldGuide.vue` exists but platform config form fields do not currently use it. Field text can be registered in `PageHelpConfig.fields`, but visible inline FieldGuide coverage requires a later form integration task.

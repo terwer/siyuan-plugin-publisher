@@ -8,7 +8,7 @@
 
 - 现有 OpenSpec 已完整：`proposal.md`、`design.md`、`specs/platform-guide-example-matching/spec.md`、`tasks.md`。
 - 本次允许进入实现阶段。
-- 不修改发布适配器、认证流程、平台配置存储和 V2 桥接业务逻辑。
+- 不修改发布适配器、认证流程、平台配置存储和桥接业务逻辑。
 - 文案精修仍按用户后续逐平台反馈推进，不做批量猜测改写。
 
 ## 关键约束
@@ -17,7 +17,7 @@
 - 稳定匹配键必须与展示名分离。
 - hash 只能用于消歧，不能成为语义主体。
 - 多示例平台每个示例都必须能独立映射到文档或明确 fallback。
-- 不污染 `v2-platform-verification-v1-retirement/platform-checklist.md`。
+- 不污染 `platform-verification/platform-checklist.md`。
 
 ## 目标链路拆解
 
@@ -46,14 +46,14 @@
 2. 写 `mapping-audit.md`，完成 tasks 1.x/2.x 的事实记录。
 3. 实现最小可选字段与工具，不改变现有调用方行为。
 4. 迁移样板平台并补测试。
-5. 运行 `pnpm vitest run ...` 与 `pnpm build:v2`。
+5. 运行 `pnpm vitest run ...` 与 `pnpm build`。
 6. 标记 OpenSpec 任务完成。
 
 ## 验证策略与命令
 
 - `pnpm vitest run src/helpConfigs/exampleMatching.spec.ts`
 - 如修改 registry 测试：`pnpm vitest run src/helpConfigs/registry.spec.ts`
-- `pnpm build:v2`
+- `pnpm build`
 - `openspec status --change normalize-platform-guide-example-matching --json`
 
 ## 风险与回滚

@@ -23,7 +23,7 @@ export const DYNAMIC_CONFIG_KEY = "dynamic-config"
  *
  * 旧界面已在本版彻底移除，本版不再提供回退入口；此处仅用于「确需旧界面」时的下载指引，
  * 展示在设置的「关于」页。**该指引与这两个常量计划在 2.3.0 一并移除**
- * （见 change `v2-platform-verification-v1-retirement`）。
+ * （见 change `platform-verification`）。
  */
 export const V1_LAST_VERSION = "1.41.1"
 

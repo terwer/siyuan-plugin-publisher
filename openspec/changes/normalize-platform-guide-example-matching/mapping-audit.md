@@ -6,7 +6,7 @@
 
 ## Scope
 
-This audit records the current help/guide matching state before adding example-level matching. It intentionally does not modify the V2 platform verification SSOT.
+This audit records the current help/guide matching state before adding example-level matching. It intentionally does not modify the platform verification SSOT.
 
 ## Current Matching Entry Points
 

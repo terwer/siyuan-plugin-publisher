@@ -5,7 +5,7 @@
 - `metaweblog_Cnblogs` 已有完整帮助配置，包含 `summary / fields / faq / tour`。
 - WordPress、语雀、Halo、语雀网页版、HaloWeb 已拆为独立配置文件。
 - 其余 T1 平台集中在 `remaining-t1.ts`，大多只有 `helpUrl`。
-- `v2-platform-verification-v1-retirement` 正在逐平台验证 V2C/Pub/Upd/Del/Img，并已形成唯一主表 `platform-checklist.md`。
+- `platform-verification` 正在逐平台验证 V2C/Pub/Upd/Del/Img，并已形成唯一主表 `platform-checklist.md`。
 
 本变更是帮助系统的覆盖补全，不重做帮助框架。
 
@@ -16,13 +16,13 @@
 - 将已验证平台的真实配置经验沉淀为平台帮助配置。
 - 建立“平台验证完成后同步补帮助”的固定流程。
 - 以博客园为样板，为每个平台逐步补齐 `summary`、关键 `fields`、`faq` 与可用的 `tour`。
-- 保持帮助覆盖与 V2 平台验证节奏一致，避免过期或猜测型文案。
+- 保持帮助覆盖与平台验证节奏一致，避免过期或猜测型文案。
 - 保留 `remaining-t1.ts` 作为未补齐平台的轻量兜底清单。
 
 **Non-Goals:**
 
 - 不重构 HelpRegistry、HelpPanel、FieldGuide、TourGuide 基础架构。
-- 不把帮助覆盖状态混入 `v2-platform-verification-v1-retirement/platform-checklist.md` 的 V2C/Pub/Upd/Del/Img 状态。
+- 不把帮助覆盖状态混入 `platform-verification/platform-checklist.md` 的 V2C/Pub/Upd/Del/Img 状态。
 - 不为未验证平台编写看似完整但未经验证的操作步骤。
 - 不修改平台发布适配器、传输层或配置存储格式。
 
@@ -72,7 +72,7 @@
 1. 为已验证平台补齐帮助覆盖任务清单。
 2. 按优先级逐个平台拆出或完善独立配置文件。
 3. 每个平台补齐后运行 registry/help 相关测试和 `pnpm build`。
-4. 在 V2 宿主手验对应平台配置页 HelpPanel / FieldGuide / TourGuide。
+4. 在宿主手验对应平台配置页 HelpPanel / FieldGuide / TourGuide。
 5. 后续平台验证通过后，在本变更追加或勾选对应帮助覆盖任务。
 
 ## Open Questions

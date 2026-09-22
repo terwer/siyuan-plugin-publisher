@@ -2,16 +2,16 @@
 
 ## Purpose
 
-定义 Publisher V2 自有的轻量 PicGo 图床配置与发布接入能力，确保图床配置和上传依赖 `zhi-siyuan-picgo` headless contract，而不依赖已安装的独立 `siyuan-plugin-picgo` 插件产品。
+定义 Publisher 自有的轻量 PicGo 图床配置与发布接入能力，确保图床配置和上传依赖 `zhi-siyuan-picgo` headless contract，而不依赖已安装的独立 `siyuan-plugin-picgo` 插件产品。
 
 ## Requirements
-### Requirement: Publisher V2 不要求安装 PicGo 插件产品
+### Requirement: Publisher 不要求安装 PicGo 插件产品
 
-Publisher V2 SHALL 允许用户通过 `zhi-siyuan-picgo` headless lib 配置和使用 PicGo 驱动的图片上传能力，而不要求 `siyuan-plugin-picgo` 作为 SiYuan 插件安装。
+Publisher SHALL 允许用户通过 `zhi-siyuan-picgo` headless lib 配置和使用 PicGo 驱动的图片上传能力，而不要求 `siyuan-plugin-picgo` 作为 SiYuan 插件安装。
 
 #### Scenario: PicGo 插件产品不存在
 
-- **WHEN** 用户打开 Publisher V2 图床设置，且 `/data/plugins/siyuan-plugin-picgo/plugin.json` 不存在
+- **WHEN** 用户打开 Publisher 图床设置，且 `/data/plugins/siyuan-plugin-picgo/plugin.json` 不存在
 - **THEN** 如果升级后的 npm lib 可用，Publisher SHALL 仍然展示 PicGo-lib 配置能力
 - **AND** Publisher SHALL NOT 仅因为 PicGo 插件产品不存在就禁用 PicGo-lib 选项
 
@@ -23,17 +23,17 @@ Publisher V2 SHALL 允许用户通过 `zhi-siyuan-picgo` headless lib 配置和�
 
 ### Requirement: Publisher 拥有轻量 PicGo-lib 配置 UI
 
-Publisher V2 SHALL 提供自己的轻量图床配置 UI，用于配置 PicGo-lib uploaders，而不是打开或嵌入 `siyuan-plugin-picgo` 插件 UI。
+Publisher SHALL 提供自己的轻量图床配置 UI，用于配置 PicGo-lib uploaders，而不是打开或嵌入 `siyuan-plugin-picgo` 插件 UI。
 
-#### Scenario: 用户打开 V2 图床设置
+#### Scenario: 用户打开图床设置
 
-- **WHEN** 用户打开 Publisher V2 图床设置
+- **WHEN** 用户打开 Publisher 图床设置
 - **THEN** UI SHALL 由 Publisher 组件渲染
 - **AND** UI SHALL NOT iframe 或跳转到 `/plugins/siyuan-plugin-picgo/#/setting`
 
 #### Scenario: 用户配置 PicGo-lib uploader
 
-- **WHEN** 用户在 Publisher V2 中选择 PicGo-lib uploader
+- **WHEN** 用户在 Publisher 中选择 PicGo-lib uploader
 - **THEN** Publisher SHALL 基于 PicGo lib schema 渲染轻量表单
 - **AND** Publisher SHALL 通过 PicGo lib contract 保存配置
 
@@ -82,23 +82,23 @@ Publisher SHALL 将平台级图床选择与 PicGo-lib uploader 配置分开。`P
 #### Scenario: 发布时上传失败
 
 - **WHEN** 发布过程中 PicGo-lib 上传失败
-- **THEN** Publisher SHALL 展示带有足够 V2 排查信息的结构化错误或警告
+- **THEN** Publisher SHALL 展示带有足够排查信息的结构化错误或警告
 - **AND** 除非用户明确配置该行为，否则 Publisher SHALL NOT 静默 fallback 到平台上传或不上传
 
-### Requirement: 移除或替换当前错误的 V2 PicGo 插件依赖 UI
+### Requirement: 移除或替换当前错误的 PicGo 插件依赖 UI
 
-Publisher V2 SHALL 移除或替换把已安装 `siyuan-plugin-picgo` 当作 PicGo 图床能力开关的 UI 和逻辑。
+Publisher SHALL 移除或替换把已安装 `siyuan-plugin-picgo` 当作 PicGo 图床能力开关的 UI 和逻辑。
 
 #### Scenario: 移除旧 PicGo 插件可用性提示
 
-- **WHEN** Publisher V2 图床设置渲染
+- **WHEN** Publisher 图床设置渲染
 - **THEN** 页面 SHALL NOT 显示“因为 PicGo 插件未安装所以 PicGo 不可用”含义的提示
 - **AND** 任何可用性状态 SHALL 指向 headless lib/runtime/config 状态
 
-#### Scenario: V2 不使用旧 PicGo 插件 iframe 入口
+#### Scenario: 不使用旧 PicGo 插件 iframe 入口
 
-- **WHEN** V2 用户需要配置 PicGo-lib 图床设置
-- **THEN** Publisher SHALL 让用户停留在 Publisher V2 设置内
+- **WHEN** 用户需要配置 PicGo-lib 图床设置
+- **THEN** Publisher SHALL 让用户停留在 Publisher 设置内
 - **AND** Publisher SHALL NOT 在主配置路径中调用 `PluginInvoke.showPicbedDialog()` 或 `PluginInvoke.showPicbedSettingDialog()` 打开 PicGo 插件页面
 
 ### Requirement: Publisher 实现等待或链接新的 PicGo contract

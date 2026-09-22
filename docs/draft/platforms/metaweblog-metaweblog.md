@@ -1,4 +1,4 @@
-# Metaweblog 通用 配置指南（草稿）
+# Metaweblog 通用配置指南（草稿）
 
 > TODO：待替换真实帮助文档链接。
 

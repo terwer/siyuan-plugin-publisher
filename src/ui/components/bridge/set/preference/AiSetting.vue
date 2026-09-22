@@ -19,7 +19,7 @@ const { getPublishPreferenceSetting, getSisyuanAiProviders, selectSisyuanAiModel
 const publishPreferenceSettingForm = getPublishPreferenceSetting()
 
 /**
- * 思源笔记 AI providers（启用且含可用模型）。V2 界面各处共用。
+ * 思源笔记 AI providers（启用且含可用模型）。界面各处共用。
  */
 const siyuanProviders = computed<SiyuanAiProvider[]>(() => getSisyuanAiProviders())
 
@@ -39,7 +39,7 @@ const handleModelChange = (modelId: string) => {
 
 <template>
   <el-form label-width="135px" class="ai-setting-form">
-    <!-- 思源笔记 AI 模型选择（V2 界面共用的核心交互） -->
+    <!-- 思源笔记 AI 模型选择（界面共用的核心交互） -->
     <el-form-item v-if="useSiyuanCfg" :label="t('pref.setting.ai.model')">
       <div class="ai-model-group">
         <el-select

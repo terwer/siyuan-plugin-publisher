@@ -124,9 +124,9 @@ If the output still points to `~/.hermes/config.yaml`, the shell did not load di
 - The Feishu/Lark gateway is a background service and does not automatically follow a terminal's current directory. This setup affects terminal-launched Hermes commands in this repo.
 - Secrets belong in the profile `.env` file at `~/.hermes/profiles/siyuan-plugin-publisher/.env`, not in this repository.
 
-## V2 Development (Primary)
+## Development (Primary)
 
-The plugin builds to `dist/` via `vite.config.ts`; the widget, extension, nginx and vercel products build from the shared V2 shell via `vite.webapp.config.ts`.
+The plugin builds to `dist/` via `vite.config.ts`; the widget, extension, nginx and vercel products build from the shared shell via `vite.webapp.config.ts`.
 
 **Start development server**
 
@@ -134,7 +134,7 @@ The plugin builds to `dist/` via `vite.config.ts`; the widget, extension, nginx 
 # Terminal 1: Start SiYuan dev server
 pnpm serve
 
-# Terminal 2: V2 watch build
+# Terminal 2: watch build
 pnpm dev
 
 # Create symlink to SiYuan plugin dir (one-time setup, or after the dist path change)
@@ -239,15 +239,15 @@ Tour steps anchor to target elements via `data-syp-tour` attributes. Add them to
 
 Then reference `"[data-syp-tour='apiUrl']"` in the tour config.
 
-**Note:** Tour queries are scoped to the `.syp-v2` container (no global DOM pollution). All help UI must render within the plugin host container.
+**Note:** Tour queries are scoped to the `.syp-app` container (no global DOM pollution). All help UI must render within the plugin host container.
 
 ### Internationalization
 
 Help system text uses the `v2.help.*` i18n key namespace. See `src/locales/en_US.ts` and `src/locales/zh_CN.ts`.
 
-## V1 Development (Deprecated, maintenance reference only)
+## Legacy UI Development (Deprecated, maintenance reference only)
 
-V1 outputs to `dist/`, built via legacy `scripts/build.py` / `scripts/dev.py`.
+The legacy UI outputs to `dist/`, built via legacy `scripts/build.py` / `scripts/dev.py`.
 
 ```bash
 pnpm dev -p siyuan

@@ -1,6 +1,6 @@
 # Tasks: complete-platform-help-tour-coverage
 
-> 关联主线：`v2-platform-verification-v1-retirement`
+> 关联主线：`platform-verification`
 > 覆盖原则：平台验证完成后补齐帮助，不提前编造未验证平台步骤。
 
 ## 0. 治理与基线
@@ -32,18 +32,18 @@
 - [ ] 3.3 当 #14–#20 Gitlab 任一平台验证通过时，同步补齐对应平台帮助配置，优先沉淀 token、仓库路径、分支、目录字段
 - [ ] 3.4 当 #22–#24 MetaWeblog 任一平台验证通过时，同步补齐 XML-RPC endpoint、用户名、密码/API Token 说明
 - [ ] 3.5 当 #26 WordPress.com 验证通过时，同步补齐 WordPress.com 与自托管 WordPress 的差异说明
-- [ ] 3.6 当 #32–#35 Custom V2 Bridge 任一平台验证通过时，同步补齐 Cookie 授权、登录入口、图床/媒体限制说明
+- [ ] 3.6 当 #32–#35 自定义平台桥接任一平台验证通过时，同步补齐 Cookie 授权、登录入口、图床/媒体限制说明
 
 ## 4. Tour 锚点与表单接入
 
 - [x] 4.1 盘点已验证平台配置表单是否存在稳定 `data-syp-tour` 锚点
 - [x] 4.2 对缺少锚点但需要 tour 的平台，补充最小 `data-syp-tour` 标记，不改变业务逻辑
-- [ ] 4.3 验证新增 tour step 在 V2 宿主容器内定位正确，不越出插件容器
+- [ ] 4.3 验证新增 tour step 在宿主容器内定位正确，不越出插件容器
 
 ## 5. 测试与验收
 
 - [x] 5.1 为新增/拆分的平台 help config 补充 registry 单测或快照式覆盖检查
 - [x] 5.2 运行 `pnpm vitest run src/helpConfigs/registry.spec.ts`
 - [x] 5.3 运行 `pnpm build`
-- [ ] 5.4 V2 宿主手验：HelpPanel 可打开、FieldGuide 可见、TourGuide 可完成
+- [ ] 5.4 宿主手验：HelpPanel 可打开、FieldGuide 可见、TourGuide 可完成
 - [ ] 5.5 每次平台验证 checklist 更新后，同步检查本 tasks 是否需要新增/勾选帮助覆盖任务

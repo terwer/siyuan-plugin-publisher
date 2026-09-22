@@ -126,12 +126,12 @@
 
 #### Scenario: 图片上传接口未完成证据验证
 
-- **WHEN** 语雀网页版图片上传尚未在 V2 宿主插件中完成真实取证
+- **WHEN** 语雀网页版图片上传尚未在宿主插件中完成真实取证
 - **THEN** 实施 SHALL NOT 合入声称支持图片上传的代码
 
-#### Scenario: V2 宿主插件图片上传失败需要取证
+#### Scenario: 宿主插件图片上传失败需要取证
 
-- **WHEN** V2 宿主插件中语雀图片上传失败
+- **WHEN** 宿主插件中语雀图片上传失败
 - **THEN** 系统 SHALL 记录可脱敏的诊断信息
 - **AND** 诊断 SHALL 能区分 `APP_BASE`、FormData 构造、`formUploadClient` 通道、`plugin-node-fetch` / `forwardProxy` / `middleware-fetch`、语雀业务错误、Cookie/权限错误
 - **AND** `transport` SHALL 为 facade 解析后的真实值，不得在 `build-formdata` 阶段预设 `siyuan-forward-proxy`
@@ -150,8 +150,8 @@
 
 #### Scenario: 图片上传失败详情可被用户查看
 
-- **WHEN** 图片上传失败导致 V2 发布失败或带警告成功
-- **THEN** V2 UI SHALL 提供可查看的脱敏错误详情
+- **WHEN** 图片上传失败导致发布失败或带警告成功
+- **THEN** 界面 SHALL 提供可查看的脱敏错误详情
 - **AND** 详情 SHALL 含文件名或脱敏标识、失败阶段、真实 transport、响应摘要
 
 ### Requirement: 语雀网页版 SHALL 提供用户化错误信息
@@ -168,23 +168,23 @@
 - **THEN** 系统 SHALL 提示用户重新登录或确认知识库写入权限
 - **AND** 系统 SHALL NOT 暴露 Cookie 或内部认证字段
 
-### Requirement: 语雀网页版 SHALL 接入 V2 平台配置桥接
+### Requirement: 语雀网页版 SHALL 接入平台配置桥接
 
-系统 SHALL 允许用户在 V2 设置流程中新增、配置和保存语雀网页版账号。V2 SHALL 通过现有桥接机制复用平台配置组件，不得新增一套孤立配置流程。
+系统 SHALL 允许用户在设置流程中新增、配置和保存语雀网页版账号。系统 SHALL 通过现有桥接机制复用平台配置组件，不得新增一套孤立配置流程。
 
-#### Scenario: 用户在 V2 新增语雀网页版账号
-- **WHEN** 用户在 V2 账号设置中选择语雀网页版
+#### Scenario: 用户新增语雀网页版账号
+- **WHEN** 用户在账号设置中选择语雀网页版
 - **THEN** 系统 SHALL 打开语雀网页版配置表单
-- **AND** 保存后该账号 SHALL 出现在 V2 快速发布平台列表中
+- **AND** 保存后该账号 SHALL 出现在快速发布平台列表中
 
-#### Scenario: V1 和 V2 共存
-- **WHEN** 用户在 V1 或 V2 中修改语雀网页版配置
+#### Scenario: 配置在多入口间保持一致
+- **WHEN** 用户在任一入口修改语雀网页版配置
 - **THEN** 配置 SHALL 使用同一持久化结构
 - **AND** 任一入口不应破坏另一入口读取配置
 
 ### Requirement: 语雀网页版 SHALL 具备全链路人工验收
 
-语雀网页版合入前 SHALL 通过人工全链路验收，覆盖配置、授权、知识库、新建、更新、删除、图片上传、预览、V2 快速发布和 V2 配置桥接。
+语雀网页版合入前 SHALL 通过人工全链路验收，覆盖配置、授权、知识库、新建、更新、删除、图片上传、预览、快速发布和平台配置桥接。
 
 #### Scenario: 实施者准备提交语雀网页版
 - **WHEN** 实施者准备提交代码

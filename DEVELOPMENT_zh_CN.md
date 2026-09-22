@@ -124,9 +124,9 @@ Windows PowerShell 中 `$HOME` 是 Windows 用户目录，所以完整路径会�
 - 飞书/Lark gateway 是后台服务，不会跟随某个终端的当前目录自动切换 profile；这里的配置只影响在本仓库终端里启动的 Hermes 命令。
 - 密钥和凭据放到 profile 自己的 `.env`：`~/.hermes/profiles/siyuan-plugin-publisher/.env`，不要提交到仓库。
 
-## V2 开发（主力模式）
+## 开发（主力模式）
 
-插件本体输出到 `dist/`，由 `vite.config.ts` 构建；挂件、浏览器扩展、nginx、vercel 四个产物由通用 V2 壳 `vite.webapp.config.ts` 构建。
+插件本体输出到 `dist/`，由 `vite.config.ts` 构建；挂件、浏览器扩展、nginx、vercel 四个产物由通用壳 `vite.webapp.config.ts` 构建。
 
 **启动开发服务**
 
@@ -134,7 +134,7 @@ Windows PowerShell 中 `$HOME` 是 Windows 用户目录，所以完整路径会�
 # 终端 1：启动思源开发者服务
 pnpm serve
 
-# 终端 2：V2 监听构建
+# 终端 2：监听构建
 pnpm dev
 
 # 创建符号链接到思源插件目录（仅首次或 dist 目录变更后执行）
@@ -238,15 +238,15 @@ Tour 步骤通过 `data-syp-tour` 属性锚定目标元素。在目标表单组�
 
 然后在 tour 配置中引用 `"[data-syp-tour='apiUrl']"` 即可。
 
-**注意：** Tour 查询限制在 `.syp-v2` 容器内（不污染全局 DOM），所有帮助 UI 必须渲染在插件宿主容器范围内。
+**注意：** Tour 查询限制在 `.syp-app` 容器内（不污染全局 DOM），所有帮助 UI 必须渲染在插件宿主容器范围内。
 
 ### 国际化
 
 帮助系统相关文本的 i18n key 命名空间为 `v2.help.*`，参见 `src/locales/zh_CN.ts` 和 `src/locales/en_US.ts`。
 
-## V1 开发（已废弃，仅维护参考）
+## 旧界面开发（已废弃，仅维护参考）
 
-V1 输出到 `dist/`，通过旧 `scripts/build.py` / `scripts/dev.py` 构建。
+旧界面输出到 `dist/`，通过旧 `scripts/build.py` / `scripts/dev.py` 构建。
 
 ```bash
 pnpm dev -p siyuan
