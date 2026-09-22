@@ -35,5 +35,5 @@
 ## 5. 验证
 
 - [x] 5.1 运行 `pnpm vitest run src/helpConfigs/registry.spec.ts src/platforms/dynamicConfig.spec.ts`。
-- [x] 5.2 运行 `pnpm build:v2`。
+- [x] 5.2 运行 `pnpm build`。
 - [x] 5.3 检查 `exampleMatching` / `PageHelpExample` / `examples` 残留引用为 0。

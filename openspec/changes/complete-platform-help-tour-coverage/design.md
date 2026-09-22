@@ -71,7 +71,7 @@
 
 1. 为已验证平台补齐帮助覆盖任务清单。
 2. 按优先级逐个平台拆出或完善独立配置文件。
-3. 每个平台补齐后运行 registry/help 相关测试和 `pnpm build:v2`。
+3. 每个平台补齐后运行 registry/help 相关测试和 `pnpm build`。
 4. 在 V2 宿主手验对应平台配置页 HelpPanel / FieldGuide / TourGuide。
 5. 后续平台验证通过后，在本变更追加或勾选对应帮助覆盖任务。
 

@@ -26,7 +26,7 @@ For each platform listed in T1 (V2 configuration bridge platforms per `bridgeReg
 - **GIVEN** a T1 platform account with valid credentials
 - **WHEN** the verifier completes V2 quick publish flows
 - **THEN** all five columns V2C/Pub/Upd/Del/Img are marked ✅ in the checklist
-- **AND** `pnpm build:v2` succeeds for the release under test
+- **AND** `pnpm build` succeeds for the release under test
 
 #### Scenario: T1 platform fails one step
 

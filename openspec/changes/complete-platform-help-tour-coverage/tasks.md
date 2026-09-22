@@ -44,6 +44,6 @@
 
 - [x] 5.1 为新增/拆分的平台 help config 补充 registry 单测或快照式覆盖检查
 - [x] 5.2 运行 `pnpm vitest run src/helpConfigs/registry.spec.ts`
-- [x] 5.3 运行 `pnpm build:v2`
+- [x] 5.3 运行 `pnpm build`
 - [ ] 5.4 V2 宿主手验：HelpPanel 可打开、FieldGuide 可见、TourGuide 可完成
 - [ ] 5.5 每次平台验证 checklist 更新后，同步检查本 tasks 是否需要新增/勾选帮助覆盖任务

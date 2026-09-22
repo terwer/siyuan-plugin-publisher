@@ -54,10 +54,10 @@
 ## 5. Phase 5 — 验证
 
 - [x] 5.1 V1：`pnpm build` 通过（回归无退化；含解耦后的包装页/BackPage 容错）
-- [ ] 5.2 V2：`pnpm build:v2` 通过；宿主手验（快速/详细/批量、视图返回、平台单发、次级面板交互）待用户
+- [ ] 5.2 V2：`pnpm build` 通过；宿主手验（快速/详细/批量、视图返回、平台单发、次级面板交互）待用户
   - 2026-08-24 构建通过（vue-tsc noEmit + vite，dist-v2/index.js 6.63MB/gzip 2.03MB，2223 模块）
 - [x] 5.3 单测：`pnpm vitest run` 56 文件 / 276 用例通过（删除 2 个冗余 spec 减 6 例，其余全绿、V1 无退化）
-- [x] 5.4 `pnpm build:v2` 含 vue-tsc noEmit，exit 0
+- [x] 5.4 `pnpm build` 含 vue-tsc noEmit，exit 0
 - [ ] 5.5 同步 docs / checklist；归档前按 OpenSpec 审计（根本修复/最佳实践/不破坏底层/不影响无关模式）
 
 > 注：原「抽公共 = V2 原生精简视图」方案已修正。本实现真正复用 V1 成熟资产（`SinglePublishDoPublish` 全套字段与逻辑 + `BatchPublishIndex` + 全套 form 子组件，100% 保留功能），仅把 V1 外壳的 `useRoute/useRouter` 解耦为 props+emit，V2 用轻壳内嵌复用。这与 AGENTS.md「桥接优先、100% 保留、禁造轮子」一致，V1 发布组件虽作解耦改动但功能/逻辑/样式零变化。

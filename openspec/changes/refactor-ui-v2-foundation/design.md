@@ -1,3 +1,4 @@
+> **结构已改名（2026-09-20 备注）**：本文是 V2 基础架构当时的决策记录，其中的路径与标识符**已随旧界面退役整体改名**，阅读时按当下结构对照：`src/components/v2/*` → `src/ui/components/*`、`src/composables/v2/*` → `src/ui/composables/*`、`src/assets/v2/*` → `src/ui/assets/*`、`siyuan/v2/*` → `siyuan/host/*`、`V2App.vue` → `App.vue`、`V2Host` → `PluginHost`、`createV2VueApp` → `createApp`、`useV2I18n` → `useAppI18n`；`src/locales/*` 与 `useVueI18n` 已并入 `siyuan/i18n/*` 后删除（国际化单轨，本文「禁止再新增 `src/locales/*` key」的约束因此已完成）。下文保留当时事实。
 # UI V2 全生命周期设计
 
 ## 1. 背景

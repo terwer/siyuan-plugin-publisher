@@ -24,7 +24,7 @@ The V2 host MUST NOT invoke VueUse `useDark`, MUST NOT render a theme toggle con
 
 ### Requirement: Element Plus in V2 uses official dark CSS variables
 
-The V2 Vue app bootstrap (`createV2VueApp`) MUST import `element-plus/dist/index.css`, `element-plus/theme-chalk/dark/css-vars.css`, and V2 base styles (`src/assets/v2/base.styl` including `syp-floating.styl`).
+The V2 Vue app bootstrap (`createApp`) MUST import `element-plus/dist/index.css`, `element-plus/theme-chalk/dark/css-vars.css`, and the base styles (`src/ui/assets/base.styl` including `syp-floating.styl`).
 
 When the host is in dark mode and Siyuan does not provide `html.dark`, the V2 host MAY temporarily add class `dark` to `document.documentElement` while the panel is open, and MUST remove that class on `close()` if the plugin added it. The plugin MUST NOT map `--el-*` to `--b3-*`.
 
@@ -85,11 +85,11 @@ Inner panels (e.g. warning detail buttons) MUST use `--b3-theme-surface` / `--b3
 - **WHEN** host is in light mode and publish succeeds
 - **THEN** the success status strip MUST match pre-change light appearance (regression guard)
 
-### Requirement: V2Host is a single plugin-scoped instance
+### Requirement: PluginHost is a single plugin-scoped instance
 
-The plugin MUST expose exactly one `V2Host` on `PublisherPlugin` (or equivalent singleton). Topbar, settings entry, and other callers MUST share that instance so only one V2 menu lifecycle runs at a time.
+The plugin MUST expose exactly one `PluginHost` on `PublisherPlugin` (or equivalent singleton). Topbar, settings entry, and other callers MUST share that instance so only one V2 menu lifecycle runs at a time.
 
-`V2Host.show()` MUST serialize concurrent open requests and `close()` MUST unmount the Vue app, await DOM flush, then remove mount nodes before closing the SiYuan `Menu`.
+`PluginHost.show()` MUST serialize concurrent open requests and `close()` MUST unmount the Vue app, await DOM flush, then remove mount nodes before closing the SiYuan `Menu`.
 
 #### Scenario: Rapid topbar clicks in light mode
 

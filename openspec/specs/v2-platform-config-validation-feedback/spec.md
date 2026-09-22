@@ -9,7 +9,7 @@ V2 平台配置桥接层 SHALL 在平台表单完成 API/授权验证后，向�
 #### Scenario: MetaWeblog 平台验证失败
 - **WHEN** 用户在 V2 发布设置页点击「验证」且底层 adaptor 抛出或返回错误（如 `TypeError`、XML-RPC fault）
 - **THEN** 桥接表单 SHALL 通过 `onValidated` 传递 `ok: false` 与可读的 `errorMessage`
-- **AND** `V2PlatformConfigBridge` SHALL 将该对象原样转发给 `V2App`
+- **AND** `PlatformConfigBridge` SHALL 将该对象原样转发给 `App`
 - **AND** 转发过程 MUST NOT 丢弃 `errorMessage` 字段
 
 #### Scenario: 验证成功

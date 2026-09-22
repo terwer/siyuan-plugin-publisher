@@ -67,5 +67,5 @@ custom_Zhihu -> SubPlatformType.Custom_Zhihu
 1. 补充 `getSubPlatformTypeByKey()` 对实例 key 的单测，确认现有函数已覆盖需求。
 2. 更新 HelpRegistry fallback 链及回归测试。
 3. 删除自造 `exampleMatching` 文件、类型和语雀 examples 配置。
-4. 运行目标测试与 `pnpm build:v2`。
+4. 运行目标测试与 `pnpm build`。
 5. 将 `complete-platform-help-tour-coverage` 覆盖日志更新为当前结论。
