@@ -16,9 +16,7 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 /**
  * `usePublishConfig` 的冒烟测试。
  *
- * 原先用挂载 V1 的 `App.vue`（`createVueApp()`）来准备 i18n/router/pinia 上下文；V1 退役后该壳已删除，
- * 而这组用例真正要覆盖的是「配置能否解析出版本与适配器」，故改为直接准备 pinia 与 i18n，
- * 不再挂载任何 SPA 组件。
+ * 覆盖「配置能否解析出版本与适配器」，因此只需准备 pinia 与 i18n 上下文，不挂载任何组件。
  */
 describe("test usePublishConfig", async () => {
   beforeEach(async () => {

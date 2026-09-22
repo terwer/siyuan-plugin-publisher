@@ -88,9 +88,9 @@
 
 ### 8. 删除面（Gate D 执行清单）
 
-**删除**：`siyuan/iframeDialog.ts`、`siyuan/invoke/pluginInvoke.ts`、`siyuan/utils/menuUtils.ts`、`siyuan/topbar.ts` 的 `showLegacyMenu`/`addMenu`、`src/routes/routeConfig.ts`、`src/bootstrap.ts`、`iframeResize` 指令、`src/pages/**` 中 V1 SPA 专用页面、V1 SPA 构建入口、`useV2UI` 开关行与关闭提示、`V1_LAST_VERSION`/`V1_LAST_RELEASE_URL`、`preferenceConfigManager` 的 `useV2UI` 归一化、`PreferenceSetting.vue` 的对应开关、相关 i18n 词条与 `helpConfigs` 字段说明。
+**删除**：`siyuan/iframeDialog.ts`、`siyuan/invoke/pluginInvoke.ts`、`siyuan/utils/menuUtils.ts`、`siyuan/topbar.ts` 的 `showLegacyMenu`/`addMenu`、`src/routes/routeConfig.ts`、`src/bootstrap.ts`、`iframeResize` 指令、`src/pages/**` 中 V1 SPA 专用页面、V1 SPA 构建入口、`useV2UI` 开关行与关闭提示、`preferenceConfigManager` 的 `useV2UI` 归一化、`PreferenceSetting.vue` 的对应开关、相关 i18n 词条与 `helpConfigs` 字段说明。
 
-**保留**：V2 复用的 V1 组件（见决策 5）与 `zhi-blog-api` 适配器层。
+**保留**：复用的共享表单组件（见决策 5）与 `zhi-blog-api` 适配器层。
 
 ## Risks / Trade-offs
 

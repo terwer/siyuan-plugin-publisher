@@ -17,7 +17,7 @@ import { Utils } from "~/src/utils/utils.ts"
 
 const logger = createAppLogger("use-publish-pref")
 
-// 共享单例：所有调用方（V1 与当前界面共用 AI 设置组件）拿到同一个引用，保证选择与回填一致
+// 共享单例：所有调用方（共享的 AI 设置组件）拿到同一个引用，保证选择与回填一致
 let prefConfig: RemovableRef<PublishPreferenceCfg> | null = null
 
 /**

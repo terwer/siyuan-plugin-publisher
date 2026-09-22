@@ -196,23 +196,23 @@ const emit = defineEmits<{
 interface ChatPrompt {
   key: string
   value: string
-  /** 是否系统内置：与 V1 一致，内置项也是 false（可编辑、可删除） */
+  /** 是否系统内置：内置项也是 false（可编辑、可删除） */
   isSys: boolean
 }
 
 const logger = createAppLogger("ai-chat")
 
-/** localStorage 键名与存储结构沿用 V1，保证老用户已有 Prompt 不丢 */
+/** localStorage 键名与存储结构保持既有约定，保证老用户已有 Prompt 不丢 */
 const PROMPTS_STORAGE_KEY = "prompts"
-/** 触发「当前上下文」的文本标记：与 V1 保持一致，用于匹配已存数据 */
+/** 触发「当前上下文」的文本标记：保持既有约定，用于匹配已存数据 */
 const CURRENT_CONTEXT = "当前上下文"
 
 /**
- * 系统内置 Prompt：key 与 V1 一致，老数据按 key 去重合并
+ * 系统内置 Prompt：key 保持既有约定，老数据按 key 去重合并
  *
  * 文案为持久化数据（会写入 localStorage 并与老数据比对），不随界面语言翻译。
- * `isSys` 与 V1 保持一致（内置项也是 false，因此可编辑、可删除）——
- * V1 的 `v-if="!row.isSys"` 分支从未被内置项命中，此处不改动既有能力。
+ * `isSys` 保持既有约定（内置项也是 false，因此可编辑、可删除）——
+ * 只读分支从未被内置项命中，此处不改动既有能力。
  */
 const SYS_PROMPT_TEMPLATES: ChatPrompt[] = [
   {
@@ -234,7 +234,7 @@ const { blogApi } = useSiyuanApi()
 
 const chatInputRef = ref<HTMLTextAreaElement | null>(null)
 
-// 数据统一存储到 formData（结构与 V1 对齐）
+// 数据统一存储到 formData（结构与既有存储对齐）
 const formData = reactive({
   prompts: loadPrompts(),
   newPrompt: { key: "", value: "" },

@@ -102,15 +102,15 @@ const handleAction = async (action: ArticleManageAction) => {
 
 <style scoped lang="stylus">
 @import "../assets/variables.styl"
-@import "../assets/legacy-bridge.styl"
+@import "../assets/bridge.styl"
 
 .syp-manage-shell
   display flex
   flex-direction column
   gap 12px
 
-  // 文章管理列表与筛选来自 V1，统一压到 紧凑尺寸
-  syp-compact-legacy()
+  // 文章管理列表与筛选是复用组件，统一压到紧凑尺寸
+  syp-compact-bridge()
 
   &__header
     display flex

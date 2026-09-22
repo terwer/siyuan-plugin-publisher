@@ -41,15 +41,15 @@ const { t } = useAppI18n()
 
 <style scoped lang="stylus">
 @import "../../assets/variables.styl"
-@import "../../assets/legacy-bridge.styl"
+@import "../../assets/bridge.styl"
 
 .syp-batch-view
   display flex
   flex-direction column
   gap 12px
 
-  // 内嵌的批量分发表单来自 V1，统一压到 紧凑尺寸
-  syp-compact-legacy()
+  // 内嵌的批量分发表单是复用组件，统一压到紧凑尺寸
+  syp-compact-bridge()
 
   &__head
     display flex

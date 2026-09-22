@@ -17,7 +17,7 @@
     </div>
 
     <div class="syp-single-view__body">
-      <!-- 第一步：选择平台（复用 V1 SinglePublishSelectPlatform） -->
+      <!-- 第一步：选择平台（复用 SinglePublishSelectPlatform） -->
       <SinglePublishSelectPlatform
         v-if="!selectedKey"
         :id="pageId"
@@ -29,7 +29,7 @@
         <el-skeleton :rows="4" animated />
       </div>
 
-      <!-- 第二步：详细发布表单（复用 V1 SinglePublishDoPublish） -->
+      <!-- 第二步：详细发布表单（复用 SinglePublishDoPublish） -->
       <SinglePublishDoPublish
         v-else
         :platform-key="selectedKey"
@@ -65,7 +65,7 @@ const emit = defineEmits<{
 const { t } = useAppI18n()
 const { getSetting } = usePublishSettingStore()
 
-// 复用 V1 两步流程：预设平台 → 直接详表单；否则先选平台。
+// 复用两步流程：预设平台 → 直接详表单；否则先选平台。
 const selectedKey = ref(props.presetPlatformKey ?? "")
 const selectedMethod = ref<string>(props.presetMethod ?? "")
 const methodReady = ref(false)
@@ -97,7 +97,7 @@ const onSelectPlatform = async (key: string, _pageId: string, method: string) =>
 
 const onPublishBack = () => {
   // 从详表单返回时：若有预设平台则回退到选平台（保留语义），否则回退到父级。
-  // 这里统一回到选平台步骤；更符合 V1 手风琴返回语义。
+  // 这里统一回到选平台步骤；与选平台页的返回语义一致。
   selectedKey.value = ""
   selectedMethod.value = ""
   methodReady.value = false
@@ -124,15 +124,15 @@ if (props.presetPlatformKey) {
 
 <style scoped lang="stylus">
 @import "../../assets/variables.styl"
-@import "../../assets/legacy-bridge.styl"
+@import "../../assets/bridge.styl"
 
 .syp-single-view
   display flex
   flex-direction column
   gap 12px
 
-  // 内嵌的发布表单来自 V1，统一压到 紧凑尺寸
-  syp-compact-legacy()
+  // 内嵌的发布表单是复用组件，统一压到紧凑尺寸
+  syp-compact-bridge()
 
   &__head
     display flex

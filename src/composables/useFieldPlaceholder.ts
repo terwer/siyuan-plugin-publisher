@@ -16,8 +16,7 @@
  * （如 `docs`、`/post/[postid].html`），说明交给 ⓘ，两者不再重复。
  *
  * 生效边界：仅当**有 pageId 注入**时改用示例值，而 pageId 只由
- * `PlatformConfigBridge` 提供（V1 走 standalone 路由，无 provider）——
- * 因此 **V1 界面文案零变化**，不必在两个入口间做分支判断。
+ * `PlatformConfigBridge` 提供；没有注入时原样返回调用方文案。
  *
  * @author terwer
  * @since 1.42.0

@@ -112,7 +112,7 @@ describe("AiChat", () => {
 
     expect(mockGetChatInput).toHaveBeenCalledWith("文档正文", "<p>文档正文</p>")
     expect(mockChat).toHaveBeenCalledWith("帮我写摘要", { name: "system", systemMessage: "doc-context" })
-    // V1 的拼接口径：`> 提问\n回复\n\n` 前置到已有输出
+    // 拼接口径：`> 提问\n回复\n\n` 前置到已有输出
     expect(wrapper.find(".syp-ai-chat__output pre").text()).toBe("> 帮我写摘要\nAI 回复")
   })
 
@@ -160,7 +160,7 @@ describe("AiChat", () => {
     expect(mockChat).not.toHaveBeenCalled()
   })
 
-  it("keeps the V1 error semantics when the AI returns an empty answer", async () => {
+  it("keeps the error semantics when the AI returns an empty answer", async () => {
     mockChat.mockResolvedValue("")
     const wrapper = await mountAiChat()
 
@@ -187,7 +187,7 @@ describe("AiChat", () => {
     const created = stored.find((item: any) => item.value === "我的自定义 Prompt")
     expect(created.key).toBeTruthy()
     expect(created.isSys).toBe(false)
-    // 新增后输入框收起、管理面板关闭（V1 行为）
+    // 新增后输入框收起、管理面板关闭
     expect(wrapper.find(".syp-ai-chat__prompt-new").exists()).toBe(false)
     expect(mockElMessage.success).toHaveBeenCalledWith(zhCN["aiChat.message.promptAdded"])
   })
@@ -204,7 +204,7 @@ describe("AiChat", () => {
     expect(localStorage.getItem("prompts")).toBeNull()
   })
 
-  it("deletes a custom prompt from localStorage and keeps built-in prompts editable like V1", async () => {
+  it("deletes a custom prompt from localStorage and keeps built-in prompts editable", async () => {
     localStorage.setItem(
       "prompts",
       JSON.stringify([{ key: "custom-1", value: "待删除的 Prompt", isSys: false }])
@@ -222,7 +222,7 @@ describe("AiChat", () => {
     expect(readStoredPrompts().map((item: any) => item.key)).not.toContain("custom-1")
     expect(mockElMessage.success).toHaveBeenCalledWith(zhCN["aiChat.message.promptDeleted"])
 
-    // 内置 4 条与 V1 一致：isSys 为 false，因此可编辑、可删除
+    // 内置 4 条：isSys 为 false，因此可编辑、可删除
     const sysRow = wrapper
       .findAll(".syp-ai-chat__table tbody tr")
       .find((row) => row.text().includes("sys-1") || row.text().includes("请为当前上下文打标签"))
@@ -231,7 +231,7 @@ describe("AiChat", () => {
     expect(sysRow!.find(".syp-ai-chat__prompt-edit-button").exists()).toBe(true)
   })
 
-  it("keeps prompts saved by V1 and merges the 4 built-in prompts", async () => {
+  it("keeps prompts saved earlier and merges the 4 built-in prompts", async () => {
     localStorage.setItem("prompts", JSON.stringify([{ key: "custom-v1", value: "老用户的 Prompt", isSys: false }]))
     const wrapper = await mountAiChat()
     await openPromptPanel(wrapper)

@@ -79,7 +79,7 @@ class PublishPreferenceCfg extends PreferenceConfig {
 
   /**
    * 当前选中的思源笔记 AI 模型 id（对应 config.ai.providers[].models[].id）
-   * 用于 V1 与当前界面共用 AI 设置组件记住用户选择
+   * 用于共享的 AI 设置组件记住用户选择
    */
   public experimentalSisyuanAiActiveModelId?: string
 

@@ -201,7 +201,7 @@ function handleFormSaved(result: { ok: boolean }) {
 
 <style scoped lang="stylus">
 @import "../../assets/variables.styl"
-@import "../../assets/legacy-bridge.styl"
+@import "../../assets/bridge.styl"
 
 .syp-platform-bridge
   padding 10px
@@ -209,12 +209,12 @@ function handleFormSaved(result: { ok: boolean }) {
   border 1px solid var(--b3-border-color, $syp-border-primary)
   overflow visible
 
-  // 平台配置表单是 V1 组件，尺寸统一由共用 mixin 压到 统一口径
-  syp-compact-legacy()
+  // 平台配置表单是复用组件，尺寸统一由共用 mixin 压到统一口径
+  syp-compact-bridge()
 
   // 表单容器自身的字号（mixin 只管表单控件）
-  :deep(.legacy-setting-form),
-  :deep(.legacy-cookie-form)
+  :deep(.bridge-setting-form),
+  :deep(.bridge-cookie-form)
     font-size 12px
 
 .syp-validation-error-bar

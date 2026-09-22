@@ -74,7 +74,7 @@ export const shouldExcludeNotebook = (notebook: any): boolean => {
  * 加载可发布的笔记本选项（<br/>发布源可选集合）。
  *
  * 数据来源：`kernelApi.lsNotebooks()`；排除关闭的与系统/用户指南笔记本。
- * 供 V1 与当前界面共用（文章管理页过滤、偏好设置的多选）。
+ * 供界面各处共用（文章管理页过滤、偏好设置的多选）。
  *
  * @returns 响应式的选项列表、加载状态与加载方法
  * @public

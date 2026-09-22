@@ -23,8 +23,8 @@ import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
 /**
  * 文章管理的原生动作落地。
  *
- * V1 的「管理」动作（quick/single/batch/view/picgo）在当前界面中以原生方式实现，
- * 禁止向 V1 兜底。发布类动作统一经 `usePublish.doSinglePublish`，天然受
+ * 「管理」动作（quick/single/batch/view/picgo）以原生方式实现，
+ * 发布类动作统一经 `usePublish.doSinglePublish`，天然受
  * 「发布源笔记本」硬校验保护（issue #2044）。
  *
  * - quick/single/window-empty：由管理视图发向上层，切换快发视图并加载指定文档。

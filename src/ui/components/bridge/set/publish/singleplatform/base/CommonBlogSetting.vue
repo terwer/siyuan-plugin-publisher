@@ -367,7 +367,7 @@ onMounted(async () => {
 
 <template>
   <el-skeleton class="placeholder" v-if="!formData.isInit" :rows="5" animated />
-  <el-form v-else label-width="96px" class="legacy-setting-form">
+  <el-form v-else label-width="96px" class="bridge-setting-form">
     <el-alert v-if="formData.settingTips" :closable="false" :title="formData.settingTips" class="top-tip" type="info" />
     <el-alert
       v-if="props.cfg?.knowledgeSpaceEnabled"
@@ -651,7 +651,7 @@ onMounted(async () => {
   width 100%
   min-width 0
 
-.legacy-setting-form
+.bridge-setting-form
   :deep(.el-form-item)
     margin-bottom 8px
 

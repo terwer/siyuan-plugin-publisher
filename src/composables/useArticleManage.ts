@@ -69,7 +69,7 @@ const MAX_PAGE_SIZE = 8
  * 发布源笔记本多选（初值取偏好、变更持久化并刷新）。
  * 所有导航动作以事件抛出，不含 router/iframe。
  *
- * V1 `Admin.vue` 与当前管理视图均为薄封装，共用此组合式函数。
+ * 管理视图为薄封装，共用此组合式函数。
  *
  * @public
  */
@@ -186,7 +186,7 @@ export const useArticleManage = () => {
           }
         }
       } else {
-        // 浏览器/插件环境：与 V1 挂件模式一致，走 kernel 数据路径，不用 getRecentPosts（易错）。
+        // 浏览器/插件环境：走 kernel 数据路径，不用 getRecentPosts（易错）。
         state.mode = "list"
         state.pageId = ""
         state.hasSubdoc = false

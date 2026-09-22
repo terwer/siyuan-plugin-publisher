@@ -882,11 +882,11 @@ async function retryInit() {
 
 <style scoped lang="stylus">
 @import "../assets/variables.styl"
-@import "../assets/legacy-bridge.styl"
+@import "../assets/bridge.styl"
 
-// AI 设置页内嵌的是 V1 的 AiSetting，尺寸统一由共用 mixin 压到 统一口径
+// AI 设置页内嵌的是复用组件 AiSetting，尺寸统一由共用 mixin 压到统一口径
 .syp-settings-ai
-  syp-compact-legacy()
+  syp-compact-bridge()
 
   :deep(.ai-setting-form)
     font-size 12px

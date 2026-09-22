@@ -43,7 +43,7 @@ const resolvePlaceholder = (field: string, fallback: string, pageId?: string): s
 }
 
 describe("useFieldPlaceholder", () => {
-  it("V1（无 pageId 注入）：原样返回调用方文案，界面零变化", () => {
+  it("无 pageId 注入时原样返回调用方文案", () => {
     const original = "存储目录例如：docs，部分平台可使用 [auto] 作为特殊占位符"
     expect(resolvePlaceholder("defaultPath", original)).toBe(original)
   })

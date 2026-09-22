@@ -2,9 +2,9 @@
  * Copyright (c) 2023, Terwer . All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * 让 V1 组件在 插件宿主里保持同一套视觉规范
+ * 让复用的表单组件在插件宿主里保持同一套视觉规范
  *
- * 界面复用了一批 V1 组件（平台配置表单、发布表单、文章管理表格）。它们用的是
+ * V2 界面复用了一批表单组件（平台配置表单、发布表单、文章管理表格）。它们用的是
  * Element Plus 的默认尺寸，直接放进 面板会明显偏大、间距松散，与 面板
  * 自身的排版对不上，看起来像两个界面拼在一起。
  *
@@ -12,7 +12,7 @@
  * 用法：在桥接容器的根类下引入，例如
  *
  *   .syp-single-view
- *     syp-compact-legacy()
+ *     syp-compact-bridge()
  *
  * 只改尺寸与间距，不改任何行为。
  *
@@ -23,7 +23,7 @@
 
 @import "./variables.styl"
 
-syp-compact-legacy()
+syp-compact-bridge()
   :deep(.el-form)
     width 100%
     max-width 100%
@@ -97,7 +97,7 @@ syp-compact-legacy()
     font-size 12px
     border-radius $syp-radius-sm
 
-  // 各页 V1 容器继承的行高不同，会让同一条提示在这里 24px、那里 32px，统一钉死
+  // 各页容器继承的行高不同，会让同一条提示在这里 24px、那里 32px，统一钉死
   :deep(.el-alert__title)
     font-size 12px
     line-height 16px
@@ -112,7 +112,7 @@ syp-compact-legacy()
     font-size 14px
     transform translateY(-50%)
 
-  // 提示条在 V1 里自带内边距，需要同权重覆盖
+  // 提示条自带内边距，需要同权重覆盖
   :deep(.el-alert.top-tip),
   :deep(.el-alert.desc-tip)
     padding 4px 6px
@@ -161,7 +161,7 @@ syp-compact-legacy()
   :deep(.el-divider)
     margin 8px 0
 
-  // 平台图标栅格：V1 用的是 50px 级别的大图标，且图标盒比 SVG 小导致互相贴住
+  // 平台图标栅格：组件自带 50px 级别的大图标，且图标盒比 SVG 小导致互相贴住
   :deep(.platform-item),
   :deep(.platform-icon)
     display inline-flex
@@ -176,8 +176,8 @@ syp-compact-legacy()
       width 20px
       height 20px
 
-  // 批量分发的平台图标栅格：V1 给图标盒 24×30、内层 SVG 却是 32×30，图标之间会互相贴住
-  // 选择器需带上 V1 的容器类才能盖过它自己的权重
+  // 批量分发的平台图标栅格：图标盒 24×30、内层 SVG 却是 32×30，图标之间会互相贴住
+  // 选择器需带上组件自己的容器类才能盖过它的权重
   :deep(.syp-distri-platform-container)
     display flex
     flex-wrap wrap
@@ -186,7 +186,7 @@ syp-compact-legacy()
     margin-top 6px
 
   // 每项是「平台图标 + 选中角标」两个行内兄弟节点，宽度必须自适应内容。
-  // 未选中的 `.icon-no` 在 V1 里就是空路径（什么都不画），这里保留它的占位，
+  // 未选中的 `.icon-no` 就是空路径（什么都不画），这里保留它的占位，
   // 这样点选平台时只是多出一个 ✓，不会因项宽变化把后面的图标整体推走。
   :deep(.syp-distri-platform-container .distri-item)
     display inline-flex
@@ -216,7 +216,7 @@ syp-compact-legacy()
       width 18px
       height 18px
 
-  // 选中角标在 V1 里没有自己的尺寸规则，会跟着图标一起溢出、压住相邻平台
+  // 选中角标没有自己的尺寸规则，会跟着图标一起溢出、压住相邻平台
   :deep(.syp-distri-platform-container .distri-item .icon-yes),
   :deep(.syp-distri-platform-container .distri-item .icon-no)
     display inline-flex
@@ -231,8 +231,8 @@ syp-compact-legacy()
       width 13px
       height 13px
 
-  // 「详细发布」的平台选择卡片：V1 用 32px 字、32px 图标，单张卡片高达 100px
-  // 选择器带上 .row-box / .icon-list 才够盖过 V1 自己的权重
+  // 「详细发布」的平台选择卡片：组件自带 32px 字、32px 图标，单张卡片高达 100px
+  // 选择器带上 .row-box / .icon-list 才够盖过组件自己的权重
   :deep(.row-box .platform-select-card)
     margin-bottom 8px
 

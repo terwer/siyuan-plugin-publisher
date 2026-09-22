@@ -39,7 +39,7 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 
 const logger = createAppLogger("single-publish-do-publish")
 
-// props（已是无 vue-router 的解耦外壳；V1 路由页从 useRoute 取参传入，当前界面直接传入）
+// props（无 vue-router 的解耦外壳；由调用方直接传入）
 // 注意：不能用 `key` 作为 prop 名——`key` 是 Vue 保留属性，Vue 不会把它作为 prop 传入，会直接导致平台 key 丢失。
 const props = defineProps({
   platformKey: {

@@ -65,7 +65,7 @@ export const buildDocQuickPublishMenus = (
   return submenus.length === 0 ? undefined : submenus
 }
 
-/** 文档块菜单的图标（与顶栏同源，避免 V1 `icons` 之外的重复定义） */
+/** 文档块菜单的图标（与顶栏同源，避免重复定义） */
 export const docMenuIcons = {
   quickPublish: icons.iconPlane,
   aiChat: icons.iconEye,
