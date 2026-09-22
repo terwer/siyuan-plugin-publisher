@@ -74,7 +74,7 @@
     - **`vite.v1.app.config.ts` 有 5 个消费者**（此前记为 4）：扩展 / 挂件 / nginx / vercel **+ 插件发行包自己**（`scripts/build.py:38` = `pluginBuild && siyuanBuild`）。
     - **现状即负债**：`pnpm build` 把整套 SPA 打进发行包 —— `dist/` 实测 **74 文件 / 33.66 MB**（含 `index.html`、`chunks/chunk.vendor_chatgpt.js` 5.39 MB），插件运行期完全用不到；对照 `dist/` 34 文件 / 18.40 MB。
     - **旧界面 SPA 路由实为 27 条**（此前记为 22）：16 条产品路由在当前界面有对应、11 条为开发测试用、**1 条缺口 = `/setting/siyuan`**（扩展在无宿主时**必须**手填 kernel 地址与 token，否则连自己的账号都读不到）。
-    - **扩展只有一个真实功能缺口**：当前界面无自有暗色模式（宿主暗色由 `v2Host.ts` 同步），弹窗会恒亮色。
+    - **扩展只有一个真实功能缺口**：当前界面无自有暗色模式（宿主暗色由 `siyuan/host/pluginHost.ts` 同步），弹窗会恒亮色。
   - [x] 4.6.2 方案选型：**先做方案 A 的最小真机 POC**（扩展独立壳：新入口 html + 独立 vite config + 调 `createApp` 的壳 main + 连接配置视图），**纯新增文件、零改动现界面核心、不动挂件与 CI**；以真机结论再决定是否需要方案 B（抽出 `HostCapabilities` 解耦，可顺带覆盖挂件）。方案 C（保留 SPA 路由只换内部 UI）不采用：不收敛任何目标。
   - [x] 4.6.3 真机验证完成（真实 Chrome 152 + `Extensions.loadUnpacked`，以 `chrome-extension://` 身份装载）：① 渲染成功、**CSP 违规 0 条**；② 连接配置写入 `127.0.0.1:9999` 后**刷新仍在**（顺带修掉 `useSiyuanSettingStore` 无条件回写 `apiUrl` 的缺陷，见提交 `1d90f10b`），填入真实 token 后 `POST /api/notebook/lsNotebooks` 返回 **200 / 3 个笔记本**、账号列表读出 **48 个账号**；③ 无宿主文档时初始视图为「文章管理」，产品语义成立。**未验**：`chrome.*` 登录窗口/cookie 链路、单 chunk 12 MB 的弹窗加载成本
   - [x] 4.6.4 通用壳落地：`src/webapp/**` + `vite.webapp.config.ts`（`BUILD_TYPE` → `extension/<type>` / `widget` / `nginx` / `vercel`），`hostAdapter` 判定宿主（扩展/挂件/网页版）决定文档来源与是否显示连接面板；**挂件与 nginx/vercel 一并迁到通用壳**（挂件无需连接面板，文档 id 走 `getWidgetId()`）

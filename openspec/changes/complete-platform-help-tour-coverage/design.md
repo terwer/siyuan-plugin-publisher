@@ -46,7 +46,7 @@
 - `faq`：沉淀验证中真实出现的问题，例如会员限制、API Token 与登录密码区别、Cookie 授权入口、图床选择。
 - `tour`：仅在目标表单存在稳定 `data-syp-tour` 锚点时添加。
 
-### 3. 独立配置优先，remaining-t1 保持兜底
+### 3. 独立配置优先，目录级兜底保持兜底
 
 当某个平台达到完整覆盖标准时，应从 `platform-config/_default.ts` 拆出独立文件，并在 `pages/index.ts` 注册。未补齐平台继续留在 `platform-config/_default.ts`，仅作为 helpUrl 兜底。
 
