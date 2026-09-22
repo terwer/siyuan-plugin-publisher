@@ -23,7 +23,7 @@
  * @since 1.42.0
  */
 import { inject } from "vue"
-import { SYP_HELP_PAGE_ID_KEY } from "~/src/components/common/help/helpPageIdKey.ts"
+import { SYP_HELP_PAGE_ID_KEY } from "~/src/ui/components/bridge/common/help/helpPageIdKey.ts"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 
 /**

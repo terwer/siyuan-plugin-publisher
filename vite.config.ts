@@ -83,6 +83,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
+      dirs: ["src/ui/components/bridge"],
       resolvers: [ElementPlusResolver()],
     }),
     nodePolyfills({

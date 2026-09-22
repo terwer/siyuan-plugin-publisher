@@ -126,7 +126,7 @@ Windows PowerShell 中 `$HOME` 是 Windows 用户目录，所以完整路径会�
 
 ## V2 开发（主力模式）
 
-插件本体输出到 `dist/`，由 `vite.v2.config.ts` 构建；挂件、浏览器扩展、nginx、vercel 四个产物由通用 V2 壳 `vite.webapp.config.ts` 构建。
+插件本体输出到 `dist/`，由 `vite.config.ts` 构建；挂件、浏览器扩展、nginx、vercel 四个产物由通用 V2 壳 `vite.webapp.config.ts` 构建。
 
 **启动开发服务**
 
@@ -135,16 +135,16 @@ Windows PowerShell 中 `$HOME` 是 Windows 用户目录，所以完整路径会�
 pnpm serve
 
 # 终端 2：V2 监听构建
-pnpm dev:v2
+pnpm dev
 
 # 创建符号链接到思源插件目录（仅首次或 dist 目录变更后执行）
-pnpm makeLink:v2
+pnpm makeLink
 ```
 
 **构建**
 
 ```bash
-pnpm build:v2
+pnpm build
 ```
 
 ## 帮助系统

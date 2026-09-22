@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import ArticleManageList from "~/src/components/common/ArticleManageList.vue"
+import ArticleManageList from "~/src/ui/components/bridge/common/ArticleManageList.vue"
 import { ArticleManageAction } from "~/src/composables/useArticleManage.ts"
 import { useArticleManageView } from "~/src/ui/composables/useArticleManageView.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"

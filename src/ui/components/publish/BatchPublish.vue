@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import LucideChevronLeft from "~icons/lucide/chevron-left"
-import BatchPublishIndex from "~/src/components/publish/BatchPublishIndex.vue"
+import BatchPublishIndex from "~/src/ui/components/bridge/publish/BatchPublishIndex.vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 
 defineProps<{

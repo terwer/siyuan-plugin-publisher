@@ -126,7 +126,7 @@ If the output still points to `~/.hermes/config.yaml`, the shell did not load di
 
 ## V2 Development (Primary)
 
-The plugin builds to `dist/` via `vite.v2.config.ts`; the widget, extension, nginx and vercel products build from the shared V2 shell via `vite.webapp.config.ts`.
+The plugin builds to `dist/` via `vite.config.ts`; the widget, extension, nginx and vercel products build from the shared V2 shell via `vite.webapp.config.ts`.
 
 **Start development server**
 
@@ -135,16 +135,16 @@ The plugin builds to `dist/` via `vite.v2.config.ts`; the widget, extension, ngi
 pnpm serve
 
 # Terminal 2: V2 watch build
-pnpm dev:v2
+pnpm dev
 
 # Create symlink to SiYuan plugin dir (one-time setup, or after the dist path change)
-pnpm makeLink:v2
+pnpm makeLink
 ```
 
 **Build**
 
 ```bash
-pnpm build:v2
+pnpm build
 ```
 
 ## Help System

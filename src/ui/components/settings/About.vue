@@ -29,6 +29,13 @@
       </div>
     </div>
 
+    <div class="syp-about-legacy">
+      <div class="syp-about-legacy__text">{{ t("about.legacy.desc", { version: legacyVersion }) }}</div>
+      <button type="button" class="syp-btn syp-btn-secondary" @click="openLegacyDownload">
+        {{ t("about.legacy.download", { version: legacyVersion }) }}
+      </button>
+    </div>
+
     <div class="syp-about-libs">
       <div class="syp-about-libs__title">{{ t("about.thirdParty") }}</div>
       <div class="syp-about-libs__list">
@@ -46,16 +53,30 @@
 
 <script setup lang="ts">
 import { dependencies as allDependencies, version as appVersion } from "../../../../package.json"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { aboutUrl } from "~/src/utils/constants.ts"
+import { aboutUrl, V1_LAST_RELEASE_URL, V1_LAST_VERSION } from "~/src/utils/constants.ts"
+import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
 
 const { t } = useAppI18n()
+const { kernelApi } = useSiyuanApi()
 
 /** 与「关于」页同源：第三方库列表取自 package.json 的 dependencies */
 const DEPS_LIMIT = 24
 const dependencies = Object.entries(allDependencies).slice(0, DEPS_LIMIT)
 const hasMore = Object.keys(allDependencies).length >= DEPS_LIMIT
 const packageJsonUrl = "https://github.com/terwer/siyuan-plugin-publisher/blob/main/package.json"
+
+/**
+ * 旧版界面的下载指引。
+ *
+ * 旧界面已在本版彻底移除，这里只提供「确需旧界面」时的去处；**计划在 2.3.0 移除整块内容**
+ * （含 `V1_LAST_VERSION` / `V1_LAST_RELEASE_URL` 两个常量）。
+ */
+const legacyVersion = V1_LAST_VERSION
+const openLegacyDownload = async () => {
+  await openPathOrUrl(V1_LAST_RELEASE_URL, kernelApi)
+}
 </script>
 
 <style scoped lang="stylus">
@@ -110,6 +131,23 @@ const packageJsonUrl = "https://github.com/terwer/siyuan-plugin-publisher/blob/m
 
     &:hover
       text-decoration underline
+
+.syp-about-legacy
+  display flex
+  align-items center
+  justify-content space-between
+  gap 12px
+  padding 10px 12px
+  border 1px solid var(--b3-border-color, $syp-border-primary)
+  border-radius $syp-radius-sm
+  background var(--b3-theme-surface-lights, $syp-bg-secondary)
+
+  &__text
+    flex 1 1 auto
+    min-width 0
+    font-size 12px
+    line-height 1.5
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
 
 .syp-about-libs
   display flex

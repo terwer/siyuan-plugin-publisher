@@ -128,6 +128,7 @@ export default defineConfig({
       dts: false,
     }),
     Components({
+      dirs: ["src/ui/components/bridge"],
       resolvers: [ElementPlusResolver()],
       dts: false,
     }),

@@ -6,15 +6,15 @@
 ## 适用范围
 
 - V2 快速发布（单平台发布/更新/删除/带图）+ V2 平台配置页。
-- 验证载体：思源 **Electron 宿主**（`pnpm build:v2` + `pnpm makeLink:v2` 后，在思源桌面端操作）。
+- 验证载体：思源 **Electron 宿主**（`pnpm build` + `pnpm makeLink` 后，在思源桌面端操作）。
 - 详细发布、批量分发、文章管理仪表盘尚未实现，**不纳入本轮覆盖范围**。
 
 ---
 
 ## 一、前置准备
 
-1. 构建产物：`pnpm build:v2` 通过（含 `vue-tsc` 类型检查 + vite 打包）。
-2. 软链到思源：`pnpm makeLink:v2`。
+1. 构建产物：`pnpm build` 通过（含 `vue-tsc` 类型检查 + vite 打包）。
+2. 软链到思源：`pnpm makeLink`。
 3. 确认测试账号/站点可用（本地 Docker 或用真实账号），并记录到 `account.txt`（放站点目录或 docker 目录）。
 4. 打开思源桌面端 → 左上角发布工具图标 → 进入 V2 面板。
 

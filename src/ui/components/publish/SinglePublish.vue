@@ -44,8 +44,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
-import SinglePublishSelectPlatform from "~/src/components/publish/SinglePublishSelectPlatform.vue"
-import SinglePublishDoPublish from "~/src/components/publish/SinglePublishDoPublish.vue"
+import SinglePublishSelectPlatform from "~/src/ui/components/bridge/publish/SinglePublishSelectPlatform.vue"
+import SinglePublishDoPublish from "~/src/ui/components/bridge/publish/SinglePublishDoPublish.vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"

@@ -8,7 +8,7 @@
 -->
 
 <!--
-  扩展壳的「思源连接配置」面板（POC）。
+  扩展壳的「思源连接配置」面板。
 
   界面的分区只有 account / picbed / preference / ai / about，没有 `/setting/siyuan` 的对应物；
   扩展必须能填写内核地址与 Token，因此本面板直接复用既有 store
@@ -34,7 +34,7 @@
         spellcheck="false"
       />
       <span class="syp-web-connection__hint">
-        提示：store 每次读取都会用构建期默认值回写该地址（POC 已知限制，见 README-POC）。
+        提示：store 每次读取都会用构建期默认值回写该地址。
       </span>
     </label>
 

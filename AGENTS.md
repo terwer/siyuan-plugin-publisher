@@ -49,7 +49,7 @@
 ## 用户偏好（已学习）
 
 - 助手回复使用**简体中文**；Git 提交说明使用**英文**。
-- V2 宿主开发/验证核心三命令：`pnpm dev:v2`（调试/watch）、`pnpm build:v2`（构建）、`pnpm makeLink:v2`（软链到思源）。
+- 开发/验证核心三命令：`pnpm dev`（调试/watch）、`pnpm build`（类型检查 + 构建并打包插件）、`pnpm makeLink`（软链到思源，指向 `dist/`）。
 - 清 diff 时直接删除文件并清理引用。
 - 非琐碎代码改动前写 `.planning/` 或 OpenSpec 规划。
 - OpenSpec archive 前严格审计：**根本修复**（非 mock）、**最佳实践**、**不破坏底层设计**、**不影响无关模式**，四项全部达标才 archive。
@@ -81,7 +81,8 @@
 
 ## 工作区事实（已学习）
 
-- **构建链（V1 退役后）**：插件本体 `pnpm build:v2`（`vite.v2.config.ts` → `dist/`）；调试/watch 用 `pnpm dev:v2`；软链到思源用 `pnpm makeLink:v2`（等价 `pnpm makeLink`，都指向 `dist/`）。**V1 SPA 与 `vite.v1*.config.ts` 已删除，不存在第二套界面构建。**
+- **构建链（V1 退役后）**：插件本体由 `vite.config.ts` 构建到 `dist/`，命令 `pnpm build`（含 `vue-tsc`）；调试/watch 用 `pnpm dev`；软链到思源用 `pnpm makeLink`。**V1 SPA、`vite.v1*.config.ts` 与 `dist-v2` 均已删除，不存在第二套界面构建。**
+- **代码结构（无 V2 命名）**：界面代码集中在 `src/ui/**` —— `components/` 为原生实现、`components/bridge/**` 为 V2 复用的 V1 组件、`composables/**`、`assets/**`；插件宿主运行时在 `siyuan/host/**`；四个 web 产物的壳在 `src/webapp/**`。（`mv2` 指 Firefox Manifest V2，与命名清理无关。）
 - **四个 web 产物**：挂件 / 浏览器扩展（chrome、edge、firefox）/ nginx / vercel 由同一份通用 V2 壳构建 —— `src/webapp/**` + `vite.webapp.config.ts`（按 `BUILD_TYPE` 落 `widget` / `extension/<type>` / `nginx` / `vercel`）。壳通过 `hostAdapter` 判定宿主（扩展 / 挂件 / 网页版）决定文档来源与是否显示「思源连接配置」。构建脚本传的 `--outDir` 必须是绝对路径（Vite 会把相对路径按 config 的 `root` 解析）。
 - **发布打包**：`pnpm build`（`scripts/build.py`）只构建插件 lib 并打 `build/*.zip`；`pnpm package` 追加四个 web 产物。发行包里**不再包含** SPA。
 - `PicbedServiceTypeEnum.None` 是用户明确选择「无图床」，视为有效值，不是未设置。

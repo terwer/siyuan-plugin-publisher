@@ -11,7 +11,7 @@ import { describe, expect, it } from "vitest"
 import { computed, defineComponent, h, provide } from "vue"
 import { mount } from "@vue/test-utils"
 import { useFieldPlaceholder } from "~/src/composables/useFieldPlaceholder.ts"
-import { SYP_HELP_PAGE_ID_KEY } from "~/src/components/common/help/helpPageIdKey.ts"
+import { SYP_HELP_PAGE_ID_KEY } from "~/src/ui/components/bridge/common/help/helpPageIdKey.ts"
 import "~/src/helpConfigs/pages/index"
 
 /**

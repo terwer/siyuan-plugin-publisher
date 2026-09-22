@@ -92,8 +92,8 @@ import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
-import HelpButton from "~/src/components/common/help/HelpButton.vue"
-import { SYP_HELP_PAGE_ID_KEY } from "~/src/components/common/help/helpPageIdKey.ts"
+import HelpButton from "~/src/ui/components/bridge/common/help/HelpButton.vue"
+import { SYP_HELP_PAGE_ID_KEY } from "~/src/ui/components/bridge/common/help/helpPageIdKey.ts"
 
 // 确保 page configs 已注册
 import "~/src/helpConfigs/pages/index"
