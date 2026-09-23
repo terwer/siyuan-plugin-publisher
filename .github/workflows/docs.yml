@@ -1,22 +1,31 @@
 name: Docs
 
-# 文档站点。
-#   - main：构建并发布到 GitHub Pages
-#   - 其他分支 / PR：只构建，用于验证站点能编译通过
+# 文档站点：唯一的文档发布者，独立于发版流程。
 #
-# 站点地址集中在 docs/.vitepress/site.mts，换域名只改那一个文件。
+#   dev / PR : 构建校验，确认站点能编译
+#   main     : lint + 测试全通过后，构建并发布到 gh-pages
+#
+# 与发版解耦：文档改动合并到 main 即上线，不必等 release-please 发版；
+# 站点出问题也不会影响插件发行包的上传。
+#
+# GitHub Pages 的 Source 指向 gh-pages 分支根目录，推送后自动重建。
+# 站点地址集中在 docs/.vitepress/site.mts；部署逻辑在 scripts/deploy_docs.mjs。
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev, main]
     paths:
       - "docs/**"
+      - "scripts/deploy_docs.mjs"
+      - "src/utils/site.ts"
       - "package.json"
       - "pnpm-lock.yaml"
       - ".github/workflows/docs.yml"
   pull_request:
     paths:
       - "docs/**"
+      - "scripts/deploy_docs.mjs"
+      - "src/utils/site.ts"
       - "package.json"
       - "pnpm-lock.yaml"
       - ".github/workflows/docs.yml"
@@ -31,43 +40,86 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: Build docs
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+          run_install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Lint for TypeScript errors
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm exec vitest run
+
       - name: Build docs
         run: pnpm docs:build
 
-      - name: Upload artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
+      - name: Verify output
+        run: |
+          test -f docs/.vitepress/dist/index.html
+          test -f docs/.vitepress/dist/404.html
+          test -d docs/.vitepress/dist/assets
+          echo "文档输出文件数: $(find docs/.vitepress/dist -type f | wc -l)"
 
   deploy:
-    # 只有 main 分支的推送才发布，dev 与 PR 仅做构建校验
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: Deploy docs
     needs: build
-    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
     permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: write
     steps:
-      - uses: actions/configure-pages@v5
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish to gh-pages
+        env:
+          DOCS_DEPLOY_NAME: github-actions[bot]
+          DOCS_DEPLOY_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          # 与 release-please.yml 使用同一个已配置的 PAT
+          DOCS_DEPLOY_REMOTE: https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+        run: pnpm docs:deploy
+
+      - name: Verify the site is live
+        run: |
+          url="https://terwer.github.io/siyuan-plugin-publisher/"
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            if [ "$code" = "200" ]; then
+              echo "站点已上线: $url"
+              exit 0
+            fi
+            echo "等待 Pages 重建... ($i/30) HTTP $code"
+            sleep 10
+          done
+          echo "站点在 5 分钟内未就绪，请检查 Pages 设置" >&2
+          exit 1

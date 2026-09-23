@@ -26,7 +26,8 @@
     "syncWidgetRepo": "python scripts/sync_widget_repo.py",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "docs:deploy": "node scripts/deploy_docs.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

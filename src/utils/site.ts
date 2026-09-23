@@ -15,20 +15,38 @@
  * 换域名时同时改这两个文件的 `SITE_ORIGIN` / `SITE_BASE` 即可。
  */
 
+/**
+ * 帮助链接指向站点文档。
+ *
+ * 站点发布在 `gh-pages` 分支（GitHub Pages），地址由 `SITE_ORIGIN` + `SITE_BASE` 决定。
+ * 若站点临时不可用，把它改为 `false`，帮助链接会回退到仓库首页。
+ */
+export const USE_SITE_DOCS = true
+
+/** 仓库地址（站点未上线时的回退目标） */
+export const REPO_URL = "https://github.com/terwer/siyuan-plugin-publisher"
+
 /** 站点根地址，末尾不带斜杠 */
 export const SITE_ORIGIN = "https://terwer.github.io"
 
 /** 站点子路径；自有域名填 `/` */
 export const SITE_BASE = "/siyuan-plugin-publisher/"
 
-/** 站点首页 */
+/** 站点首页；站点未上线时回退到仓库 */
 export function siteHome(): string {
+  if (!USE_SITE_DOCS) return REPO_URL
   const base = SITE_BASE.endsWith("/") ? SITE_BASE : `${SITE_BASE}/`
   return `${SITE_ORIGIN}${base}`
 }
 
-/** 拼接站点内的任意路径 */
+/**
+ * 拼接站点内的任意路径。
+ *
+ * 站点未上线时不拼接路径——仓库里没有这些页面，拼出来仍是 404，
+ * 因此直接回退到仓库首页，让用户至少能拿到 README。
+ */
 export function siteUrl(path = "/"): string {
+  if (!USE_SITE_DOCS) return REPO_URL
   const rel = path.startsWith("/") ? path.slice(1) : path
   return `${siteHome()}${rel}`
 }

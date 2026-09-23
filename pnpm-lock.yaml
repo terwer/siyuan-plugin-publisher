@@ -140,7 +140,7 @@ importers:
         version: 22.19.1
       '@vitejs/plugin-vue':
         specifier: ^6.0.7
-        version: 6.0.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))(vue@3.5.24(typescript@5.9.3))
+        version: 6.0.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))(vue@3.5.24(typescript@5.9.3))
       '@vitest/coverage-v8':
         specifier: ^4.1.7
         version: 4.1.7(vitest@4.1.7)
@@ -179,19 +179,19 @@ importers:
         version: 48.10.2(rollup@4.53.2)(typescript@5.9.3)
       vite:
         specifier: ^8.0.14
-        version: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)
+        version: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))
+        version: 3.2.2(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))
       vite-plugin-node-polyfills:
         specifier: ^0.28.0
-        version: 0.28.0(rollup@4.53.2)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))
+        version: 0.28.0(rollup@4.53.2)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))
       vitepress:
         specifier: ^1.6.4
         version: 1.6.4(@algolia/client-search@5.59.0)(@types/node@22.19.1)(async-validator@4.2.5)(axios@1.13.2)(lightningcss@1.32.0)(postcss@8.5.15)(sass@1.94.0)(search-insights@2.17.3)(stylus@0.64.0)(terser@5.44.1)(typescript@5.9.3)
       vitest:
         specifier: ^4.1.7
-        version: 4.1.7(@edge-runtime/vm@3.2.0)(@types/node@22.19.1)(@vitest/coverage-v8@4.1.7)(jsdom@27.2.0)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))
+        version: 4.1.7(@edge-runtime/vm@3.2.0)(@types/node@22.19.1)(@vitest/coverage-v8@4.1.7)(jsdom@27.2.0)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))
       vue-tsc:
         specifier: ^3.1.4
         version: 3.1.4(typescript@5.9.3)
@@ -5574,6 +5574,11 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
 
+  yaml@2.9.1:
+    resolution: {integrity: sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
+
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
@@ -7619,10 +7624,10 @@ snapshots:
       vite: 5.4.21(@types/node@22.19.1)(lightningcss@1.32.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)
       vue: 3.5.24(typescript@5.9.3)
 
-  '@vitejs/plugin-vue@6.0.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))(vue@3.5.24(typescript@5.9.3))':
+  '@vitejs/plugin-vue@6.0.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))(vue@3.5.24(typescript@5.9.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)
+      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
       vue: 3.5.24(typescript@5.9.3)
 
   '@vitest/coverage-v8@4.1.7(vitest@4.1.7)':
@@ -7637,7 +7642,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.7(@edge-runtime/vm@3.2.0)(@types/node@22.19.1)(@vitest/coverage-v8@4.1.7)(jsdom@27.2.0)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))
+      vitest: 4.1.7(@edge-runtime/vm@3.2.0)(@types/node@22.19.1)(@vitest/coverage-v8@4.1.7)(jsdom@27.2.0)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))
 
   '@vitest/expect@4.1.7':
     dependencies:
@@ -7648,13 +7653,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))':
+  '@vitest/mocker@4.1.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))':
     dependencies:
       '@vitest/spy': 4.1.7
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)
+      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
 
   '@vitest/pretty-format@4.1.7':
     dependencies:
@@ -11331,7 +11336,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite-plugin-html@3.2.2(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)):
+  vite-plugin-html@3.2.2(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -11345,13 +11350,13 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)
+      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
 
-  vite-plugin-node-polyfills@0.28.0(rollup@4.53.2)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)):
+  vite-plugin-node-polyfills@0.28.0(rollup@4.53.2)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@4.53.2)
       node-stdlib-browser: 1.3.1
-      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)
+      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
     transitivePeerDependencies:
       - rollup
 
@@ -11368,7 +11373,7 @@ snapshots:
       stylus: 0.64.0
       terser: 5.44.1
 
-  vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2):
+  vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -11383,6 +11388,7 @@ snapshots:
       stylus: 0.64.0
       terser: 5.44.1
       tsx: 4.19.2
+      yaml: 2.9.1
 
   vitepress@1.6.4(@algolia/client-search@5.59.0)(@types/node@22.19.1)(async-validator@4.2.5)(axios@1.13.2)(lightningcss@1.32.0)(postcss@8.5.15)(sass@1.94.0)(search-insights@2.17.3)(stylus@0.64.0)(terser@5.44.1)(typescript@5.9.3):
     dependencies:
@@ -11434,10 +11440,10 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@4.1.7(@edge-runtime/vm@3.2.0)(@types/node@22.19.1)(@vitest/coverage-v8@4.1.7)(jsdom@27.2.0)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)):
+  vitest@4.1.7(@edge-runtime/vm@3.2.0)(@types/node@22.19.1)(@vitest/coverage-v8@4.1.7)(jsdom@27.2.0)(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)):
     dependencies:
       '@vitest/expect': 4.1.7
-      '@vitest/mocker': 4.1.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2))
+      '@vitest/mocker': 4.1.7(vite@8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))
       '@vitest/pretty-format': 4.1.7
       '@vitest/runner': 4.1.7
       '@vitest/snapshot': 4.1.7
@@ -11454,7 +11460,7 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)
+      vite: 8.0.14(@types/node@22.19.1)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@edge-runtime/vm': 3.2.0
@@ -11622,6 +11628,9 @@ snapshots:
   yallist@5.0.0: {}
 
   yaml@1.10.2: {}
+
+  yaml@2.9.1:
+    optional: true
 
   yargs-parser@21.1.1: {}
 

@@ -59,7 +59,7 @@ Platform capabilities continue to improve with each version. Check the in-plugin
 
 ## Documentation
 
-[Read the Publisher docs](https://siyuan.wiki/s/20240330142711-bc3gjg0)
+[Read the Publisher docs](https://terwer.github.io/siyuan-plugin-publisher/)
 
 ## Changelog
 

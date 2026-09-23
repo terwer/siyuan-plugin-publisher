@@ -59,7 +59,7 @@
 
 ## 使用文档
 
-[查看发布工具文档](https://siyuan.wiki/s/20230810132040-nn4q7vs)
+[查看发布工具文档](https://terwer.github.io/siyuan-plugin-publisher/)
 
 ## 更新记录
 
