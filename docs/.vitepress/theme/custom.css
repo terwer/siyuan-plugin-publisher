@@ -1,0 +1,182 @@
+/**
+ * 品牌与排版微调：沿用 VitePress 默认主题，只调色与几处密度。
+ * 不覆盖结构，保证升级 VitePress 时无需跟着改。
+ */
+
+:root {
+  --vp-c-brand-1: #3e63dd;
+  --vp-c-brand-2: #3358d4;
+  --vp-c-brand-3: #2b4bc7;
+  --vp-c-brand-soft: rgba(62, 99, 221, 0.14);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #3e63dd 20%, #30a46c 80%);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #3e63dd55 40%, #30a46c55 60%);
+  --vp-home-hero-image-filter: blur(48px);
+}
+
+.dark {
+  --vp-c-brand-1: #7b9aff;
+  --vp-c-brand-2: #6a8bff;
+  --vp-c-brand-3: #5a7bfa;
+  --vp-c-brand-soft: rgba(123, 154, 255, 0.18);
+}
+
+/* 首页 hero 更松弛一些 */
+.VPHero .name {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* 主标题：默认字号下「一次编写，发布到 30+ 平台」会折成三行。
+   同时放开 VitePress 默认给 .text 的宽度上限。 */
+.VPHero .text {
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 1.22;
+  max-width: none;
+}
+
+@media (min-width: 640px) {
+  .VPHero .text {
+    font-size: 38px;
+  }
+}
+
+@media (min-width: 960px) {
+  .VPHero .text {
+    font-size: 42px;
+  }
+}
+
+/* 标题与副标题所在的容器也放开，避免被压窄 */
+.VPHero .heading {
+  max-width: 40em;
+}
+
+/* hero 主图放大：默认尺寸在 16:9 版式里偏空。
+   仅放开图片本身不够——外层 .image-container 会把它限制回原始尺寸。 */
+.VPHero .image-container {
+  width: 260px;
+  height: 260px;
+  transform: none;
+}
+
+.VPHero .image-src {
+  max-width: 260px;
+  max-height: 260px;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 960px) {
+  .VPHero .image-container {
+    width: 300px;
+    height: 300px;
+  }
+
+  .VPHero .image-src {
+    max-width: 300px;
+    max-height: 300px;
+  }
+}
+
+/* 平台能力表这类宽表在窄屏可横向滚动，不撑破布局 */
+.vp-doc table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* 首页特性卡片圆角与阴影统一 */
+.VPFeature {
+  border-radius: 12px;
+}
+
+/* 侧栏分组标题更清晰 */
+.VPSidebarItem.level-0 > .item > .text {
+  font-weight: 600;
+}
+
+/* 首页界面预览。
+   注意：Markdown 里的图片会被 VitePress 包进 <p>，因此网格子项是 p 而非 img。 */
+.shot-hero p,
+.shot-grid p {
+  margin: 0;
+}
+
+.shot-hero img,
+.shot-grid img {
+  border-radius: 10px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shot-hero {
+  margin: 28px 0 8px;
+}
+
+.shot-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+  margin-top: 18px;
+}
+
+@media (min-width: 720px) {
+  .shot-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* 首页入口卡片：纯 HTML 结构，网格子项就是 <a> 本身 */
+.start-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+  margin-top: 20px;
+}
+
+@media (min-width: 720px) {
+  .start-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.start-grid a {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.start-grid a:hover {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  box-shadow: 0 4px 16px rgba(62, 99, 221, 0.12);
+}
+
+.start-grid strong {
+  display: block;
+  font-size: 15px;
+  color: var(--vp-c-text-1);
+  margin-bottom: 6px;
+}
+
+.start-grid span {
+  display: block;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+
+/* 正文里的截图 */
+.vp-doc img {
+  border-radius: 10px;
+  border: 1px solid var(--vp-c-divider);
+}

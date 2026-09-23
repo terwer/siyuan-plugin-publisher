@@ -2,6 +2,7 @@
 .idea
 .DS_Store
 .turbo
+.omc
 
 # build
 dist
@@ -12,6 +13,7 @@ node_modules
 # api-extractor
 etc
 temp
+tmp
 tsdoc-metadata.json
 
 # env
@@ -43,3 +45,24 @@ coverage
 testdata
 .typora
 .tool-versions
+.opencode
+
+# log
+*.log
+
+# ReCode local database
+.recode
+
+# Claude config
+.claude
+
+# Cursor config
+.cursor
+# Workbuddy local memory
+.workbuddy
+vercel
+webapp
+
+# docs site
+docs/.vitepress/dist
+docs/.vitepress/cache

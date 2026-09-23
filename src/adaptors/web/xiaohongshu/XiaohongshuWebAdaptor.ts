@@ -7,28 +7,61 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { StrUtil } from "zhi-common"
-import { MockBrowser } from "~/src/utils/MockBrowser.ts"
+import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi"
+import { MockBrowser } from "~/src/utils/MockBrowser"
+import { XiaohongshuUtils } from "./XiaohongshuUtils"
 
 /**
  * 小红书适配器
  *
  * @author terwer
  * @since 1.32.0
+ * @deprecated 小红书签名机制复杂，暂时搁置，待后续研究
  */
 class XiaohongshuWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
-    // "/api/galaxy/user/info"
-    // "/api/galaxy/user/my-info"
+    // 小红书验证 API: /api/galaxy/user/info
+    // 成功返回: { result: 0, success: true, code: 0, data: { userId, userName, userAvatar, ... } }
+    // 失败返回: { code: -1, msg: "登录已过期", result: -100, success: false }
     const header = {
       "User-Agent": MockBrowser.HEADERS.MACOS_CHROME["User-Agent"],
-      referer: "https://creator.xiaohongshu.com/publish/publish?from=menu",
+      referer: "https://creator.xiaohongshu.com/new/home",
     }
-    const res = await this.xiaohongshuFetch("/api/galaxy/user/my-info", header)
-    // const flag = !!res?.data?.user_id
-    this.logger.debug("get xiaohongshu metadata finished=>", res)
-    throw new Error("开发中。。。")
+
+    try {
+      const res = await this.xiaohongshuFetch("/api/galaxy/user/info", header)
+      this.logger.debug("get xiaohongshu metadata res=>", res)
+
+      // 验证是否成功
+      const flag = res?.success === true && res?.code === 0 && !!res?.data?.userId
+      this.logger.info(`get xiaohongshu metadata finished, flag => ${flag}`)
+
+      if (flag) {
+        return {
+          flag: true,
+          uid: res.data.userId,
+          title: res.data.userName,
+          avatar: res.data.userAvatar,
+          type: "xiaohongshu",
+          displayName: "小红书",
+          supportTypes: ["markdown"],
+          home: "https://creator.xiaohongshu.com/new/home",
+          icon: "https://www.xiaohongshu.com/favicon.ico",
+        }
+      } else {
+        return {
+          flag: false,
+          msg: res?.msg || "小红书授权验证失败",
+        }
+      }
+    } catch (e) {
+      this.logger.error("get xiaohongshu metadata error=>", e)
+      return {
+        flag: false,
+        msg: e.message || "小红书授权验证异常",
+      }
+    }
   }
 
   // ================
@@ -43,11 +76,18 @@ class XiaohongshuWebAdaptor extends BaseWebApi {
     contentType: string = "application/json"
   ) {
     const apiUrl = StrUtil.pathJoin(this.cfg.apiUrl, url)
+    const timestamp = Date.now()
+
+    // 生成签名头
+    const signHeaders = XiaohongshuUtils.generateSignature(url, timestamp)
+
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("Cookie", this.cfg.password)
 
+    // 合并所有头信息：Cookie + 签名 + 用户自定义头
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),
+      ...signHeaders,
       ...headers,
     }
 

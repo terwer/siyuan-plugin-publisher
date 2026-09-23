@@ -7,16 +7,17 @@
  *  of this license document, but changing it is not allowed.
  */
 
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { HaloApiAdaptor } from "~/src/adaptors/api/halo/HaloApiAdaptor.ts"
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
-import { HaloApiAdaptor } from "~/src/adaptors/api/halo/HaloApiAdaptor.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
   // 创建应用日志记录器
@@ -36,14 +37,14 @@ const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<HaloConfig>(setting[key], {} as HaloConfig)
+    cfg = safeMergeConfig<HaloConfig>(setting[key], HaloConfig, ["", "", ""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取 Halo API 的 URL、认证令牌和其他配置信息
       const haloUsername = Utils.emptyOrDefault(process.env.VITE_YUQUE_USERNAME, "")
       const haloAuthToken = Utils.emptyOrDefault(process.env.VITE_YUQUE_AUTH_TOKEN, "")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new HaloConfig(haloUsername, haloAuthToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

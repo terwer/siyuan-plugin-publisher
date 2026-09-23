@@ -8,6 +8,7 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { resolvePlatformImagePath } from "~/src/adaptors/api/base/platformImagePath.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -19,6 +20,7 @@ import { Base64 } from "js-base64"
 import { isDev } from "~/src/utils/constants.ts"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { GitlabFetchClientProxyAdaptor } from "~/src/adaptors/api/base/gitlab/gitlabFetchClientProxyAdaptor.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Gitlab API 适配器
@@ -182,7 +184,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     return true
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     try {
       const resJson = await this.gitlabClient.deleteRepositoryFile(postid)
       this.logger.debug("gitlab deletePost finished =>", resJson)
@@ -228,13 +230,15 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      let imageFullPath = StrUtil.pathJoin(this.cfg.imageStorePath ?? "images", mediaObject.name)
-      if (imageFullPath.startsWith("/")) {
-        imageFullPath = imageFullPath.substring(1)
-      }
-      if (imageFullPath.startsWith("./")) {
-        imageFullPath = imageFullPath.substring(2)
-      }
+      // 与 GitHub 族共用同一套图片路径规则（见 platformImagePath）：
+      // 支持 [docpath]/images 就近目录、./ 与 ../ 相对链接、以及仓库根目录
+      const { imagePath } = resolvePlatformImagePath(
+        this.cfg.imageStorePath ?? "images",
+        mediaObject,
+        "images",
+        this.cfg.blogid
+      )
+      let imageFullPath = imagePath
       this.logger.info("Gitlab图片将要最终发送到以下目录 =>", imageFullPath)
       const res = await this.gitlabClient.createRepositoryFile(imageFullPath, base64, "base64")
       this.logger.debug("gitlab createRepositoryFile res =>", res)

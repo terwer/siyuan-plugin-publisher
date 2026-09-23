@@ -103,7 +103,7 @@ class CommonStorageAsync implements StorageLikeAsync {
         const res = await this.kernelApi.saveTextData(key, value)
         this.logger.debug(`Use SiYuan Api LocalStorageAdaptor to setItem - Key '${key}'`, res)
       } catch (e) {
-        this.logger.errot(`Failed to set value for key '${key}' from SiYuan Api LocalStorageAdaptor. Error:`, e)
+        this.logger.error(`Failed to set value for key '${key}' from SiYuan Api LocalStorageAdaptor. Error:`, e)
       }
     } else {
       const win = SiyuanDevice.siyuanWindow()

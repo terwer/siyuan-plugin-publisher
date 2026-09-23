@@ -11,12 +11,12 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
-import CryptoJS from "crypto-js"
-import { arrayToBuffer } from "~/src/utils/polyfillUtils.ts"
+import { md5Hex } from "~/src/utils/cryptoUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 import * as _ from "lodash-es"
 import ZhihuUtils from "~/src/adaptors/web/zhihu/zhihuUtils.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 知乎网页授权适配器
@@ -201,7 +201,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
     return `https://zhuanlan.zhihu.com/p/${postid}`
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     let flag = false
     try {
       const res = await this.zhihuFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, undefined, "DELETE")
@@ -273,10 +273,8 @@ class ZhihuWebAdaptor extends BaseWebApi {
     if (file instanceof Blob) {
       // 1. 获取图片hash
       const ab = await file.arrayBuffer()
-      const bits = arrayToBuffer(ab)
-      const hash = CryptoJS.MD5(bits.toString("utf8")).toString()
-      // const wordArray = CryptoJS.enc.Latin1.parse(bits.toString("latin1"))
-      // const hash = CryptoJS.MD5(wordArray).toString()
+      const bits = new Uint8Array(ab)
+      const hash = md5Hex(bits)
       const params = JSON.stringify({
         image_hash: hash,
         source: "article",
@@ -294,8 +292,10 @@ class ZhihuWebAdaptor extends BaseWebApi {
       } else {
         const token = fileResp.upload_token
         try {
-          const client = getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token)
-          const finalUrl = await client.put(upload_file.object_key, new Blob([bits as any]))
+          const client = await getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token, {
+            appInstance: this.appInstance,
+          })
+          const finalUrl = await client.put(upload_file.object_key, new Blob([bits]))
           this.logger.debug("zhihu uploadFile finished", { client, finalUrl })
         } catch (e) {
           this.logger.error("知乎图片上传失败 =>", e)
@@ -385,6 +385,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("Cookie", this.cfg.password)
+    reqHeaderMap.set("Content-Type", "application/json")
 
     const mergedHeaders = {
       ...Object.fromEntries(reqHeaderMap),

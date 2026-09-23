@@ -12,7 +12,8 @@ import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import * as _ from "lodash-es"
-import FormDataUtils from "~/src/utils/FormDataUtils.ts"
+import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * CSDN网页授权适配器
@@ -265,7 +266,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     return post
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     let flag = false
     try {
       const params = JSON.stringify({
@@ -303,7 +304,7 @@ class CsdnWebAdaptor extends BaseWebApi {
   }
 
   public async uploadFile(mediaObject: MediaObject): Promise<any> {
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
 
@@ -346,7 +347,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     const uploadUrl = uploadData.host
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     formData.append("key", uploadData.filePath)
@@ -404,7 +405,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     const uploadUrl = uploadData.host
-    const { FormData, Blob } = FormDataUtils.getFormData(this.appInstance)
+    const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
 
     const formData = new FormData()
     formData.append("key", uploadData.filePath)
@@ -451,7 +452,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     const accept = "*/*"
     const xcakey = CsdnUtils.X_CA_KEY
     const xCaNonce = CsdnUtils.generateXCaNonce()
-    const xCaSignature = CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
+    const xCaSignature = await CsdnUtils.generateXCaSignature(url, method, accept, xCaNonce, contentType)
 
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("accept", accept)
@@ -493,7 +494,14 @@ class CsdnWebAdaptor extends BaseWebApi {
     const xcakey = CsdnUtils.X_CA_KEY_MEDIA
     const xCaNonce = CsdnUtils.generateXCaNonce()
     const timestamp = new Date().getTime().toString()
-    const xCaSignature = CsdnUtils.generateXCaSignatureForMedia(url, method, accept, xCaNonce, contentType, timestamp)
+    const xCaSignature = await CsdnUtils.generateXCaSignatureForMedia(
+      url,
+      method,
+      accept,
+      xCaNonce,
+      contentType,
+      timestamp
+    )
 
     const reqHeaderMap = new Map<string, string>()
     reqHeaderMap.set("accept", accept)

@@ -7,16 +7,17 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import {MetaweblogConfig} from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
-import {createAppLogger} from "~/src/utils/appLogger.ts"
-import {PublisherAppInstance} from "~/src/publisherAppInstance.ts"
-import {usePublishSettingStore} from "~/src/stores/usePublishSettingStore.ts"
-import {JsonUtil, ObjectUtil, StrUtil} from "zhi-common"
-import {Utils} from "~/src/utils/utils.ts"
-import {getDynPostidKey} from "~/src/platforms/dynamicConfig.ts"
-import {MetaweblogBlogApiAdaptor} from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
-import {CategoryTypeEnum} from "zhi-blog-api"
-import {LEGENCY_SHARED_PROXT_MIDDLEWARE} from "~/src/utils/constants.ts";
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
+import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
+import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
+import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { Utils } from "~/src/utils/utils.ts"
 
 /**
  * 使用Metaweblog API的自定义hook
@@ -45,14 +46,14 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<MetaweblogConfig>(setting[key], {} as MetaweblogConfig)
+    cfg = safeMergeConfig<MetaweblogConfig>(setting[key], MetaweblogConfig, ["","","","",""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Metaweblog API的URL、用户名、认证令牌和中间件URL
       const metaweblogApiUrl = ""
       const metaweblogUsername = ""
       const metaweblogAuthToken = ""
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
 
       cfg = new MetaweblogConfig("", metaweblogApiUrl, metaweblogUsername, metaweblogAuthToken, middlewareUrl)
       logger.debug("Configuration is empty, using default environment variables.")

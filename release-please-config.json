@@ -7,7 +7,13 @@
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
       "draft": false,
-      "prerelease": false
+      "prerelease": false,
+      "extra-files": [
+        { "type": "json", "path": "plugin.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "widget.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "src/extensions/manifest.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "src/extensions/mv2/manifest-v2-for-firefox.json", "jsonpath": "$.version" }
+      ]
     }
   },
   "pull-request-header": ":robot: A new release will be created",

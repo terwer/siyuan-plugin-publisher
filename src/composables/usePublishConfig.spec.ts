@@ -8,28 +8,26 @@
  */
 
 import { beforeEach, describe, it } from "vitest"
+import { createPinia, setActivePinia } from "pinia"
+import { createI18n } from "vue-i18n"
+import { config } from "@vue/test-utils"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
-import { config, mount } from "@vue/test-utils"
-import App from "~/src/App.vue"
-import { createVueApp } from "~/src/bootstrap.ts"
 
+/**
+ * `usePublishConfig` 的冒烟测试。
+ *
+ * 覆盖「配置能否解析出版本与适配器」，因此只需准备 pinia 与 i18n 上下文，不挂载任何组件。
+ */
 describe("test usePublishConfig", async () => {
-  const instance = await createVueApp()
-  const app = instance.app
-
   beforeEach(async () => {
-    // apply plugins
-    config.global.plugins = [instance.i18n, instance.router]
+    setActivePinia(createPinia())
+    config.global.plugins = [createI18n({ legacy: false, locale: "zh_CN", messages: { zh_CN: {} } })]
 
     // mock env
     process.env.VITE_DEFAULT_TYPE = "siyuan"
     process.env.VITE_SIYUAN_API_URL = "http://127.0.0.1:6806"
     process.env.VITE_SIYUAN_AUTH_TOKEN = ""
     process.env.VITE_DEV_PAGE_ID = "20230731201306-ps6ld6p"
-    // 等价于访问首页: http://localhost:5173/#/?id=20230731201306-ps6ld6p
-
-    const wrapper = mount(App)
-    console.log(wrapper.html())
   })
 
   it("test getPublishCfg", async () => {

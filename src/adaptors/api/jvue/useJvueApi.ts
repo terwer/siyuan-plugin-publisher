@@ -8,12 +8,13 @@
  */
 
 import { JvueConfig } from "~/src/adaptors/api/jvue/jvueConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { Utils } from "~/src/utils/utils.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
 import { JvueApiAdaptor } from "~/src/adaptors/api/jvue/jvueApiAdaptor.ts"
@@ -45,7 +46,7 @@ export const useJvueApi = async (key?: string, newCfg?: JvueConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<JvueConfig>(setting[key], {} as JvueConfig)
+    cfg = safeMergeConfig<JvueConfig>(setting[key], JvueConfig, ["","","","",""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
       // 从环境变量获取Jvue API的URL、用户名、认证令牌和中间件URL
@@ -53,7 +54,7 @@ export const useJvueApi = async (key?: string, newCfg?: JvueConfig) => {
       const jvueApiUrl = Utils.emptyOrDefault(process.env.VITE_JVUE_API_URL, "")
       const jvueUsername = Utils.emptyOrDefault(process.env.VITE_JVUE_USERNAME, "")
       const jvueAuthToken = Utils.emptyOrDefault(process.env.VITE_JVUE_PASSWORD, "")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new JvueConfig(jvueHome, jvueApiUrl, jvueUsername, jvueAuthToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")
     } else {

@@ -1,0 +1,75 @@
+/*
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
+ */
+import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
+
+export const csdnHelpConfig: PageHelpConfig = {
+  pageId: "platform-config/custom_Csdn",
+  helpUrl: platformDocUrl("custom-csdn"),
+  summary: "通过 Cookie 授权发布到 CSDN。图片默认上传到 CSDN；默认使用 Markdown 发布。",
+  fields: {
+    home: { tip: "默认是 CSDN 博客首页 https://blog.csdn.net，通常保持默认。", placeholder: "https://blog.csdn.net" },
+    apiUrl: { tip: "默认是 CSDN 业务 API 地址 https://bizapi.csdn.net，通常保持默认。", placeholder: "https://bizapi.csdn.net" },
+    password: {
+      tip:
+        "Cookie 授权：点「1 去登录」登录 CSDN 创作中心，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
+        "也可展开「手动编辑」直接粘贴 Cookie。Cookie 过期后需要重新读取。",
+        placeholder: "your-cookie",
+    },
+    previewUrl: {
+      tip: "查看文章链接模板，默认 /[userid]/article/details/[postid]，与 CSDN 文章地址一致，通常保持默认。",
+      placeholder: "/[userid]/article/details/[postid]",
+    },
+    pageType: { tip: "正文提交格式，CSDN 默认使用 Markdown 发布，保持默认的 Markdown。" },
+    picbedService: {
+      tip:
+        "图片发布方式：默认「当前平台」，图片随文章上传到 CSDN；也可选「不使用」按原图地址引用（需公网可访问）。" +
+        "CSDN 网页版未提供 PicGo 选项。",
+    },
+  },
+  faq: [
+    { q: "Cookie 验证失败？", a: "确认浏览器已登录 CSDN 创作中心，并重新读取 Cookie。" },
+    {
+      q: "发布格式该选什么？",
+      a: "必须选 HTML。CSDN 目前只接受 HTML 模式，选 Markdown 会出现发布异常。知乎同理。",
+    },
+    {
+      q: "提示标签为空、无法发布？",
+      a: "CSDN 强制要求标签，标签不能为空。请在发布前填好标签再提交。",
+    },
+    {
+      q: "过一段时间提示无法授权、需要登录？",
+      a: "Cookie 过期了。安装「网页视图」插件，在思源内打开 CSDN 首页并退出登录，然后回到配置页重新授权。必须在思源的网页视图里退出才有效。",
+    },
+    { q: "图片发布该选什么？", a: "默认「当前平台」即可，图片随文章上传到 CSDN，不需要额外配置 PicGo。" },
+    { q: "文章分类或标签异常？", a: "CSDN 支持分类和标签，发布前确认当前账号创作中心可以正常读取相关数据。" },
+  ],
+  tour: [
+    {
+      target: "[data-syp-tour='cookie']",
+      title: "Cookie 授权",
+      content: "先登录 CSDN 创作中心，再读取 Cookie。切换账号或登录过期后需要重新读取。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='pageType']",
+      title: "内容格式",
+      content: "CSDN 默认按 Markdown 发布，通常保持默认即可。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='picbedService']",
+      title: "图片发布",
+      content: "CSDN 默认使用平台内置（Bundled）图片链路，保持默认即可。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='validate']",
+      title: "验证并保存",
+      content: "验证 Cookie 和平台连通性后保存配置，再进行发布。",
+      placement: "top",
+    },
+  ],
+}

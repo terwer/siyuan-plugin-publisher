@@ -1,0 +1,81 @@
+/*
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
+ */
+import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl, siteUrl } from "~/src/utils/site"
+
+export const cnblogsHelpConfig: PageHelpConfig = {
+  pageId: "platform-config/metaweblog_Cnblogs",
+  helpUrl: platformDocUrl("metaweblog-cnblogs"),
+  summary: "将思源笔记发布到博客园。使用 MetaWeblog XML-RPC 协议。",
+  fields: {
+    home: { tip: "你的博客园博客首页，如 https://cnblogs.com/yourname", placeholder: "https://www.cnblogs.com/" },
+    apiUrl: {
+      tip: "博客园 MetaWeblog API 地址：https://rpc.cnblogs.com/metaweblog/yourblogname",
+      placeholder: "https://rpc.cnblogs.com/metaweblog/your-blog",
+      link: siteUrl("guide/picbed"),
+      linkText: "如何获取 API 地址？",
+    },
+    username: { tip: "博客园登录用户名", placeholder: "your-cnblogs-name" },
+    password: {
+      tip: "博客园 API Token（在博客园设置 → 开放 API 中生成，生成地址 https://i.cnblogs.com/settings），不是登录密码",
+      placeholder: "your-access-token",
+      link: siteUrl("guide/picbed"),
+    },
+    previewUrl: {
+      tip: "查看文章链接模板，默认 /[userid]/p/[postid].html，与博客园文章地址一致，通常保持默认。",
+      placeholder: "/[userid]/p/[postid].html",
+    },
+    pageType: { tip: "正文提交格式，博客园默认使用 Markdown 发布，保持默认的 Markdown。" },
+    picbedService: {
+      tip:
+        "图片发布方式：默认「当前平台」，图片上传到博客园；也可选「不使用」按原图地址引用（需公网可访问），" +
+        "或选「PicGo 强烈推荐」改用你配置的 PicGo。",
+    },
+  },
+  faq: [
+    { q: "提示「用户名或密码错误」？", a: "确认是否使用了 API Token 而非登录密码，Token 生成了吗？" },
+    {
+      q: "发布后 H1 标题被错误替换？",
+      a: "多半是发布格式选错了。博客园请使用 Markdown，不要选 HTML。",
+    },
+    {
+      q: "文章里的外链打不开或 404？",
+      a: "博客园对外链有额外限制，可在博客园后台的用户配置里调整相关选项解决。",
+    },
+    { q: "图片上传失败？", a: "默认「当前平台」即可（博客园平台内置）；需要时可选「PicGo 强烈推荐」并先在设置里配置好 PicGo。" },
+  ],
+  tour: [
+    {
+      target: "[data-syp-tour='home']",
+      title: "首页地址",
+      content: "填写你的博客园博客首页地址，如 https://cnblogs.com/yourname。发布后文章链接会基于此地址生成。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='apiUrl']",
+      title: "API 地址",
+      content: "填写博客园的 MetaWeblog API 端点地址。格式为 https://rpc.cnblogs.com/metaweblog/yourblogname。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='username']",
+      title: "用户名",
+      content: "填写你的博客园登录用户名。注意不是昵称或显示名。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='token']",
+      title: "API Token",
+      content: "这里填的是博客园 API Token，不是你的登录密码。在博客园后台 → 设置 → 开放 API 中生成。",
+      placement: "bottom",
+    },
+    {
+      target: "[data-syp-tour='validate']",
+      title: "验证并保存",
+      content: "填写完成后点击「验证并保存」，系统会测试 API 连通性。验证通过后平台即配置完成，可以开始发布。",
+      placement: "top",
+    },
+  ],
+}
