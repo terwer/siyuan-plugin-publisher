@@ -63,8 +63,8 @@ TBD - created by archiving change add-field-guide-tips. Update Purpose after arc
 - **AND** 该字段的说明 SHALL 通过指引入口可见
 - **AND** 同一段字段说明 MUST NOT 在配置表单内出现两份
 
-#### Scenario: 保留旧界面文案
+#### Scenario: 不改动共享提示串
 - **WHEN** 配置表单改用示例值 placeholder
 - **THEN** 系统 MUST NOT 修改共享的 locales 提示串
-- **AND** 旧界面的字段文案 SHALL 保持原样
+- **AND** 其他入口读到的字段文案 SHALL 保持原样
 

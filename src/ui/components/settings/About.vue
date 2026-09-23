@@ -68,9 +68,10 @@ const hasMore = Object.keys(allDependencies).length >= DEPS_LIMIT
 const packageJsonUrl = "https://github.com/terwer/siyuan-plugin-publisher/blob/main/package.json"
 
 /**
- * 旧版界面的下载指引。
+ * 最后一个提供旧界面的发行版下载指引。
  *
- * 旧界面已在本版彻底移除，这里只提供「确需旧界面」时的去处；**计划在 2.3.0 移除整块内容**
+ * 本版界面为原生面板，旧界面已在 2.0.0 中整体移除；这里只提供确需旧界面时的去处，
+ * **整块内容计划在 2.3.0 移除**
  * （含 `PREVIOUS_UI_LAST_VERSION` / `PREVIOUS_UI_RELEASE_URL` 两个常量）。
  */
 const previousUiVersion = PREVIOUS_UI_LAST_VERSION

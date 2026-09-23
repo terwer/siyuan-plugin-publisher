@@ -25,8 +25,8 @@ const isWatch = args.watch || args.w || false
 /**
  * 插件 lib 的唯一产出目录。
  *
- * V1 退役后不再有 `vite.v1.siyuan.config.ts` 那条平行的 lib 构建，这里就是发行包目录，
- * 因此与 `scripts/make_dev_link.py` 的默认值（`dist`）保持一致，`pnpm makeLink` 直接可用。
+ * 插件 lib 的唯一产出目录，也是发行包目录；与 `scripts/make_dev_link.py` 的默认值（`dist`）
+ * 保持一致，`pnpm makeLink` 直接可用。
  */
 const distDir = "dist"
 const PluginAppBase = "/plugins/siyuan-plugin-publisher/"
