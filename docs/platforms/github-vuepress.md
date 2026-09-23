@@ -37,6 +37,20 @@
 2. 快速发布 → 选 Vuepress → 发布。文章 `.md` 会提交到 `存储目录/[filename].md`。
 3. 点「查看文章」能打开仓库中该 `.md` 的 blob 地址；带图发布时图片会一并上传到仓库 `docs/.vuepress/public/images` 并在文章中引用 `/images/<图片名>`。
 
+## 图片存储路径
+
+图床选「当前平台」时，可以指定图片存到仓库哪里：
+
+![填写图片存储目录与访问链接](/images/shots/path-vuepress.webp)
+
+| 字段 | 默认值 |
+|---|---|
+| 图片存储目录 | `docs/.vuepress/public/images` |
+| 图片访问链接 | `images` |
+
+VuePress 的静态资源放在 `.vuepress/public` 下，构建后映射到站点根。一般不需要改，改了请保证两个值**对应**。
+
+
 ## 常见问题
 
 - **验证通过但发布失败**：确认 Token 对目标仓库有 push 权限，仓库名与分支正确，存储目录已存在。权限不足会收到 401/403。

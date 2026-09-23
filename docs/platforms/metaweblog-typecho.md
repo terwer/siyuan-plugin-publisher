@@ -28,6 +28,24 @@
 2. 快速发布 → 选 Typecho → 发布。文章提交到站点。
 3. 「查看文章」按 `/index.php/archives/[postid]` 打开；若站点启用了伪静态，请在「查看规则」里改成实际形态。
 
+## 四、公式支持
+
+Typecho 默认不渲染 LaTeX 公式。安装 **KaTeX 渲染插件**并按其说明配置标识符即可。
+
+1. 安装 [KaTeX4Typecho](https://github.com/dreamerblue/AutoLaTeX) 插件并启用。
+
+2. 在插件设置里把「公式标识符」改成：
+
+   ```
+   {left: "$$", right: "$$", display: true},{left: "$", right: "$", display: false}
+   ```
+
+   ![填写公式标识符](/images/shots/typecho-latex-config.webp)
+
+3. 保存后刷新页面，公式即可正常渲染。
+
+   ![公式渲染效果](/images/shots/typecho-latex-result.webp)
+
 ## 常见问题
 
 - **验证失败或提示账号错误**：确认用户名是后台登录用户名、密码是登录密码（不使用 Token）；再确认 API 地址确实是站点的 XML-RPC 端点。
