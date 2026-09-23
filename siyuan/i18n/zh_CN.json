@@ -734,5 +734,18 @@
   "articleManage.tooltip.notPublished": "尚未发布",
   "articleManage.platformDeleted": "[已删除]",
   "articleManage.extend.platformUpdate": "已发布，点击进入单发",
-  "articleManage.extend.platformPublish": "未发布，点击进入单发"
+  "articleManage.extend.platformPublish": "未发布，点击进入单发",
+  "nav.repair": "发布修复",
+  "repair.eyebrow": "发布修复",
+  "repair.title": "发布修复",
+  "repair.desc": "文档在思源里的 ID 变化后（删除重建、拆分、从别处导入），原来的发布记录就找不到它，会显示成「未发布」，但平台上的文章其实还在。这里把各平台的文章 ID 列在一起，填好后统一保存，即可重新对上，不必重新发布。",
+  "repair.doc.label": "当前文档",
+  "repair.doc.none": "未获取到文档",
+  "repair.noDoc": "没有获取到当前文档，请在文档中打开本面板后重试。",
+  "repair.empty": "该文档目前没有任何发布记录。",
+  "repair.hint": "在平台上已有的文章 ID 填入对应行；留空表示不修改该平台。",
+  "repair.field.placeholder": "平台上已有的文章 ID",
+  "repair.save": "保存修复",
+  "repair.saved": "发布记录已修复",
+  "repair.failed": "修复失败"
 }

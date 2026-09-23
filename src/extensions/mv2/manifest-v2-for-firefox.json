@@ -1,6 +1,6 @@
 {
   "name": "思源笔记发布工具",
-  "version": "1.41.1",
+  "version": "2.0.0",
   "manifest_version": 2,
   "author": "terwer",
   "icons": {
@@ -16,7 +16,9 @@
       "strict_min_version": "47.0"
     }
   },
-  "permissions": ["*://*/*"],
+  "permissions": [
+    "*://*/*"
+  ],
   "browser_action": {
     "default_title": "思源笔记发布工具",
     "default_icon": {

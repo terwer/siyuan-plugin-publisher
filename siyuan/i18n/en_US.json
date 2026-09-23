@@ -734,5 +734,18 @@
   "yaml.show.type.yamlmd": "YAML + MD Body",
   "yaml.show.type.html": "HTML Body",
   "main.read.mode.tip4": "If you delete the built-in YAML attributes, sync to SiYuan Notes right away, otherwise switching modes will restore them.",
-  "publisher.post.status.pubish": "Publish"
+  "publisher.post.status.pubish": "Publish",
+  "nav.repair": "Repair",
+  "repair.eyebrow": "Repair",
+  "repair.title": "Repair publish records",
+  "repair.desc": "When a document's SiYuan ID changes — after deleting and recreating it, splitting it, or importing it from elsewhere — the existing publish records can no longer find it. The document shows as unpublished while the articles are still on the platforms. Fill in the article IDs that already exist there and save once to reconnect every platform; no re-publishing needed.",
+  "repair.doc.label": "Current document",
+  "repair.doc.none": "No document detected",
+  "repair.noDoc": "No current document was detected. Open this panel from a document and try again.",
+  "repair.empty": "This document has no publish records yet.",
+  "repair.hint": "Enter the article ID that already exists on each platform; leave a row empty to keep it unchanged.",
+  "repair.field.placeholder": "Article ID on the platform",
+  "repair.save": "Save repair",
+  "repair.saved": "Publish records repaired",
+  "repair.failed": "Repair failed"
 }
