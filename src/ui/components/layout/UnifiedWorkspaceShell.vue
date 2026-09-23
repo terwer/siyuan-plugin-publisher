@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
+import type { SettingsSection } from "~/src/ui/composables/useSettings.ts"
 
-type SettingsSection = "account" | "picbed" | "preference" | "ai" | "about"
 export type AppView = "quick_publish" | "settings" | "manage" | "single_publish" | "batch_publish" | "ai_chat"
 const { t } = useAppI18n()
 
@@ -44,6 +44,7 @@ const navItems: Array<{ key: SettingsSection; label: string }> = [
   { key: "account", label: t("nav.account") },
   { key: "picbed", label: t("nav.picbed") },
   { key: "preference", label: t("nav.preference") },
+  { key: "repair", label: t("nav.repair") },
   { key: "ai", label: t("nav.ai") },
   { key: "about", label: t("nav.about") },
 ]

@@ -270,12 +270,12 @@ const doOpenBrowserWindow = (
 }
 
 /**
- * 获取主窗口页面的节点ID
+ * 获取主窗口当前活动文档的节点 ID
  *
  * @param doc - 父窗口的 document 对象
  * @returns 返回页面的节点ID，如果不存在，则返回undefined
  */
-const getMainWindowPageId = (doc: Document): string | undefined => {
+export const getMainWindowPageId = (doc: Document): string | undefined => {
   // 查找包含 protyle 类但不包含 fn__none 的 div 元素
   const protyleElement = doc.querySelector("div.protyle:not(.fn__none)")
 

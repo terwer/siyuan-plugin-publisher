@@ -304,6 +304,8 @@
 
         <PreferenceSettings v-else-if="settings.state.section === 'preference'" />
 
+        <RepairPublishRecords v-else-if="settings.state.section === 'repair'" :doc-id="props.docId" />
+
         <section v-else-if="settings.state.section === 'ai'" class="syp-settings-page syp-settings-ai">
           <div class="syp-settings-page__header">
             <div>
@@ -355,6 +357,7 @@ import PicBedSettings from "~/src/ui/components/settings/PicBedSettings.vue"
 import PlatformConfigBridge from "~/src/ui/components/settings/PlatformConfigBridge.vue"
 import PlatformSelect from "~/src/ui/components/settings/PlatformSelect.vue"
 import PreferenceSettings from "~/src/ui/components/settings/PreferenceSettings.vue"
+import RepairPublishRecords from "~/src/ui/components/settings/RepairPublishRecords.vue"
 import AiSetting from "~/src/ui/components/bridge/set/preference/AiSetting.vue"
 import { useErrorDetails } from "~/src/ui/composables/useErrorDetails.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
@@ -699,7 +702,7 @@ function onBatchPublishBack() {
   void backFromBatchPublish()
 }
 
-async function changeSettingsSection(section: "account" | "picbed" | "preference" | "ai") {
+async function changeSettingsSection(section: "account" | "picbed" | "preference" | "repair" | "ai" | "about") {
   if (settings.state.section === section && settings.state.accountView === "list") {
     return
   }

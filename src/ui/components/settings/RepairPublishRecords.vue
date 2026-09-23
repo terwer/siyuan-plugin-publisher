@@ -8,80 +8,87 @@
   -->
 
 <!--
-  发布记录修复面板。
+  发布修复。
 
   文档在思源里的 ID 变化后（删除重建、拆分、外部导入），原发布记录找不到对应文档，
-  界面上会显示「未发布」，但平台上的文章其实还在。这里按平台填写平台上已有的文章 ID，
-  即可把记录重新对上，不必重新发布。
+  界面上会显示「未发布」，但平台上的文章其实还在。这里把所有平台的文章 ID 列在一起，
+  填写后统一保存，即可把记录重新对上，不必重新发布。
+
+  文档 ID 默认取当前文档，无需手填。
 -->
 <template>
-  <el-dialog
-    :model-value="visible"
-    :title="t('preference.repair.title')"
-    width="560px"
-    :append-to-body="false"
-    :close-on-click-modal="true"
-    class="syp-repair-dialog"
-    @update:model-value="emit('update:visible', $event)"
-  >
-    <p class="syp-repair-desc">{{ t("preference.repair.desc") }}</p>
-
-    <div class="syp-repair-field">
-      <label class="syp-repair-label">{{ t("preference.repair.pageId.label") }}</label>
-      <el-input
-        v-model="pageId"
-        :placeholder="t('preference.repair.pageId.placeholder')"
-        clearable
-        @change="handlePageIdChange"
-      />
-      <p class="syp-repair-tips">{{ t("preference.repair.tips") }}</p>
+  <section class="syp-settings-page">
+    <div class="syp-settings-page__header">
+      <div>
+        <div class="syp-settings-page__eyebrow">{{ t("repair.eyebrow") }}</div>
+        <h2 class="syp-settings-page__title">{{ t("repair.title") }}</h2>
+        <p class="syp-settings-page__desc">{{ t("repair.desc") }}</p>
+      </div>
     </div>
 
-    <template v-if="pageId">
-      <el-alert
-        v-if="platformRows.length === 0"
-        :title="t('preference.repair.empty')"
-        type="info"
-        :closable="false"
-        class="syp-repair-alert"
-      />
-      <template v-else>
-        <el-alert :title="targetTitle" type="warning" :closable="false" class="syp-repair-alert" />
-        <div class="syp-repair-rows">
-          <div v-for="row in platformRows" :key="row.key" class="syp-repair-row">
-            <span class="syp-repair-row__name">{{ row.name }}</span>
-            <el-input v-model="postIdMap[row.key]" :placeholder="row.postId || '—'" />
-          </div>
+    <div class="syp-settings-group-list">
+      <article class="syp-settings-group">
+        <!-- 当前文档 -->
+        <div class="syp-repair-doc">
+          <span class="syp-repair-doc__label">{{ t("repair.doc.label") }}</span>
+          <span class="syp-repair-doc__title">{{ docTitle || docId || t("repair.doc.none") }}</span>
         </div>
-        <p class="syp-repair-hint">{{ t("preference.repair.column.hint") }}</p>
-      </template>
-    </template>
 
-    <template #footer>
-      <el-button @click="emit('update:visible', false)">{{ t("main.opt.cancel") }}</el-button>
-      <el-button type="primary" :loading="saving" @click="handleSave">{{ t("preference.repair.save") }}</el-button>
-    </template>
-  </el-dialog>
+        <el-alert
+          v-if="!docId"
+          :title="t('repair.noDoc')"
+          type="warning"
+          :closable="false"
+          class="syp-repair-alert"
+        />
+
+        <template v-else>
+          <el-alert v-if="rows.length === 0" :title="t('repair.empty')" type="info" :closable="false" class="syp-repair-alert" />
+
+          <template v-else>
+            <p class="syp-repair-hint">{{ t("repair.hint") }}</p>
+
+            <div class="syp-settings-form-list">
+              <div v-for="row in rows" :key="row.key" class="syp-settings-form-row">
+                <div class="syp-settings-form-main">
+                  <div class="syp-settings-form-label">{{ row.name }}</div>
+                  <div class="syp-settings-form-desc">{{ row.key }}</div>
+                </div>
+                <div class="syp-settings-form-control">
+                  <el-input v-model="postIdMap[row.key]" :placeholder="row.postId || t('repair.field.placeholder')" />
+                </div>
+              </div>
+            </div>
+
+            <div class="syp-repair-actions">
+              <el-button type="primary" :loading="saving" @click="handleSave">{{ t("repair.save") }}</el-button>
+              <span v-if="saved" class="syp-settings-status-text is-saved">✓ {{ t("repair.saved") }}</span>
+            </div>
+          </template>
+        </template>
+      </article>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import { ElMessage } from "element-plus"
+import { SiyuanDevice } from "zhi-device"
 import { ObjectUtil, StrUtil } from "zhi-common"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
+import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
+import { getMainWindowPageId } from "~/src/utils/widgetUtils.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
-const logger = createAppLogger("repair-publish-records")
+const logger = createAppLogger("repair")
 
 const props = defineProps<{
-  visible: boolean
-}>()
-
-const emit = defineEmits<{
-  (e: "update:visible", value: boolean): void
+  /** 当前文档 ID；未传时自行获取 */
+  docId?: string
 }>()
 
 const { t } = useAppI18n()
@@ -89,9 +96,10 @@ const { getPublishCfg } = usePublishConfig()
 const { updateSetting } = usePublishSettingStore()
 const { kernelApi } = useSiyuanApi()
 
-const pageId = ref("")
-const saving = ref(false)
+const docId = ref("")
 const docTitle = ref("")
+const saving = ref(false)
+const saved = ref(false)
 const postIdMap = reactive<Record<string, string>>({})
 
 interface PlatformRow {
@@ -100,36 +108,63 @@ interface PlatformRow {
   postId: string
 }
 
-const platformRows = ref<PlatformRow[]>([])
+const rows = ref<PlatformRow[]>([])
 
-const targetTitle = computed(() =>
-  t("preference.repair.target").replace("{title}", docTitle.value || pageId.value)
-)
+/**
+ * 解析当前文档 ID。
+ *
+ * 顺序：打开面板时传入的 docId → 挂件/新窗口场景 → 当前活动文档（读宿主 DOM）。
+ * 读活动文档这一步覆盖了最常用的场景：在文档中打开面板，div.protyle 就是当前文档。
+ */
+async function resolveDocId(): Promise<string> {
+  if (!StrUtil.isEmptyString(props.docId)) {
+    return props.docId as string
+  }
 
-/** 文档 ID 变化时，读取该文档的发布记录并列出各平台当前值 */
-async function handlePageIdChange() {
-  platformRows.value = []
-  docTitle.value = ""
-
-  const id = pageId.value.trim()
-  if (StrUtil.isEmptyString(id)) {
-    return
+  const fromDevice = await getSiyuanPageId()
+  if (!StrUtil.isEmptyString(fromDevice)) {
+    return fromDevice
   }
 
   try {
-    // 文档标题（取不到就用 ID）
+    const hostDoc = SiyuanDevice.siyuanWindow()?.document
+    if (hostDoc) {
+      const active = getMainWindowPageId(hostDoc)
+      if (!StrUtil.isEmptyString(active)) {
+        return active as string
+      }
+    }
+  } catch (e) {
+    logger.debug("read active document failed", e)
+  }
+
+  return ""
+}
+
+/** 读取当前文档的发布记录，列出所有可写入的平台 */
+async function loadRows() {
+  rows.value = []
+  docTitle.value = ""
+
+  const id = await resolveDocId()
+  if (StrUtil.isEmptyString(id)) {
+    return
+  }
+  docId.value = id
+
+  try {
     try {
       const block = await kernelApi.getBlockByID(id)
-      docTitle.value = Utils_emptyOrDefault(block?.content, id)
+      docTitle.value = StrUtil.isEmptyString(block?.content) ? "" : String(block.content)
     } catch {
-      docTitle.value = id
+      docTitle.value = ""
     }
 
     const publishCfg = await getPublishCfg()
     const setting = publishCfg.setting
     const postMeta = ObjectUtil.getProperty(setting, id, {})
 
-    const rows: PlatformRow[] = []
+    const list: PlatformRow[] = []
     for (const item of publishCfg.dynamicConfigArray) {
       const cfg = ObjectUtil.getProperty(setting, item.platformKey, {})
       const posidKey = cfg?.posidKey
@@ -138,29 +173,29 @@ async function handlePageIdChange() {
       }
       const current = ObjectUtil.getProperty(postMeta, posidKey, "")
       postIdMap[item.platformKey] = current
-      rows.push({ key: item.platformKey, name: item.platformName ?? item.platformKey, postId: current })
+      list.push({ key: item.platformKey, name: item.platformName ?? item.platformKey, postId: current })
     }
-    platformRows.value = rows
+    rows.value = list
   } catch (e) {
     logger.error("load publish records failed", e)
   }
 }
 
-/** 把填写的内容写回发布记录 */
+/** 一次保存所有平台 */
 async function handleSave() {
-  const id = pageId.value.trim()
-  if (StrUtil.isEmptyString(id)) {
-    ElMessage.warning(t("preference.repair.noPageId"))
+  if (StrUtil.isEmptyString(docId.value)) {
+    ElMessage.warning(t("repair.noDoc"))
     return
   }
 
   saving.value = true
+  saved.value = false
   try {
     const publishCfg = await getPublishCfg()
     const setting = publishCfg.setting
-    const postMeta = ObjectUtil.getProperty(setting, id, {})
+    const postMeta = ObjectUtil.getProperty(setting, docId.value, {})
 
-    for (const row of platformRows.value) {
+    for (const row of rows.value) {
       const next = (postIdMap[row.key] ?? "").trim()
       if (StrUtil.isEmptyString(next)) {
         continue
@@ -172,82 +207,60 @@ async function handleSave() {
       }
     }
 
-    setting[id] = postMeta
+    setting[docId.value] = postMeta
     await updateSetting(setting)
-    ElMessage.success(t("preference.repair.success"))
-    emit("update:visible", false)
+    saved.value = true
+    ElMessage.success(t("repair.saved"))
+    setTimeout(() => {
+      saved.value = false
+    }, 2000)
   } catch (e) {
     logger.error("save publish records failed", e)
-    ElMessage.error(`${t("preference.repair.failure")}: ${e}`)
+    ElMessage.error(`${t("repair.failed")}: ${e}`)
   } finally {
     saving.value = false
   }
 }
 
-/** 每次打开时重置 */
-watch(
-  () => props.visible,
-  (open) => {
-    if (open) {
-      void handlePageIdChange()
-    }
-  }
-)
-
-function Utils_emptyOrDefault(value: unknown, fallback: string): string {
-  return StrUtil.isEmptyString(value as string) ? fallback : String(value)
-}
+onMounted(() => {
+  void loadRows()
+})
 </script>
 
 <style scoped lang="stylus">
 @import "../../assets/variables.styl"
 
-.syp-repair-desc
-  margin 0 0 16px
-  font-size 13px
-  line-height 1.7
-  color $syp-text-secondary
+.syp-repair-doc
+  display flex
+  align-items baseline
+  gap 10px
+  margin-bottom 14px
 
-.syp-repair-field
-  margin-bottom 8px
-
-.syp-repair-label
-  display block
-  margin-bottom 6px
+.syp-repair-doc__label
+  flex 0 0 auto
   font-size 13px
+  color $syp-text-tertiary
+
+.syp-repair-doc__title
+  font-size 14px
   font-weight 500
   color $syp-text-primary
 
-.syp-repair-tips
-  margin 6px 0 0
+.syp-repair-alert
+  margin 10px 0
+
+.syp-repair-hint
+  margin 0 0 6px
   font-size 12px
   line-height 1.6
   color $syp-text-tertiary
 
-.syp-repair-alert
-  margin 12px 0
-
-.syp-repair-rows
-  max-height 300px
-  overflow-y auto
-  padding-right 4px
-
-.syp-repair-row
+.syp-repair-actions
   display flex
   align-items center
   gap 12px
-  margin-bottom 10px
+  margin-top 16px
 
-.syp-repair-row__name
-  flex 0 0 120px
-  font-size 13px
-  color $syp-text-secondary
-  overflow hidden
-  text-overflow ellipsis
-  white-space nowrap
-
-.syp-repair-hint
-  margin 8px 0 0
-  font-size 12px
-  color $syp-text-tertiary
+.syp-settings-status-text.is-saved
+  color $syp-badge-ready-text
 </style>
