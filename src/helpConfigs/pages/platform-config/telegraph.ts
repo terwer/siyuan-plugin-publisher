@@ -3,13 +3,14 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl, siteUrl } from "~/src/utils/site"
 
 /**
  * Telegraph 配置页帮助（覆盖匿名 / 登录发布两种模式）
  */
 export const telegraphHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Telegraph",
-  helpUrl: "https://siyuan.wiki/s/20240312153728-paen10j",
+  helpUrl: platformDocUrl("telegraph"),
   summary:
     "将思源笔记发布到 Telegra.ph。支持两种模式：匿名发布（无需账号，仅用生成的 Uuid 与 Hash）与登录发布（需账号的 Access Token）。Telegraph 为 CORS 受限平台，必须填写你自己的 CORS 代理地址。",
   fields: {
@@ -44,7 +45,7 @@ export const telegraphHelpConfig: PageHelpConfig = {
     corsAnywhereUrl: {
       tip: "Telegraph 为 CORS 受限平台，必须填写你自己的 CORS 代理地址，否则无法访问",
       placeholder: "https://your-cors-proxy.example.com",
-      link: "https://siyuan.wiki/s/20240312153728-paen10j",
+      link: siteUrl("guide/cors-proxy"),
       linkText: "如何配置 CORS 代理？",
     },
   },
@@ -55,7 +56,7 @@ export const telegraphHelpConfig: PageHelpConfig = {
     },
     {
       q: "提示「需要配置 CORS 代理地址」？",
-      a: "Telegraph 需要通过跨域代理才能访问。请在「跨域代理地址」配置项填写你自己的代理地址，参考文档：https://siyuan.wiki/s/20240312153728-paen10j",
+      a: "Telegraph 需要通过跨域代理才能访问。请在「跨域代理地址」配置项填写你自己的代理地址，参考站点的《CORS 代理配置》",
     },
     {
       q: "切换设备后发布失败？",

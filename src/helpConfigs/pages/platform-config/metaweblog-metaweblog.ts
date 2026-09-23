@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const metaweblogHelpConfig: PageHelpConfig = {
   pageId: "platform-config/metaweblog_Metaweblog",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("metaweblog-metaweblog"),
   summary:
     "「Metaweblog 通用」用于接入任何实现了 MetaWeblog XML-RPC 协议、但插件尚未单独适配的博客。账号使用该博客的后台登录用户名与密码（不是 Token）；「平台首页」填博客地址，「API 地址」需要你按站点实际的 XML-RPC 端点手动填写（通用入口不会自动推导）；正文默认按 HTML 提交；查看链接模板默认留空，需要你按该站的文章地址形态填写；该入口不提供「发布目录」行。",
   fields: {

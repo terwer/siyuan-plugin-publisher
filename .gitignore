@@ -62,3 +62,7 @@ testdata
 .workbuddy
 vercel
 webapp
+
+# docs site
+docs/.vitepress/dist
+docs/.vitepress/cache

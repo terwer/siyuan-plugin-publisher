@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { siteUrl } from "~/src/utils/site"
 
 export const quickPublishHelpConfig: PageHelpConfig = {
   pageId: "quick-publish",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: siteUrl("guide/quick-publish"),
   summary: "选择目标平台，填写文章信息，一键发布到已配置的账号。",
   fields: {
     targetPlatform: { tip: "选择已配置好的目标平台" },

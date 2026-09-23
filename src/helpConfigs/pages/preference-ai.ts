@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { siteUrl } from "~/src/utils/site"
 
 export const preferenceAiHelpConfig: PageHelpConfig = {
   pageId: "preference-ai",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: siteUrl("guide/ai"),
   summary: "配置 AI 服务，用于自动生成标题、摘要、标签和分类。支持 OpenAI 兼容接口。",
   fields: {
     apiKey: { tip: "AI 服务 API Key，仅保存在本地，不会上传" },

@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const yuquewebHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Yuqueweb",
-  helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+  helpUrl: platformDocUrl("custom-yuqueweb"),
   summary: "通过 Cookie 授权发布到语雀网页版，无需语雀专业会员，使用浏览器登录态即可发布。",
   fields: {
     home: { tip: "语雀网页版站点地址，固定为 https://www.yuque.com，通常无需修改。", placeholder: "https://www.yuque.com" },

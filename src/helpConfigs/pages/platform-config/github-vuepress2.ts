@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const vuepress2HelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Vuepress2",
-  helpUrl: "https://siyuan.wiki/s/20230908183739-2x156oj",
+  helpUrl: platformDocUrl("github-vuepress2"),
   summary:
     "通过 GitHub API 将文章发布到 Vuepress2 文档站仓库。账号使用 GitHub Token（PAT）；文章默认写入 src/post 目录（文件名 [slug].md）；图片选「当前平台」图床时上传到文章所在目录的 images 子目录（例如 src/post/images/<图片名>，即存储规则 [docpath]/images），文章中引用为相对路径 ./images/<图片名>（Vuepress2 官方推荐的资源就近放置方式，构建时随页面一起输出）；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），站点文章地址由 Vuepress2 主题路由决定。",
   fields: {

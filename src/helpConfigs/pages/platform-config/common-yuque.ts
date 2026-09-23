@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const yuqueHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Yuque",
-  helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+  helpUrl: platformDocUrl("common-yuque"),
   summary: "发布到语雀知识库；语雀 API 发布需要专业会员，这是平台策略限制。",
   fields: {
     home: { tip: "你的语雀主页地址，如 https://www.yuque.com/yourname", placeholder: "https://www.yuque.com/" },

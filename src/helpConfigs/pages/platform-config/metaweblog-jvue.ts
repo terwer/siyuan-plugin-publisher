@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const jvueHelpConfig: PageHelpConfig = {
   pageId: "platform-config/metaweblog_Jvue",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("metaweblog-jvue"),
   summary:
     "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 Jvue 博客。账号使用 Jvue 的登录用户名与密码（不是 Token）；「平台首页」填博客地址，「API 地址」填站点的 MetaWeblog 端点；正文默认按 Markdown 发布，查看文章链接模板固定为 /post/[postid].html（不支持修改）；Jvue 无发布目录概念，因此没有「发布目录」行。",
   fields: {

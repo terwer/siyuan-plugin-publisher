@@ -3,13 +3,14 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl, siteUrl } from "~/src/utils/site"
 
 /**
  * Confluence 配置页帮助
  */
 export const confluenceHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Confluence",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("confluence"),
   summary:
     "将思源笔记发布到 Atlassian Confluence。使用个人访问令牌（Personal Access Token, PAT）鉴权，发布到指定「空间」，可选挂载到「父页面」下。Confluence 支持平台自带图片上传（以附件形态管理）。",
   fields: {
@@ -18,7 +19,7 @@ export const confluenceHelpConfig: PageHelpConfig = {
     password: {
       tip: "个人访问令牌（PAT），在 Confluence 的 Personal Access Tokens 页面生成后填入",
       placeholder: "your-personal-access-token",
-      link: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+      link: siteUrl("guide/usage"),
       linkText: "如何生成 Confluence 个人访问令牌？",
     },
     parentPageId: {

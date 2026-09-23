@@ -9,6 +9,7 @@
 
 import { describe, it, expect, beforeEach } from "vitest"
 import { helpRegistry } from "~/src/helpConfigs/registry"
+import { DEFAULT_PAGE_HELP_CONFIG } from "~/src/helpConfigs/pages/_default"
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
 import { yuqueHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-yuque"
 import { notionHelpConfig } from "~/src/helpConfigs/pages/platform-config/common-notion"
@@ -99,7 +100,7 @@ describe("HelpRegistry", () => {
     it("should fallback to global _default when no directory match either", () => {
       const result = helpRegistry.get("unknown-page-xyz")
       expect(result.pageId).toBe("_default")
-      expect(result.helpUrl).toBe("https://siyuan.wiki/s/20230810132040-nn4q7vs")
+      expect(result.helpUrl).toBe(DEFAULT_PAGE_HELP_CONFIG.helpUrl)
     })
   })
 
@@ -162,7 +163,7 @@ describe("HelpRegistry", () => {
 
     it("should return global default helpUrl for unknown page", () => {
       const url = helpRegistry.getHelpUrl("unknown-xyz")
-      expect(url).toBe("https://siyuan.wiki/s/20230810132040-nn4q7vs")
+      expect(url).toBe(DEFAULT_PAGE_HELP_CONFIG.helpUrl)
     })
   })
 

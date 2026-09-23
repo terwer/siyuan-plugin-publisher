@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const localSystemHelpConfig: PageHelpConfig = {
   pageId: "platform-config/fs_LocalSystem",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("fs-local-system"),
   summary: "发布到本地文件系统，把文档导出为 Markdown，并写入静态站点所需的 Front Matter；图片保存到配置的媒体目录。仅在桌面端（Electron）环境可用。",
   fields: {
     storePath: {

@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const bilibiliHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Bilibili",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("custom-bilibili"),
   summary: "通过 Cookie 授权发布到哔哩哔哩专栏（opus）。图片默认走平台上传；以 Markdown 发布，可选择文集。",
   fields: {
     home: { tip: "默认是哔哩哔哩专栏地址 https://www.bilibili.com/opus，通常保持默认。", placeholder: "https://www.bilibili.com" },

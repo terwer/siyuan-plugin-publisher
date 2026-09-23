@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const notionHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Notion",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("common-notion"),
   summary:
     "通过 API Token 发布到 Notion 页面。Notion 使用 API Token（非 Cookie），页面归属到所选根页面，图片以 PicGo 外部链接图床发布为外部图片块。",
   fields: {

@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const wechatHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Wechat",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("custom-wechat"),
   summary: "通过登录公众号后台的 Cookie 发布到微信公众号。以 HTML 内容发布，图片默认上传到公众号素材库。",
   fields: {
     home: { tip: "默认是公众号后台 https://mp.weixin.qq.com，通常保持默认。", placeholder: "https://mp.weixin.qq.com" },

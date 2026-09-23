@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const wordpressHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpress",
-  helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+  helpUrl: platformDocUrl("wordpress-wordpress"),
   summary: "发布到自建或托管的 WordPress 站点。当前配置重点是站点地址、账号和图片发布方式。",
   fields: {
     home: { tip: "WordPress 站点首页地址，如 https://yourblog.com", placeholder: "https://yourblog.com" },

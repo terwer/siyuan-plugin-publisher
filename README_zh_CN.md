@@ -45,7 +45,7 @@
 - **平台账号配置不受影响**：账号、平台设置与已发布关联沿用原有存储，升级后无需重新配置。
 - **文案单一来源**：原先并存的两套翻译已合并为一份，中英文完全对齐。
 
-![](./docs/images/publisher-icon.png)
+![](./docs/public/images/publisher-icon.png)
 
 ## 支持的平台
 

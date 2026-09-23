@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const zhihuHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Zhihu",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("custom-zhihu"),
   summary: "通过 Cookie 授权发布到知乎专栏。图片默认上传到知乎；已发布文章暂不支持更换所属专栏。",
   fields: {
     home: { tip: "默认是知乎专栏地址 https://zhuanlan.zhihu.com，通常不需要修改。", placeholder: "https://zhuanlan.zhihu.com" },

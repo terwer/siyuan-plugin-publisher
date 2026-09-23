@@ -1,3 +1,4 @@
+import { siteUrl } from "~/src/utils/site"
 /*
  *            GNU GENERAL PUBLIC LICENSE
  *               Version 3, 29 June 2007
@@ -62,9 +63,9 @@ export const SHARED_PROXY_MIDDLEWARE = "https://api.terwer.space/api/middleware"
  * 新版通用 HTTP 代理，不再免费提供
  *
  * 注意：不提供默认共享代理地址（防止滥用共享额度），corsAnywhereUrl 需用户自行配置。
- * 配置指引文档：https://siyuan.wiki/s/20240312153728-paen10j
+ * 配置指引文档见站点 `guide/cors-proxy`
  *
  * @since 1.20.2
  * @version 1.20.2
  */
-export const CORS_PROXY_DOC_URL = "https://siyuan.wiki/s/20240312153728-paen10j"
+export const CORS_PROXY_DOC_URL = siteUrl("guide/cors-proxy")

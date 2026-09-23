@@ -3,24 +3,25 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl, siteUrl } from "~/src/utils/site"
 
 export const cnblogsHelpConfig: PageHelpConfig = {
   pageId: "platform-config/metaweblog_Cnblogs",
-  helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+  helpUrl: platformDocUrl("metaweblog-cnblogs"),
   summary: "将思源笔记发布到博客园。使用 MetaWeblog XML-RPC 协议。",
   fields: {
     home: { tip: "你的博客园博客首页，如 https://cnblogs.com/yourname", placeholder: "https://www.cnblogs.com/" },
     apiUrl: {
       tip: "博客园 MetaWeblog API 地址：https://rpc.cnblogs.com/metaweblog/yourblogname",
       placeholder: "https://rpc.cnblogs.com/metaweblog/your-blog",
-      link: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+      link: siteUrl("guide/picbed"),
       linkText: "如何获取 API 地址？",
     },
     username: { tip: "博客园登录用户名", placeholder: "your-cnblogs-name" },
     password: {
       tip: "博客园 API Token（在博客园设置 → 开放 API 中生成，生成地址 https://i.cnblogs.com/settings），不是登录密码",
       placeholder: "your-access-token",
-      link: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+      link: siteUrl("guide/picbed"),
     },
     previewUrl: {
       tip: "查看文章链接模板，默认 /[userid]/p/[postid].html，与博客园文章地址一致，通常保持默认。",

@@ -45,7 +45,7 @@ After publishing, you can view publishing status, open the published article, or
 - **Your platform accounts are untouched**: accounts, platform settings and published links keep the storage they already had, so nothing needs reconfiguring after the upgrade.
 - **One source of copy**: the two parallel translation sets are merged into one and the languages are fully aligned.
 
-![](./docs/images/publisher-icon.png)
+![](./docs/public/images/publisher-icon.png)
 
 ## Platform directions
 

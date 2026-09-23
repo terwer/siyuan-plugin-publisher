@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const jianshuHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Jianshu",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("custom-jianshu"),
   summary: "通过 Cookie 授权发布到简书。图片默认上传到简书；已发布文章暂不支持更换笔记本。",
   fields: {
     home: { tip: "默认是简书首页 https://www.jianshu.com，通常保持默认。", placeholder: "https://www.jianshu.com" },

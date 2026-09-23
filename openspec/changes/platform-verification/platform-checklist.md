@@ -110,7 +110,7 @@
 
 > **标准**：平台配置页**每一行真实渲染的字段**都要有一个可点的 ⓘ；`fields` 键 = 该行绑定的配置属性名
 > （鉴权行**恒为 `password`**）；指引在字段已填值时仍可见；弹层在 `.syp-panel` 内不裁切不错位；
-> 动态实例 key 走 registry 回落链。完整口径见 `docs/draft/platform-verification-sop.md` 第三节第 5 条。
+> 动态实例 key 走 registry 回落链。完整口径见 `.internal-docs/platform-verification-sop.md` 第三节第 5 条。
 >
 > **自动校验（唯一键集来源）**：`src/helpConfigs/verifiedPlatformRows.ts` 按真实渲染行冻结键集，
 > `src/helpConfigs/fieldGuideRulers.spec.ts` 用五把尺强制（键尺 / 覆盖尺 / 守卫尺 / 分工尺 / 示例尺）；
@@ -251,7 +251,7 @@
 | 2026-08-14 | #28 devtools 复核：配置页打开正常（修复生效）、手动 Cookie 编辑区正常、空配置验证合理失败；本地 Docker 起 Halo 2.20 测试实例（`halo2-docker` compose，localhost:8090）验证 Cookie 认证可用；浏览器 std 环境 `middleware-fetch` 无法访问 localhost（远端 CORS 代理）+ Cookie 头 forbidden，全链路改由 Electron 宿主手验 |
 | 2026-08-14 | **transport 规则修正**：loopback/私网目标在有代理条件（`isUseSiyuanProxy || forceProxy`）时改走 `siyuan-forward-proxy`（依据思源内核 3.7.3 `SSRFSafeDialer` 源码：默认模式允许访问本机，`--safe-mode` 才拒绝；middleware-fetch 远端代理无法访问 localhost）。单测 64 绿、build:v2 通过；**#28 Halo网页版（localhost:8090）Cfg/Pub/Upd/Del/Img 五格 devtools 全链路手验通过**，T1 小结更新为 8 个全链路 ✅ |
 | 2026-08-15 | #28 Halo网页版补 help 引导：`custom-haloweb.ts` 补 tour（5 步）+ cookie/pageType/picbedService 字段 + 4 条 faq；`registry.spec.ts` verifiedConfigs 补全到 8 平台强制约束；Electron 宿主实测 HelpPanel + TourGuide 正常展示 |
-| 2026-08-15 | 8 个已验证平台 help/文档盘点完成：全部有 helpUrl/summary/fields/faq/tour（Halo网页版本次补齐）。文档草稿落地 `docs/draft/platforms/*.md`（8 份）+ `docs/draft/platform-verification-sop.md`（全覆盖测试 SOP）；helpUrl 多个平台误用博客园链接，待用户提供真实链接后替换 |
+| 2026-08-15 | 8 个已验证平台 help/文档盘点完成：全部有 helpUrl/summary/fields/faq/tour（Halo网页版本次补齐）。文档草稿落地 `docs/draft/platforms/*.md`（8 份）+ `.internal-docs/platform-verification-sop.md`（全覆盖测试 SOP）；helpUrl 多个平台误用博客园链接，待用户提供真实链接后替换 |
 | 2026-08-15 | #28 Halo网页版 **Electron 宿主全链路实测**（补上此前仅 devtools std 环境的缺口）：Pub（前台 200 含标题+图片）/ Upd / Del（404 Post not found）/ Img 均真实验证通过，回写 #28 备注 |
 | 2026-08-16 | #32 简书 V2 全链路验证：Cfg（Cookie 授权通过，笔记本=随笔）；Pub `https://www.jianshu.com/p/9654472734f3`；Upd 成功；Del 成功；Img 带真实 PNG 发布成功（`https://upload-images.jianshu.io/upload_images/16941800-0b988068785ce608.png`）。修复：`JianshuConfig` 默认图床改为 Bundled（新增账号默认选中“当前平台推荐”）；新增 `custom-jianshu` 完整 help 配置（fields/faq/tour 4 步）并移出 remaining-t1；`uploadFile` 增加 qiniu 错误详情。此前 Img 失败是测试图片 `icon.png` 实为 WebP 伪装 PNG，非简书适配器缺陷 |
 | 2026-08-22 | #33 掘金 **Img ✅ 收官**：原生 veImageX 五步直传（gen_token→ApplyImageUpload→TOS 裸字节 PUT+CRC32→CommitImageUpload→get_img_url）落地 `vendors/byteimagex/imagexClient.ts` + `utils/rawHeaderFetch.ts`（undici 引擎）；掘金默认图床改 Bundled。**根因**：SigV4 amzDate 必须剥冒号（ISO 串 `[-:]|\.\d{3}` 全替换），带冒号即 100024 InvalidAuthorization——与传输层/头大小写无关。Electron 宿主验证：配置页切「当前平台」→ 文档贴图 → 发布面板更新 → 草稿 mark_content 两图均为裸 `![](tos-cn-i-73owjymdk6/<32hex>)`（官方契约），文章 `https://juejin.cn/post/7676404118950395938` audit=2 匿名可访问含图。T1 全链路 ✅ 更新为 10 个 |

@@ -3,6 +3,7 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { siteUrl } from "~/src/utils/site"
 
 /**
  * 平台配置页通用帮助（兜底）
@@ -11,7 +12,7 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
  */
 export const platformConfigDefaultHelpConfig: PageHelpConfig = {
   pageId: "platform-config/_default",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: siteUrl("platforms/"),
   summary: "填写平台 API 认证信息，验证通过后即可发布。不同平台需要的字段不同，请参考具体平台文档。",
   fields: {
     home: { tip: "平台首页地址，用于预览已发布的文章链接" },

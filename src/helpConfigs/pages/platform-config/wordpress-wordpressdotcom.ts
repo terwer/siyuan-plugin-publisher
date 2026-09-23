@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const wordpressdotcomHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpressdotcom",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("wordpress-wordpressdotcom"),
   summary:
     "通过 MetaWeblog XML-RPC 协议把思源笔记发布到 WordPress.com 站点。账号使用 WordPress.com 的登录用户名与密码（不是 Token）；「平台首页」填站点地址，API 地址由该地址自动推导；正文默认按 HTML 发布，查看文章链接模板为 /?p=[postid]；文章「分类」可在本页选择（验证后下拉列出站点已有分类）。访问该站点有两条通路，任选其一：「跨域代理地址」填入你自备的跨域代理服务（无需额外网络条件），或留空由思源宿主自身的网络通道直连站点（需当前网络能打开该站点）。",
   fields: {

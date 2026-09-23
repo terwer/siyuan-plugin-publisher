@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl, siteUrl } from "~/src/utils/site"
 
 export const haloHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Halo",
-  helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+  helpUrl: platformDocUrl("common-halo"),
   summary:
     "通过 Halo API 发布到 Halo 2.x 博客。Halo API 平台仅支持 Halo 2.9（2.20+ 已调整 API 策略，需改用「Halo网页版」）。账号使用用户名与密码；图床默认「不使用」，选「当前平台」时图片上传到 Halo 附件；发布后文章地址形如 https://<host>/archives/<slug>。",
   fields: {
@@ -21,7 +22,7 @@ export const haloHelpConfig: PageHelpConfig = {
     password: {
       tip: "Halo 登录密码（非令牌），与用户名一起用于 API 认证。",
       placeholder: "your-halo-password",
-      link: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+      link: siteUrl("guide/picbed"),
       linkText: "Halo 配置说明",
     },
     previewUrl: { tip: "Halo 文章预览规则，默认 /archives/{slug}；查看链接为 https://<host>/archives/<slug>，可修改。", placeholder: "/archives/{slug}" },

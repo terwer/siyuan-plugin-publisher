@@ -16,6 +16,7 @@ import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 import { StrUtil } from "zhi-common"
 import { routeLocationKey, routerKey } from "vue-router"
+import { siteUrl } from "~/src/utils/site"
 
 const logger = createAppLogger("back-page")
 const { t } = useAppI18n()
@@ -67,7 +68,7 @@ const onHelp = () => {
   if (!StrUtil.isEmptyString(helpUrl)) {
     window.open(helpUrl, "_blank")
   } else {
-    const helpIndexUrl = "https://siyuan.wiki/s/20230810132040-nn4q7vs"
+    const helpIndexUrl = siteUrl("guide/usage")
     window.open(helpIndexUrl, "_blank")
   }
 }

@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const csdnHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Csdn",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("custom-csdn"),
   summary: "通过 Cookie 授权发布到 CSDN。图片默认上传到 CSDN；默认使用 Markdown 发布。",
   fields: {
     home: { tip: "默认是 CSDN 博客首页 https://blog.csdn.net，通常保持默认。", placeholder: "https://blog.csdn.net" },

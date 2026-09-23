@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const typechoHelpConfig: PageHelpConfig = {
   pageId: "platform-config/metaweblog_Typecho",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("metaweblog-typecho"),
   summary:
     "通过 MetaWeblog XML-RPC 协议把思源笔记发布到自建的 Typecho 博客。账号使用 Typecho 的登录用户名与密码（不是 Token）；「平台首页」填博客地址，API 地址由该地址自动推导；正文默认按 HTML 发布，查看文章链接模板为 /index.php/archives/[postid]；Typecho 无发布目录概念，因此没有「发布目录」行。",
   fields: {

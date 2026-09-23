@@ -8,6 +8,7 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { siteUrl } from "~/src/utils/site"
 
 /**
  * 全局兜底帮助配置
@@ -17,6 +18,6 @@ import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
  */
 export const DEFAULT_PAGE_HELP_CONFIG: PageHelpConfig = {
   pageId: "_default",
-  helpUrl: "https://siyuan.wiki/s/20230810132040-nn4q7vs",
+  helpUrl: siteUrl("guide/usage"),
   summary: "Publisher 发布工具帮助文档。查看完整文档获取详细使用说明。",
 }

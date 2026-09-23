@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const vitepressHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Vitepress",
-  helpUrl: "https://siyuan.wiki/s/20230914173253-mx2gaxd",
+  helpUrl: platformDocUrl("github-vitepress"),
   summary:
     "通过 GitHub API 将文章发布到 Vitepress 文档站仓库。账号使用 GitHub Token（PAT）；文章默认写入 docs 目录（文件名 [slug].md）；图片选「当前平台」图床时上传到文章所在目录的 images 子目录（存储规则 [docpath]/images，例如 docs/images/<图片名>），文章中引用为相对路径 ./images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），站点文章地址由 Vitepress 的文件路由决定。",
   fields: {

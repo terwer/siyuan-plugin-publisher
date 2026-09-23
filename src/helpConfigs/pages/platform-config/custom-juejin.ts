@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const juejinHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Juejin",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("custom-juejin"),
   summary: "通过 Cookie 授权发布到掘金。图片默认走掘金原生上传；默认使用 Markdown 发布。",
   fields: {
     home: { tip: "默认是掘金首页 https://juejin.cn，通常保持默认。", placeholder: "https://juejin.cn" },

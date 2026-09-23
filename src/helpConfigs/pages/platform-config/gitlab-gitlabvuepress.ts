@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const gitlabvuepressHelpConfig: PageHelpConfig = {
   pageId: "platform-config/gitlab_Gitlabvuepress",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("gitlab-gitlabvuepress"),
   summary:
     "通过 GitLab API 将文章发布到 GitLab 上的 VuePress 文档站仓库。账号使用 GitLab 访问令牌（Personal Access Token）；仓库地址由「平台首页 + 用户名 + 仓库名」拼出，平台首页与 API 地址均为你的 GitLab 实例地址；文章默认写入 docs（文件名 [filename].md）；图片提交到仓库 docs/.vuepress/public/images，文章中引用 images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），该规则固定不可修改。",
   fields: {

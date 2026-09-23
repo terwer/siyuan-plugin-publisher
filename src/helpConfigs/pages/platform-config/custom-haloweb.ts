@@ -3,10 +3,11 @@
  *               Version 3, 29 June 2007
  */
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const halowebHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Haloweb",
-  helpUrl: "https://siyuan.wiki/s/20230908183639-btcnnmj",
+  helpUrl: platformDocUrl("custom-haloweb"),
   summary: "通过 Cookie 授权发布到 Halo 2.20+。需要在站点地址中填写你的 Halo 博客首页 URL，登录后读取 Cookie 即可发布。",
   fields: {
     home: {

@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const astroHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Astro",
-  helpUrl: "https://siyuan.wiki/s/20240330142711-bc3gjg0",
+  helpUrl: platformDocUrl("github-astro"),
   summary:
     "通过 GitHub API 将文章发布到 Astro 文档站仓库。账号使用 GitHub Token（PAT）；文章默认写入 src/content/blog（文件名 [slug].md）；图片选「当前平台」图床时上传到仓库根目录的 public/images（存储规则 public/images，文章中引用为绝对路径 /images/<图片名>）；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），站点文章地址由 Astro 内容集合的文件路径决定。",
   fields: {

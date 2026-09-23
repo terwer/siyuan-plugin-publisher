@@ -8,10 +8,11 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
+import { platformDocUrl } from "~/src/utils/site"
 
 export const hexoHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Hexo",
-  helpUrl: "https://siyuan.wiki/s/20230908182140-8riar0r",
+  helpUrl: platformDocUrl("common-github-hexo"),
   summary:
     "通过 GitHub API 将文章发布到 Hexo 静态博客仓库。账号使用 GitHub Token（PAT）；图片选「当前平台」图床会上传到仓库 source/images；发布后文章地址为 GitHub blob 预览链接（或按站点预览规则合成），查看链接形如 https://github.com/<user>/<repo>/blob/<branch>/<docpath>。",
   fields: {
