@@ -43,7 +43,7 @@ export const telegraphHelpConfig: PageHelpConfig = {
       tip: "Telegraph 只有「不使用」与「PicGo」两项（无内置图床）。平台本身没有图片上传接口，文章里的图片只能以外部链接形式出现，保持默认「不使用」即可；思源本地未上传的图片不会随文章上传。",
     },
     corsAnywhereUrl: {
-      tip: "Telegraph 为 CORS 受限平台，必须填写你自己的 CORS 代理地址，否则无法访问",
+      tip: "Telegraph 为 CORS 受限平台，必须填写你自己的 CORS 代理地址，否则无法访问。可用 cors-anywhere 自建，或部署到 Cloudflare Workers；插件不内置公共代理地址（避免滥用与凭据集中），配套部署源码也未公开分发，需要时邮件索取。",
       placeholder: "https://your-cors-proxy.example.com",
       link: siteUrl("guide/cors-proxy"),
       linkText: "如何配置 CORS 代理？",

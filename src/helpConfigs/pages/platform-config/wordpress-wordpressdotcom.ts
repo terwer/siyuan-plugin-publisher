@@ -8,7 +8,7 @@
  */
 
 import type { PageHelpConfig } from "~/src/types/IPageHelpConfig"
-import { platformDocUrl } from "~/src/utils/site"
+import { platformDocUrl, siteUrl } from "~/src/utils/site"
 
 export const wordpressdotcomHelpConfig: PageHelpConfig = {
   pageId: "platform-config/wordpress_Wordpressdotcom",
@@ -37,8 +37,11 @@ export const wordpressdotcomHelpConfig: PageHelpConfig = {
     corsAnywhereUrl: {
       tip:
         "跨域代理地址（可选）。填入你自备的跨域代理服务后，发布请求经它转发，**无需额外网络条件**即可访问 WordPress.com；" +
-        "留空则改由思源宿主自身的网络通道直连站点，此时需当前网络能正常打开该站点。两条通路任选其一。",
+        "留空则改由思源宿主自身的网络通道直连站点，此时需当前网络能正常打开该站点。两条通路任选其一。" +
+        "代理可用 cors-anywhere 自建或部署到 Cloudflare Workers，插件不内置公共代理地址，部署源码需邮件索取。",
       placeholder: "https://your-cors-proxy.example.com",
+      link: siteUrl("guide/cors-proxy"),
+      linkText: "如何配置 CORS 代理？",
     },
     picbedService: {
       tip:
