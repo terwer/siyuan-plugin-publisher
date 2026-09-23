@@ -73,6 +73,8 @@ const mountPreference = () =>
           props: ["content", "triggerClass"],
           template: '<label :class="triggerClass"><slot>{{ content }}</slot></label>',
         },
+        // 修复面板自身依赖 Pinia store；本测试聚焦开关逻辑，桩掉即可
+        RepairPublishRecords: true,
       },
     },
   })
