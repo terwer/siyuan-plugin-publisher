@@ -95,7 +95,7 @@ Publisher SHALL 移除或替换把已安装 `siyuan-plugin-picgo` 当作 PicGo �
 - **THEN** 页面 SHALL NOT 显示“因为 PicGo 插件未安装所以 PicGo 不可用”含义的提示
 - **AND** 任何可用性状态 SHALL 指向 headless lib/runtime/config 状态
 
-#### Scenario: 不使用旧 PicGo 插件 iframe 入口
+#### Scenario: 不跳转到 PicGo 插件的设置入口
 
 - **WHEN** 用户需要配置 PicGo-lib 图床设置
 - **THEN** Publisher SHALL 让用户停留在 Publisher 设置内

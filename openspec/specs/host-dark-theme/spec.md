@@ -10,7 +10,7 @@
 
 The hosted panel MUST NOT maintain its own theme mode. It MUST derive dark mode solely from the Siyuan host document: `document.documentElement.getAttribute("data-theme-mode") === "dark"`.
 
-The host MUST NOT invoke VueUse `useDark`, MUST NOT render a theme toggle control, and MUST NOT depend on any iframe `html.dark` state inside an iframe document.
+The host MUST NOT invoke VueUse `useDark`, MUST NOT render a theme toggle control, and MUST NOT read the theme from an embedded document's `html.dark` state.
 
 #### Scenario: Host switches to dark while panel is closed
 

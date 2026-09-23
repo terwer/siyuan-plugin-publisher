@@ -10,9 +10,8 @@
 /**
  * 通用壳的构建配置：浏览器扩展 / 思源挂件 / 网页版（nginx、vercel）共用一份。
  *
- * 取代原先的 `vite.v1.app.config.ts`（它构建的是 V1 SPA）。差别：
- * - 入口是 `src/webapp/index.html`（应用壳），不再有 vue-router 与 `src/pages/**`；
- * - 产物按 `BUILD_TYPE` 落到各自的目录，与既有 `scripts/*.py` 的约定一致；
+ * - 入口是 `src/webapp/index.html`（应用壳），不含 vue-router；
+ * - 产物按 `BUILD_TYPE` 落到各自的目录，与 `scripts/*.py` 的约定一致；
  * - 不 external `siyuan`：壳链路完全不 import 它（只有 `siyuan/host/pluginHost.ts` 才 import）。
  *
  * 用法：
