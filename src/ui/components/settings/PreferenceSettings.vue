@@ -40,6 +40,9 @@
                 <span v-if="saveStateMap['publishSourceNotebooks'] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("common.saved") }}</span>
                 <span v-else-if="saveStateMap['publishSourceNotebooks'] === 'failed'" class="syp-settings-status-text is-error">{{ t("common.saveFailed") }}</span>
               </template>
+              <template v-else-if="item.kind === 'action'">
+                <el-button size="small" @click="repairVisible = true">{{ item.actionText }}</el-button>
+              </template>
               <template v-else>
                 <span v-if="saveStateMap[item.key] === 'saved'" class="syp-settings-status-text is-saved">✓ {{ t("common.saved") }}</span>
                 <span v-else-if="saveStateMap[item.key] === 'failed'" class="syp-settings-status-text is-error">{{ t("common.saveFailed") }}</span>
@@ -66,6 +69,8 @@
       </article>
 
     </div>
+
+    <RepairPublishRecords v-model:visible="repairVisible" />
   </section>
 </template>
 
@@ -74,6 +79,7 @@ import { computed, onMounted, reactive, ref } from "vue"
 import { StrUtil } from "zhi-common"
 import { sypConfirm } from "~/src/ui/components/common/SypMessageBox.ts"
 import SypTooltip from "~/src/ui/components/common/SypTooltip.vue"
+import RepairPublishRecords from "~/src/ui/components/settings/RepairPublishRecords.vue"
 import { useNotebookOptions } from "~/src/composables/useNotebookOptions.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
@@ -95,13 +101,16 @@ type PreferenceKey =
   | "ignoreBlockRef"
   | "allowChangeSlug"
   | "publishSourceNotebooks"
+  | "repairPublishRecords"
 
 interface PreferenceItem {
   key: PreferenceKey
   label: string
   description: string
   pluginOnly?: boolean
-  kind?: "toggle" | "notebooks"
+  kind?: "toggle" | "notebooks" | "action"
+  /** kind 为 action 时的按钮文案 */
+  actionText?: string
 }
 
 interface PreferenceGroup {
@@ -117,6 +126,7 @@ const preferenceForm = getPublishPreferenceSetting()
 
 const saveStateMap = reactive<Record<PreferenceKey, "idle" | "saving" | "saved" | "failed">>({} as any)
 const allowChangeSlugConfirming = ref(false)
+const repairVisible = ref(false)
 const { options: notebookOptions, load: loadNotebookOptions } = useNotebookOptions()
 
 onMounted(() => {
@@ -223,6 +233,20 @@ const groups: PreferenceGroup[] = [
         label: t("preference.item.publishSourceNotebooks.label"),
         description: t("preference.item.publishSourceNotebooks.desc"),
         kind: "notebooks",
+      },
+    ],
+  },
+  {
+    title: t("preference.group.repair.title"),
+    description: t("preference.group.repair.desc"),
+    items: [
+      {
+        key: "repairPublishRecords",
+        label: t("preference.item.repair.label"),
+        description: t("preference.item.repair.desc"),
+        kind: "action",
+        actionText: t("preference.repair.open"),
+        pluginOnly: true,
       },
     ],
   },

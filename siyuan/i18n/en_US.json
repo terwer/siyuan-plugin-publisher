@@ -734,5 +734,22 @@
   "yaml.show.type.yamlmd": "YAML + MD Body",
   "yaml.show.type.html": "HTML Body",
   "main.read.mode.tip4": "If you delete the built-in YAML attributes, sync to SiYuan Notes right away, otherwise switching modes will restore them.",
-  "publisher.post.status.pubish": "Publish"
+  "publisher.post.status.pubish": "Publish",
+  "preference.group.repair.title": "Repair publish records",
+  "preference.group.repair.desc": "When a document is rebuilt or split, its SiYuan ID changes and the existing publish records no longer match it — the document shows as unpublished even though the article is still on the platform. Repair the records here instead of publishing again.",
+  "preference.item.repair.label": "Repair publish records",
+  "preference.item.repair.desc": "Open the repair panel and enter the article IDs that already exist on each platform.",
+  "preference.repair.title": "Repair publish records",
+  "preference.repair.desc": "When a document's SiYuan ID changes — after deleting and recreating it, splitting it, or importing it from elsewhere — the existing publish records can no longer find it. The document shows as unpublished, while the articles are still on the platforms. Enter the article IDs that already exist there to reconnect the records; no re-publishing needed.",
+  "preference.repair.pageId.label": "Document ID",
+  "preference.repair.pageId.placeholder": "Paste the SiYuan document ID (the .sy filename without its extension)",
+  "preference.repair.tips": "To find a document ID: right-click the document in SiYuan → Copy → Copy ID, or read the .sy filename in the document tree.",
+  "preference.repair.empty": "This document has no publish records yet.",
+  "preference.repair.target": "Repairing publish records for “{title}”",
+  "preference.repair.save": "Save repair",
+  "preference.repair.success": "Publish records repaired",
+  "preference.repair.failure": "Repair failed",
+  "preference.repair.noPageId": "Enter a document ID first",
+  "preference.repair.column.hint": "Leave a field empty to keep that platform's record unchanged.",
+  "preference.repair.open": "Open repair panel"
 }

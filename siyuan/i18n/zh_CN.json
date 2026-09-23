@@ -734,5 +734,22 @@
   "articleManage.tooltip.notPublished": "尚未发布",
   "articleManage.platformDeleted": "[已删除]",
   "articleManage.extend.platformUpdate": "已发布，点击进入单发",
-  "articleManage.extend.platformPublish": "未发布，点击进入单发"
+  "articleManage.extend.platformPublish": "未发布，点击进入单发",
+  "preference.group.repair.title": "发布记录修复",
+  "preference.group.repair.desc": "文档重建或拆分后，它在思源里的 ID 会变，导致原来的发布记录对不上（表现为「未发布」，实际平台上已有文章）。这里可以把记录重新对上，不必重新发布。",
+  "preference.item.repair.label": "发布记录修复",
+  "preference.item.repair.desc": "打开修复面板，按平台填写平台上已有的文章 ID，即可恢复关联。",
+  "preference.repair.title": "发布记录修复",
+  "preference.repair.desc": "当文档在思源里的 ID 发生变化（例如删除后重建、拆分成多篇、或从别处导入），原先的发布记录就找不到对应文档，会显示成「未发布」，但平台上的文章其实还在。填写平台上已有的文章 ID，即可把两边重新对上，不需要重新发布。",
+  "preference.repair.pageId.label": "文档 ID",
+  "preference.repair.pageId.placeholder": "粘贴思源文档 ID（.sy 文件名去掉后缀那段）",
+  "preference.repair.tips": "文档 ID 的获取方式：在思源里右键该文档 →「复制」→「复制 ID」；或在文档树中查看 .sy 文件名。",
+  "preference.repair.empty": "该文档目前没有任何发布记录。",
+  "preference.repair.target": "将修复文档「{title}」的发布记录",
+  "preference.repair.save": "保存修复",
+  "preference.repair.success": "发布记录已修复",
+  "preference.repair.failure": "修复失败",
+  "preference.repair.noPageId": "请先填写文档 ID",
+  "preference.repair.column.hint": "留空表示不修改该平台的记录。",
+  "preference.repair.open": "打开修复面板"
 }
