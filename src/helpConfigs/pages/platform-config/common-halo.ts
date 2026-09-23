@@ -14,7 +14,7 @@ export const haloHelpConfig: PageHelpConfig = {
   pageId: "platform-config/common_Halo",
   helpUrl: platformDocUrl("common-halo"),
   summary:
-    "通过 Halo API 发布到 Halo 2.x 博客。Halo API 平台仅支持 Halo 2.9（2.20+ 已调整 API 策略，需改用「Halo网页版」）。账号使用用户名与密码；图床默认「不使用」，选「当前平台」时图片上传到 Halo 附件；发布后文章地址形如 https://<host>/archives/<slug>。",
+    "通过 Halo API 发布到 Halo 2.x 博客。Halo 2.20 起默认关闭 Basic Auth，需在容器启动命令中追加 --halo.security.basic-auth.disabled=false。账号使用用户名与密码；图床默认「不使用」，选「当前平台」时图片上传到 Halo 附件；发布后文章地址形如 https://<host>/archives/<slug>。",
   fields: {
     home: { tip: "Halo 站点首页地址，通常与 API 地址一致，如 https://yourhalo.com。", placeholder: "https://your-halo.com" },
     apiUrl: { tip: "Halo 站点 API 地址，通常与首页地址相同，如 https://yourhalo.com。", placeholder: "https://your-halo.com" },
@@ -38,7 +38,7 @@ export const haloHelpConfig: PageHelpConfig = {
     },
     {
       q: "Halo 版本要求？",
-      a: "Halo API 平台仅支持 Halo 2.9。Halo 2.20+ 已调整 API 策略，请改用「Halo网页版」平台。",
+      a: "Halo 2.20+ 默认关闭 Basic Auth。请在 Halo 容器的启动命令里追加 --halo.security.basic-auth.disabled=false 并重启容器。",
     },
     {
       q: "图片要怎么发布？",
