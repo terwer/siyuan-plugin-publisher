@@ -65,9 +65,9 @@ Platform capabilities continue to improve with each version. Check the in-plugin
 
 [CHANGELOG](CHANGELOG.md)
 
-## Community and history
+## Community
 
-[QQ 722632752](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8) · [More SiYuan plugins](https://github.com/terwer/zhi/blob/main/README.md#plugins) · [Archived README files](docs/archive/README.md)
+[Docs](https://terwer.github.io/siyuan-plugin-publisher/) · [QQ 722632752](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8) · [More SiYuan plugins](https://github.com/terwer/zhi/blob/main/README.md#plugins)
 
 Thanks to SiYuan, Vue, Vite, TypeScript, and the open-source projects behind this plugin, and to everyone who tests, reports issues, and supports Publisher.
 

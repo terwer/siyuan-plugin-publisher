@@ -65,9 +65,9 @@
 
 [CHANGELOG](CHANGELOG.md)
 
-## 社区与历史
+## 社区
 
-[QQ 群 722632752](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8) · [作者的其他思源插件](https://github.com/terwer/zhi/blob/main/README_zh_CN.md#%E6%8F%92%E4%BB%B6) · [历史 README 归档](docs/archive/README.md)
+[使用文档](https://terwer.github.io/siyuan-plugin-publisher/) · [QQ 群 722632752](https://qm.qq.com/cgi-bin/qm/qr?k=fYrA79XDvtr4JuEgez-dmj1h3tOef8pg&jump_from=webapi&authKey=DC+XcjkoTH762jxvkSgpt7V97QFETnaLVTZIWhd8PdZoX+MNSr+LsprWFYYELXu8) · [作者的其他思源插件](https://github.com/terwer/zhi/blob/main/README_zh_CN.md#%E6%8F%92%E4%BB%B6)
 
 感谢思源笔记、Vue、Vite、TypeScript 等开源项目，以及所有反馈、测试和支持发布工具的用户。
 
