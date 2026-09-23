@@ -19,7 +19,7 @@ export const notionHelpConfig: PageHelpConfig = {
     home: { tip: "Notion 平台首页，通常固定为 https://www.notion.so/，保持默认。", placeholder: "https://www.notion.so/" },
     apiUrl: { tip: "Notion API 地址，通常固定为 https://api.notion.com/v1，保持默认。", placeholder: "https://api.notion.com/v1" },
     password: {
-      tip: "Notion API Token，在 Notion 集成（my-integrations）中创建，需勾选 Read content、Update content、Insert content 三项权限。",
+      tip: "Notion API Token，在 Notion 集成（my-integrations）中创建。创建后还需在目标页面的「⋯ → Connections → Add connections」里把该集成连接到页面，否则默认没有任何页面权限、拉不到根页面列表。",
       placeholder: "ntn_xxxxxxxxxxxxxxxxxxxx",
       link: "https://www.notion.so/my-integrations",
       linkText: "前往创建 Token",
@@ -35,8 +35,8 @@ export const notionHelpConfig: PageHelpConfig = {
   },
   faq: [
     {
-      q: "Token 验证失败？",
-      a: "确认创建 Notion 集成 Token 时勾选了 Read content、Update content、Insert content 三项权限，并将集成授权给目标根页面。",
+      q: "Token 验证失败，或根页面列表为空？",
+      a: "两种常见原因：① 集成没有连接到页面——请在目标页面的「⋯ → Connections → Add connections」里添加该集成，Notion 默认不给集成任何页面权限；② Token 不正确或来自别的工作空间。",
     },
     {
       q: "为什么不能修改已发布页面的根页面？",
@@ -47,6 +47,10 @@ export const notionHelpConfig: PageHelpConfig = {
       a: "Notion 无内置上传，选择「PicGo」。图片会先上传到外部图床，并以外部 image 块嵌入 Notion 页面。",
     },
     {
+      q: "发布后图片不显示？",
+      a: "Notion 只接受 https 图片外链，http 地址会被忽略。请确认图床返回的是 https 地址，并确保已选择「PicGo」图床。",
+    },
+    {
       q: "查看链接打开后提示登录 / 无权限？",
       a: "Notion 页面默认私有，需要 Notion 账号访问权限。发布成功且链接正确即为正常现象，非插件缺陷。",
     },
@@ -55,7 +59,7 @@ export const notionHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='token']",
       title: "API Token",
-      content: "在 Notion 集成中创建 Token 并授权（读、更新、插入三项权限），然后填入。",
+      content: "在 Notion 集成中创建 Token，并在目标页面的 Connections 里把该集成连接到页面，然后填入。",
       placement: "bottom",
     },
     {
