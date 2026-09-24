@@ -1,30 +1,19 @@
 # Changelog
 
 ## [2.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.0.0...siyuan-plugin-publisher-v2.1.0) (2026-09-24)
-
-
 ### Features
-
 * **nav:** keep the header entries resident instead of swapping them ([aae2454](https://github.com/terwer/siyuan-plugin-publisher/commit/aae2454a010a0044be25791092b5d2b7a6716540))
-
-
 ### Bug Fixes
-
 * **manifest:** conform the bazaar manifests to the new spec ([442651b](https://github.com/terwer/siyuan-plugin-publisher/commit/442651b266d82fc444603700f6ee14bb98d00b3f))
 * preview image ([b5458b6](https://github.com/terwer/siyuan-plugin-publisher/commit/b5458b63cff6dd110b7430f8141ed5d57890d800))
-* **theme:** make the whole panel follow the SiYuan theme ([84f3bda](https://github.com/terwer/siyuan-plugin-publisher/commit/84f3bda863d57b6f817ca924686760e0a558a0cd))
-
-
+* **theme:** make the whole panel follow the siyuan theme ([84f3bda](https://github.com/terwer/siyuan-plugin-publisher/commit/84f3bda863d57b6f817ca924686760e0a558a0cd))
 ### Miscellaneous
-
 * **openspec:** archive the changes shipped in 2.0.0 ([0cdbd1a](https://github.com/terwer/siyuan-plugin-publisher/commit/0cdbd1acf1b2fe262a266c2b8ed66bf3223a8724))
-
 ## [2.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.41.1...siyuan-plugin-publisher-v2.0.0) (2026-09-23)
 ### ⚠ BREAKING CHANGES
 * the platform verification column formerly named `v2c` is now `cfg`, and the `v1c` column no longer exists. neither appears in the plugin api or in user-visible text; the checklist and the verification sop are updated to the new name.
 * the previous interface was removed in 2.0.0 and this release provides no way back to it. the toolbar menu and the old settings pages no longer exist, and the browser extension, widget and web builds render the new interface, with the extension and web build requiring your siyuan api address and token under connection settings. your platform accounts and published links are preserved and need no reconfiguration. if you need the old interface, install 1.41.1, the last release that had it; the download link is kept in settings - about until 2.3.0.
 * introduce the v2 unified workspace and complete the ui architecture migration from iframe-based spa hosting to native dom mounting.
-### Features
 * **account:** enhance v2accountlist with ui improvements and integrate element plus ([218b6d6](https://github.com/terwer/siyuan-plugin-publisher/commit/218b6d652a6727f99ed02928c4cdc8b6c585d6bb))
 * add findings, progress, and task plan for telegraph v2 verification ([a159f13](https://github.com/terwer/siyuan-plugin-publisher/commit/a159f13ad993e94a3797a6b7a78e02574cbd9e11))
 * allow loopback targets to use siyuan-forward-proxy under proxy conditions ([51dd890](https://github.com/terwer/siyuan-plugin-publisher/commit/51dd890d326a41af1d83f062b7d7606f74db1dd1))
@@ -130,7 +119,6 @@
 * **yuqueweb:** add yuque web platform for v2 web auth publishing ([a1d5fd1](https://github.com/terwer/siyuan-plugin-publisher/commit/a1d5fd1c921ab2fd52e02eafbb7375b4ca64cb03))
 * **yuqueweb:** fix document update and read api usage and enhance publishing flow ([d0cbc79](https://github.com/terwer/siyuan-plugin-publisher/commit/d0cbc79acf01454d3f67bc2b1bf411adb3c60298))
 * **yuqueweb:** implement adapter-level logout action and remove logouturl usage ([eaf0185](https://github.com/terwer/siyuan-plugin-publisher/commit/eaf0185b8014ca7d5b612cf9b93db4902ca02171))
-### Bug Fixes
 * **ai:** inject x-opencode-session header for opencode go requests ([5a636dc](https://github.com/terwer/siyuan-plugin-publisher/commit/5a636dc3cb8c7546313af9e3444ea592959484f8))
 * **ai:** make auto summary in detailed publish resilient on ai failure ([9f1a09b](https://github.com/terwer/siyuan-plugin-publisher/commit/9f1a09b62d2a627ca1c68a7da78829348ea86c27))
 * **ai:** read siyuan note ai providers and share ai settings across v1/v2 ([22f1405](https://github.com/terwer/siyuan-plugin-publisher/commit/22f140599e8be56ba35fcd0009e6917bda92334f))
@@ -228,7 +216,6 @@
 * **v2:** enhance platform config with env compatibility checks ([d49ffcd](https://github.com/terwer/siyuan-plugin-publisher/commit/d49ffcdbce5892bb060a6465855a95460bee4944))
 * **v2:** provide global error detail handler for picbed settings ([5ecb85f](https://github.com/terwer/siyuan-plugin-publisher/commit/5ecb85fdc20610c506d324a8ec7c1eb943c20727))
 * **v2:** share one compact style for every bridged v1 surface ([2334407](https://github.com/terwer/siyuan-plugin-publisher/commit/233440794998211f5fef136f61cc98e15b6a16cd))
-### Miscellaneous
 * **build:** upgrade build toolchain to vite 8 ([fa4f40d](https://github.com/terwer/siyuan-plugin-publisher/commit/fa4f40d4e3feedc58f01e7d73bf228e2d292ab04))
 * **build:** upgrade to vite 8 build toolchain ([082184d](https://github.com/terwer/siyuan-plugin-publisher/commit/082184dfbbb737c91eeb89823098b176311bc0be))
 * **dependencies:** update package.json and pnpm-lock.yaml for dependency management ([b8ba0de](https://github.com/terwer/siyuan-plugin-publisher/commit/b8ba0defacc5b192fe42bb363d695fca525819f8))
