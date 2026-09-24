@@ -7,15 +7,16 @@
  *  of this license document, but changing it is not allowed.
  */
 
+import { ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { TelegraphApiAdaptor } from "~/src/adaptors/api/telegraph/telegraphApiAdaptor.ts"
 import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { TelegraphApiAdaptor } from "~/src/adaptors/api/telegraph/telegraphApiAdaptor.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   const logger = createAppLogger("use-telegraph-api")
@@ -30,11 +31,11 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   } else {
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<TelegraphConfig>(setting[key], {} as TelegraphConfig)
+    cfg = safeMergeConfig<TelegraphConfig>(setting[key], TelegraphConfig, ["","",""])
 
     if (ObjectUtil.isEmptyObject(cfg)) {
       const telegraphUrl = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_URL, "https://telegra.ph")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       const telegraphToken = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_TOKEN, "")
       cfg = new TelegraphConfig(telegraphUrl, telegraphToken, middlewareUrl)
       logger.info("Configuration is empty, using default environment variables.")

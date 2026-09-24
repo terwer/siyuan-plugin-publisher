@@ -124,10 +124,11 @@ if __name__ == "__main__":
         print("Copied required extension files.")
 
         # Set the BUILD_TYPE environment variable in node
-        os.environ["BUILD_TYPE"] = args.type
+        os.environ["BUILD_TYPE"] = "extension"
+        os.environ["EXT_TYPE"] = args.type
         os.environ["VITE_SIYUAN_API_URL"] = "http://127.0.0.1:6806"
         print(f"BUILD_TYPE=>{args.type}")
-        build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
+        build_cmd = "vue-tsc --noEmit && vite build --config vite.webapp.config.ts --outDir " + os.path.abspath(dist_name)
         print("Build command: " + build_cmd)
         os.system(build_cmd)
         print("Build finished")

@@ -8,7 +8,7 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
+import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * CSDN配置
@@ -29,5 +29,8 @@ export class CsdnConfig extends CommonWebConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+    this.picgoPicbedSupported = false
+    this.bundledPicbedSupported = true
+    this.picbedService = PicbedServiceTypeEnum.Bundled
   }
 }

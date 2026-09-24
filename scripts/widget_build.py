@@ -59,6 +59,11 @@ if __name__ == "__main__":
         # 在 node 里面可以通过 process.env.BUILD_TYPE 读取
         os.environ["BUILD_TYPE"] = "widget"
 
+        # 先构建：webapp 配置会清空产物目录（emptyOutDir），附属文件必须构建后再拷
+        build_cmd = "vue-tsc --noEmit && vite build --config vite.webapp.config.ts --outDir " + os.path.abspath(dist_name)
+        print("构建命令:" + build_cmd)
+        os.system(build_cmd)
+
         # 复制挂件需要的其他文件
         scriptutils.cp_file("./LICENSE", dist_folder)
         scriptutils.cp_file("./src/assets/README.md", dist_folder)
@@ -69,9 +74,6 @@ if __name__ == "__main__":
         scriptutils.cp_file("./policy.md", dist_folder)
         print("复制挂件需要的其他文件.")
 
-        build_cmd = "vue-tsc --noEmit && vite build --outDir " + dist_name
-        print("构建命令:" + build_cmd)
-        os.system(build_cmd)
         print("项目构建完成.")
 
     # 挂件打包

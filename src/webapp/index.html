@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>思源笔记发布工具</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        font-size: 13px;
+        color: #1f2329;
+        background: #ffffff;
+      }
+
+      /* 扩展弹窗：Chrome 按内容尺寸开窗，这里给出固定宽度（上限 800×600） */
+      body.is-popup {
+        width: 780px;
+        min-height: 460px;
+      }
+
+      /* 网页版 / 挂件：铺满容器 */
+      body.is-page {
+        min-height: 100vh;
+      }
+
+      .syp-web-shell {
+        display: flex;
+        flex-direction: column;
+        min-height: inherit;
+      }
+
+      .syp-web-shell__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 6px 10px;
+        border-bottom: 1px solid #e5e7eb;
+        background: #fafbfc;
+      }
+
+      .syp-web-shell__title {
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        color: #646a73;
+      }
+
+      .syp-web-shell__toggle {
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid #d0d3d6;
+        background: #ffffff;
+        color: #1f2329;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .syp-web-shell__toggle:hover {
+        color: #1677ff;
+        border-color: #1677ff;
+      }
+
+      .syp-web-shell__panes {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 10px;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="syp-web-shell" class="syp-web-shell">
+      <div class="syp-web-shell__bar">
+        <span class="syp-web-shell__title">思源笔记发布工具</span>
+        <button id="syp-web-toggle" class="syp-web-shell__toggle" type="button">连接配置</button>
+      </div>
+      <div class="syp-web-shell__panes">
+        <div id="syp-web-connection" hidden></div>
+        <div id="syp-web"></div>
+      </div>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

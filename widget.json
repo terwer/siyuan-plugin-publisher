@@ -2,18 +2,8 @@
   "name": "sy-post-publisher",
   "author": "terwer",
   "url": "https://github.com/terwer/sy-post-publisher",
-  "version": "1.41.1",
+  "version": "2.1.0",
   "minAppVersion": "2.9.0",
-  "backends": [
-    "windows",
-    "linux",
-    "darwin",
-    "docker"
-  ],
-  "frontends": [
-    "desktop",
-    "browser-desktop"
-  ],
   "displayName": {
     "default": "sy-post-publisher",
     "zh_CN": "发布工具挂件版"
@@ -26,10 +16,8 @@
     "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
-  "i18n": [
-    "en_US",
-    "zh_CN"
-  ],
+  "icon": "icon.png",
+  "preview": "preview.png",
   "funding": {
     "custom": [
       "https://afdian.com/a/terwer"

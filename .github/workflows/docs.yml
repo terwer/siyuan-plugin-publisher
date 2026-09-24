@@ -1,0 +1,125 @@
+name: Docs
+
+# 文档站点：唯一的文档发布者，独立于发版流程。
+#
+#   dev / PR : 构建校验，确认站点能编译
+#   main     : lint + 测试全通过后，构建并发布到 gh-pages
+#
+# 与发版解耦：文档改动合并到 main 即上线，不必等 release-please 发版；
+# 站点出问题也不会影响插件发行包的上传。
+#
+# GitHub Pages 的 Source 指向 gh-pages 分支根目录，推送后自动重建。
+# 站点地址集中在 docs/.vitepress/site.mts；部署逻辑在 scripts/deploy_docs.mjs。
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - "docs/**"
+      - "scripts/deploy_docs.mjs"
+      - "src/utils/site.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "scripts/deploy_docs.mjs"
+      - "src/utils/site.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint for TypeScript errors
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm exec vitest run
+
+      - name: Build docs
+        run: pnpm docs:build
+
+      - name: Verify output
+        run: |
+          test -f docs/.vitepress/dist/index.html
+          test -f docs/.vitepress/dist/404.html
+          test -d docs/.vitepress/dist/assets
+          echo "文档输出文件数: $(find docs/.vitepress/dist -type f | wc -l)"
+
+  deploy:
+    name: Deploy docs
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish to gh-pages
+        env:
+          DOCS_DEPLOY_NAME: github-actions[bot]
+          DOCS_DEPLOY_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          # 与 release-please.yml 使用同一个已配置的 PAT
+          DOCS_DEPLOY_REMOTE: https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+        run: pnpm docs:deploy
+
+      - name: Verify the site is live
+        run: |
+          url="https://terwer.github.io/siyuan-plugin-publisher/"
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            if [ "$code" = "200" ]; then
+              echo "站点已上线: $url"
+              exit 0
+            fi
+            echo "等待 Pages 重建... ($i/30) HTTP $code"
+            sleep 10
+          done
+          echo "站点在 5 分钟内未就绪，请检查 Pages 设置" >&2
+          exit 1

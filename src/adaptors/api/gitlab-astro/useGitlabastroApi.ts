@@ -7,17 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { GitlabastroApiAdaptor } from "~/src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts"
+import { GitlabastroConfig } from "~/src/adaptors/api/gitlab-astro/gitlabastroConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { GitlabastroYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-astro/gitlabastroYamlConverterAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
-import { GitlabastroConfig } from "~/src/adaptors/api/gitlab-astro/gitlabastroConfig.ts"
-import { GitlabastroYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-astro/gitlabastroYamlConverterAdaptor.ts"
-import { GitlabastroApiAdaptor } from "~/src/adaptors/api/gitlab-astro/gitlabastroApiAdaptor.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useGitlabastroApi = async (key: string, newCfg?: GitlabastroConfig) => {
   // 创建应用日志记录器
@@ -37,7 +38,7 @@ const useGitlabastroApi = async (key: string, newCfg?: GitlabastroConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<GitlabastroConfig>(setting[key], {} as GitlabastroConfig)
+    cfg = safeMergeConfig<GitlabastroConfig>(setting[key], GitlabastroConfig, ["","","","",""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -46,7 +47,7 @@ const useGitlabastroApi = async (key: string, newCfg?: GitlabastroConfig) => {
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITLAB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITLAB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new GitlabastroConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[slug].md"
       logger.info("Configuration is empty, using default environment variables.")
@@ -73,7 +74,6 @@ const useGitlabastroApi = async (key: string, newCfg?: GitlabastroConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlab Astro 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   // picbed service
   cfg.picgoPicbedSupported = true

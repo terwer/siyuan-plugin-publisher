@@ -42,6 +42,15 @@ class WordpressdotcomConfig extends MetaweblogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+
+    // WordPress.com 的站点域按客户端特征拒绝 Node fetch（返回需脚本校验的中间页），
+    // 而宿主自身的网络栈访问正常，故声明经宿主网络栈直连；宿主不具备该能力时自动回退，不硬失败。
+    this.isHostSessionFetch = true
+
+    // 另声明本平台 CORS 受限：用户在「跨域代理地址」填入自备的代理服务后，请求即改经它转发
+    // （与 JSON / multipart 侧同义，见 resolveXmlrpcTransport）。**不内置共享代理地址**。
+    // 该开关同时决定配置页是否渲染「跨域代理地址」输入框（见 CommonBlogSetting.vue）。
+    this.isCorsProxy = true
   }
 }
 

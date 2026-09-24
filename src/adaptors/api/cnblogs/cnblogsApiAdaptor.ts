@@ -14,6 +14,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { CnblogsConstants } from "~/src/adaptors/api/cnblogs/cnblogsConstants.ts"
 import { MetaweblogBlogApiAdaptor } from "~/src/adaptors/api/base/metaweblog/metaweblogBlogApiAdaptor.ts"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * 博客园 API 适配器
@@ -62,7 +63,7 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
     return super.editPost(postid, post, publish)
   }
 
-  public override async deletePost(postid: string): Promise<boolean> {
+  public override async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const ret = await this.metaweblogCall(CnblogsConstants.METHOD_DELETE_POST, [
       this.cfg.blogid,
       postid,

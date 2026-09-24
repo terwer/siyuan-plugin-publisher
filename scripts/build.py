@@ -35,7 +35,7 @@ if __name__ == "__main__":
     # 获取当前工作目录
     print(os.getcwd())
 
-    os.system("pnpm pluginBuild && pnpm siyuanBuild")
+    os.system("pnpm pluginBuild")
 
     # 打包
     dist_folder = "./dist"

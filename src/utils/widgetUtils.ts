@@ -13,6 +13,8 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
+import { sanitizeCookieArrayForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
 const logger = createAppLogger("widget-utils")
 
@@ -36,11 +38,13 @@ export const openBrowserWindow = (
   dynCfg?: DynamicConfig,
   cookieCb?: any,
   extraScriptCb?: any,
-  isDevMode?: boolean
+  isDevMode?: boolean,
+  forceElectronWindow?: boolean
 ) => {
   const { isInSiyuanWidget } = useSiyuanDevice()
 
-  if (isInSiyuanWidget()) {
+  const shouldUseElectronWindow = isInSiyuanWidget() || (!!cookieCb && EnvUtil.isSiyuanElectron()) || (!!forceElectronWindow && EnvUtil.isSiyuanElectron())
+  if (shouldUseElectronWindow) {
     const isDev = isDevMode ?? false
     const isModel = false
     const isShow = !cookieCb
@@ -167,7 +171,7 @@ const doOpenBrowserWindow = (
     }
 
     const readCookies = async () => {
-      const extraScript = dynCfg.extraScript
+      const extraScript = dynCfg?.extraScript
       if (extraScript) {
         try {
           const result = await newWindow.webContents.executeJavaScript(extraScript)
@@ -198,10 +202,11 @@ const doOpenBrowserWindow = (
         )
       })
       if (domainCookies.length > 0) {
-        logger.info(`读取所有cookies成功`, domainCookies)
+        logger.info(`读取所有cookies成功`, sanitizeCookieArrayForLog(domainCookies))
         await cookieCallback(dynCfg, domainCookies)
       } else {
         logger.info(`未读取到Cookie`)
+        await cookieCallback(dynCfg, [])
       }
     }
 
@@ -265,12 +270,12 @@ const doOpenBrowserWindow = (
 }
 
 /**
- * 获取主窗口页面的节点ID
+ * 获取主窗口当前活动文档的节点 ID
  *
  * @param doc - 父窗口的 document 对象
  * @returns 返回页面的节点ID，如果不存在，则返回undefined
  */
-const getMainWindowPageId = (doc: Document): string | undefined => {
+export const getMainWindowPageId = (doc: Document): string | undefined => {
   // 查找包含 protyle 类但不包含 fn__none 的 div 元素
   const protyleElement = doc.querySelector("div.protyle:not(.fn__none)")
 

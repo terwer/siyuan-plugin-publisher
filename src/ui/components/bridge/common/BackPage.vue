@@ -1,0 +1,121 @@
+<!--
+  -            GNU GENERAL PUBLIC LICENSE
+  -               Version 3, 29 June 2007
+  -
+  -  Copyright (C) 2025 Terwer, Inc. <https://terwer.space/>
+  -  Everyone is permitted to copy and distribute verbatim copies
+  -  of this license document, but changing it is not allowed.
+  -->
+
+<script setup lang="ts">
+// uses
+import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
+import { inject, ref, computed } from "vue"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
+import { helpRegistry } from "~/src/helpConfigs/registry"
+import { StrUtil } from "zhi-common"
+import { routeLocationKey, routerKey } from "vue-router"
+import { siteUrl } from "~/src/utils/site"
+
+const logger = createAppLogger("back-page")
+const { t } = useAppI18n()
+
+// 容错获取 router/route：由上层按可选依赖注入，未提供时安全返回 undefined，不抛错。
+const router = inject(routerKey, undefined)
+const route = inject(routeLocationKey, undefined)
+
+// props
+const props = defineProps({
+  title: {
+    type: String,
+    default: "",
+  },
+  hasBackEmit: {
+    type: Boolean,
+    default: false,
+  },
+  helpKey: {
+    type: String,
+    default: "",
+  },
+  showBack: {
+    type: Boolean,
+    default: undefined,
+  },
+})
+
+// datas
+const showBack = ref(props.showBack ?? route?.query?.showBack === "true")
+
+// emits
+const emit = defineEmits(["backEmit"])
+
+const onBack = () => {
+  if (props.hasBackEmit) {
+    logger.info("using backEmit do back")
+    emit("backEmit")
+  } else if (router) {
+    logger.info("using router handle back")
+    router.back()
+  } else {
+    logger.warn("no backEmit and no router, cannot go back")
+  }
+}
+
+const onHelp = () => {
+  const helpUrl = helpRegistry.getHelpUrl(props.helpKey)
+  if (!StrUtil.isEmptyString(helpUrl)) {
+    window.open(helpUrl, "_blank")
+  } else {
+    const helpIndexUrl = siteUrl("guide/usage")
+    window.open(helpIndexUrl, "_blank")
+  }
+}
+
+const getTooltipContent = computed(() => {
+  return t("common.help")
+})
+</script>
+
+<template>
+  <div id="page-body">
+    <div v-if="showBack" class="page-head">
+      <el-page-header :icon="ArrowLeft as any" title="返回" @click="onBack">
+        <template #content>
+          <div class="flex items-center">
+            <span class="text-large font-600 mr-3">{{ props.title }}</span>
+            <el-tooltip v-if="helpKey" effect="light" :content="getTooltipContent" placement="top">
+              <el-button
+                v-if="helpKey"
+                :icon="QuestionFilled as any"
+                circle
+                size="small"
+                type="info"
+                class="ml-2 help-btn"
+                @click.stop="onHelp"
+              />
+            </el-tooltip>
+          </div>
+        </template>
+      </el-page-header>
+    </div>
+    <div class="page-content-box">
+      <slot />
+    </div>
+  </div>
+</template>
+
+<style scoped lang="stylus">
+#page-body
+  margin 10px 20px
+.help-btn
+  border none
+  color var(--el-color-info-light-3)
+  background-color transparent
+  transition: all 0.3s var(--el-transition-function-ease-in-out-bezier)
+  &:hover
+    color var(--el-color-primary)
+    background-color var(--el-color-primary-light-9)
+    transform: scale(1.1)
+</style>

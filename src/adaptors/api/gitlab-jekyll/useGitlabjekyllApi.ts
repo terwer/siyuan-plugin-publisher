@@ -7,17 +7,18 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { CategoryTypeEnum } from "zhi-blog-api"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { GitlabjekyllApiAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllApiAdaptor.ts"
+import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
+import { GitlabjekyllYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllYamlConverterAdaptor.ts"
+import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
-import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
-import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
-import { GitlabjekyllYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllYamlConverterAdaptor.ts"
-import { GitlabjekyllApiAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllApiAdaptor.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
   // 创建应用日志记录器
@@ -37,7 +38,7 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<GitlabjekyllConfig>(setting[key], {} as GitlabjekyllConfig)
+    cfg = safeMergeConfig<GitlabjekyllConfig>(setting[key], GitlabjekyllConfig, ["","","","",""])
 
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
@@ -46,7 +47,7 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
       const githubAuthToken = Utils.emptyOrDefault(process.env.VITE_GITLAB_AUTH_TOKEN, "")
       const githubRepo = Utils.emptyOrDefault(process.env.VITE_GITLAB_REPO, "")
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITLAB_BRANCH, "main")
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new GitlabjekyllConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
       logger.info("Configuration is empty, using default environment variables.")
@@ -73,7 +74,6 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceTitle = "发布目录"
   cfg.allowKnowledgeSpaceChange = false
-  cfg.placeholder.knowledgeSpaceReadonlyModeTip = "Gitlabjekyll 平台暂不支持修改发布目录，如需修改，请删除之后重新发布"
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Tree_Single
   // picbed service
   cfg.picgoPicbedSupported = true

@@ -1,39 +1,21 @@
 /*
- * Copyright (c) 2023, Terwer . All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *            GNU GENERAL PUBLIC LICENSE
+ *               Version 3, 29 June 2007
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Terwer designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Terwer in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Terwer, Shenzhen, Guangdong, China, youweics@163.com
- * or visit www.terwer.space if you need additional information or have any
- * questions.
+ *  Copyright (C) 2023-2026 Terwer, Inc. <https://terwer.space/>
+ *  Everyone is permitted to copy and distribute verbatim copies
+ *  of this license document, but changing it is not allowed.
  */
 
-import { App, confirm, getFrontend, IObject, Model, Plugin } from "siyuan"
+import { App, confirm, getFrontend, IObject, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
-import { WidgetInvoke } from "./invoke/widgetInvoke"
 import { Topbar } from "./topbar"
 import { ILogger } from "zhi-lib-base"
 import { ConfigManager } from "~/siyuan/store/config.ts"
-import MenuUtils from "~/siyuan/utils/menuUtils.ts"
-import { PluginInvoke } from "~/siyuan/invoke/pluginInvoke.ts"
-import { icons } from "~/siyuan/utils/svg.ts"
 import { PreferenceConfigManager } from "~/siyuan/store/preferenceConfigManager.ts"
+import { PluginHost } from "~/siyuan/host/pluginHost.ts"
+import { buildDocQuickPublishMenus, docMenuIcons } from "~/siyuan/host/docMenu.ts"
 
 import "./index.styl"
 
@@ -49,11 +31,8 @@ export default class PublisherPlugin extends Plugin {
 
   public isMobile: boolean
   public kernelApi: SiyuanKernelApi
-  private widgetInvoke: WidgetInvoke
-  private pluginInvoke: PluginInvoke
-
-  customTabObject: () => Model
-  public tabInstance: any
+  /** 全插件唯一插件宿主，避免 Topbar / 文档菜单各建实例导致双 Menu 与卸载竞态 */
+  public readonly pluginHost: PluginHost
 
   private publishSetting: any
   private prefSetting: any
@@ -69,20 +48,18 @@ export default class PublisherPlugin extends Plugin {
     const siyuanConfig = new SiyuanConfig("", "")
     this.kernelApi = new SiyuanKernelApi(siyuanConfig)
 
+    this.pluginHost = new PluginHost(this)
     this.topbar = new Topbar(this)
-    this.widgetInvoke = new WidgetInvoke(this)
-    this.pluginInvoke = new PluginInvoke(this)
   }
 
   openSetting(): void {
-    this.widgetInvoke.showPublisherPublishSettingDialog()
+    // 思源宿主「插件设置」入口：直接打开 设置视图
+    void this.pluginHost.show({ initialView: "settings" })
   }
 
   onload() {
     // 初始化菜单
     this.topbar.initTopbar()
-    // 初始化自定义Tab
-    this.initCustomTab()
     // mountFn
     this.mountFn()
   }
@@ -93,6 +70,7 @@ export default class PublisherPlugin extends Plugin {
   }
 
   onunload() {
+    void this.pluginHost.close()
     // unmountFn
     this.unmountFn()
     // offEvent
@@ -102,20 +80,6 @@ export default class PublisherPlugin extends Plugin {
   // ================
   // private methods
   // ================
-  private initCustomTab() {
-    const that = this
-    this.customTabObject = this.addTab({
-      type: "publisher-plugin-custom-tab",
-      async init() {
-        this.element.innerHTML = `<p>加载中...</p>`
-      },
-      destroy() {
-        delete that.tabInstance
-        that.logger.info("publisher custopm tab destroyed")
-      },
-    })
-  }
-
   private mountFn() {
     const elAlertBox = (msg: string) => {
       confirm("⚠️错误提示", msg, () => {})
@@ -170,19 +134,23 @@ export default class PublisherPlugin extends Plugin {
       return
     }
 
-    // 快速发布
-    const quickMenus = MenuUtils.getQuickMenus(this, this.widgetInvoke, this.publishSetting, pageId)
+    // 面板锚定到用户实际点击的文档标题图标，避免无锚点时铺满窗口
+    const protyleElement = detail?.protyle?.element as HTMLElement | undefined
+    const anchorElement = protyleElement?.querySelector<HTMLElement>(".protyle-title__icon") ?? protyleElement
+
+    // 快速发布：每个已启用平台一项，点击即在 面板内对该文档发布该平台
+    const quickMenus = buildDocQuickPublishMenus(this.publishSetting, this.pluginHost, pageId, anchorElement)
     context.push({
-      iconHTML: `<span class="iconfont-icon">${icons.iconPlane}</span>`,
+      iconHTML: `<span class="iconfont-icon">${docMenuIcons.quickPublish}</span>`,
       label: this.i18n.publishToQuick,
       submenu: quickMenus,
     })
     // AI聊天
     context.push({
-      iconHTML: `<span class="iconfont-icon">${icons.iconEye}</span>`,
+      iconHTML: `<span class="iconfont-icon">${docMenuIcons.aiChat}</span>`,
       label: this.i18n.aiChat,
       click: async () => {
-        await this.widgetInvoke.showPublisherAiChatDialog(pageId)
+        await this.pluginHost.show({ anchorElement, initialView: "ai_chat", docId: pageId })
       },
     })
   }

@@ -8,6 +8,7 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
+import { resolvePlatformImagePath } from "~/src/adaptors/api/base/platformImagePath.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
@@ -17,6 +18,7 @@ import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { ElMessage } from "element-plus"
+import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 /**
  * Github API 适配器
@@ -209,7 +211,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     }
   }
 
-  public async deletePost(postid: string): Promise<boolean> {
+  public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const res = await this.githubClient.deleteGithubPage(postid)
     if (!res?.commit?.sha) {
       throw new Error("Github 调用API异常")
@@ -312,31 +314,8 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   // private methods
   // ================
   private getImagePath(path: string, mediaObject: MediaObject, defaultPath: string, removeStart = true) {
-    let imagePath: string
-    let absImgPath: string
-    if (path.startsWith("[docpath]")) {
-      const post = mediaObject.post
-      const docPath = post.cate_slugs?.[0] ?? this.cfg.blogid
-      const savePath = StrUtil.pathJoin(docPath, path.replace("[docpath]", ""))
-      imagePath = StrUtil.pathJoin(savePath, mediaObject.name)
-    } else if (path.startsWith("./")) {
-      return {
-        imagePath: path,
-        absImgPath: path,
-      }
-    } else {
-      const savePath = StrUtil.isEmptyString(path) ? defaultPath : path
-      imagePath = StrUtil.pathJoin(savePath, mediaObject.name)
-    }
-    // 处理相对路径
-    if (imagePath.startsWith("/")) {
-      imagePath = imagePath.substring(1)
-    }
-    absImgPath = StrUtil.pathJoin("/", imagePath)
-    return {
-      imagePath,
-      absImgPath,
-    }
+    // 与 GitLab 族共用同一套路径规则（见 platformImagePath），避免两族行为漂移
+    return resolvePlatformImagePath(path, mediaObject, defaultPath, this.cfg.blogid)
   }
 
   public async safeDeletePost(postid: string): Promise<boolean> {

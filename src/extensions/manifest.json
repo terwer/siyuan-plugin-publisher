@@ -1,6 +1,6 @@
 {
-  "name": "思源笔记发布辅助工具",
-  "version": "1.41.1",
+  "name": "思源笔记发布工具",
+  "version": "2.1.0",
   "manifest_version": 3,
   "author": "terwer",
   "icons": {
@@ -9,24 +9,9 @@
     "48": "images/icon48.png",
     "128": "images/icon128.png"
   },
-  "description": "思源笔记发布辅助工具，支持博客式只读浏览，多平台文章发布。",
-  "background": {
-    "service_worker": "background.js"
-  },
-  "host_permissions": [
-    "*://*/*"
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "index.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
-  ],
+  "description": "思源笔记发布辅助工具，连接你自己的思源内核完成多平台文章发布与更新。",
   "action": {
+    "default_title": "思源笔记发布工具",
     "default_icon": {
       "16": "images/icon16.png",
       "32": "images/icon32.png",
@@ -35,7 +20,10 @@
     },
     "default_popup": "index.html"
   },
+  "host_permissions": [
+    "*://*/*"
+  ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval';font-src 'self' https://static-rs-terwer.oss-cn-beijing.aliyuncs.com;"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   }
 }

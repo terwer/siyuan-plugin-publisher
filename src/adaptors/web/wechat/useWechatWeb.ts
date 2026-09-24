@@ -12,10 +12,11 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { WechatWebAdaptor } from "~/src/adaptors/web/wechat/wechatWebAdaptor.ts"
-import { LEGENCY_SHARED_PROXT_MIDDLEWARE } from "~/src/utils/constants.ts"
+import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
@@ -38,10 +39,10 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
     // 从配置中获取数据
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
-    cfg = JsonUtil.safeParse<WechatConfig>(setting[key], {} as WechatConfig)
+    cfg = safeMergeConfig<WechatConfig>(setting[key], WechatConfig, ["", "", ""])
     // 如果配置为空，则使用默认的环境变量值，并记录日志
     if (ObjectUtil.isEmptyObject(cfg)) {
-      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+      const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       // 从环境变量获取Wechat的cookie
       const wechatCookie = Utils.emptyOrDefault(process.env.VITE_WECHAT_AUTH_TOKEN, "")
       cfg = new WechatConfig("", wechatCookie, middlewareUrl)
@@ -50,7 +51,7 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
     } else {
       logger.info("Using configuration from settings...")
     }
-    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, LEGENCY_SHARED_PROXT_MIDDLEWARE)
+    const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {
       cfg.middlewareUrl = middlewareUrl
     }

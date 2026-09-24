@@ -19,7 +19,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 export class PluginUtils {
   public static async preCheckPicgoPlugin() {
     const { kernelApi } = useSiyuanApi()
-    // 检测是否安装 picgo 插件
+    // 探测独立的 PicGo 插件产品是否已安装：图床入口据此决定是否可用。
     return await isFileExists(kernelApi, "/data/plugins/siyuan-plugin-picgo/plugin.json", "text")
   }
 
