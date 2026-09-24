@@ -146,6 +146,8 @@
   "app.action.close": "Close",
   "app.back.accountList": "Back to Account List",
   "app.back.quickPublish": "Back to Quick Publish",
+  "app.nav.label": "Main navigation",
+  "app.nav.needDocument": "Open a document first",
   "quickPublish.currentDocument": "Current Document",
   "quickPublish.desc": "Pick a target platform, then publish, update, or open the article directly.",
   "quickPublish.errorDetails": "Error Details",

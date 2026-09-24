@@ -274,6 +274,30 @@
     gap $syp-spacing-md
     flex-shrink 0
 
+  // 内容区自带的返回入口：顶部导航恒为导航，回到上一层由所在内容区提供
+  .syp-settings-page__head
+    display flex
+    align-items flex-start
+    gap 10px
+    min-width 0
+
+  .syp-settings-page__back
+    display inline-flex
+    align-items center
+    justify-content center
+    width 28px
+    height 28px
+    flex-shrink 0
+    border-radius 999px
+    border 1px solid var(--b3-border-color, $syp-border-primary)
+    background var(--b3-theme-surface, $syp-bg-primary)
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+    cursor pointer
+
+    &:hover
+      color var(--b3-theme-primary, $syp-accent)
+      border-color var(--b3-theme-primary, $syp-accent)
+
   .syp-settings-page__eyebrow
     font-size $syp-font-size-xs
     color var(--b3-theme-on-surface-light, $syp-text-tertiary)

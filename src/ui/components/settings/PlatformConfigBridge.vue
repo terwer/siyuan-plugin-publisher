@@ -1,15 +1,25 @@
 <template>
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
-      <div>
-        <div class="syp-settings-page__eyebrow">{{ t("platformConfig.eyebrow") }}</div>
-        <h2 class="syp-settings-page__title">
-          {{ platformName || t("platformConfig.title") }}
-          <HelpButton :page-id="helpPageId" :page-title="platformName" />
-        </h2>
-        <p class="syp-settings-page__desc">
-          {{ t("platformConfig.desc") }}
-        </p>
+      <div class="syp-settings-page__head">
+        <button
+          type="button"
+          class="syp-settings-page__back"
+          :aria-label="t('app.back.accountList')"
+          @click="emit('back')"
+        >
+          <LucideChevronLeft />
+        </button>
+        <div>
+          <div class="syp-settings-page__eyebrow">{{ t("platformConfig.eyebrow") }}</div>
+          <h2 class="syp-settings-page__title">
+            {{ platformName || t("platformConfig.title") }}
+            <HelpButton :page-id="helpPageId" :page-title="platformName" />
+          </h2>
+          <p class="syp-settings-page__desc">
+            {{ t("platformConfig.desc") }}
+          </p>
+        </div>
       </div>
     </div>
 
@@ -94,6 +104,7 @@ import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import HelpButton from "~/src/ui/components/bridge/common/help/HelpButton.vue"
 import { SYP_HELP_PAGE_ID_KEY } from "~/src/ui/components/bridge/common/help/helpPageIdKey.ts"
+import LucideChevronLeft from "~icons/lucide/chevron-left"
 
 // 确保 page configs 已注册
 import "~/src/helpConfigs/pages/index"
@@ -108,6 +119,7 @@ const emit = defineEmits<{
   (event: "validated", result: PlatformConfigValidationResult): void
   (event: "saved", result: { ok: boolean }): void
   (event: "show-error-details"): void
+  (event: "back"): void
 }>()
 
 const { t } = useAppI18n()

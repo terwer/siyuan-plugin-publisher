@@ -1,10 +1,20 @@
 <template>
   <section class="syp-settings-page">
     <div class="syp-settings-page__header">
-      <div>
-        <div class="syp-settings-page__eyebrow">{{ t("platformSelect.eyebrow") }}</div>
-        <h2 class="syp-settings-page__title">{{ t("platformSelect.title") }}</h2>
-        <p class="syp-settings-page__desc">{{ t("platformSelect.desc") }}</p>
+      <div class="syp-settings-page__head">
+        <button
+          type="button"
+          class="syp-settings-page__back"
+          :aria-label="t('app.back.accountList')"
+          @click="emit('back')"
+        >
+          <LucideChevronLeft />
+        </button>
+        <div>
+          <div class="syp-settings-page__eyebrow">{{ t("platformSelect.eyebrow") }}</div>
+          <h2 class="syp-settings-page__title">{{ t("platformSelect.title") }}</h2>
+          <p class="syp-settings-page__desc">{{ t("platformSelect.desc") }}</p>
+        </div>
       </div>
     </div>
 
@@ -52,10 +62,17 @@ import SypTooltip from "~/src/ui/components/common/SypTooltip.vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import type { SelectablePlatform } from "~/src/ui/composables/useSettings.ts"
 import { PLATFORM_SELECT_GROUP_DEFS } from "~/src/ui/components/settings/platformSelectGroups.ts"
+import LucideChevronLeft from "~icons/lucide/chevron-left"
 
 const props = defineProps<{
   items: SelectablePlatform[]
 }>()
+
+const emit = defineEmits<{
+  (event: "select", item: SelectablePlatform): void
+  (event: "back"): void
+}>()
+
 const { t } = useAppI18n()
 
 const groupDefs = PLATFORM_SELECT_GROUP_DEFS
@@ -69,10 +86,6 @@ const groupedItems = computed(() => {
     }))
     .filter((group) => group.items.length > 0)
 })
-
-defineEmits<{
-  (event: "select", item: SelectablePlatform): void
-}>()
 </script>
 
 <style scoped lang="stylus">
