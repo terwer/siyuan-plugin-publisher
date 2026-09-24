@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.0.0...siyuan-plugin-publisher-v2.1.0) (2026-09-24)
+
+
+### Features
+
+* **nav:** keep the header entries resident instead of swapping them ([aae2454](https://github.com/terwer/siyuan-plugin-publisher/commit/aae2454a010a0044be25791092b5d2b7a6716540))
+
+
+### Bug Fixes
+
+* **manifest:** conform the bazaar manifests to the new spec ([442651b](https://github.com/terwer/siyuan-plugin-publisher/commit/442651b266d82fc444603700f6ee14bb98d00b3f))
+* preview image ([b5458b6](https://github.com/terwer/siyuan-plugin-publisher/commit/b5458b63cff6dd110b7430f8141ed5d57890d800))
+* **theme:** make the whole panel follow the SiYuan theme ([84f3bda](https://github.com/terwer/siyuan-plugin-publisher/commit/84f3bda863d57b6f817ca924686760e0a558a0cd))
+
+
+### Miscellaneous
+
+* **openspec:** archive the changes shipped in 2.0.0 ([0cdbd1a](https://github.com/terwer/siyuan-plugin-publisher/commit/0cdbd1acf1b2fe262a266c2b8ed66bf3223a8724))
+
 ## [2.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.41.1...siyuan-plugin-publisher-v2.0.0) (2026-09-23)
 ### ⚠ BREAKING CHANGES
 * the platform verification column formerly named `v2c` is now `cfg`, and the `v1c` column no longer exists. neither appears in the plugin api or in user-visible text; the checklist and the verification sop are updated to the new name.
