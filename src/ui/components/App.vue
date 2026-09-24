@@ -914,9 +914,9 @@ async function retryInit() {
   margin-bottom 8px
   padding 6px 10px
   border-radius 999px
-  border 1px solid #d8e7ff
-  background #f5f9ff
-  color #2563eb
+  border 1px solid $syp-border-primary
+  background rgba(64, 128, 255, 0.10)
+  color $syp-primary
   font-size 12px
   font-weight 600
   box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
@@ -925,7 +925,7 @@ async function retryInit() {
   width 7px
   height 7px
   border-radius 999px
-  background #1677ff
+  background $syp-primary
   animation syp-settings-loading-pulse 0.9s ease-in-out infinite alternate
 
 @keyframes syp-settings-loading-pulse
