@@ -6,41 +6,45 @@
  */
 
 // 主色调
+// 强调色保持固定值：部分思源主题的 --b3-theme-primary 接近黑色，
+// 用作强调底会出现「黑块」，故强调色不用主题 primary。
 $syp-primary = #4080FF
 $syp-primary-light = #6699FF
 $syp-primary-dark = #3366CC
 
 // 中性色
-$syp-bg-primary = #FFFFFF
-$syp-bg-secondary = #F5F5F5
-$syp-bg-tertiary = #EEEEEE
+// 语义色一律「主题优先、浅色回退」：无论调用方写 var(--b3-…, $syp-…) 还是直接用 $syp-…，
+// 暗黑模式都能跟随思源主题（嵌套回退是合法 CSS）。
+$syp-bg-primary = var(--b3-theme-background, #FFFFFF)
+$syp-bg-secondary = var(--b3-theme-surface, #F5F5F5)
+$syp-bg-tertiary = var(--b3-theme-surface-light, #EEEEEE)
 
 // 文字颜色
-$syp-text-primary = #1F2329
-$syp-text-secondary = #646A73
-$syp-text-tertiary = #8F959E
-$syp-text-disabled = #BBBFC4
+$syp-text-primary = var(--b3-theme-on-background, #1F2329)
+$syp-text-secondary = var(--b3-theme-on-surface, #646A73)
+$syp-text-tertiary = var(--b3-theme-on-surface-light, #8F959E)
+$syp-text-disabled = var(--b3-theme-on-surface-light, #BBBFC4)
 
 // 边框颜色
-$syp-border-primary = #DEE0E3
-$syp-border-secondary = #EBEBEB
+$syp-border-primary = var(--b3-border-color, #DEE0E3)
+$syp-border-secondary = var(--b3-border-color, #EBEBEB)
 
 // 状态色
-$syp-success = #34C724
-$syp-warning = #FF8800
-$syp-error = #F54A45
+$syp-success = var(--b3-theme-success, #34C724)
+$syp-warning = var(--b3-theme-warning, #FF8800)
+$syp-error = var(--b3-theme-error, #F54A45)
 
-// 状态背景色（浅色模式）
-$syp-status-info-bg = #f7fbff
-$syp-status-info-border = #d6e4f5
-$syp-status-success-bg = #f3fbf5
-$syp-status-success-border = #d7f0df
-$syp-status-error-bg = #fff5f5
-$syp-status-error-border = #f2d6d6
-$syp-status-error-deep-bg = #fff1f1
-$syp-status-warning-bg = #fffbf0
-$syp-status-warning-border = #f5e6c8
-$syp-status-warning-deep-bg = #fff8e6
+// 状态背景色（随思源主题卡片色）
+$syp-status-info-bg = var(--b3-card-info-background, #f7fbff)
+$syp-status-info-border = var(--b3-border-color, #d6e4f5)
+$syp-status-success-bg = var(--b3-card-success-background, #f3fbf5)
+$syp-status-success-border = var(--b3-border-color, #d7f0df)
+$syp-status-error-bg = var(--b3-card-error-background, #fff5f5)
+$syp-status-error-border = var(--b3-border-color, #f2d6d6)
+$syp-status-error-deep-bg = var(--b3-card-error-background, #fff1f1)
+$syp-status-warning-bg = var(--b3-card-warning-background, #fffbf0)
+$syp-status-warning-border = var(--b3-border-color, #f5e6c8)
+$syp-status-warning-deep-bg = var(--b3-card-warning-background, #fff8e6)
 
 // Chip / 标签（随思源 --b3-* 变化）
 $syp-chip-bg = var(--b3-theme-surface-light, #f3f6fa)

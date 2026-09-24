@@ -136,6 +136,8 @@ const handleModelChange = (modelId: string) => {
 </template>
 
 <style lang="stylus" scoped>
+@import "../../../../assets/variables.styl"
+
 .form-item-tip
   padding 2px 4px
   margin 0 10px 0 0
@@ -152,7 +154,7 @@ const handleModelChange = (modelId: string) => {
   display inline-block
   margin-left 12px
   min-width 30px
-  color #606266
+  color $syp-text-secondary
   font-size 12px
   text-align right
 
@@ -166,7 +168,7 @@ const handleModelChange = (modelId: string) => {
 
 .ai-model-baseurl
   margin-left 12px
-  color #909399
+  color $syp-text-tertiary
   font-size 12px
   white-space nowrap
   overflow hidden

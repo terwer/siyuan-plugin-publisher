@@ -206,7 +206,7 @@
 
   .syp-shell__nav
     padding 12px
-    background linear-gradient(180deg, #fbfdff 0%, #f6f9ff 100%)
+    background linear-gradient(180deg, var(--b3-theme-surface, $syp-bg-secondary) 0%, var(--b3-theme-background, $syp-bg-primary) 100%)
     border-right 1px solid var(--b3-border-color, $syp-border-secondary)
     overflow-y auto
     min-height 0
@@ -224,7 +224,7 @@
     text-align left
     border none
     background transparent
-    color #667085
+    color var(--b3-theme-on-surface, $syp-text-secondary)
     padding 7px 10px 7px 14px
     border-radius 8px
     font-size 13px
@@ -233,14 +233,14 @@
     transition all 0.2s ease
 
     &:hover
-      background #f0f6ff
-      color #2563eb
+      background var(--b3-theme-surface-light, $syp-accent-hover-bg)
+      color $syp-primary
 
     &.is-active
-      background #ffffff
-      color #1d4ed8
+      background var(--b3-theme-surface, $syp-bg-primary)
+      color $syp-primary
       font-weight 700
-      box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
+      box-shadow 0 4px 14px rgba(64, 128, 255, 0.12)
 
       &::before
         content ""
@@ -250,7 +250,7 @@
         bottom 8px
         width 3px
         border-radius 999px
-        background #1677ff
+        background $syp-primary
 
   .syp-shell__main
     display flex
@@ -273,6 +273,30 @@
     align-items flex-start
     gap $syp-spacing-md
     flex-shrink 0
+
+  // 内容区自带的返回入口：顶部导航恒为导航，回到上一层由所在内容区提供
+  .syp-settings-page__head
+    display flex
+    align-items flex-start
+    gap 10px
+    min-width 0
+
+  .syp-settings-page__back
+    display inline-flex
+    align-items center
+    justify-content center
+    width 28px
+    height 28px
+    flex-shrink 0
+    border-radius 999px
+    border 1px solid var(--b3-border-color, $syp-border-primary)
+    background var(--b3-theme-surface, $syp-bg-primary)
+    color var(--b3-theme-on-surface-light, $syp-text-tertiary)
+    cursor pointer
+
+    &:hover
+      color var(--b3-theme-primary, $syp-accent)
+      border-color var(--b3-theme-primary, $syp-accent)
 
   .syp-settings-page__eyebrow
     font-size $syp-font-size-xs
@@ -511,20 +535,20 @@
       margin-left 0
 
     .el-button--primary
-      background #4080ff
-      border-color #4080ff
+      background $syp-primary
+      border-color $syp-primary
 
       &:hover
-        background #2f6ff0
-        border-color #2f6ff0
+        background $syp-primary-dark
+        border-color $syp-primary-dark
 
     .syp-message-box__confirm-danger.el-button--primary
-      background #d92d20
-      border-color #d92d20
+      background $syp-action-danger
+      border-color $syp-action-danger
 
       &:hover
-        background #c6281d
-        border-color #c6281d
+        background $syp-action-danger-hover
+        border-color $syp-action-danger-hover
 
 // 遮罩用深色半透明：浅色主题下若沿用主题背景色会得到「白色遮罩」，
 // 背景内容几乎不被遮挡，弹窗与页面分辨不清

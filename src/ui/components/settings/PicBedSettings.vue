@@ -679,19 +679,21 @@ function stringifyDetails(input: unknown) {
 </script>
 
 <style scoped lang="stylus">
+@import "../../assets/variables.styl"
+
 .syp-settings-page
   position relative
-  color #1f2329
+  color $syp-text-primary
 
 :deep(.syp-settings-page__title)
-  color #1f2329
+  color $syp-text-primary
 
 :deep(.syp-settings-page__desc),
 :deep(.syp-settings-group__desc)
-  color #697386
+  color $syp-text-secondary
 
 :deep(.syp-settings-group__title)
-  color #1f2329
+  color $syp-text-primary
   font-weight 700
   font-size 15px
 
@@ -724,8 +726,8 @@ function stringifyDetails(input: unknown) {
 
 .syp-picgo-uploader-card,
 .syp-picbed-platform-card
-  border-color #edf1f7
-  background linear-gradient(180deg, #ffffff 0%, #fbfdff 100%)
+  border-color $syp-border-secondary
+  background $syp-card-bg-gradient
   box-shadow 0 8px 24px rgba(18, 38, 63, 0.04)
 
 .syp-picbed-section-head
@@ -738,13 +740,13 @@ function stringifyDetails(input: unknown) {
   flex-shrink 0
   height 28px
   border-radius 8px
-  background #f5f9ff
-  color #2563eb
-  border 1px solid #d8e7ff
+  background rgba(64, 128, 255, 0.10)
+  color $syp-primary
+  border 1px solid $syp-border-primary
 
   &:hover
-    background #eef6ff
-    color #1d4ed8
+    background rgba(64, 128, 255, 0.14)
+    color $syp-primary-dark
 
 .syp-picgo-uploader-layout
   display grid
@@ -767,35 +769,35 @@ function stringifyDetails(input: unknown) {
   gap 4px
   text-align left
   border-radius 9px
-  border 1px solid #e8edf5
-  background #ffffff
-  color #344054
+  border 1px solid $syp-border-primary
+  background $syp-bg-primary
+  color $syp-text-primary
   cursor pointer
   transition all 0.18s ease
 
   &:hover
-    border-color #cfe1ff
-    background #f7fbff
+    border-color $syp-border-primary
+    background rgba(64, 128, 255, 0.06)
 
   &.is-active
-    border-color #7bb0ff
-    background linear-gradient(180deg, #f5f9ff 0%, #eef6ff 100%)
-    color #1d4ed8
+    border-color $syp-primary-light
+    background rgba(64, 128, 255, 0.12)
+    color $syp-primary-dark
     box-shadow 0 4px 12px rgba(22, 119, 255, 0.12)
 
     .syp-picgo-uploader-item__name
-      color #1d4ed8
+      color $syp-primary-dark
 
     .syp-picgo-uploader-item__meta
-      color #4f7fcf
+      color $syp-primary
 
 .syp-picgo-uploader-item__name
   font-weight 700
   font-size 13px
-  color #1f2937
+  color $syp-text-primary
 
 .syp-picgo-uploader-item__meta
-  color #8a94a6
+  color $syp-text-tertiary
   font-size 12px
 
 .syp-picgo-uploader-form
@@ -810,12 +812,12 @@ function stringifyDetails(input: unknown) {
   gap 10px
   padding 9px 12px
   border-radius 10px
-  background #f7fbff
-  color #667085
-  border 1px solid #e6f0ff
+  background rgba(64, 128, 255, 0.06)
+  color $syp-text-secondary
+  border 1px solid $syp-border-secondary
 
   strong
-    color #2563eb
+    color $syp-primary
 
 .syp-picgo-field
   display flex
@@ -825,16 +827,16 @@ function stringifyDetails(input: unknown) {
 .syp-picgo-field__label
   font-size 13px
   font-weight 700
-  color #344054
+  color $syp-text-primary
 
 .syp-picgo-field__required,
 .syp-picgo-field__error,
 .syp-btn-link.is-error
-  color #b42318
+  color $syp-error
 
 .syp-picgo-field__help
   font-size 12px
-  color #8a94a6
+  color $syp-text-tertiary
 
 .syp-picgo-field__error
   font-size 12px
@@ -843,7 +845,7 @@ function stringifyDetails(input: unknown) {
   display flex
   align-items center
   gap 8px
-  color #344054
+  color $syp-text-primary
 
 .syp-picgo-actions
   display flex
@@ -864,54 +866,54 @@ function stringifyDetails(input: unknown) {
   gap 14px
   padding 12px 14px
   border-radius 10px
-  border 1px solid rgba(180, 35, 24, 0.25)
-  background rgba(254, 243, 242, 0.85)
+  border 1px solid rgba(217, 45, 32, 0.28)
+  background rgba(217, 45, 32, 0.10)
 
 .syp-picbed-runtime-error__title
   font-weight 700
-  color #b42318
+  color $syp-error
 
 .syp-picbed-runtime-error__desc
   margin-top 4px
   font-size 13px
-  color #475467
+  color $syp-text-secondary
 
 .syp-settings-status-text.is-error
-  color #b42318
+  color $syp-error
 
 .syp-picgo-inline-loading
   margin-top 14px
   padding 14px
   border-radius 10px
-  border 1px solid #d8e7ff
-  background linear-gradient(180deg, #fbfdff 0%, #f5f9ff 100%)
+  border 1px solid $syp-border-primary
+  background rgba(64, 128, 255, 0.06)
 
 .syp-picgo-inline-loading__title
   font-size 13px
   font-weight 700
-  color #2563eb
+  color $syp-primary
 
 .syp-picgo-inline-loading__desc
   margin-top 4px
   font-size 13px
-  color #667085
+  color $syp-text-secondary
 
 .syp-picbed-collapsed-note
   margin-top 14px
   padding 12px 14px
   border-radius 10px
-  border 1px dashed #d8e7ff
-  background #f8fbff
+  border 1px dashed $syp-border-primary
+  background rgba(64, 128, 255, 0.06)
 
 .syp-picbed-collapsed-note__title
   font-size 13px
   font-weight 700
-  color #344054
+  color $syp-text-primary
 
 .syp-picbed-collapsed-note__desc
   margin-top 4px
   font-size 13px
-  color #667085
+  color $syp-text-secondary
 
 .syp-picbed-platform-error
   margin-top 14px
@@ -923,15 +925,15 @@ function stringifyDetails(input: unknown) {
   margin-top 14px
 
 .syp-picbed-platform-group
-  border 1px solid #eef2f7
+  border 1px solid $syp-border-secondary
   border-radius 10px
-  background #ffffff
+  background $syp-bg-primary
   overflow hidden
 
 .syp-picbed-platform-group__head
   padding 10px 12px
-  border-bottom 1px solid #eef2f7
-  background #fbfdff
+  border-bottom 1px solid $syp-border-secondary
+  background $syp-bg-secondary
 
 .syp-picbed-platform-group__title
   display flex
@@ -939,7 +941,7 @@ function stringifyDetails(input: unknown) {
   gap 8px
   font-size 13px
   font-weight 700
-  color #344054
+  color $syp-text-primary
 
   span
     display inline-flex
@@ -949,14 +951,14 @@ function stringifyDetails(input: unknown) {
     height 18px
     padding 0 6px
     border-radius 999px
-    background #eef6ff
-    color #2563eb
+    background rgba(64, 128, 255, 0.14)
+    color $syp-primary
     font-size 11px
 
 .syp-picbed-platform-group__desc
   margin-top 4px
   font-size 12px
-  color #8a94a6
+  color $syp-text-tertiary
 
 .syp-picbed-platform-list
   display flex
@@ -968,13 +970,13 @@ function stringifyDetails(input: unknown) {
   align-items center
   gap 12px
   padding 11px 12px
-  border-bottom 1px solid #f1f4f8
+  border-bottom 1px solid $syp-bg-tertiary
 
   &:last-child
     border-bottom none
 
   &.is-disabled
-    background #fbfbfc
+    background $syp-bg-secondary
 
 .syp-picbed-platform-main
   min-width 0
@@ -983,7 +985,7 @@ function stringifyDetails(input: unknown) {
 .syp-picbed-platform-name
   font-size 13px
   font-weight 700
-  color #344054
+  color $syp-text-primary
 
 .syp-picbed-platform-meta
   display flex
@@ -992,7 +994,7 @@ function stringifyDetails(input: unknown) {
   gap 6px
   margin-top 5px
   font-size 12px
-  color #8a94a6
+  color $syp-text-tertiary
 
   span
     display inline-flex
@@ -1001,7 +1003,7 @@ function stringifyDetails(input: unknown) {
     &:not(:last-child)::after
       content "·"
       margin-left 6px
-      color #c4cad4
+      color $syp-text-disabled
 
 @media (max-width: 960px)
   .syp-picgo-uploader-layout

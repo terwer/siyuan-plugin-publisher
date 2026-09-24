@@ -146,6 +146,8 @@
   "app.action.close": "关闭",
   "app.back.accountList": "返回账号列表",
   "app.back.quickPublish": "返回快速发布",
+  "app.nav.label": "主导航",
+  "app.nav.needDocument": "请先打开一篇文档",
   "quickPublish.currentDocument": "当前文档",
   "quickPublish.desc": "选择目标平台后可直接发布、更新或查看文章。",
   "quickPublish.errorDetails": "错误详情",

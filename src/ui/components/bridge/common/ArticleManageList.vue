@@ -243,6 +243,8 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="stylus">
+@import "../../../assets/variables.styl"
+
 .article-manage-box
   font-family var(--g-font-family, inherit)
   padding 0 10px
@@ -341,7 +343,7 @@ onMounted(async () => {
   cursor default
 
 .article-manage-yaml-sign
-  color #f56c6c
+  color $syp-error
   font-size 12px
   padding-left 2px
 

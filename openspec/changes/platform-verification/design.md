@@ -1,7 +1,7 @@
 ## Context
 
 - 平台入口：`PluginHost`、快速发布（`useQuickPublish`）、设置桥接（`bridgeRegistry.ts` + `SUPPORTED_V2_BRIDGE_SUBTYPES`）。
-- 旧界面仍为 iframe SPA + 「旧界面开关」回退；收敛条件见 `openspec/changes/refactor-ui-foundation/specs/ui-migration/spec.md`。
+- 旧界面（iframe SPA + 「旧界面开关」）已于 `2.0.0` 移除，Gate C/D 均已执行；SPA 退役判定标准见 `openspec/specs/ui-migration/spec.md`（原 `refactor-ui-foundation` 变更，2026-09-24 归档后并入主 specs）。
 - 旧 checklist 曾位于 `.qoder/plans/`（已删除）；平行 `.planning/` 副本停用，避免双源。
 
 ## Goals / Non-Goals

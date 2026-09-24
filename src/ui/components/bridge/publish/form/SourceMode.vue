@@ -374,6 +374,8 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="stylus">
+@import "../../../../assets/variables.styl"
+
 .top-tip
   margin 10px 0
 
@@ -385,7 +387,8 @@ onMounted(async () => {
   margin-bottom: 10px
 
   a
-    --text-color: #1a1a1a
+    // 语义令牌已主题优先，无需再单独写 html.dark 覆盖
+    --text-color: $syp-text-primary
     /*padding: 4px 2px*/
     cursor: pointer
     /*border: solid 1px #409eff*/
@@ -406,12 +409,9 @@ onMounted(async () => {
       color: var(--text-blue-color)
       font-weight: 600
 
-html.dark .source-opt a
-  --text-color: #999
-
 :deep(.readonly-textarea .el-textarea__inner)
-  background-color #f0f0f0
-  color #888
+  background-color $syp-bg-tertiary
+  color $syp-text-tertiary
   cursor default
 
 .un-saved-tip
@@ -419,11 +419,4 @@ html.dark .source-opt a
   margin-bottom 0
   a
     cursor pointer
-</style>
-
-<style lang="css">
-html.dark .readonly-textarea .el-textarea__inner {
-  background-color: #333;
-  color: #ddd;
-}
 </style>

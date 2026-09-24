@@ -343,15 +343,15 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   border 0
   border-radius 7px
   background transparent
-  color #9aa4b2
+  color $syp-text-tertiary
   cursor grab
   font-size 13px
   line-height 1
   justify-content center
 
   &:hover
-    background #eef3fb
-    color #4f6f9f
+    background rgba(64, 128, 255, 0.10)
+    color $syp-primary
 
   &:active
     cursor grabbing
@@ -368,14 +368,14 @@ function moveItem(platformKey: string, direction: -1 | 1) {
   border 0
   border-radius 5px
   background transparent
-  color #9aa4b2
+  color $syp-text-tertiary
   font-size 10px
   line-height 1
   justify-content center
 
   &:hover:not(:disabled)
-    background #eef3fb
-    color #4f6f9f
+    background rgba(64, 128, 255, 0.10)
+    color $syp-primary
 
   &:disabled
     opacity 0.26
