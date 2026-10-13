@@ -77,7 +77,7 @@ export const haloHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='previewUrl']",
       title: "查看链接",
-      content: "发布后点「查看」打开文章链接。",
+      content: "发布后点「查看文章」打开文章链接。",
       placement: "bottom",
     },
     {

@@ -13,22 +13,9 @@ import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { useArticleManage, ArticleManageAction } from "~/src/composables/useArticleManage.ts"
 import { svgIcons } from "~/src/utils/svgIcons.ts"
 import MaterialSymbolsDriveFolderUpload from "~icons/material-symbols/drive-folder-upload"
-import MaterialSymbolsAddPhotoAlternateOutline from "~icons/material-symbols/add-photo-alternate-outline"
 import MaterialSymbolsRocketLaunch from "~icons/material-symbols/rocket-launch"
 import MdiMinusBoxMultipleOutline from "~icons/mdi/minus-box-multiple-outline"
-import Fa6SolidBookOpenReader from "~icons/fa6-solid/book-open-reader"
 import Fa6SolidHouse from "~icons/fa6-solid/house"
-
-const props = withDefaults(
-  defineProps<{
-    enableView?: boolean
-    enablePicgo?: boolean
-  }>(),
-  {
-    enableView: true,
-    enablePicgo: true,
-  }
-)
 
 const emit = defineEmits<{
   action: [payload: ArticleManageAction]
@@ -211,16 +198,6 @@ onMounted(async () => {
             </el-button>
             <el-button size="small" @click="dispatch('batch', scope.row)">
               <MdiMinusBoxMultipleOutline />&nbsp;{{ t("articleManage.action.batch") }}
-            </el-button>
-            <el-button
-              v-if="enableView && scope.row.isShared"
-              size="small"
-              @click="dispatch('view', scope.row)"
-            >
-              <Fa6SolidBookOpenReader />&nbsp;{{ t("articleManage.action.view") }}
-            </el-button>
-            <el-button v-if="enablePicgo" size="small" @click="dispatch('picgo', scope.row)">
-              <MaterialSymbolsAddPhotoAlternateOutline />&nbsp;{{ t("articleManage.action.picgo") }}
             </el-button>
           </template>
         </el-table-column>

@@ -18,19 +18,16 @@
     </div>
 
     <div class="syp-manage-shell__body">
-      <ArticleManageList :enableView="isBlogInstalled" :enablePicgo="isPicgoInstalled" @action="handleAction" />
+      <ArticleManageList @action="handleAction" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
 import ArticleManageList from "~/src/ui/components/bridge/common/ArticleManageList.vue"
 import { ArticleManageAction } from "~/src/composables/useArticleManage.ts"
-import { useArticleManageView } from "~/src/ui/composables/useArticleManageView.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
-import { PluginUtils } from "~/src/utils/pluginUtils.ts"
 
 const emit = defineEmits<{
   openSingle: [pageId: string, platformKey?: string, title?: string]
@@ -39,16 +36,6 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useAppI18n()
-const { viewArticle, openPicgo } = useArticleManageView()
-
-const isPicgoInstalled = ref(false)
-const isBlogInstalled = ref(false)
-
-onMounted(async () => {
-  isPicgoInstalled.value = await PluginUtils.preCheckPicgoPlugin()
-  isBlogInstalled.value = await PluginUtils.preCheckBlogPlugin()
-})
-
 const handleAction = async (action: ArticleManageAction) => {
   const pageId = action.row?.postid ?? ""
   const title = action.row?.title ?? ""
@@ -68,18 +55,6 @@ const handleAction = async (action: ArticleManageAction) => {
     case "batch": {
       if (pageId) {
         emit("openBatch", pageId, title)
-      }
-      break
-    }
-    case "view": {
-      if (pageId) {
-        await viewArticle(pageId)
-      }
-      break
-    }
-    case "picgo": {
-      if (pageId) {
-        await openPicgo(pageId)
       }
       break
     }
