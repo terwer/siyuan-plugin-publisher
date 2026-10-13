@@ -1,35 +1,19 @@
 # Changelog
 
 ## [2.2.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.1.0...siyuan-plugin-publisher-v2.2.0) (2026-10-13)
-
-
 ### Features
-
 * **source-mode:** upload preview for image-bed replacement ([#2050](https://github.com/terwer/siyuan-plugin-publisher/issues/2050)) ([c341aaa](https://github.com/terwer/siyuan-plugin-publisher/commit/c341aaa17835a70067dae9e719a020e60a44b0b9))
-
-
 ### Bug Fixes
-
 * **source-mode:** prevent image-bed errors for posts without images ([#2050](https://github.com/terwer/siyuan-plugin-publisher/issues/2050)) ([99db1b8](https://github.com/terwer/siyuan-plugin-publisher/commit/99db1b810aa2b67febdefeb909fece273781f4c4))
-
-
 ### Code Refactoring
-
 * drop v1 cross-plugin dependencies and refresh platform login docs ([536f80a](https://github.com/terwer/siyuan-plugin-publisher/commit/536f80a36b7a6cb306480ce58eb87e0f8978e67a))
-
-
 ### Miscellaneous
-
 * **deps:** upgrade vite, vitest and undici ([b20cdd0](https://github.com/terwer/siyuan-plugin-publisher/commit/b20cdd0faa7c17600cef690a3800c04d66f297d7))
-
 ## [2.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.0.0...siyuan-plugin-publisher-v2.1.0) (2026-09-24)
-### Features
 * **nav:** keep the header entries resident instead of swapping them ([aae2454](https://github.com/terwer/siyuan-plugin-publisher/commit/aae2454a010a0044be25791092b5d2b7a6716540))
-### Bug Fixes
 * **manifest:** conform the bazaar manifests to the new spec ([442651b](https://github.com/terwer/siyuan-plugin-publisher/commit/442651b266d82fc444603700f6ee14bb98d00b3f))
 * preview image ([b5458b6](https://github.com/terwer/siyuan-plugin-publisher/commit/b5458b63cff6dd110b7430f8141ed5d57890d800))
 * **theme:** make the whole panel follow the siyuan theme ([84f3bda](https://github.com/terwer/siyuan-plugin-publisher/commit/84f3bda863d57b6f817ca924686760e0a558a0cd))
-### Miscellaneous
 * **openspec:** archive the changes shipped in 2.0.0 ([0cdbd1a](https://github.com/terwer/siyuan-plugin-publisher/commit/0cdbd1acf1b2fe262a266c2b8ed66bf3223a8724))
 ## [2.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.41.1...siyuan-plugin-publisher-v2.0.0) (2026-09-23)
 ### ⚠ BREAKING CHANGES
@@ -215,7 +199,6 @@
 * **yuque-setting:** change alert type ([ff2afe5](https://github.com/terwer/siyuan-plugin-publisher/commit/ff2afe5ca6c5268faa8c0d90e2d1cfe3bb0fada4))
 * **yuque:** fix v2 image upload failure and host dialog error details ([1e1fc1c](https://github.com/terwer/siyuan-plugin-publisher/commit/1e1fc1c09c6214bd8a7e90f62d3edb2493473e94))
 * **yuqueweb:** fix image url escaping and validation in markdown updates ([b5ac4c3](https://github.com/terwer/siyuan-plugin-publisher/commit/b5ac4c3a61a2805cafbd9314e2aca7cf69d3a0d6))
-### Code Refactoring
 * **api:** add optional id and publishcfg parameters to deletepost methods ([a2bd7ca](https://github.com/terwer/siyuan-plugin-publisher/commit/a2bd7ca30485fdb9d8048857b214e7f729ef0873))
 * delete the v1 spa and its build configs ([8ba26d9](https://github.com/terwer/siyuan-plugin-publisher/commit/8ba26d99c9f818b858f7a59a10e1846354477d9a))
 * describe the current state without era wording ([600abea](https://github.com/terwer/siyuan-plugin-publisher/commit/600abeaa2ceeeb6e373fa34c68fb18aab814338e))
