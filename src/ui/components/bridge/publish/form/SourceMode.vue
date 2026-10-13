@@ -9,20 +9,28 @@
 
 <script setup lang="ts">
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { onMounted, reactive, toRaw } from "vue"
+import { computed, onMounted, reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { Post, PostUtil, YamlConvertAdaptor, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
+import { PicbedServiceTypeEnum, Post, PostUtil, YamlConvertAdaptor, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
-import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { LuteUtil } from "~/src/utils/luteUtil.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useAppI18n()
-const { handlePicgo } = usePicgoBridge()
+const { kernelApi } = useSiyuanApi()
+
+/**
+ * 预览入口的能力形状：由 BaseWebApi / BaseBlogApi 提供（与发布链路同源）
+ */
+type ImagePreviewAdaptor = {
+  previewImageProcess(post: Post, id?: string, publishCfg?: any): Promise<Post>
+}
 
 const props = defineProps({
   modelValue: {
@@ -67,6 +75,28 @@ const formData = reactive({
   // 界面动态显示
   yamlContent: "",
   isSaved: true,
+
+  // 图片处理提示：正文含图片时，提示上传与链接替换在发布时进行
+  showImageNotice: false,
+  // 单平台场景（PicGo / 平台图床）且正文含图片时，可手动触发「上传并预览替换后的内容」；
+  // 批量分发没有单平台上下文，不提供预览
+  canPreviewUpload: false,
+  // 图片上传预览（显示层专用，不写入 yamlFormatObj / siyuanPost）
+  previewMode: false,
+  previewLoading: false,
+  previewMd: "",
+  previewHtml: "",
+})
+
+// 预览按钮文案：按当前状态切换
+const previewActionText = computed(() => {
+  if (formData.previewLoading) {
+    return t("yaml.image.preview.loading")
+  }
+  if (formData.previewMode) {
+    return t("yaml.image.preview.restore")
+  }
+  return t("yaml.image.preview.action")
 })
 
 const emit = defineEmits(["emitSyncPost", "edmtSyncToSiyuan"])
@@ -82,15 +112,19 @@ const onYamlShowTypeChange = (val: SourceContentShowType) => {
       break
     case SourceContentShowType.MD_CONTENT:
       formData.contentReadonlyMode = true
-      initYaml(formData.yamlFormatObj.mdContent)
+      initYaml(formData.previewMode ? formData.previewMd : formData.yamlFormatObj.mdContent)
       break
     case SourceContentShowType.YAML_MD_CONTENT:
       formData.contentReadonlyMode = true
-      initYaml(formData.yamlFormatObj.mdFullContent)
+      initYaml(
+        formData.previewMode
+          ? YamlUtil.addYamlToMd(formData.yamlFormatObj.formatter, formData.previewMd)
+          : formData.yamlFormatObj.mdFullContent
+      )
       break
     case SourceContentShowType.HTML_CONTENT:
       formData.contentReadonlyMode = true
-      initYaml(formData.yamlFormatObj.htmlContent)
+      initYaml(formData.previewMode ? formData.previewHtml : formData.yamlFormatObj.htmlContent)
       break
     default:
       break
@@ -210,15 +244,79 @@ const handlePostToHoHtml = async (post: Post) => {
   logger.info("编辑模式到 YAML 的同步已完成")
 }
 
+/**
+ * 初始化图片处理提示
+ *
+ * 图片上传与链接替换在发布时进行；
+ * 正文包含图片且图床服务会处理图片时，提示此处显示的是原始 Markdown。
+ */
+const initImageNotice = async () => {
+  // 图床服务为「不使用」时，图片不会被上传或替换，无需提示
+  const picbedService = (formData.cfg as CommonBlogConfig)?.picbedService
+  if (picbedService === PicbedServiceTypeEnum.None) {
+    return
+  }
+  if (StrUtil.isEmptyString(formData.pageId)) {
+    return
+  }
+  try {
+    const imageBlocks = await kernelApi.getImageBlocksByID(formData.pageId)
+    formData.showImageNotice = (imageBlocks?.length ?? 0) > 0
+    // 单平台场景提供「上传并预览」入口（与发布链路同源处理图片）
+    formData.canPreviewUpload = formData.showImageNotice && !StrUtil.isEmptyString(formData.apiType)
+  } catch (e) {
+    // 提示属于辅助信息，读取失败不阻断源码展示
+    logger.warn("读取图片块失败，跳过源码模式图片提示", e)
+  }
+}
+
+/**
+ * 手动触发「上传并预览替换后的内容」
+ *
+ * 与发布时的图片处理走同一条链路（按图床服务分流：PicGo 内核 / 平台图床），
+ * 点击后将立即上传图片并把 MD 相关视图切换为替换后的内容；
+ * 再次点击退出预览、恢复原文。预览内容仅用于显示，不写入文档。
+ */
+const toggleImagePreview = async () => {
+  if (formData.previewLoading) {
+    return
+  }
+  // 二次点击：退出预览，恢复原文显示
+  if (formData.previewMode) {
+    formData.previewMode = false
+    onYamlShowTypeChange(formData.stype)
+    return
+  }
+  formData.previewLoading = true
+  try {
+    const adaptor = (await Adaptors.getAdaptor(formData.apiType, formData.cfg)) as unknown as ImagePreviewAdaptor
+    const previewedPost = await adaptor.previewImageProcess(formData.siyuanPost, formData.pageId, {
+      cfg: formData.cfg,
+    })
+    formData.previewMd = previewedPost.markdown
+    formData.previewHtml = LuteUtil.mdToHtml(previewedPost.markdown)
+    formData.previewMode = true
+    onYamlShowTypeChange(formData.stype)
+    // 与发布一致：图片上传失败不中断，收集后提示
+    const imageUploadErrors = (previewedPost as any).imageUploadErrors as string[] | undefined
+    if (imageUploadErrors?.length) {
+      ElMessage.warning(imageUploadErrors.join("\n"))
+    }
+  } catch (e) {
+    ElMessage.error(e.message)
+    logger.error(t("main.opt.failure") + "=>", e)
+  } finally {
+    formData.previewLoading = false
+  }
+}
+
 const initPage = async () => {
   formData.isLoading = true
   try {
     const post = formData.siyuanPost
 
-    // 处理正文
-    const id = formData.pageId
-    const md = await handlePicgo(id, post.markdown)
-    post.markdown = md
+    // 图片处理提示（源码模式不做图床预处理，图片在发布时上传并替换）
+    await initImageNotice()
 
     // 没有平台 Key，不展示 YAML
     formData.yamlAdaptor = formData.readonlyMode ? null : await Adaptors.getYamlAdaptor(formData.apiType, formData.cfg)
@@ -265,6 +363,25 @@ onMounted(async () => {
         class="top-yaml-tip"
         :type="formData.syncStatus as any"
       />
+    </el-form-item>
+
+    <!-- 图片处理提示：上传与链接替换在发布时进行；单平台场景提供「上传并预览」 -->
+    <el-form-item v-if="formData.showImageNotice">
+      <el-alert :closable="false" class="top-yaml-tip image-preview-tip" type="warning">
+        <template #title>
+          <span>{{ formData.previewMode ? t("yaml.image.preview.tip") : t("yaml.image.tip") }}</span>
+          <el-button
+            v-if="formData.canPreviewUpload"
+            link
+            type="primary"
+            size="small"
+            :loading="formData.previewLoading"
+            @click="toggleImagePreview"
+          >
+            {{ previewActionText }}
+          </el-button>
+        </template>
+      </el-alert>
     </el-form-item>
 
     <!-- 显示方式 -->
@@ -382,6 +499,13 @@ onMounted(async () => {
 .top-yaml-tip
   padding 2px 4px
   margin 0 10px 0 0
+
+.image-preview-tip
+  :deep(.el-alert__title)
+    display inline-flex
+    align-items center
+    gap 8px
+    flex-wrap wrap
 
 .source-opt
   margin-bottom: 10px

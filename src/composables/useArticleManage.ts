@@ -49,8 +49,6 @@ export type ArticleManageActionType =
   | "quick"
   | "single"
   | "batch"
-  | "view"
-  | "picgo"
   | "platform-single"
   | "widget-empty"
 

@@ -64,7 +64,7 @@
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
     "zhi-siyuan-api": "^2.38.0",
-    "zhi-siyuan-picgo": "^3.0.3",
+    "zhi-siyuan-picgo": "^3.0.5",
     "zhi-xmlrpc-middleware": "^0.6.26"
   },
   "devDependencies": {
@@ -76,7 +76,7 @@
     "@types/minimist": "^1.2.5",
     "@types/node": "^22.19.1",
     "@vitejs/plugin-vue": "^6.0.7",
-    "@vitest/coverage-v8": "^4.1.7",
+    "@vitest/coverage-v8": "^5.0.4",
     "@vue/test-utils": "^2.4.6",
     "fast-glob": "^3.3.3",
     "jsdom": "^27.2.0",
@@ -84,16 +84,16 @@
     "rollup-plugin-livereload": "^2.0.5",
     "stylus": "^0.64.0",
     "typescript": "5.9.3",
-    "undici": "^8.10.0",
+    "undici": "8.10.2",
     "unplugin-auto-import": "^20.2.0",
     "unplugin-vue-components": "^30.0.0",
     "vercel": "^48.10.2",
-    "vite": "^8.0.14",
+    "vite": "^8.3.4",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-node-polyfills": "^0.28.0",
     "vitepress": "^1.6.4",
-    "vitest": "^4.1.7",
-    "vue-tsc": "^3.1.4"
+    "vitest": "^5.0.4",
+    "vue-tsc": "^3.3.13"
   },
   "packageManager": "pnpm@10.22.0"
 }

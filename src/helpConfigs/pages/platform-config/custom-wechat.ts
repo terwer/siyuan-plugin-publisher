@@ -40,7 +40,7 @@ export const wechatHelpConfig: PageHelpConfig = {
     {
       target: "[data-syp-tour='cookie']",
       title: "Cookie 授权",
-      content: "先用公众号管理员微信在浏览器登录 mp.weixin.qq.com，再读取 Cookie。登录过期或切换账号后需重新读取。",
+      content: "点「去登录」，用公众号管理员微信扫码登录后台，关闭登录窗口保存登录态后点「自动读取 Cookie」。登录过期或切换账号后重新授权即可。",
       placement: "bottom",
     },
     {
