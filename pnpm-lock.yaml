@@ -111,8 +111,8 @@ importers:
         specifier: ^2.38.0
         version: 2.38.0(typescript@5.9.3)
       zhi-siyuan-picgo:
-        specifier: ^3.0.3
-        version: 3.0.3(typescript@5.9.3)
+        specifier: ^3.0.5
+        version: 3.0.5(typescript@5.9.3)
       zhi-xmlrpc-middleware:
         specifier: ^0.6.26
         version: 0.6.26(typescript@5.9.3)
@@ -5132,11 +5132,11 @@ packages:
   unist-util-visit@5.1.0:
     resolution: {integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==}
 
-  universal-picgo-store@3.0.3:
-    resolution: {integrity: sha512-DNZ4qhjAJIndL5pYhOaZ9A8AzqXbI3sQVk8+7Ch9xQagWNVFCY2pqO7EU9IFn1UwmGk8B5G0+dFzyqEXAt7npg==}
+  universal-picgo-store@3.0.5:
+    resolution: {integrity: sha512-rtOIQ1d2qqicrDqT3sQRi2+BIubdcUlGyISAzu2ybtUhxzBWcvC5IpFdkoNUoVT++ozEEbYb0UeHJ9zTKxOE6A==}
 
-  universal-picgo@3.0.3:
-    resolution: {integrity: sha512-J04y78F2+mLZvYR9FgZvDe91n0Epwhm5+Rccji78PpAPM5dHs89jr2Pa3RcCvhb0bQXSKm8TE8AzSiK910cCAw==}
+  universal-picgo@3.0.5:
+    resolution: {integrity: sha512-GtwzRKYjx1wSF4w2MuD2KY65tUL3TUJtgg4ANfh2+EFuxK0GK8OjQZGIK2vjyguhmhVCASCgCojfr4WwNYx3dw==}
 
   universal-user-agent@6.0.1:
     resolution: {integrity: sha512-yCzhz6FN2wU1NiiQRogkTQszlQSlpWaw8SvVegAc+bDxbzHgh1vX8uIe8OYyMH6DwH+sdTJsgMl36+mSMdRJIQ==}
@@ -5637,8 +5637,8 @@ packages:
   zhi-siyuan-api@2.38.0:
     resolution: {integrity: sha512-NxDp2WVGI/9uWVr3tArxwBNdkXpa8q6sWzEVcJlUl+TzQckfMTh13CueNGosvraWt5OUTsYpBCMg9TkysuT+Dg==}
 
-  zhi-siyuan-picgo@3.0.3:
-    resolution: {integrity: sha512-Tsxn2oZ2WL5KC1MpVVbjcMNn5i0nMV0gD0LXKzkMGb3d8E1Zx2XWv1IMZD1LavKmZ/MpFXBG4O0Lbby0Dqppag==}
+  zhi-siyuan-picgo@3.0.5:
+    resolution: {integrity: sha512-AG1Kb9DdRvpBKrxViwEfddHC/YTyaMM/KGj3T5itAXCh90i/jE7lmYSBEe3vIulNlhltFsecvfM7aDEMQVVxPQ==}
 
   zhi-xmlrpc-middleware@0.6.26:
     resolution: {integrity: sha512-ajUOtLMRt++anQc7YsUHIOGrs3fXcAuxEAOc7xT16Vxq0gZfhNtBL9nBD8iaBl2PgwmWBUTUpGktiqb6OmuBOg==}
@@ -11170,11 +11170,11 @@ snapshots:
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
 
-  universal-picgo-store@3.0.3:
+  universal-picgo-store@3.0.5:
     dependencies:
       zhi-lib-base: 0.8.0
 
-  universal-picgo@3.0.3:
+  universal-picgo@3.0.5:
     dependencies:
       '@aws-sdk/client-s3': 3.1053.0
       '@aws-sdk/s3-request-presigner': 3.1053.0
@@ -11189,7 +11189,7 @@ snapshots:
       js-yaml: 4.1.1
       mime: 4.1.0
       queue: 7.0.0
-      universal-picgo-store: 3.0.3
+      universal-picgo-store: 3.0.5
       zhi-lib-base: 0.8.0
     transitivePeerDependencies:
       - debug
@@ -11725,10 +11725,10 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  zhi-siyuan-picgo@3.0.3(typescript@5.9.3):
+  zhi-siyuan-picgo@3.0.5(typescript@5.9.3):
     dependencies:
       js-md5: 0.8.3
-      universal-picgo: 3.0.3
+      universal-picgo: 3.0.5
       uuid: 9.0.1
       zhi-common: 1.35.0(typescript@5.9.3)
       zhi-device: 2.12.0

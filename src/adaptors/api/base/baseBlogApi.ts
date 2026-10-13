@@ -104,6 +104,10 @@ export class BaseBlogApi extends BlogApi {
     return await this.baseExtendApi.preEditPost(post, id, publishCfg)
   }
 
+  public async previewImageProcess(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    return await this.baseExtendApi.previewImageProcess(post, id, publishCfg)
+  }
+
   public async getCategories(keyword?: string): Promise<CategoryInfo[]> {
     return this.baseExtendApi.getCategories(keyword)
   }

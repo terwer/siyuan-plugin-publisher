@@ -108,6 +108,20 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   }
 
   /**
+   * 预览图片处理结果
+   *
+   * 与发布时的图片处理走同一条链路（按 cfg.picbedService 分流：PicGo 内核 / 平台图床），
+   * 结果仅用于展示，不写回文档。
+   *
+   * @param doc - 要处理的 Post 对象
+   * @param id - 思源笔记文档 ID
+   * @param publishCfg - （可选）发布配置参数
+   */
+  public async previewImageProcess(doc: Post, id?: string, publishCfg?: any): Promise<Post> {
+    return await this.handlePictures(doc, id, publishCfg)
+  }
+
+  /**
    * 删除文章
    *
    * @param postid - 平台文章 ID

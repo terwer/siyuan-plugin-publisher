@@ -64,7 +64,7 @@
     "zhi-lib-base": "^0.8.0",
     "zhi-notion-markdown": "^0.1.4",
     "zhi-siyuan-api": "^2.38.0",
-    "zhi-siyuan-picgo": "^3.0.3",
+    "zhi-siyuan-picgo": "^3.0.5",
     "zhi-xmlrpc-middleware": "^0.6.26"
   },
   "devDependencies": {
