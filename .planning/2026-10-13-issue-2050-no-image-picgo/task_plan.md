@@ -28,19 +28,20 @@
 - [x] `SourceMode.vue`：移除图床预处理调用；按场景显示原文 + 有图片时提示（i18n 新增中英文案，文案已定稿）
 - [x] `usePicgoBridge.handlePicgo`：无图片短路（`kernelApi.getImageBlocksByID` 判空）
 - [x] 「上传并预览替换后的内容」按钮：`previewMode` 默认 false；点击走发布同源链路（`previewImageProcess` → `handlePictures` 分流）上传并切换显示、再点恢复原文；纯显示层不写文档；**单平台（PicGo / Bundled）且正文有图片时渲染**；批量分发无单平台上下文不提供
-- [x] 安装上游本地包（tgz）用于端到端验证——**临时 `file:` 引用，发版后改回正式版本依赖**
+- [x] 本地 tgz 端到端验证后，升级正式依赖 `zhi-siyuan-picgo@^3.0.5`
 - **状态：** complete
 
 ### 阶段 4：测试与验证
 - [x] 单测（新增 usePicgoBridge 3 例；全量 74 文件 / 402 用例通过）
 - [x] `vue-tsc --noEmit` 通过；`pnpm build` 通过（产物含上游修复 + 分流 + 新文案）
-- [x] 宿主人工验证（作者）：语雀网页版 + 源码模式通过；提示条 `warning` 类型并已重建同步
-- [ ] 其余清单项（无图发布 / PicGo 有图发布 / 「不使用」无提示）待作者确认
-- **状态：** in_progress
+- [x] 宿主人工验证（作者）：语雀网页版 + 源码模式 + 预览按钮通过；提示条 `warning` 类型
+- [x] 提交前回归（最终依赖组合 vite 8.3.4 / vitest 5.0.4 / vue-tsc 3.3.13）：402 用例 / 类型 / 构建全绿
+- **状态：** complete
 
 ### 阶段 5：交付
-- [ ] 回复 issue #2050（按作者安排）
-- **状态：** pending
+- [x] 分批提交（5 个提交，dev；含 feat → release-please 生成 v2.2.0）
+- [ ] 回复 issue #2050（按作者安排，待 v2.2.0 发布）
+- **状态：** in_progress
 
 ## 上下游顺序（契约约束）
 1. **上游先行**：zhi-siyuan-picgo 按 U1 修改 `uploadMarkdownImages` → 构建 → 本地 tgz 验证 → 发版（发版前向作者确认）
