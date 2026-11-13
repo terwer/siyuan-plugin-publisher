@@ -432,6 +432,10 @@ const usePublish = () => {
     try {
       const attrs = await kernelApi.getBlockAttrs(id)
       if (attrs) {
+        // 精确命中优先：新旧 SiYuan 同时存在小写与历史大写属性时，取规范形态
+        if (attrs[wantKey] !== undefined) {
+          return attrs[wantKey] ?? ""
+        }
         const matchedKey = Object.keys(attrs).find((name) => name.toLowerCase() === wantKey)
         if (matchedKey) {
           return attrs[matchedKey] ?? ""
@@ -530,8 +534,8 @@ const usePublish = () => {
         // 更新时间以思源文档为准（issue #2054）：YAML 里的 updated 是上次发布时的快照，
         // 直接沿用会让「更新时间」停在首次发布之后不再前进；文档时间更晚时采用文档时间。
         if (
-          docDateUpdated &&
-          (!post.dateUpdated || docDateUpdated.getTime() > post.dateUpdated.getTime())
+          docDateUpdated instanceof Date &&
+          (!(post.dateUpdated instanceof Date) || docDateUpdated.getTime() > post.dateUpdated.getTime())
         ) {
           post.dateUpdated = docDateUpdated
         }
