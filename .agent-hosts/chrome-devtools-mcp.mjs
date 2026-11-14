@@ -105,10 +105,37 @@ try {
   process.exit(1);
 }
 
+// 把调试地址从 HTTP 代理里排除。
+// Node 24 在 NODE_USE_ENV_PROXY=1 时会把 WebSocket 也交给代理，
+// 而本机/宿主地址通常在 NO_PROXY 之外，表现为 HTTP 探测通、CDP 握手失败。
+// 这里在解析出地址后自动补 NO_PROXY，避免依赖任何用户级环境配置。
+function excludeFromProxy(target) {
+  let host;
+  let hostname;
+  try {
+    const u = new URL(target);
+    host = u.host;
+    hostname = u.hostname;
+  } catch {
+    return;
+  }
+  const extra = [host, hostname].filter(Boolean);
+  for (const key of ['NO_PROXY', 'no_proxy']) {
+    const cur = String(process.env[key] || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    for (const e of extra) if (!cur.includes(e)) cur.push(e);
+    process.env[key] = cur.join(',');
+  }
+}
+excludeFromProxy(url);
+
 if (argv.includes('--print')) {
   console.log('config      :', CONF_FILE);
   console.log('platform    :', `${process.platform}${isWsl() ? ' (wsl)' : ''}`);
   console.log('browser-url :', url);
+  console.log('NO_PROXY    :', process.env.NO_PROXY || '(空)');
   process.exit(0);
 }
 
