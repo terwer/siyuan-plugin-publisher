@@ -1,0 +1,7 @@
+# 项目级 Codex 配置（仅本仓库）
+# 调试地址与端口由 .agent-hosts/hosts.env 解析；不含端口、不含绝对路径。
+
+[mcp_servers.chrome-devtools]
+command = "node"
+args = [".agent-hosts/chrome-devtools-mcp.mjs"]
+startup_timeout_sec = 120

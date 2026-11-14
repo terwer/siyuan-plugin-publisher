@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "node",
+      "args": [
+        ".agent-hosts/chrome-devtools-mcp.mjs"
+      ]
+    }
+  }
+}
