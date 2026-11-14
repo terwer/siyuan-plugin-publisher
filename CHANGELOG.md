@@ -1,27 +1,18 @@
 # Changelog
 
 ## [2.2.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.0...siyuan-plugin-publisher-v2.2.1) (2026-11-14)
-
-
 ### Bug Fixes
-
 * anchor the plugin settings entry so desktop opens a popover, not the mobile sheet ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([f43cc80](https://github.com/terwer/siyuan-plugin-publisher/commit/f43cc80806f419bd8c8b7901ecb87df961b4ae75))
 * correct platform YAML persistence, permalink rule and update time ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([269eaf5](https://github.com/terwer/siyuan-plugin-publisher/commit/269eaf56f03855b9ad45e28a57db152068ca6ea7))
 * prefer the canonical attribute key and guard non-Date update time ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([c18be8d](https://github.com/terwer/siyuan-plugin-publisher/commit/c18be8dee0fc94074e7fefc66681ab832401d935))
-
-
 ### Miscellaneous
-
 * keep local planning notes out of the pull request ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([05c318f](https://github.com/terwer/siyuan-plugin-publisher/commit/05c318f7e52b29aea889535cb70347bd359387f3))
-
 ## [2.2.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.1.0...siyuan-plugin-publisher-v2.2.0) (2026-10-13)
 ### Features
 * **source-mode:** upload preview for image-bed replacement ([#2050](https://github.com/terwer/siyuan-plugin-publisher/issues/2050)) ([c341aaa](https://github.com/terwer/siyuan-plugin-publisher/commit/c341aaa17835a70067dae9e719a020e60a44b0b9))
-### Bug Fixes
 * **source-mode:** prevent image-bed errors for posts without images ([#2050](https://github.com/terwer/siyuan-plugin-publisher/issues/2050)) ([99db1b8](https://github.com/terwer/siyuan-plugin-publisher/commit/99db1b810aa2b67febdefeb909fece273781f4c4))
 ### Code Refactoring
 * drop v1 cross-plugin dependencies and refresh platform login docs ([536f80a](https://github.com/terwer/siyuan-plugin-publisher/commit/536f80a36b7a6cb306480ce58eb87e0f8978e67a))
-### Miscellaneous
 * **deps:** upgrade vite, vitest and undici ([b20cdd0](https://github.com/terwer/siyuan-plugin-publisher/commit/b20cdd0faa7c17600cef690a3800c04d66f297d7))
 ## [2.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.0.0...siyuan-plugin-publisher-v2.1.0) (2026-09-24)
 * **nav:** keep the header entries resident instead of swapping them ([aae2454](https://github.com/terwer/siyuan-plugin-publisher/commit/aae2454a010a0044be25791092b5d2b7a6716540))
