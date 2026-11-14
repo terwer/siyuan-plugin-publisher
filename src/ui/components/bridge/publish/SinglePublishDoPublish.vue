@@ -36,6 +36,8 @@ import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import PageUtils from "~/common/pageUtils.ts"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
+import Adaptors from "~/src/adaptors"
 
 const logger = createAppLogger("single-publish-do-publish")
 
@@ -259,7 +261,18 @@ const handleSyncSiyuanAttrToSiyuan = async () => {
 }
 
 const handleSyncPlatformAttrToSiyuan = async () => {
-  const yaml = formData.mergedPost.yaml
+  const cfg = formData.publishCfg.cfg as BlogConfig
+  let yaml = formData.mergedPost.yaml
+  // 详细模式修改的是模型字段，post.yaml 仍是初始化时的快照；写回前按同一套
+  // YAML 适配器重算，避免「同步修改到思源笔记」写回旧内容（issue #2054）。
+  // 源码模式下以编辑框里的 YAML 为准，不做重算。
+  if (formData.editType !== PageEditMode.EditMode_source) {
+    const yamlAdaptor = await Adaptors.getYamlAdaptor(key, cfg)
+    if (yamlAdaptor) {
+      yaml = (await buildPlatformYamlFormatObj(yamlAdaptor, formData.mergedPost, cfg)).formatter
+    }
+  }
+  formData.mergedPost.yaml = yaml
   const yamlKey = getDynYamlKey(key)
   await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
   logger.debug("保存当前平台属性", { yaml: toRaw(yaml) })

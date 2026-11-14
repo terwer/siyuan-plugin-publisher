@@ -10,6 +10,7 @@
 import {
   DynamicConfig,
   getDynCfgByKey,
+  getDynYamlKey,
   getNewPlatformKey,
   getSubPlatformTypeByKey,
   normalizePlatformKey,
@@ -59,5 +60,14 @@ describe("test dynamicConfig", () => {
     expect(getDynCfgByKey(configs, "custom_Haloweb")?.platformName).toBe("Halo网页版")
     // 不存在
     expect(getDynCfgByKey(configs, "not_exist")).toBeNull()
+  })
+
+  it("test getDynYamlKey 生成思源可保存的小写属性名", () => {
+    // 思源自定义属性名只允许小写字母、数字和连字符，大写会被内核规范成小写（issue #2026、#2054）
+    const key = getDynYamlKey("github_Hexo-z2jom6d")
+    expect(key).toBe("custom-github-hexo-z2jom6d-yaml")
+    expect(key).toMatch(/^custom-[a-z0-9-]+$/)
+    // 读写两端用的是同一个 key，不能出现大小写不同的第二种写法
+    expect(getDynYamlKey("custom_Yuqueweb")).toBe("custom-custom-yuqueweb-yaml")
   })
 })

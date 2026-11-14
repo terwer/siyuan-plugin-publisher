@@ -1,5 +1,5 @@
 import { computed, reactive } from "vue"
-import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import WidgetPageUtils from "~/siyuan/utils/widgetPageUtils.ts"
 import { usePublish } from "~/src/composables/usePublish.ts"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
@@ -17,6 +17,7 @@ import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { removeTitleNumber } from "~/src/utils/titleNumber.ts"
 import { openPathOrUrl } from "~/src/utils/pathUtils.ts"
 import { openBrowserWindow } from "~/src/utils/widgetUtils.ts"
 import { PreviewOpenModeEnum } from "zhi-blog-api"
@@ -179,7 +180,7 @@ export const useQuickPublish = () => {
         try {
           const postInfo = await kernelApi.getBlockByID(pageId)
           const rawTitle = postInfo?.content ?? t("quickPublish.docTitle.untitled")
-          state.docTitle = pref.value.fixTitle ? HtmlUtil.removeTitleNumber(rawTitle).replace(/\.md/g, "") : rawTitle
+          state.docTitle = pref.value.fixTitle ? removeTitleNumber(rawTitle).replace(/\.md/g, "") : rawTitle
         } catch (e) {
           state.docTitle = t("quickPublish.docTitle.untitled")
         }
