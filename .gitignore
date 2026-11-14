@@ -55,6 +55,7 @@ testdata
 
 # Claude config
 .claude
+.mcp.json
 
 # Cursor config
 .cursor

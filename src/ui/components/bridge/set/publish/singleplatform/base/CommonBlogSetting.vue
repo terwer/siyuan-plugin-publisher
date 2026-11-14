@@ -633,6 +633,8 @@ onMounted(async () => {
 </template>
 
 <style lang="stylus" scoped>
+@import "../../../../../../assets/variables.styl"
+
 .placeholder
   margin-top 4px
 
@@ -661,7 +663,7 @@ onMounted(async () => {
     line-height 16px
     padding-right 10px
     font-size 12px
-    color #5f6b7a
+    color $syp-text-secondary
 
   :deep(.el-form-item__content)
     min-height 30px

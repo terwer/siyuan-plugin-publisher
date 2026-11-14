@@ -421,6 +421,33 @@ const usePublish = () => {
   }
 
   /**
+   * 读取平台 YAML 自定义属性。
+   *
+   * 属性名以 `getDynYamlKey` 生成的小写形态为准（思源自定义属性名只允许小写，
+   * 见 siyuan-note/siyuan#16447）；历史上写入过含大写字母的属性，读取时按
+   * 大小写不敏感匹配兜底一次，避免被当成「还没有保存过 YAML」而重新生成默认值。
+   */
+  const readPlatformYamlAttr = async (id: string, platformKey: string): Promise<string> => {
+    const wantKey = getDynYamlKey(platformKey)
+    try {
+      const attrs = await kernelApi.getBlockAttrs(id)
+      if (attrs) {
+        // 精确命中优先：新旧 SiYuan 同时存在小写与历史大写属性时，取规范形态
+        if (attrs[wantKey] !== undefined) {
+          return attrs[wantKey] ?? ""
+        }
+        const matchedKey = Object.keys(attrs).find((name) => name.toLowerCase() === wantKey)
+        if (matchedKey) {
+          return attrs[matchedKey] ?? ""
+        }
+      }
+    } catch (e) {
+      logger.warn("读取块属性失败，回退到单属性查询 =>", e)
+    }
+    return (await kernelApi.getSingleBlockAttr(id, wantKey)) ?? ""
+  }
+
+  /**
    * 初始化调用
    *
    * @param post - 文章对象
@@ -465,9 +492,11 @@ const usePublish = () => {
       // 其他属性初始化
       let post = _.cloneDeep(slugedPost) as Post
       if (!isSys) {
+        // 思源文档自身的更新时间，YAML 转换前先记下来（YAML 里的 updated 是上次发布时的值）
+        const docDateUpdated = post.dateUpdated
+
         // 平台相关自定义属性（摘要、标签、分类）
-        const yamlKey = getDynYamlKey(key)
-        const yaml = await kernelApi.getSingleBlockAttr(id, yamlKey)
+        const yaml = await readPlatformYamlAttr(id, key)
         const checkYaml = YamlUtil.extractFrontmatter(yaml).trim()
 
         // YAML属性转换
@@ -500,6 +529,15 @@ const usePublish = () => {
             // 未保存过，默认不处理
             logger.info("未保存过YAML，未找到适配器，默认不处理", { post: toRaw(post) })
           }
+        }
+
+        // 更新时间以思源文档为准（issue #2054）：YAML 里的 updated 是上次发布时的快照，
+        // 直接沿用会让「更新时间」停在首次发布之后不再前进；文档时间更晚时采用文档时间。
+        if (
+          docDateUpdated instanceof Date &&
+          (!(post.dateUpdated instanceof Date) || docDateUpdated.getTime() > post.dateUpdated.getTime())
+        ) {
+          post.dateUpdated = docDateUpdated
         }
       }
 
@@ -589,6 +627,9 @@ const usePublish = () => {
         mergedPost.markdown = siyuanPost.markdown
         mergedPost.html = siyuanPost.html
         mergedPost.description = siyuanPost.description
+        // 更新时间以思源笔记文档为准（issue #2054）：平台侧的 updated 是上次发布时的值，
+        // 沿用下去会让「更新时间」永远不前进。这里先取文档时间，后续 YAML 解析更晚时才覆盖。
+        mergedPost.dateUpdated = siyuanPost.dateUpdated
 
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, id, cfg)

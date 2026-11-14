@@ -46,16 +46,23 @@ const usePicgoBridge = () => {
     const picgoErrMsg = "文档可能已经成功发布，但是 PicGo 图床内核上传失败，详细信息=>"
 
     try {
-      const attrs = await kernelApi.getBlockAttrs(pageId)
-      const siyuanData = {
-        pageId: pageId,
-        meta: attrs,
-      }
-
       if (StrUtil.isEmptyString(md)) {
         // 思源笔记原始文章数据
         const siyuanPost = await blogApi.getPost(pageId)
         md = siyuanPost.markdown
+      }
+
+      // 文章中没有图片时直接返回：无需初始化图床内核，也无需校验 uploader 配置（issue #2050）
+      const imageBlocks = await kernelApi.getImageBlocksByID(pageId)
+      if (imageBlocks.length === 0) {
+        logger.info("文章中没有图片，跳过图床处理")
+        return md
+      }
+
+      const attrs = await kernelApi.getBlockAttrs(pageId)
+      const siyuanData = {
+        pageId: pageId,
+        meta: attrs,
       }
 
       const picgoManager = await getPublisherPicgoManager()

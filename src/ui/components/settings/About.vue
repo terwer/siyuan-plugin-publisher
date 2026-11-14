@@ -141,7 +141,7 @@ const openPreviousReleaseDownload = async () => {
   padding 10px 12px
   border 1px solid var(--b3-border-color, $syp-border-primary)
   border-radius $syp-radius-sm
-  background var(--b3-theme-surface-lights, $syp-bg-secondary)
+  background var(--b3-theme-surface-light, $syp-bg-secondary)
 
   &__text
     flex 1 1 auto
@@ -169,7 +169,7 @@ const openPreviousReleaseDownload = async () => {
     min-width 0
     padding 4px 6px
     border-radius $syp-radius-sm
-    background var(--b3-theme-surface-lights, $syp-bg-secondary)
+    background var(--b3-theme-surface-light, $syp-bg-secondary)
     font-size 12px
     color var(--b3-theme-on-surface-light, $syp-text-tertiary)
     overflow hidden

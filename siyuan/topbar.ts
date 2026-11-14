@@ -21,9 +21,19 @@ import { icons } from "./utils/svg"
 export class Topbar {
   private logger
   private pluginInstance
+  /** 顶栏图标元素：其他入口（例如宿主「插件 → 设置」）复用它作为面板锚点 */
+  private topBarElement: HTMLElement | null = null
+
   constructor(pluginInstance: PublisherPlugin) {
     this.logger = createSiyuanAppLogger("topbar")
     this.pluginInstance = pluginInstance
+  }
+
+  /**
+   * 顶栏图标元素，供其他入口把面板锚定到同一个位置
+   */
+  public getTopBarElement(): HTMLElement | null {
+    return this.topBarElement
   }
 
   private get pluginHost() {
@@ -38,6 +48,7 @@ export class Topbar {
       position: "left",
       callback: () => {},
     })
+    this.topBarElement = topBarElement
 
     topBarElement.addEventListener("click", async () => {
       try {

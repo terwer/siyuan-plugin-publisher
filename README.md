@@ -12,7 +12,7 @@ Publisher is built for people who write in SiYuan and also maintain blogs, knowl
 
 - **Quick publish** — open a SiYuan document, choose a platform, and publish.
 - **Continuous updates** — after publishing, update the same platform article when the document changes.
-- **Image handling** — choose no upload, platform built-in upload, or Publisher’s bundled PicGo core (`zhi-siyuan-picgo` headless lib) per platform; PicGo-core upload does not require installing the standalone `siyuan-plugin-picgo` plugin product.
+- **Image handling** — choose no upload, platform built-in upload, or Publisher’s bundled PicGo core (`zhi-siyuan-picgo` headless lib) per platform; uploads and link replacement happen at publish time, and source mode can preview the replaced content on demand. PicGo-core upload does not require installing the standalone `siyuan-plugin-picgo` plugin product.
 - **Configure once** — validate and save platform accounts, then reuse them for future publishing.
 - **Multiple targets** — publish to blogs, knowledge bases, static-site repositories, web-login platforms, and local folders.
 - **Unified interface** — platform setup, quick publish, publishing status, and error details stay in one interface.

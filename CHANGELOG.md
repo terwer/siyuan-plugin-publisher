@@ -1,11 +1,39 @@
 # Changelog
 
+## [2.2.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.0...siyuan-plugin-publisher-v2.2.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* anchor the plugin settings entry so desktop opens a popover, not the mobile sheet ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([f43cc80](https://github.com/terwer/siyuan-plugin-publisher/commit/f43cc80806f419bd8c8b7901ecb87df961b4ae75))
+* correct platform YAML persistence, permalink rule and update time ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([269eaf5](https://github.com/terwer/siyuan-plugin-publisher/commit/269eaf56f03855b9ad45e28a57db152068ca6ea7))
+* prefer the canonical attribute key and guard non-Date update time ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([c18be8d](https://github.com/terwer/siyuan-plugin-publisher/commit/c18be8dee0fc94074e7fefc66681ab832401d935))
+
+
+### Miscellaneous
+
+* keep local planning notes out of the pull request ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([05c318f](https://github.com/terwer/siyuan-plugin-publisher/commit/05c318f7e52b29aea889535cb70347bd359387f3))
+
+## [2.2.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.1.0...siyuan-plugin-publisher-v2.2.0) (2026-10-13)
+### Features
+* **source-mode:** upload preview for image-bed replacement ([#2050](https://github.com/terwer/siyuan-plugin-publisher/issues/2050)) ([c341aaa](https://github.com/terwer/siyuan-plugin-publisher/commit/c341aaa17835a70067dae9e719a020e60a44b0b9))
+### Bug Fixes
+* **source-mode:** prevent image-bed errors for posts without images ([#2050](https://github.com/terwer/siyuan-plugin-publisher/issues/2050)) ([99db1b8](https://github.com/terwer/siyuan-plugin-publisher/commit/99db1b810aa2b67febdefeb909fece273781f4c4))
+### Code Refactoring
+* drop v1 cross-plugin dependencies and refresh platform login docs ([536f80a](https://github.com/terwer/siyuan-plugin-publisher/commit/536f80a36b7a6cb306480ce58eb87e0f8978e67a))
+### Miscellaneous
+* **deps:** upgrade vite, vitest and undici ([b20cdd0](https://github.com/terwer/siyuan-plugin-publisher/commit/b20cdd0faa7c17600cef690a3800c04d66f297d7))
+## [2.1.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.0.0...siyuan-plugin-publisher-v2.1.0) (2026-09-24)
+* **nav:** keep the header entries resident instead of swapping them ([aae2454](https://github.com/terwer/siyuan-plugin-publisher/commit/aae2454a010a0044be25791092b5d2b7a6716540))
+* **manifest:** conform the bazaar manifests to the new spec ([442651b](https://github.com/terwer/siyuan-plugin-publisher/commit/442651b266d82fc444603700f6ee14bb98d00b3f))
+* preview image ([b5458b6](https://github.com/terwer/siyuan-plugin-publisher/commit/b5458b63cff6dd110b7430f8141ed5d57890d800))
+* **theme:** make the whole panel follow the siyuan theme ([84f3bda](https://github.com/terwer/siyuan-plugin-publisher/commit/84f3bda863d57b6f817ca924686760e0a558a0cd))
+* **openspec:** archive the changes shipped in 2.0.0 ([0cdbd1a](https://github.com/terwer/siyuan-plugin-publisher/commit/0cdbd1acf1b2fe262a266c2b8ed66bf3223a8724))
 ## [2.0.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v1.41.1...siyuan-plugin-publisher-v2.0.0) (2026-09-23)
 ### ⚠ BREAKING CHANGES
 * the platform verification column formerly named `v2c` is now `cfg`, and the `v1c` column no longer exists. neither appears in the plugin api or in user-visible text; the checklist and the verification sop are updated to the new name.
 * the previous interface was removed in 2.0.0 and this release provides no way back to it. the toolbar menu and the old settings pages no longer exist, and the browser extension, widget and web builds render the new interface, with the extension and web build requiring your siyuan api address and token under connection settings. your platform accounts and published links are preserved and need no reconfiguration. if you need the old interface, install 1.41.1, the last release that had it; the download link is kept in settings - about until 2.3.0.
 * introduce the v2 unified workspace and complete the ui architecture migration from iframe-based spa hosting to native dom mounting.
-### Features
 * **account:** enhance v2accountlist with ui improvements and integrate element plus ([218b6d6](https://github.com/terwer/siyuan-plugin-publisher/commit/218b6d652a6727f99ed02928c4cdc8b6c585d6bb))
 * add findings, progress, and task plan for telegraph v2 verification ([a159f13](https://github.com/terwer/siyuan-plugin-publisher/commit/a159f13ad993e94a3797a6b7a78e02574cbd9e11))
 * allow loopback targets to use siyuan-forward-proxy under proxy conditions ([51dd890](https://github.com/terwer/siyuan-plugin-publisher/commit/51dd890d326a41af1d83f062b7d7606f74db1dd1))
@@ -111,7 +139,6 @@
 * **yuqueweb:** add yuque web platform for v2 web auth publishing ([a1d5fd1](https://github.com/terwer/siyuan-plugin-publisher/commit/a1d5fd1c921ab2fd52e02eafbb7375b4ca64cb03))
 * **yuqueweb:** fix document update and read api usage and enhance publishing flow ([d0cbc79](https://github.com/terwer/siyuan-plugin-publisher/commit/d0cbc79acf01454d3f67bc2b1bf411adb3c60298))
 * **yuqueweb:** implement adapter-level logout action and remove logouturl usage ([eaf0185](https://github.com/terwer/siyuan-plugin-publisher/commit/eaf0185b8014ca7d5b612cf9b93db4902ca02171))
-### Bug Fixes
 * **ai:** inject x-opencode-session header for opencode go requests ([5a636dc](https://github.com/terwer/siyuan-plugin-publisher/commit/5a636dc3cb8c7546313af9e3444ea592959484f8))
 * **ai:** make auto summary in detailed publish resilient on ai failure ([9f1a09b](https://github.com/terwer/siyuan-plugin-publisher/commit/9f1a09b62d2a627ca1c68a7da78829348ea86c27))
 * **ai:** read siyuan note ai providers and share ai settings across v1/v2 ([22f1405](https://github.com/terwer/siyuan-plugin-publisher/commit/22f140599e8be56ba35fcd0009e6917bda92334f))
@@ -186,7 +213,6 @@
 * **yuque-setting:** change alert type ([ff2afe5](https://github.com/terwer/siyuan-plugin-publisher/commit/ff2afe5ca6c5268faa8c0d90e2d1cfe3bb0fada4))
 * **yuque:** fix v2 image upload failure and host dialog error details ([1e1fc1c](https://github.com/terwer/siyuan-plugin-publisher/commit/1e1fc1c09c6214bd8a7e90f62d3edb2493473e94))
 * **yuqueweb:** fix image url escaping and validation in markdown updates ([b5ac4c3](https://github.com/terwer/siyuan-plugin-publisher/commit/b5ac4c3a61a2805cafbd9314e2aca7cf69d3a0d6))
-### Code Refactoring
 * **api:** add optional id and publishcfg parameters to deletepost methods ([a2bd7ca](https://github.com/terwer/siyuan-plugin-publisher/commit/a2bd7ca30485fdb9d8048857b214e7f729ef0873))
 * delete the v1 spa and its build configs ([8ba26d9](https://github.com/terwer/siyuan-plugin-publisher/commit/8ba26d99c9f818b858f7a59a10e1846354477d9a))
 * describe the current state without era wording ([600abea](https://github.com/terwer/siyuan-plugin-publisher/commit/600abeaa2ceeeb6e373fa34c68fb18aab814338e))
@@ -209,7 +235,6 @@
 * **v2:** enhance platform config with env compatibility checks ([d49ffcd](https://github.com/terwer/siyuan-plugin-publisher/commit/d49ffcdbce5892bb060a6465855a95460bee4944))
 * **v2:** provide global error detail handler for picbed settings ([5ecb85f](https://github.com/terwer/siyuan-plugin-publisher/commit/5ecb85fdc20610c506d324a8ec7c1eb943c20727))
 * **v2:** share one compact style for every bridged v1 surface ([2334407](https://github.com/terwer/siyuan-plugin-publisher/commit/233440794998211f5fef136f61cc98e15b6a16cd))
-### Miscellaneous
 * **build:** upgrade build toolchain to vite 8 ([fa4f40d](https://github.com/terwer/siyuan-plugin-publisher/commit/fa4f40d4e3feedc58f01e7d73bf228e2d292ab04))
 * **build:** upgrade to vite 8 build toolchain ([082184d](https://github.com/terwer/siyuan-plugin-publisher/commit/082184dfbbb737c91eeb89823098b176311bc0be))
 * **dependencies:** update package.json and pnpm-lock.yaml for dependency management ([b8ba0de](https://github.com/terwer/siyuan-plugin-publisher/commit/b8ba0defacc5b192fe42bb363d695fca525819f8))

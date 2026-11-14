@@ -54,10 +54,22 @@
 ## 5. Phase 5 — 验证
 
 - [x] 5.1 旧界面：`pnpm build` 通过（回归无退化；含解耦后的包装页/BackPage 容错）
-- [ ] 5.2 新界面：`pnpm build` 通过；宿主手验（快速/详细/批量、视图返回、平台单发、次级面板交互）待用户
+- [x] 5.2 新界面：`pnpm build` 通过；宿主手验（快速/详细/批量、视图返回、平台单发、次级面板交互）
   - 2026-08-24 构建通过（vue-tsc noEmit + vite，dist/index.js 6.63MB/gzip 2.03MB，2223 模块）
+  - 2026-09-24 收口：随 `2.0.0`（2026-09-23 发行）完成宿主手验——`platform-checklist.md` 35 站六格 + SOP §3 帮助引导均在当前界面（快速发布/详细发布/批量/文章管理/平台单发）手验通过
 - [x] 5.3 单测：`pnpm vitest run` 56 文件 / 276 用例通过（删除 2 个冗余 spec 减 6 例，其余全绿、旧界面无退化）
 - [x] 5.4 `pnpm build` 含 vue-tsc noEmit，exit 0
-- [ ] 5.5 同步 docs / checklist；归档前按 OpenSpec 审计（根本修复/最佳实践/不破坏底层/不影响无关模式）
+- [x] 5.5 同步 docs / checklist；归档前按 OpenSpec 审计（根本修复/最佳实践/不破坏底层/不影响无关模式）
+  - docs：`docs/platforms/` 35 篇平台文档（含 `index.md`）；checklist：SOP §3.5「字段指引与帮助引导」35 站回写
+  - 2026-09-24 归档审计结论见文末「归档审计结论」
 
 > 注：原「抽公共 = 界面原生精简视图」方案已修正。本实现真正复用既有成熟实现（`SinglePublishDoPublish` 全套字段与逻辑 + `BatchPublishIndex` + 全套 form 子组件，100% 保留功能），仅把既有发布外壳的 `useRoute/useRouter` 解耦为 props+emit，界面用轻壳内嵌复用。这与 AGENTS.md「桥接优先、100% 保留、禁造轮子」一致，既有发布组件虽作解耦改动但功能/逻辑/样式零变化。
+
+## 归档审计结论（2026-09-24）
+
+- **交付版本**：`2.0.0`（2026-09-23 发行，见 `CHANGELOG.md`）。
+- **根本修复（非 mock）**：五视图状态机、`single_publish` / `batch_publish` 复用壳、管理页次级滑入面板、平台 chip 单发均为真实实现（`src/ui/components/App.vue`、`src/ui/components/publish/SinglePublish.vue`、`src/ui/components/publish/BatchPublish.vue` → `bridge/publish/BatchPublishIndex.vue`、`src/ui/components/ArticleManage.vue`）。
+- **最佳实践**：复用既有成熟表单链与共享 `usePublish`，不新造发布引擎（精简引擎 `useSinglePublish` / `useBatchPublish` 已删除）；导航走 `currentView` 状态机而非 vue-router。
+- **不破坏底层设计**：`usePublish`（`doSinglePublish` / `assignInitAttrs` / 批量循环）与 `publishTransport` 传输层未被改写；`SinglePublishDoPublish` / `BatchPublishIndex` 仅将 `useRoute/useRouter` 解耦为 props+emit，功能、逻辑、样式零变化。
+- **不影响无关模式**：2026-09-24 复跑 `pnpm vitest run` = **72 文件 / 394 用例全绿**；`pnpm build`（vue-tsc noEmit + vite）在本变更 5.4 及 2.0.0 发行前的构建链中通过。
+- **归档动作**：本变更 delta 合并至 `openspec/specs/publish-loop/spec.md` 与 `openspec/specs/shared-publish-ui/spec.md`。

@@ -10,90 +10,9 @@
           <div class="syp-header-title">{{ panelTitle }}</div>
         </div>
         <div class="syp-header-actions">
-          <SypTooltip
-            v-if="isQuickPublishView && quickPublish.state.hasDocument"
-            content=""
-            ellipsis
-            inline-flex
-            tag="button"
-            class="syp-btn syp-btn-quiet syp-btn-text-entry"
-            type="button"
-            :aria-label="t('panel.singlePublish')"
-            @click.stop="openSinglePublishForCurrent"
-          >
-            <LucidePenLine />
-            <span class="syp-btn-text-entry__label">{{ t("panel.singlePublish") }}</span>
-          </SypTooltip>
-          <SypTooltip
-            v-if="isQuickPublishView"
-            content=""
-            ellipsis
-            inline-flex
-            tag="button"
-            class="syp-btn syp-btn-quiet syp-btn-text-entry"
-            type="button"
-            :aria-label="t('panel.batchPublish')"
-            @click.stop="openBatchPublishForCurrent"
-          >
-            <LucideLayers />
-            <span class="syp-btn-text-entry__label">{{ t("panel.batchPublish") }}</span>
-          </SypTooltip>
-          <SypTooltip
-            v-if="!isSettingsView && !isManageView"
-            content=""
-            ellipsis
-            inline-flex
-            tag="button"
-            class="syp-btn syp-btn-quiet syp-btn-text-entry"
-            type="button"
-            :aria-label="t('app.action.openManage')"
-            @click.stop="openManage"
-          >
-            <LucideHouse />
-            <span class="syp-btn-text-entry__label">{{ t("app.action.openManage") }}</span>
-          </SypTooltip>
-          <SypTooltip
-            v-if="isManageView"
-            :content="t('app.back.manage')"
-            ellipsis
-            inline-flex
-            tag="button"
-            class="syp-btn syp-btn-back"
-            type="button"
-            :aria-label="t('app.back.manage')"
-            @click.stop="backFromManage"
-          >
-            <LucideChevronLeft />
-            <span class="syp-btn-back__label">{{ t("app.back.manage") }}</span>
-          </SypTooltip>
-          <SypTooltip
-            v-if="!isSettingsView"
-            content=""
-            ellipsis
-            inline-flex
-            tag="button"
-            class="syp-btn syp-btn-quiet syp-btn-text-entry"
-            type="button"
-            :aria-label="t('app.action.openSettings')"
-            @click.stop="openSettings"
-          >
-            <LucideSettings />
-            <span class="syp-btn-text-entry__label">{{ t("app.action.openSettings") }}</span>
-          </SypTooltip>
-          <SypTooltip
-            v-else
-            :content="settingsBackTitle"
-            ellipsis
-            inline-flex
-            tag="button"
-            class="syp-btn syp-btn-back"
-            type="button"
-            :aria-label="settingsBackTitle"
-            @click.stop="handleSettingsBack"
-          >
-            <LucideChevronLeft />
-            <span class="syp-btn-back__label">{{ settingsBackTitle }}</span>
-          </SypTooltip>
+          <!-- 常驻主导航：入口集合与顺序恒定，任何点击都不隐藏、不替换入口。
+               当前所在项以蓝色高亮表示；「返回上一层」由内容区自己承担，不占用入口。 -->
+          <AppHeaderNav :entries="headerNavEntries" @select="selectHeaderNav" />
           <SypTooltip
             :content="t('app.action.close')"
             ellipsis
@@ -288,6 +207,7 @@
           v-else-if="settings.state.section === 'account' && settings.state.accountView === 'select'"
           :items="settings.selectablePlatforms.value"
           @select="settings.createAccountDraft"
+          @back="handleAccountFlowBack"
         />
 
         <PlatformConfigBridge
@@ -298,6 +218,7 @@
           @validated="handleConfigValidated"
           @saved="handleConfigSaved"
           @show-error-details="showLastConfigValidationError"
+          @back="handleAccountFlowBack"
         />
 
         <PicBedSettings v-else-if="settings.state.section === 'picbed'" />
@@ -342,8 +263,14 @@ import { computed, onBeforeUnmount, onMounted, provide, ref } from "vue"
 import "~/src/ui/assets/base.styl"
 import SypErrorDetailsPanel from "~/src/ui/components/common/SypErrorDetailsPanel.vue"
 import SypTooltip from "~/src/ui/components/common/SypTooltip.vue"
+import AppHeaderNav from "~/src/ui/components/layout/AppHeaderNav.vue"
 import { type AppView } from "~/src/ui/components/layout/UnifiedWorkspaceShell.vue"
 import UnifiedWorkspaceShell from "~/src/ui/components/layout/UnifiedWorkspaceShell.vue"
+import {
+  buildHeaderNavEntries,
+  resolveHeaderNavAction,
+  type HeaderNavKey,
+} from "~/src/ui/composables/useHeaderNav.ts"
 import PlatformCard from "~/src/ui/components/publish/PlatformCard.vue"
 import SinglePublish from "~/src/ui/components/publish/SinglePublish.vue"
 import BatchPublish from "~/src/ui/components/publish/BatchPublish.vue"
@@ -367,11 +294,7 @@ import { useSettings, type SettingsSection } from "~/src/ui/composables/useSetti
 import { MessageError, MessageSuccess, MessageWarning } from "~/src/ui/composables/floatingUi.ts"
 import LucideChevronLeft from "~icons/lucide/chevron-left"
 import LucideSend from "~icons/lucide/send"
-import LucideSettings from "~icons/lucide/settings"
-import LucideHouse from "~icons/lucide/house"
 import LucideX from "~icons/lucide/x"
-import LucidePenLine from "~icons/lucide/pen-line"
-import LucideLayers from "~icons/lucide/layers"
 
 const props = defineProps<{
   /** 宿主指定的初始视图，缺省「快速发布」 */
@@ -413,6 +336,60 @@ provide("show-error-details", showErrorDetails)
 const settingsSwitchLoading = ref(false)
 let settingsSwitchLoadingTimer: number | undefined
 
+/** 入口集合与顺序由 useHeaderNav 唯一决定，不随视图增删 */
+const headerNavEntries = computed(() =>
+  buildHeaderNavEntries({ currentView: currentView.value, hasDocument: quickPublish.state.hasDocument })
+)
+
+/**
+ * 顶部导航点击。
+ *
+ * 入口本身永远是入口：这里只负责「去哪」，绝不把入口换成「返回」。
+ * 动作解析见 resolveHeaderNavAction（不可用→不动；不在该视图→前往；已在该入口→回到根状态）。
+ */
+async function selectHeaderNav(key: HeaderNavKey, disabled: boolean) {
+  const action = resolveHeaderNavAction({ key, disabled, currentView: currentView.value })
+  if (action === "none") {
+    return
+  }
+
+  if (action === "reset") {
+    if (key === "manage") {
+      closeManagePanel()
+      return
+    }
+    await settings.setSection("account")
+    return
+  }
+
+  await navigateToHeaderView(key)
+}
+
+async function navigateToHeaderView(key: HeaderNavKey) {
+  if (key !== "manage") {
+    // 离开文章管理时收起滑入面板，避免面板状态残留到其他视图
+    closeManagePanel()
+  }
+
+  switch (key) {
+    case "quick_publish":
+      await backToQuickPublish()
+      return
+    case "single_publish":
+      await openSinglePublishForCurrent()
+      return
+    case "batch_publish":
+      await openBatchPublishForCurrent()
+      return
+    case "manage":
+      openManage()
+      return
+    case "settings":
+      await openSettings()
+      return
+  }
+}
+
 const panelTitle = computed(() => {
   if (isManageView.value) {
     if (managePanel.value === "single") {
@@ -436,20 +413,6 @@ const panelTitle = computed(() => {
     return t("panel.aiChat")
   }
   return isSettingsView.value ? t("app.panel.settings") : t("app.panel.quickPublish")
-})
-
-const settingsBackTitle = computed(() => {
-  if (settings.state.section === "account" && settings.state.accountView === "config") {
-    const returnTarget = settings.getConfigReturnTarget()
-    if (returnTarget === "quick_publish") {
-      return t("app.back.quickPublish")
-    }
-    return t("app.back.accountList")
-  }
-  if (settings.state.section === "account" && settings.state.accountView !== "list") {
-    return t("app.back.accountList")
-  }
-  return t("app.back.quickPublish")
 })
 
 const publishTitle = computed(() => {
@@ -617,14 +580,6 @@ async function openManage() {
   currentView.value = "manage"
 }
 
-async function backFromManage() {
-  if (managePanel.value) {
-    closeManagePanel()
-    return
-  }
-  await backToQuickPublish()
-}
-
 function openManagePanel(panel: ManagePanel, pageId: string, platformKey = "") {
   if (!pageId) {
     return
@@ -727,7 +682,13 @@ function clearSettingsSwitchLoadingTimer() {
   }
 }
 
-async function handleSettingsBack() {
+/**
+ * 账号子流程（选平台 / 平台配置）的内容区返回。
+ *
+ * 返回顶部导航不承担「返回上一层」：入口恒为入口，退出由所在内容区提供。
+ * 从快速发布卡片「配置」进来的配置页，返回时回到快速发布，与来路一致。
+ */
+async function handleAccountFlowBack() {
   if (settings.state.section === "account" && settings.state.accountView === "config") {
     const returnTarget = settings.getConfigReturnTarget()
     if (returnTarget === "quick_publish") {
@@ -932,56 +893,14 @@ async function retryInit() {
 .syp-header-actions
   display flex
   align-items center
-  gap 6px
+  gap 8px
   flex-shrink 0
 
-.syp-btn-quiet
-  min-width 28px
-  height 28px
-  padding 0
-  background transparent
-  color var(--b3-theme-on-surface-light, $syp-text-tertiary)
-  border-radius 999px
-
-  &:hover
-    color var(--b3-theme-primary, $syp-accent)
-    background var(--b3-theme-surface-light, $syp-accent-hover-bg)
-
-.syp-btn-text-entry
-  display inline-flex
-  align-items center
-  padding 0 10px
-  font-size 13px
-  font-weight 500
-  white-space nowrap
-
-  svg
-    width 15px
-    height 15px
-    flex-shrink 0
-    margin-right 0
-
-  .syp-btn-text-entry__label
-    line-height 1
-    margin-left 7px
-
-.syp-btn-back
-  display inline-flex
-  align-items center
-  gap 4px
-  height 28px
-  padding 0 8px
-  background var(--b3-theme-surface-light, transparent)
-  border 1px solid var(--b3-border-color, transparent)
-  color var(--b3-theme-on-surface, $syp-text-tertiary)
-  border-radius 999px
-  font-size 12px
-
-  &:hover
-    color var(--b3-theme-primary, $syp-accent)
-    background var(--b3-theme-surface-light, $syp-accent-hover-bg)
-
-.syp-btn-back__label
+// 标题只做位置提示，窄面板下让位给常驻导航：截断而不是挤压导航
+.syp-header-title
+  min-width 0
+  overflow hidden
+  text-overflow ellipsis
   white-space nowrap
 
 .syp-settings-switch-loading
@@ -995,9 +914,9 @@ async function retryInit() {
   margin-bottom 8px
   padding 6px 10px
   border-radius 999px
-  border 1px solid #d8e7ff
-  background #f5f9ff
-  color #2563eb
+  border 1px solid $syp-border-primary
+  background rgba(64, 128, 255, 0.10)
+  color $syp-primary
   font-size 12px
   font-weight 600
   box-shadow 0 4px 14px rgba(22, 119, 255, 0.10)
@@ -1006,7 +925,7 @@ async function retryInit() {
   width 7px
   height 7px
   border-radius 999px
-  background #1677ff
+  background $syp-primary
   animation syp-settings-loading-pulse 0.9s ease-in-out infinite alternate
 
 @keyframes syp-settings-loading-pulse

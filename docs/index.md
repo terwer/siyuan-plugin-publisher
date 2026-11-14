@@ -31,7 +31,7 @@ features:
     details: 已发布与未发布的文档集中列出，可按「发布源笔记本」隔离公开与非公开内容，并逐行进入发布。
   - icon: 🖼
     title: 图床可选
-    details: 可用平台原生直传、内置的阿里云 OSS 与腾讯云 COS，或本机 PicGo，按平台分别指定。
+    details: 可用平台原生直传、内置的阿里云 OSS 与腾讯云 COS，或本机 PicGo，按平台分别指定；源码模式可预览图床替换效果。
   - icon: 🤖
     title: AI 辅助
     details: 用思源内置 AI 或自定义的 OpenAI 兼容接口，自动生成标题、摘要、标签与分类。

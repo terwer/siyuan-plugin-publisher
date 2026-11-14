@@ -37,3 +37,13 @@
 - [x] 5.1 运行 `pnpm vitest run src/helpConfigs/registry.spec.ts src/platforms/dynamicConfig.spec.ts`。
 - [x] 5.2 运行 `pnpm build`。
 - [x] 5.3 检查 `exampleMatching` / `PageHelpExample` / `examples` 残留引用为 0。
+
+## 归档审计结论（2026-09-24）
+
+- **交付版本**：`2.0.0`（2026-09-23 发行）。
+- **根本修复（非 mock）**：动态平台实例 key（`platform-config/<platformKey>-<id>`）由 `HelpRegistry.get()` 归一化命中预置平台 help config，实现落在 `src/helpConfigs/registry.ts`（复用 `getSubPlatformTypeByKey()`），非占位/兜底文案。
+- **最佳实践**：不自造帮助专属 key 解析或示例级 hash，直接复用 `src/platforms/dynamicConfig.ts` 的既有 key 规则（`getSubPlatformTypeByKey()` / `normalizePlatformKey()`），与 AGENTS.md「平台 key 只允许一种标准」一致。
+- **不破坏底层设计**：`getField()` / `getTour()` 改为复用 `get()` 的 fallback 链，精确匹配优先级与目录 `_default` 兜底行为保持不变（`registry.spec.ts` 既有断言全绿）。
+- **不影响无关模式**：`exampleMatching` / `PageHelpExample` / `examples` 残留引用为 0（2026-09-24 复核）；2026-09-24 复跑 `pnpm vitest run` = **72 文件 / 394 用例全绿**、`pnpm lint`（vue-tsc --noEmit）exit 0。
+- **归档动作**：本变更 delta 合并至 `openspec/specs/platform-guide-example-matching/spec.md`。
+

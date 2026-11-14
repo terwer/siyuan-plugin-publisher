@@ -9,14 +9,42 @@
 
 import { defineConfig } from "vitest/config"
 import vue from "@vitejs/plugin-vue"
-import { resolve } from "path"
+import { readFileSync, readdirSync, statSync } from "node:fs"
+import { join, relative, resolve } from "node:path"
 import AutoImport from "unplugin-auto-import/vite"
 import Icons from "unplugin-icons/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import Components from "unplugin-vue-components/vite"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
 
+/**
+ * UI 源码快照（styl / vue 原文），以 `__SYP_UI_SOURCES__` 注入测试环境。
+ *
+ * 用例里读不到这些文件：本配置给 `node:fs` 打了浏览器桩，且 `.styl` 走 CSS 管线后
+ * `?raw` / `?inline` 都拿到空串。这里在 Node 侧（配置文件本身）读取一次即可，
+ * 主题一致性守卫（src/ui/assets/themeParity.spec.ts）依赖它扫描颜色声明。
+ */
+function collectUiSources(): Record<string, string> {
+  const root = resolve(__dirname, "src/ui")
+  const sources: Record<string, string> = {}
+  const walk = (dir: string) => {
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry)
+      if (statSync(full).isDirectory()) {
+        walk(full)
+      } else if (entry.endsWith(".styl") || entry.endsWith(".vue")) {
+        sources[relative(root, full).split("\\").join("/")] = readFileSync(full, "utf-8")
+      }
+    }
+  }
+  walk(root)
+  return sources
+}
+
 export default defineConfig({
+  define: {
+    __SYP_UI_SOURCES__: JSON.stringify(collectUiSources()),
+  },
   plugins: [
     vue(),
     Icons({

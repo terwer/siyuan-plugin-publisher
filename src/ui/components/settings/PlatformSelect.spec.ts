@@ -55,6 +55,20 @@ describe("PlatformSelect", () => {
 
     expect(wrapper.text()).toContain(preset.platformName)
     expect(wrapper.text()).toContain(description)
-    expect(wrapper.find("button").attributes("aria-label")).toContain(description)
+    expect(wrapper.find(".syp-platform-select-item").attributes("aria-label")).toContain(description)
+  })
+
+  it("keeps a back entry inside the page so the stable header nav never has to become one", async () => {
+    const wrapper = mount(PlatformSelect, {
+      props: { items: [] },
+      global: {
+        plugins: [createI18n({ legacy: false, locale: "zh_CN", messages: { zh_CN: zhCN } })],
+      },
+    })
+
+    const back = wrapper.find(".syp-settings-page__back")
+    expect(back.exists()).toBe(true)
+    await back.trigger("click")
+    expect(wrapper.emitted("back")).toHaveLength(1)
   })
 })

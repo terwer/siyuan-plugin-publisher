@@ -162,6 +162,10 @@ class BaseWebApi extends WebApi {
     return await this.baseExtendApi.preEditPost(post, id, publishCfg)
   }
 
+  public async previewImageProcess(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    return await this.baseExtendApi.previewImageProcess(post, id, publishCfg)
+  }
+
   // 兼容的方法
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     try {

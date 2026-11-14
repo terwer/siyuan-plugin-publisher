@@ -9,7 +9,7 @@
 - 验证口径：Cfg / Pub / Upd / Del / Img（及 T2a 的 Inv）；失败项在本变更 `tasks.md` 中开子任务修复。
 - **语雀 API**（`common_Yuque`）：需语雀专业会员属平台政策，**不计入插件阻塞**；持会员账号验收通过即记 ✅（#1 已验）。
 - 全部 T1 通过后：**Gate C** 标记旧界面废弃（默认新界面，保留旧界面开关关闭时回退至 Gate D 前）。
-- **Gate D**：连续 **3 个发行版本** 后移除旧界面的 iframe/SPA 宿主路径（对齐 `refactor-ui-foundation`）。
+- **Gate D**：连续 **3 个发行版本** 后移除旧界面的 iframe/SPA 宿主路径（判定标准见 `openspec/specs/ui-migration/spec.md`）。
 
 ## Capabilities
 
