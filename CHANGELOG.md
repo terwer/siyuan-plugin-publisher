@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.1...siyuan-plugin-publisher-v2.2.2) (2026-11-14)
+
+
+### Bug Fixes
+
+* **agent:** exclude the CDP endpoint from the HTTP proxy ([db146ef](https://github.com/terwer/siyuan-plugin-publisher/commit/db146eff1556b734c554392634a0722ad1462334))
+
 ## [2.2.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.0...siyuan-plugin-publisher-v2.2.1) (2026-11-14)
 ### Bug Fixes
 * anchor the plugin settings entry so desktop opens a popover, not the mobile sheet ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([f43cc80](https://github.com/terwer/siyuan-plugin-publisher/commit/f43cc80806f419bd8c8b7901ecb87df961b4ae75))
