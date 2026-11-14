@@ -8,7 +8,7 @@
  */
 
 import { computed, reactive } from "vue"
-import { DateUtil, HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
+import { DateUtil, JsonUtil, StrUtil } from "zhi-common"
 import { useNotebookOptions, NotebookOption } from "~/src/composables/useNotebookOptions.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -20,6 +20,7 @@ import { Utils } from "~/src/utils/utils.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
+import { removeTitleNumber } from "~/src/utils/titleNumber.ts"
 
 /**
  * 文章管理某一行（供共享组件渲染）。
@@ -99,7 +100,7 @@ export const useArticleManage = () => {
   const createRow = (post: any, dynamicConfigArray: DynamicConfig[]): ArticleManageRow => {
     let title = post.title
     if (pref.value.fixTitle) {
-      title = HtmlUtil.removeTitleNumber(title).replace(/\.md/g, "")
+      title = removeTitleNumber(title).replace(/\.md/g, "")
     }
     const shortTitle = StrUtil.getByLength(title, MAX_TITLE_LENGTH, false)
     const content = LuteUtil.mdToHtml(post.description)

@@ -22,7 +22,6 @@ import {
   WebApi,
   WebConfig,
   YamlConvertAdaptor,
-  YamlFormatObj,
   YamlStrategy,
 } from "zhi-blog-api"
 import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
@@ -45,6 +44,8 @@ import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
+import { removeMarkdownHeadingNumbers, removeTitleNumber } from "~/src/utils/titleNumber.ts"
 import { SypConfig } from "~/syp.config.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
@@ -230,7 +231,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
     const pref = getReadOnlyPublishPreferenceSetting()
     if (pref.value.fixTitle) {
-      post.title = HtmlUtil.removeTitleNumber(post.title).replace(/\.md/g, "")
+      post.title = removeTitleNumber(post.title).replace(/\.md/g, "")
     }
 
     this.logger.debug("处理MD文件名完成，post", { post: toRaw(post) })
@@ -343,6 +344,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 处理外链
     const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
     const pref = getReadOnlyPublishPreferenceSetting()
+
+    // 去除正文标题编号（思源「标题块自动编号」会随 Markdown 导出写进标题文本）
+    if (pref.value.fixTitle) {
+      md = removeMarkdownHeadingNumbers(md)
+    }
+
     const outerLinkRegex = /\[(.+?)]\(siyuan:\/\/blocks\/(\d+-\w+)\)/g
     md = await this.replaceOuterLinks(md, outerLinkRegex, { pref, cfg, setting })
 
@@ -408,11 +415,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           this.checkPropertiesStartsWith(defaultYaml, "siyuan://") ||
           post.editMode !== PageEditMode.EditMode_source
         ) {
-          // 属性合并
-          const newYfmObj = new YamlFormatObj()
-          const newYamlObj = await YamlUtil.yaml2ObjAsync(post.yaml)
-          newYfmObj.yamlObj = newYamlObj
-          const yfmObj = yamlAdaptor.convertToYaml(post, newYfmObj, cfg)
+          // 按平台适配器重新生成，并保留已保存 YAML 里适配器不负责的字段（issue #2054）
+          const yfmObj = await buildPlatformYamlFormatObj(yamlAdaptor, post, cfg)
           // 同步发布内容
           post.yaml = yfmObj.formatter
           post.markdown = yfmObj.mdFullContent
@@ -444,7 +448,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // // 前面改过属性，需要再生成一次
     // const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     // if (null !== yamlAdaptor) {
-    //   let yamlObj: YamlFormatObj
+    //   let yamlObj: Record<string, any>
     //   const defaultYaml = await YamlUtil.yaml2ObjAsync(post.yaml)
     //   // 不确定那个字段才代表，所以全部检测一遍
     //   // 非源码模式还是需要转换的
@@ -724,7 +728,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       // processedTitle
       let processedTitle = title
       if (pref.value.fixTitle) {
-        processedTitle = HtmlUtil.removeTitleNumber(processedTitle)
+        processedTitle = removeTitleNumber(processedTitle)
       }
 
       // outerLink

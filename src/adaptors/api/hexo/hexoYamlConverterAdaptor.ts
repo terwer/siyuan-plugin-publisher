@@ -64,28 +64,28 @@ class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // permalink
     if (cfg.yamlLinkEnabled) {
+      // 发布链路上的 cfg 是从设置反序列化得到的普通对象（不是配置类实例），
+      // 用 instanceof 判断平台会在发布时恒为 false，导致自定义预览规则被静默忽略（issue #2054）
+      const githubCfg = cfg as CommonGithubConfig
       let link = "/post/" + post.wp_slug + ".html"
-      if (cfg instanceof CommonGithubConfig) {
-        const githubCfg = cfg as CommonGithubConfig
-        if (!StrUtil.isEmptyString(cfg.previewPostUrl)) {
-          link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-          const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-          const datearr = created.split(" ")[0]
-          const numarr = datearr.split("-")
-          this.logger.debug("created numarr=>", numarr)
-          const y = numarr[0]
-          const m = numarr[1]
-          const d = numarr[2]
-          link = link.replace(/\[yyyy]/g, y)
-          link = link.replace(/\[MM]/g, m)
-          link = link.replace(/\[mm]/g, m)
-          link = link.replace(/\[dd]/g, d)
+      if (!StrUtil.isEmptyString(githubCfg?.previewPostUrl)) {
+        link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
+        const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+        const datearr = created.split(" ")[0]
+        const numarr = datearr.split("-")
+        this.logger.debug("created numarr=>", numarr)
+        const y = numarr[0]
+        const m = numarr[1]
+        const d = numarr[2]
+        link = link.replace(/\[yyyy]/g, y)
+        link = link.replace(/\[MM]/g, m)
+        link = link.replace(/\[mm]/g, m)
+        link = link.replace(/\[dd]/g, d)
 
-          if (yamlFormatObj.yamlObj.categories?.length > 0) {
-            link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
-          } else {
-            link = link.replace(/\/\[cats]/, "")
-          }
+        if (yamlFormatObj.yamlObj.categories?.length > 0) {
+          link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
+        } else {
+          link = link.replace(/\/\[cats]/, "")
         }
       }
       yamlFormatObj.yamlObj.permalink = link

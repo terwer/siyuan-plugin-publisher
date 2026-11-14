@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
+import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
 import { computed, onMounted, reactive, toRaw } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -207,20 +208,11 @@ const handlePostToHoHtml = async (post: Post) => {
   let yfmObj: YamlFormatObj = new YamlFormatObj()
 
   switch (post.yamlType) {
-    case YamlStrategy.Yaml_custom_auto: {
-      const key = formData.apiType
-      yfmObj = formData.yamlAdaptor.convertToYaml(post, undefined, formData.cfg)
-      logger.debug("常规发布，自动生成对应平台的YAML, =>", key)
-      break
-    }
-
+    case YamlStrategy.Yaml_custom_auto:
     case YamlStrategy.Yaml_custom_hand: {
-      // 属性合并
-      const newYfmObj = new YamlFormatObj()
-      const newYamlObj = await YamlUtil.yaml2ObjAsync(post.yaml)
-      newYfmObj.yamlObj = newYamlObj
-      yfmObj = formData.yamlAdaptor.convertToYaml(post, newYfmObj, formData.cfg)
-      logger.debug("常规发布，修改过YAML")
+      // 按平台适配器重新生成 YAML，并保留已保存 YAML 里适配器不负责的字段（issue #2054）
+      yfmObj = await buildPlatformYamlFormatObj(formData.yamlAdaptor, post, formData.cfg)
+      logger.debug("常规发布，按平台适配器生成 YAML, =>", formData.apiType)
       break
     }
 

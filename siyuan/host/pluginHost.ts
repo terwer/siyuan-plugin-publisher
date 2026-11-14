@@ -13,6 +13,7 @@ import { createSiyuanAppLogger } from "~/siyuan/appLogger.ts"
 import PublisherPlugin from "~/siyuan/index.ts"
 import { createApp, type InitialView } from "./createApp.ts"
 import type { SettingsSection } from "~/src/ui/composables/useSettings.ts"
+import { resolveMenuPlacement } from "~/src/utils/menuPlacement.ts"
 
 const MENU_MOUNT_SELECTOR = ".publisher-menu-content"
 
@@ -238,21 +239,19 @@ export class PluginHost {
   }
 
   private openMenu(menu: Menu, anchorElement?: HTMLElement) {
-    if (this.pluginInstance.isMobile) {
+    const placement = resolveMenuPlacement(
+      this.pluginInstance.isMobile,
+      anchorElement?.getBoundingClientRect(),
+      document.body.clientWidth
+    )
+    if (placement.mode === "fullscreen") {
       menu.fullscreen("all")
       return
     }
-
-    const rect = anchorElement?.getBoundingClientRect()
-    if (!rect) {
-      menu.fullscreen("all")
-      return
-    }
-
     menu.open({
-      x: rect.left,
-      y: rect.bottom,
-      isLeft: true,
+      x: placement.x,
+      y: placement.y,
+      isLeft: placement.isLeft,
     })
   }
 

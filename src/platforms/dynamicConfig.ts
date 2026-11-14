@@ -570,10 +570,14 @@ export function getDynPostidKey(platformKey: string): string {
 /**
  * 获取动态YAML的key
  *
- * @param platformKey
+ * 思源的自定义属性名只允许小写字母、数字和连字符，内核保存时会统一规范成小写
+ * （siyuan-note/siyuan#16447）。这里直接生成规范形态，读写才会命中同一个属性；
+ * 含大写的历史属性由读取侧做一次大小写兼容，见 usePublish 的 readPlatformYamlAttr。
+ *
+ * @param platformKey 平台 key，例如 `github_Hexo-abc123`
  */
 export function getDynYamlKey(platformKey: string): string {
-  return "custom-" + platformKey.replace(/_/g, "-") + "-yaml"
+  return ("custom-" + platformKey.replace(/_/g, "-") + "-yaml").toLowerCase()
 }
 
 /**
