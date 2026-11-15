@@ -73,6 +73,9 @@ export const useWordpressApi = async (key?: string, newCfg?: WordpressConfig) =>
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // 特色图片：与其它能力位一样在这里统一声明。发布链路的配置是设置反序列化出来的普通对象，
+  // 只靠构造器默认值不够；只有 WordPress 打开，其它 MetaWeblog 平台保持关闭。
+  cfg.featuredImageEnabled = true
   // picbed service
   cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true

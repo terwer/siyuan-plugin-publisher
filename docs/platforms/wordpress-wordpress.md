@@ -28,6 +28,12 @@ WordPress 后台 → 用户 → 编辑 → 滚动到「应用程序密码」→ 
 1. 点「验证」→ 通过后保存。
 2. 快速发布 → 选 WordPress → 发布。
 
+## 五、特色图片
+
+发布页切到「详细模式」后有「特色图片」一栏（仅 WordPress 支持）：填思源资源相对路径（如 `assets/cover.png`）或完整图片链接，也可以点「取正文首图」直接引用正文第一张图片。图片会先上传到 WordPress 媒体库，再设为该文章的**特写图（Featured Image）**。
+
+设置会被记在文档的 WordPress 平台属性里（`featured_image`），下次打开发布页会自动回填；清空后重新发布会移除已设置的特写图。
+
 ## 常见问题
 
 - **XML-RPC 被禁用**：检查 WordPress 是否开启 XML-RPC，安全插件是否拦截 `/xmlrpc.php`。

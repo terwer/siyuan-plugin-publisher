@@ -34,6 +34,10 @@ export const wordpressHelpConfig: PageHelpConfig = {
       q: "图片上传失败？",
       a: "「图床服务」选「当前平台」时图片经 XML-RPC 上传到 WordPress 媒体库，请确认站点媒体库权限与网络连通；也可先在设置里配置好 PicGo，再改选「PicGo 强烈推荐」。",
     },
+    {
+      q: "怎么设置文章特色图片？",
+      a: "发布页「详细模式」下的「特色图片」一栏填写图片地址（思源资源如 assets/cover.png 或完整链接），也可点「取正文首图」直接引用正文第一张图；图片会先上传到媒体库再设为该文章的特写图。",
+    },
   ],
   tour: [
     {

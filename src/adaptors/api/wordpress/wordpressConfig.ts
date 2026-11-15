@@ -42,6 +42,10 @@ class WordpressConfig extends MetaweblogConfig {
     this.categoryType = CategoryTypeEnum.CategoryType_Multi
     this.allowCateChange = true
     this.knowledgeSpaceEnabled = false
+
+    // WordPress 的文章支持特写图（featured image）：图片先上传到媒体库拿到附件 ID，
+    // 再随 metaWeblog.newPost / metaWeblog.editPost 的文章结构提交，见 WordpressApiAdaptor。
+    this.featuredImageEnabled = true
   }
 }
 
