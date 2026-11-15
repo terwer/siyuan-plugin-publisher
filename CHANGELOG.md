@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.1...siyuan-plugin-publisher-v2.3.0) (2026-11-15)
+
+
+### Features
+
+* support a featured image when publishing to WordPress ([cf04256](https://github.com/terwer/siyuan-plugin-publisher/commit/cf04256017e0cb77258a19593c01f45d1da80678))
+* upload a local image as the WordPress featured image ([73b0bfb](https://github.com/terwer/siyuan-plugin-publisher/commit/73b0bfb66289f71ce9d53ec5bbfb0952cd316b2c))
+
+
+### Bug Fixes
+
+* **agent:** exclude the CDP endpoint from the HTTP proxy ([db146ef](https://github.com/terwer/siyuan-plugin-publisher/commit/db146eff1556b734c554392634a0722ad1462334))
+
+
+### Miscellaneous
+
+* **deps:** bump zhi-siyuan-picgo to 3.1.0 ([1d06363](https://github.com/terwer/siyuan-plugin-publisher/commit/1d06363a7756787f841ae67738905234d4852c0c))
+
 ## [2.2.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.0...siyuan-plugin-publisher-v2.2.1) (2026-11-14)
 ### Bug Fixes
 * anchor the plugin settings entry so desktop opens a popover, not the mobile sheet ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([f43cc80](https://github.com/terwer/siyuan-plugin-publisher/commit/f43cc80806f419bd8c8b7901ecb87df961b4ae75))
