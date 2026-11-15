@@ -133,7 +133,7 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       post.post_status = postStatus
     }
 
-    const postStruct = this.createPostStruct(post)
+    const postStruct = this.createPostStruct(post, false)
     this.logger.debug("postStruct=>", postStruct)
     let ret = await this.metaweblogCall(MetaweblogConstants.METHOD_NEW_POST, [
       this.cfg.blogid,
@@ -167,7 +167,7 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       post.post_status = postStatus
     }
 
-    const postStruct = this.createPostStruct(post)
+    const postStruct = this.createPostStruct(post, true)
     this.logger.debug("postStruct=>", postStruct)
     const ret = await this.metaweblogCall(MetaweblogConstants.METHOD_EDIT_POST, [
       postid,
@@ -285,9 +285,10 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
   /**
    * 适配文章字段
    * @param post 原始文章
+   * @param isEdit 是否为更新已有文章
    * @private
    */
-  private createPostStruct(post: Post): object {
+  private createPostStruct(post: Post, isEdit = false): object {
     const postObj = {}
 
     if (!StrUtil.isEmptyString(post.title)) {
@@ -355,7 +356,23 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       })
     }
 
+    this.extendPostStruct(post, postObj, isEdit)
+
     return postObj
+  }
+
+  /**
+   * 平台私有字段扩展点。
+   *
+   * 默认不追加任何字段，保持既有 MetaWeblog 平台的文章结构不变；
+   * 只有需要平台私有字段（例如 WordPress 的特写图附件 ID）的适配器才覆盖本方法。
+   *
+   * @param post - 文章
+   * @param postStruct - 已生成的公共字段
+   * @param isEdit - 是否为更新已有文章
+   */
+  protected extendPostStruct(post: Post, postStruct: Record<string, any>, isEdit: boolean): void {
+    // 默认无扩展，子类按平台协议自行追加
   }
 }
 

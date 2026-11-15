@@ -85,6 +85,14 @@ export class MetaweblogConfig extends CommonBlogConfig {
    */
   public isHostSessionFetch = false
 
+  /**
+   * 是否支持发布时设置特色图片（平台侧的特写图 / featured image）。
+   *
+   * 默认关闭：只有平台协议确实提供该能力时才在平台配置里打开。关闭时发布表单不展示该字段，
+   * 发布链路也不会读取或改写它，其它 MetaWeblog 平台的行为完全不变。
+   */
+  public featuredImageEnabled = false
+
   constructor(home: string, apiUrl: string, username: string, password: string, middlewareUrl?: string) {
     super(home, apiUrl, username, password, middlewareUrl)
 
