@@ -11,10 +11,17 @@
 import { computed, reactive, ref, watch } from "vue"
 import { Post } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
+import { ElMessage } from "element-plus"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { extractFirstImageOfPost, getFeaturedImage } from "~/src/utils/featuredImage.ts"
+import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
+import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { extractFirstImageOfPost, getFeaturedImage, uploadFeaturedImageAsset } from "~/src/utils/featuredImage.ts"
 
+const logger = createAppLogger("publish-featured-image")
 const { t } = useAppI18n()
+const { kernelApi } = useSiyuanApi()
+const { isInSiyuanOrSiyuanNewWin } = useSiyuanDevice()
 
 const props = defineProps({
   modelValue: {
@@ -32,6 +39,11 @@ const formData = reactive({
 })
 
 const previewBroken = ref(false)
+const uploading = ref(false)
+const fileInput = ref<HTMLInputElement>()
+
+// 上传依赖思源内核的资源接口，只在思源宿主内提供
+const uploadEnabled = computed(() => isInSiyuanOrSiyuanNewWin())
 
 // 正文里有图片时，允许一键引用正文首图，省去手填地址
 const bodyImage = computed(() => extractFirstImageOfPost(post.value))
@@ -65,6 +77,33 @@ const useBodyImage = () => {
   syncValue()
 }
 
+const pickImageFile = () => {
+  fileInput.value?.click()
+}
+
+const onImageFileChange = async (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  // 清空选择，便于再次选择同一个文件
+  input.value = ""
+  if (!file) {
+    return
+  }
+
+  uploading.value = true
+  try {
+    const assetPath = await uploadFeaturedImageAsset(kernelApi, file)
+    formData.url = assetPath
+    syncValue()
+    ElMessage.success(t("publisher.post.featuredImage.uploadSuccess"))
+  } catch (e: any) {
+    logger.error("上传特色图片失败", e)
+    ElMessage.error(e?.message || t("publisher.post.featuredImage.uploadFailed"))
+  } finally {
+    uploading.value = false
+  }
+}
+
 const onPreviewError = () => {
   previewBroken.value = true
 }
@@ -80,10 +119,26 @@ const onPreviewError = () => {
           :placeholder="t('publisher.post.featuredImage.tip')"
           @input="syncValue"
         />
-        <el-button v-if="!StrUtil.isEmptyString(bodyImage)" class="featured-image__pick" @click="useBodyImage">
+        <el-button
+          v-if="uploadEnabled"
+          class="featured-image__action"
+          :loading="uploading"
+          :disabled="uploading"
+          @click="pickImageFile"
+        >
+          {{ t("publisher.post.featuredImage.upload") }}
+        </el-button>
+        <el-button v-if="!StrUtil.isEmptyString(bodyImage)" class="featured-image__action" @click="useBodyImage">
           {{ t("publisher.post.featuredImage.useBodyImage") }}
         </el-button>
       </div>
+      <input
+        ref="fileInput"
+        class="featured-image__file"
+        type="file"
+        accept="image/*"
+        @change="onImageFileChange"
+      />
       <div v-if="!StrUtil.isEmptyString(previewUrl) && !previewBroken" class="featured-image__preview">
         <img :src="previewUrl" alt="" @error="onPreviewError" />
       </div>
@@ -100,8 +155,11 @@ const onPreviewError = () => {
     gap 8px
     align-items center
 
-  &__pick
+  &__action
     flex-shrink 0
+
+  &__file
+    display none
 
   &__preview
     margin-top 8px

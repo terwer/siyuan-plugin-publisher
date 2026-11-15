@@ -18,7 +18,9 @@ import {
   isFeaturedImageEnabled,
   readFeaturedImageFromYaml,
   syncFeaturedImageYaml,
+  uploadFeaturedImageAsset,
   writeFeaturedImageToYaml,
+  type FeaturedImageAssetKernel,
   type FeaturedImagePost,
 } from "~/src/utils/featuredImage.ts"
 
@@ -156,5 +158,46 @@ describe("featuredImage util", () => {
     empty.markdown = "no image"
     expect(extractFirstImageOfPost(empty)).toBe("")
     expect(extractFirstImageOfPost(undefined)).toBe("")
+  })
+})
+
+describe("featuredImage upload", () => {
+  const createFile = () => new File(["x"], "cover.png", { type: "image/png" })
+
+  it("uploads the picked file to the siyuan assets dir and returns its path", async () => {
+    const formDataSpy: FormData[] = []
+    const kernel: FeaturedImageAssetKernel = {
+      uploadAsset: (formData) => {
+        formDataSpy.push(formData)
+        return Promise.resolve({ errFiles: [], succMap: { "cover.png": "assets/cover-20261115.png" } })
+      },
+    }
+
+    const path = await uploadFeaturedImageAsset(kernel, createFile())
+
+    expect(path).toBe("assets/cover-20261115.png")
+    expect(formDataSpy).toHaveLength(1)
+    expect(formDataSpy[0].get("assetsDirPath")).toBe("/assets/")
+    expect(formDataSpy[0].get("file[]")).toBeInstanceOf(File)
+  })
+
+  it("reports a failure when the kernel returns no uploaded path", async () => {
+    const kernel: FeaturedImageAssetKernel = {
+      uploadAsset: () => Promise.resolve({ errFiles: ["cover.png"], succMap: {} }),
+    }
+
+    await expect(uploadFeaturedImageAsset(kernel, createFile())).rejects.toThrow("cover.png")
+  })
+
+  it("reports a failure when the kernel returns nothing at all", async () => {
+    const kernel: FeaturedImageAssetKernel = { uploadAsset: () => Promise.resolve(undefined) }
+
+    await expect(uploadFeaturedImageAsset(kernel, createFile())).rejects.toThrow("图片上传失败")
+  })
+
+  it("rejects when no file was picked", async () => {
+    const kernel: FeaturedImageAssetKernel = { uploadAsset: () => Promise.resolve({ succMap: {} }) }
+
+    await expect(uploadFeaturedImageAsset(kernel, undefined as unknown as File)).rejects.toThrow("请选择要上传的图片")
   })
 })

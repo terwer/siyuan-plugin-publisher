@@ -200,3 +200,43 @@ export const extractFirstImageOfPost = (post?: Post): string => {
 
   return ""
 }
+
+/**
+ * 上传特色图片所需的宿主内核能力（只依赖 uploadAsset 这一个入口）。
+ */
+export interface FeaturedImageAssetKernel {
+  uploadAsset(formData: FormData): Promise<any>
+}
+
+/**
+ * 把本地图片上传到思源资源库，返回可直接填进「特色图片」的相对路径。
+ *
+ * 上传后得到的是 `assets/<文件名>` 这类思源资源相对路径，发布时再随文章上传到平台，
+ * 与本字段既有的取值规则一致。
+ *
+ * @param kernel - 思源内核 API
+ * @param file - 用户选择的本地图片文件
+ */
+export const uploadFeaturedImageAsset = async (
+  kernel: FeaturedImageAssetKernel,
+  file: File
+): Promise<string> => {
+  if (!file) {
+    throw new Error("请选择要上传的图片")
+  }
+
+  const formData = new FormData()
+  formData.append("assetsDirPath", "/assets/")
+  formData.append("file[]", file)
+
+  const data = await kernel.uploadAsset(formData)
+  const succMap = (data?.succMap ?? {}) as Record<string, string>
+  const uploadedPath = Object.values(succMap).find((path) => typeof path === "string" && path !== "")
+  if (!uploadedPath) {
+    const errFiles = Array.isArray(data?.errFiles) ? data.errFiles.join(", ") : ""
+    throw new Error(errFiles ? `图片上传失败：${errFiles}` : "图片上传失败，请重试")
+  }
+
+  return uploadedPath
+}
+
