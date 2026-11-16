@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.0...siyuan-plugin-publisher-v2.3.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **deps:** bump actions/cache to v6 ([b7cb214](https://github.com/terwer/siyuan-plugin-publisher/commit/b7cb21489199d1057fce0c2cf6dcd4ad9191ea38))
+* **deps:** bump actions/checkout to v7 ([3c022a0](https://github.com/terwer/siyuan-plugin-publisher/commit/3c022a091f106066a0a3e0734efda52901c324c0))
+* **deps:** bump vue from 3.5.24 to 3.5.45 ([77166e6](https://github.com/terwer/siyuan-plugin-publisher/commit/77166e60f94503311a3de39b9e7486b53bef46a5))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump @vitejs/plugin-vue from 6.0.7 to 6.0.11 ([995bdfa](https://github.com/terwer/siyuan-plugin-publisher/commit/995bdfa5896868f93b965e02922071ea00973f2f))
+* **deps-dev:** bump vite from 8.3.4 to 8.3.8 ([d69ae1f](https://github.com/terwer/siyuan-plugin-publisher/commit/d69ae1f8ebc4b75ee426a1072cc20d124840d3fd))
+* **deps-dev:** bump vue-tsc from 3.3.13 to 3.3.14 ([4a66bef](https://github.com/terwer/siyuan-plugin-publisher/commit/4a66bef481352bcd306dd288d0a4bf0acb663eb6))
+* **deps:** bump @types/node from 22.19.1 to 24.19.2 ([daa2aa5](https://github.com/terwer/siyuan-plugin-publisher/commit/daa2aa5f1adbc935fc282bc45d0d75223b6a0797))
+
 ## [2.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.1...siyuan-plugin-publisher-v2.3.0) (2026-11-15)
 ### Features
 * support a featured image when publishing to wordpress ([cf04256](https://github.com/terwer/siyuan-plugin-publisher/commit/cf04256017e0cb77258a19593c01f45d1da80678))
