@@ -142,6 +142,11 @@ export default defineConfig({
       output: {
         entryFileNames: "[name].js",
         chunkFileNames: "chunks/[name].js",
+        // 思源用 window.require 加载插件，不支持插件目录内的相对路径解析：
+        // 一旦产物首行变成 require("./chunks/xxx.js")，插件直接抛错加载失败。
+        // zhi-siyuan-picgo 3.1.x 依赖的 universal-picgo 带动态 import（AWS SDK 等），
+        // 会被拆成独立 chunk，所以这里强制内联，保证 index.js 始终是单文件。
+        inlineDynamicImports: true,
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith(".css")) {
             return "index.css"
