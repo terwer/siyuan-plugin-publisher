@@ -53,8 +53,13 @@ export default class PublisherPlugin extends Plugin {
   }
 
   openSetting(): void {
-    // 思源宿主「插件设置」入口：直接打开 设置视图
-    void this.pluginHost.show({ initialView: "settings" })
+    // 思源宿主「插件设置」入口：直接打开 设置视图。
+    // 必须带上顶栏图标的锚点：桌面端没有锚点时会落到移动端的全屏菜单，
+    // 出现「返回上一层」标题条与空内容容器，把插件设置顶到容器下方（issue #2054）
+    void this.pluginHost.show({
+      initialView: "settings",
+      anchorElement: this.topbar.getTopBarElement() ?? undefined,
+    })
   }
 
   onload() {

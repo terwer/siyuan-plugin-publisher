@@ -49,6 +49,7 @@ testdata
 
 # log
 *.log
+.ac
 
 # ReCode local database
 .recode
@@ -67,3 +68,7 @@ webapp
 # docs site
 docs/.vitepress/dist
 docs/.vitepress/cache
+
+# Planning runtime locks
+/.planning/.active_plan.lock
+/.planning/.task_locks.json

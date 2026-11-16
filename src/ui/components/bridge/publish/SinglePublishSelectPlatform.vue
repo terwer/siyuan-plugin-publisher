@@ -12,8 +12,9 @@ import { markRaw, onBeforeMount, reactive, ref } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
-import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
+import { removeTitleNumber } from "~/src/utils/titleNumber.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { useLoadingTimer } from "~/src/composables/useLoadingTimer.ts"
 import PageUtils from "~/common/pageUtils.ts"
@@ -122,7 +123,7 @@ const initPage = async () => {
   formData.postInfo = await kernelApi.getBlockByID(props.id)
   const pref = getReadOnlyPublishPreferenceSetting()
   if (pref.value.fixTitle) {
-    const docTitle = HtmlUtil.removeTitleNumber(formData.postInfo.content).replace(/\.md/g, "")
+    const docTitle = removeTitleNumber(formData.postInfo.content).replace(/\.md/g, "")
     pageTitle.value = docTitle
   } else {
     pageTitle.value = formData.postInfo.content
