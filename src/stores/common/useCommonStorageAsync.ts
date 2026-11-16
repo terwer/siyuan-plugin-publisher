@@ -9,7 +9,6 @@
 
 import CommonStorageAsync from "~/src/stores/common/commonStorageAsync.ts"
 import { StorageSerializers } from "@vueuse/core"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
 import { toRaw } from "vue"
 
@@ -23,7 +22,6 @@ export const useCommonStorageAsync = <T extends string | number | boolean | obje
   storageKey: string,
   initialValue: T
 ) => {
-  const logger = createAppLogger("common-storage-async")
   const commonStorage = new CommonStorageAsync(storageKey)
 
   // 获取 initialValue 类型对应的序列化器，如果不存在则使用默认序列化器
@@ -37,20 +35,16 @@ export const useCommonStorageAsync = <T extends string | number | boolean | obje
     | "map"
     | "set"
     | "date"
-  logger.debug(`It is detected that the serialization type is ${type}`)
   const serializer = StorageSerializers[type]
 
   // 定义 commonStore 对象
   const commonStore = {
     async get(): Promise<T> {
-      logger.debug("Fetching data from common storage...")
       const rawValue = (await commonStorage.getItem(commonStorage.key)) ?? "{}"
       let ret = (await serializer.read(rawValue)) ?? {}
 
       if (ObjectUtil.isEmptyObject(ret)) {
-        logger.info("Initial data not found in common storage. Setting initial value...")
         await commonStorage.setItem(commonStorage.key, serializer.write(initialValue))
-        logger.debug("Initial value set:", initialValue)
         ret = initialValue
       }
       return ret

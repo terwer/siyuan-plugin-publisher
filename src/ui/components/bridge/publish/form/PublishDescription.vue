@@ -93,7 +93,6 @@ const handleMakeDesc = async () => {
           if (!StrUtil.isEmptyString(text)) {
             formData.desc = text
           }
-          logger.debug("partialResponse=>", text)
         },
         timeoutMs: 2 * 60 * 1000,
         silent: true,
@@ -109,10 +108,6 @@ const handleMakeDesc = async () => {
       const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
       if (!StrUtil.isEmptyString(resJson?.desc)) {
         formData.desc = resJson.desc
-        logger.info("使用AI智能生成的摘要结果 =>", {
-          inputWord: inputWord,
-          chatText: chatText,
-        })
       }
     }
 

@@ -8,7 +8,6 @@
  */
 
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
-import { CategoryInfo } from "zhi-blog-api"
 
 /**
  * Flowus网页授权适配器
@@ -22,7 +21,6 @@ class FlowusWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.webFetch("https://flowus.cn/api/users/me")
     const flag = res?.code === 200
-    this.logger.info(`get flowus metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: res?.data?.uuid,
@@ -42,7 +40,6 @@ class FlowusWebAdaptor extends BaseWebApi {
   //
   //   // const pages: any[] = await this.getPages(keyword)
   // }
-
 
   // ================
   // private methods

@@ -213,7 +213,7 @@ export const useArticleManage = () => {
           const pageAttrs = await kernelApi.getBlockAttrs(row.postid)
           enrichYaml(row, pageAttrs, dynamicConfigArray)
         } catch (e) {
-          logger.warn(`getBlockAttrs failed for ${row.postid}=>`, e)
+          // 此处失败不阻断主流程
         }
       }
       state.rows = rows

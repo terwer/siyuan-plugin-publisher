@@ -9,10 +9,9 @@
 
 import { ZhihuWebAdaptor } from "~/src/adaptors/web/zhihu/zhihuWebAdaptor.ts"
 import { ZhihuConfig } from "~/src/adaptors/web/zhihu/zhihuConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -25,16 +24,13 @@ import { ZhihuPlaceholder } from "~/src/adaptors/web/zhihu/zhihuPlaceholder.ts"
  */
 const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-zhihu-web")
 
   // 记录开始使用Zhihu WebAuth
-  logger.info("Start using Zhihu WebAuth...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
   let cfg: ZhihuConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -48,9 +44,7 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
       const zhihuCookie = Utils.emptyOrDefault(process.env.VITE_ZHIHU_AUTH_TOKEN, "")
       cfg = new ZhihuConfig("", zhihuCookie, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
-      logger.debug("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {

@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { HexoApiAdaptor } from "~/src/adaptors/api/hexo/hexoApiAdaptor.ts"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
@@ -16,23 +16,19 @@ import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConver
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-hexo-api")
 
   // 记录开始使用 Hexo API
-  logger.info("Start using Hexo API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: HexoConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -49,9 +45,7 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITHUB_BRANCH, "main")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new HexoConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -91,7 +85,6 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
 
   // 创建 Hexo API 适配器
   const blogApi = new HexoApiAdaptor(appInstance, cfg)
-  logger.info("Hexo API created successfully.", cfg)
 
   return {
     cfg,

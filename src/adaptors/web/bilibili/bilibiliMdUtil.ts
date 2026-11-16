@@ -9,7 +9,6 @@
 
 import { PublisherLuteInstance } from "~/src/publisherLuteInstance.ts"
 import { JsonUtil } from "zhi-common"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 interface Node {
   Type: string
@@ -57,17 +56,13 @@ interface ContentNode {
  * B站解析器
  */
 class BilibiliMdUtil {
-  private static readonly logger = createAppLogger("bilibili-md-util")
 
   /**
    * 从 Markdown 转换为 Bilibili 节点格式
    */
   public static md2bilbiliNodes(md: string) {
-    const { lute, Lute } = PublisherLuteInstance.getInstance()
-    this.logger.debug("lute instance=>", lute)
-
+    const { lute } = PublisherLuteInstance.getInstance()
     const luteJson = JsonUtil.safeParse<Node>(lute.RenderJSON(md), {} as Node)
-    this.logger.debug("lute json=>", JSON.stringify(luteJson))
 
     // 初始化 ops 和 content
     const ops: Op[] = []
@@ -241,7 +236,6 @@ class BilibiliMdUtil {
       } else if (node.text) {
         paragraph.text.nodes.push(...node.text.nodes)
       } else {
-        this.logger.warn("unknown node type", node)
       }
     })
 

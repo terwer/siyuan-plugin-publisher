@@ -30,7 +30,6 @@ class JianshuWebAdaptor extends BaseWebApi {
       uid = avatar.substring(avatar.lastIndexOf("/") + 1, avatar.lastIndexOf("."))
     }
     const flag = !!uid
-    this.logger.info(`get jianshu metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: uid,
@@ -50,7 +49,6 @@ class JianshuWebAdaptor extends BaseWebApi {
       accept: "application/json",
     }
     const notebooks = await this.jianshuFetch("https://www.jianshu.com/author/notebooks", undefined, "GET", header)
-    this.logger.info(`get jianshu notebooks`, notebooks)
 
     if (notebooks && notebooks.length > 0) {
       notebooks.forEach((item: any) => {
@@ -62,7 +60,6 @@ class JianshuWebAdaptor extends BaseWebApi {
       })
     }
 
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -73,7 +70,6 @@ class JianshuWebAdaptor extends BaseWebApi {
       accept: "application/json",
     }
     const notebooks = await this.jianshuFetch("https://www.jianshu.com/author/notebooks", undefined, "GET", header)
-    this.logger.info(`get jianshu notebooks`, notebooks)
 
     if (notebooks && notebooks.length > 0) {
       notebooks.forEach((item: any) => {
@@ -88,7 +84,6 @@ class JianshuWebAdaptor extends BaseWebApi {
   }
 
   public async addPost(post: Post) {
-    this.logger.debug("start add post =>", { post })
     // 1 初始化文章，返回文章ID
     // 如果没传递过来就用默认的父页面
     const notebookId = post.cate_slugs?.[0]?.toString() ?? this.cfg.blogid.toString()
@@ -101,13 +96,11 @@ class JianshuWebAdaptor extends BaseWebApi {
       at_bottom: false,
     })
     const initRes = await this.jianshuFetch("https://www.jianshu.com/author/notes", initParams, "POST", initHeader)
-    this.logger.debug("jianshu addPost initRes =>", initRes)
     const pageId = initRes.id
     const endUrl = initRes.slug
 
     // 文章更新并发布
     await this.updateJianshuArticle(pageId, post.title, post.description, 1)
-    this.logger.info(`文章发布成功，开始组装简书的ID组合,pageId=${pageId},notebookId=${notebookId},endUrl=${endUrl}`)
     const postid = [pageId, notebookId, endUrl].join("_")
     return {
       status: "success",
@@ -132,13 +125,11 @@ class JianshuWebAdaptor extends BaseWebApi {
     const header = {
       accept: "application/json",
     }
-    const res = await this.jianshuFetch(
-      `https://www.jianshu.com/author/notes/${pageId}/soft_destroy`,
+    await this.jianshuFetch(      `https://www.jianshu.com/author/notes/${pageId}/soft_destroy`,
       JSON.stringify({}),
       "POST",
       header
     )
-    this.logger.debug("jianshu delete post res =>", res)
 
     return true
   }
@@ -159,11 +150,9 @@ class JianshuWebAdaptor extends BaseWebApi {
         "GET",
         header
       )
-      this.logger.debug("jianshu get post version res =>", res)
 
       // 文章更新并发布
       const newVersion = res.length + 1
-      this.logger.debug("jianshu update post with new version =>", newVersion)
       await this.updateJianshuArticle(pageId, post.title, post.description, newVersion)
       flag = true
     } catch (e) {
@@ -177,7 +166,6 @@ class JianshuWebAdaptor extends BaseWebApi {
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
 
-    this.logger.debug(`jianshu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // uploadUrl
       const uploadUrl = "https://upload.qiniup.com/"
@@ -188,7 +176,6 @@ class JianshuWebAdaptor extends BaseWebApi {
 
       // formData
       const tokenReq = await this.jianshuFetch("https://www.jianshu.com/upload_images/token.json?filename=" + filename)
-      this.logger.debug("jianshu get picture token res =>", tokenReq)
       const formData = new FormData()
       formData.append("token", tokenReq.token)
       formData.append("key", tokenReq.key)
@@ -197,7 +184,6 @@ class JianshuWebAdaptor extends BaseWebApi {
 
       // 发送请求
       const resJson = await this.jianshuFormFetch(uploadUrl, formData)
-      this.logger.debug("jianshu upload success, resJson =>", resJson)
       if (!resJson.url) {
         const detail = resJson?.error ? ` (${resJson.error})` : ""
         throw new Error(`简书图片上传失败 =>${filename}${detail}`)
@@ -262,13 +248,11 @@ class JianshuWebAdaptor extends BaseWebApi {
       title: title,
       content: conetnt,
     })
-    const saveRes = await this.jianshuFetch(
-      `https://www.jianshu.com/author/notes/${pageId}`,
+    await this.jianshuFetch(      `https://www.jianshu.com/author/notes/${pageId}`,
       saveParams,
       "PUT",
       saveHeader
     )
-    this.logger.debug("jianshu savePost saveRes =>", saveRes)
 
     // 2 文章发布
     try {
@@ -276,13 +260,11 @@ class JianshuWebAdaptor extends BaseWebApi {
         accept: "application/json",
       }
       const publishParams = JSON.stringify({})
-      const pubRes = await this.jianshuFetch(
-        `https://www.jianshu.com/author/notes/${pageId}/publicize`,
+      await this.jianshuFetch(        `https://www.jianshu.com/author/notes/${pageId}/publicize`,
         publishParams,
         "POST",
         publishHeader
       )
-      this.logger.debug("jianshu publishPost pubRes =>", pubRes)
     } catch (e) {
       ElMessage.warning("简书文章发布失败，内容已存入草稿 =>" + e)
       this.logger.error("简书文章发布失败", e)
@@ -314,12 +296,8 @@ class JianshuWebAdaptor extends BaseWebApi {
 
     // 输出日志
     const apiUrl = url
-    this.logger.debug("向简书网站请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向简书网站请求数据，headers =>", headers)
-    this.logger.debug("向简书网站请求数据，body =>", body)
 
     const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
-    this.logger.debug("向简书网站请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }

@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { QuartzApiAdaptor } from "~/src/adaptors/api/quartz/quartzApiAdaptor.ts"
 import { QuartzConfig } from "~/src/adaptors/api/quartz/quartzConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
@@ -16,23 +16,19 @@ import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYaml
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useQuartzApi = async (key: string, newCfg?: QuartzConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-quartz-api")
 
   // 记录开始使用 Quartz API
-  logger.info("Start using Quartz API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: QuartzConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -49,9 +45,7 @@ const useQuartzApi = async (key: string, newCfg?: QuartzConfig) => {
       const githubBranch = Utils.emptyOrDefault(process.env.VITE_GITHUB_BRANCH, "main")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new QuartzConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -89,7 +83,6 @@ const useQuartzApi = async (key: string, newCfg?: QuartzConfig) => {
 
   // 创建 Quartz API 适配器
   const blogApi = new QuartzApiAdaptor(appInstance, cfg)
-  logger.info("Quartz API created successfully.", cfg)
 
   return {
     cfg,

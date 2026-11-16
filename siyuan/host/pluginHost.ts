@@ -169,7 +169,6 @@ export class PluginHost {
       },
       fallbackResolve: (key: string) => this.resolvePluginI18nKey(key),
       onClose: () => {
-        this.logger.info("panel closed")
         void this.close()
       },
     })
@@ -197,7 +196,6 @@ export class PluginHost {
       this.app = app
       this.menu = menu
       this.openMenu(menu, options.anchorElement)
-      this.logger.info("panel mounted")
     } catch (e) {
       this.logger.error("Failed to mount the panel:", e)
       await this.close()

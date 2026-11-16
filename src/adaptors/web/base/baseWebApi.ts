@@ -180,7 +180,6 @@ class BaseWebApi extends WebApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
-    this.logger.debug("newMediaObject on baseWebApi =>", mediaObject)
     const res = await this.uploadFile(mediaObject)
     return {
       attachment_id: res?.id,
@@ -258,7 +257,6 @@ class BaseWebApi extends WebApi {
       responseEncoding,
       diagnostic: options.diagnostic,
     })
-    this.logger.debug("webFetch success =>", sanitizeSensitiveForLog(result))
     return result
   }
 
@@ -284,7 +282,6 @@ class BaseWebApi extends WebApi {
       forceProxy,
       diagnostic: options.diagnostic,
     })
-    this.logger.debug("webFormFetch success, resJson=>", sanitizeSensitiveForLog(json))
     return json as any
   }
 

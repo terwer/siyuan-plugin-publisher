@@ -47,7 +47,6 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
       this.cfg.username,
       this.cfg.password,
     ])
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -71,7 +70,6 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
       this.cfg.password,
       false,
     ])
-    this.logger.debug("ret=>", ret)
 
     return ret
   }
@@ -86,7 +84,6 @@ class CnblogsApiAdaptor extends MetaweblogBlogApiAdaptor {
         this.cfg.password,
       ])
       const dataArr = ret
-      this.logger.debug("博客园获取的分类信息，dataArr=>", dataArr)
 
       dataArr.forEach((item: any) => {
         const cate = new CategoryInfo()

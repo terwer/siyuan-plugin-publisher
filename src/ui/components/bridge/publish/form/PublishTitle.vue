@@ -100,10 +100,6 @@ const handleMakeTitle = async () => {
     }
 
     formData.postTitle = resJson.title
-    logger.info("使用AI智能生成的标题结果 =>", {
-      inputWord: inputWord,
-      chatText: chatText,
-    })
     emit("emitSyncPublishTitle", formData.postTitle)
     ElMessage.success("使用人工智能提取标题成功")
   } catch (e) {

@@ -109,10 +109,6 @@ const cateMethods = {
         throw new Error("文档信息量太少，未能抽取有效信息")
       }
       formData.recommCates = resJson.categories
-      logger.info("使用AI智能生成的分类结果 =>", {
-        inputWord: inputWord,
-        chatText: chatText,
-      })
     } catch (e: any) {
       logger.error(t("main.opt.failure") + "=>", e)
       ElMessage.error(t("main.opt.failure") + "=>" + e)

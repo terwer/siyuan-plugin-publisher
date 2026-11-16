@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { JekyllApiAdaptor } from "~/src/adaptors/api/jekyll/jekyllApiAdaptor.ts"
 import { JekyllConfig } from "~/src/adaptors/api/jekyll/jekyllConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
@@ -16,23 +16,19 @@ import { JekyllYamlConverterAdaptor } from "~/src/adaptors/api/jekyll/jekyllYaml
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useJekyllApi = async (key: string, newCfg?: JekyllConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-jekyll-api")
 
   // 记录开始使用 Hexo API
-  logger.info("Start using Hexo API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: JekyllConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -50,9 +46,7 @@ const useJekyllApi = async (key: string, newCfg?: JekyllConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new JekyllConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -86,7 +80,6 @@ const useJekyllApi = async (key: string, newCfg?: JekyllConfig) => {
 
   // 创建 Hexo API 适配器
   const blogApi = new JekyllApiAdaptor(appInstance, cfg)
-  logger.info("Jekyll API created successfully.", cfg)
 
   return {
     cfg,

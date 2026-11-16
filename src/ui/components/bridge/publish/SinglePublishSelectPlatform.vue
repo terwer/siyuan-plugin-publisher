@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import { markRaw, onBeforeMount, reactive, ref } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig, DynamicJsonCfg, getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
@@ -27,7 +26,6 @@ import { Warning } from "@element-plus/icons-vue"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 
-const logger = createAppLogger("single-publish-select-platform")
 // appInstance
 const appInstance = new PublisherAppInstance()
 const { getPostPreviewUrl } = usePublish()

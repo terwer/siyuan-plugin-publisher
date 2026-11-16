@@ -158,7 +158,6 @@ class CsdnUtils {
       html: html,
     })
     const res = await adaptorInstance.webFetch(apiUrl, [headers], params, "POST", contentType, false)
-    console.log("processPrismjs res=>", res)
 
     return res.html
   }

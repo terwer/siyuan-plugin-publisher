@@ -15,23 +15,19 @@ import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-halo-api")
 
   // 记录开始使用 Halo API
-  logger.info("Start using Halo API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: HaloConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -46,9 +42,7 @@ const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
       const haloAuthToken = Utils.emptyOrDefault(process.env.VITE_YUQUE_AUTH_TOKEN, "")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new HaloConfig(haloUsername, haloAuthToken, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -71,7 +65,6 @@ const useHaloApi = async (key: string, newCfg?: HaloConfig) => {
 
   // 创建 Halo API 适配器
   const blogApi = new HaloApiAdaptor(appInstance, cfg)
-  logger.info("Halo API created successfully.", cfg)
 
   return {
     cfg,

@@ -48,7 +48,6 @@ import { useXiaohongshuWeb } from "~/src/adaptors/web/xiaohongshu/useXiaohongshu
 import { useZhihuWeb } from "~/src/adaptors/web/zhihu/useZhihuWeb.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { getSubPlatformTypeByKey, SubPlatformType } from "~/src/platforms/dynamicConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 适配器统一入口
@@ -57,7 +56,6 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
  * @since 0.9.0
  */
 class Adaptors {
-  private static logger = createAppLogger("adaptors")
 
   /**
    * 根据平台key查找配置
@@ -276,7 +274,6 @@ class Adaptors {
         break
       }
     }
-    this.logger.debug(`get conf from key ${key}=>`, conf)
     return conf
   }
 
@@ -495,7 +492,6 @@ class Adaptors {
         break
       }
     }
-    this.logger.debug(`get blogAdaptor from key ${key}`)
     return blogAdaptor
   }
 
@@ -602,12 +598,10 @@ class Adaptors {
       }
       default: {
         // 对于没有特定YAML适配器的平台，返回null
-        this.logger.info(`No specific YAML adapter found for platform key: ${key}, using null`)
         yamlAdp = null
         break
       }
     }
-    this.logger.debug(`get yamlAdaptor from key ${key}=>`, yamlAdp)
     return yamlAdp
   }
 }

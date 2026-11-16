@@ -15,7 +15,6 @@ import { CnblogsConfig } from "~/src/adaptors/api/cnblogs/cnblogsConfig.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
@@ -30,17 +29,14 @@ import { Utils } from "~/src/utils/utils.ts"
  */
 export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-cnblogs-api")
 
   // 记录开始使用Cnblogs API
-  logger.info("Start using Cnblogs API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: CnblogsConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -59,9 +55,7 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
 
       cfg = new CnblogsConfig(cnblogsApiUrl, cnblogsUsername, cnblogsAuthToken, middlewareUrl)
-      logger.debug("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -81,7 +75,6 @@ export const useCnblogsApi = async (key?: string, newCfg?: CnblogsConfig) => {
   const blogApi = new CnblogsApiAdaptor(appInstance, cfg)
 
   // 记录Cnblogs API创建成功
-  logger.info("Cnblogs API created successfully.")
 
   return {
     cfg,

@@ -43,7 +43,6 @@ class HaloApiAdaptor extends BaseBlogApi {
       userblog.url = item.status.permalink
       result.push(userblog)
     })
-    this.logger.debug("get halo categories =>", result)
 
     return result
   }
@@ -124,19 +123,15 @@ class HaloApiAdaptor extends BaseBlogApi {
 
     // 草稿
     const res = await this.haloFetch("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
-    this.logger.debug("halo newPost res =>", res)
     if (!res?.metadata?.name) {
       throw new Error("Halo 文章发布失败")
     }
-    this.logger.debug("halo 文章草稿完成")
 
     // 发布
     await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
-    this.logger.debug("halo 文章发布完成")
 
     // 生成文章ID
     const postidMeta = new HaloPostMeta(res.spec.slug, res.metadata.name, post.dateCreated)
-    this.logger.debug("postidMeta =>", postidMeta)
 
     // 需要更新一次，否则
 
@@ -151,7 +146,6 @@ class HaloApiAdaptor extends BaseBlogApi {
 
       // 加载最新
       let params: PostRequest = await this.getHaloPost(name)
-      this.logger.debug("get latest halo post =>", { name: name, haloPost: params })
 
       if (!params.post) {
         throw new Error("获取文章信息失败，如果文章删除，请强制删除解除关联")
@@ -196,7 +190,6 @@ class HaloApiAdaptor extends BaseBlogApi {
 
       // 重新发布
       await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
-      this.logger.debug("halo 文章发布完成")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
     }
@@ -210,7 +203,6 @@ class HaloApiAdaptor extends BaseBlogApi {
 
     // 加载最新
     const haloPost = await this.getHaloPost(name)
-    this.logger.debug("getPost haloPost =>", { name: name, haloPost: haloPost })
 
     const commonPost = new Post()
     commonPost.title = haloPost.post.spec.title
@@ -240,7 +232,6 @@ class HaloApiAdaptor extends BaseBlogApi {
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`
     const res = await this.haloFetch(recycleUrl, {}, "PUT")
-    this.logger.debug("halo deletePost res =>", res)
 
     if (!res?.metadata?.name) {
       throw new Error("Halo 文章删除失败")
@@ -262,7 +253,6 @@ class HaloApiAdaptor extends BaseBlogApi {
         cat.categoryDescription = item.spec.description
         cats.push(cat)
       })
-      this.logger.debug("get halo categories =>", cats)
     }
 
     return cats
@@ -284,7 +274,6 @@ class HaloApiAdaptor extends BaseBlogApi {
     let res: any
     try {
       const bits = mediaObject.bits
-      this.logger.debug("newMediaObject on halo =>", mediaObject)
 
       // get formData and Blob
       const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
@@ -303,7 +292,6 @@ class HaloApiAdaptor extends BaseBlogApi {
       // 发送请求
       res = await this.haloFormFetch(uploadUrl, formData)
 
-      this.logger.debug("halo upload success, res =>", res)
       if (!res.metadata) {
         throw new Error("Halo图片上传失败 =>" + mediaObject.name)
       }
@@ -406,7 +394,6 @@ class HaloApiAdaptor extends BaseBlogApi {
       })
       .filter(Boolean) as string[]
 
-    this.logger.debug("newCategories =>", newCategories)
     return [...existNames, ...newCategories.map((item) => item.metadata.name)]
   }
 
@@ -449,7 +436,6 @@ class HaloApiAdaptor extends BaseBlogApi {
       })
       .filter(Boolean) as string[]
 
-    this.logger.debug("newTags =>", newTags)
     return [...existNames, ...newTags.map((item) => item.metadata.name)]
   }
 
@@ -483,13 +469,10 @@ class HaloApiAdaptor extends BaseBlogApi {
 
     // 打印日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    this.logger.debug("向 Halo 请求数据，apiUrl =>", apiUrl)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
-    this.logger.debug("向 Halo 请求数据，body =>", body)
     const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64", "text")
-    this.logger.debug("向 Halo 请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }

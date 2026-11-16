@@ -117,7 +117,6 @@ export default class PublisherPlugin extends Plugin {
   protected readonly blockMenuEventListener = async (e: CustomEvent) => {
     // 获取菜单信息
     const detail = e.detail
-    this.logger.info("detail =>", detail)
 
     // 获取块菜单上下文
     const context: any = detail?.menu?.menus
@@ -125,17 +124,14 @@ export default class PublisherPlugin extends Plugin {
       this.logger.error("获取发布菜单失败")
       return
     }
-    this.logger.debug("当前上下文 =>", context)
 
     const pageId = detail?.protyle?.block.rootID
     if (!pageId) {
       this.logger.error("无法获取文档 ID")
       return
     }
-    this.logger.info("当前文档 ID =>", detail)
 
     if (this.prefSetting.showDocQuickMenu === false) {
-      this.logger.warn("文档发布菜单已关闭")
       return
     }
 

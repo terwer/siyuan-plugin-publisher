@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { GitlabjekyllApiAdaptor } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllApiAdaptor.ts"
 import { GitlabjekyllConfig } from "~/src/adaptors/api/gitlab-jekyll/gitlabjekyllConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
@@ -16,23 +16,19 @@ import { GitlabjekyllYamlConverterAdaptor } from "~/src/adaptors/api/gitlab-jeky
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-gitlab-hugo-api")
 
   // 记录开始使用 Hexo API
-  logger.info("Start using Gitlabhugo API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: GitlabjekyllConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -50,9 +46,7 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new GitlabjekyllConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -84,7 +78,6 @@ const useGitlabjekyllApi = async (key: string, newCfg?: GitlabjekyllConfig) => {
 
   // 创建 Hexo API 适配器
   const blogApi = new GitlabjekyllApiAdaptor(appInstance, cfg)
-  logger.info("Gitlabjekyll API created successfully.", cfg)
 
   return {
     cfg,

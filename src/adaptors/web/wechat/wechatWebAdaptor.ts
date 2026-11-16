@@ -11,7 +11,6 @@ import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import * as cheerio from "cheerio"
 import { HtmlUtil, JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import { BlogConfig, MediaObject, PageTypeEnum, Post, PreviewOpenModeEnum, UserBlog } from "zhi-blog-api"
-import { toRaw } from "vue"
 import * as _ from "lodash-es"
 import { fileToBuffer } from "~/src/utils/polyfillUtils.ts"
 import {MockBrowser} from "~/src/utils/MockBrowser.ts";
@@ -32,16 +31,13 @@ class WechatWebAdaptor extends BaseWebApi {
   public override previewOpenMode = PreviewOpenModeEnum.AppSession
   public async getMetaData(): Promise<any> {
     const res = await this.weChatFetch("https://mp.weixin.qq.com/", undefined, "GET", {}, "text/html")
-    this.logger.debug("WechatWebAdaptor res=>", { res: res })
     const $ = cheerio.load(res)
     const scriptElement = $("script")[0]
     // 获取元素的文本内容
     const scriptText = $(scriptElement).text()
-    this.logger.debug("scriptElement =>", { scriptText: scriptText })
 
     const code = scriptText.substring(scriptText.indexOf("window.wx.commonData"))
     const wx = new Function("window.wx = {}; window.handlerNickname = function(){};" + code + "; return window.wx;")()
-    this.logger.debug(code, wx)
 
     const commonData = Object.assign({}, wx.commonData)
     delete (window as any).wx
@@ -61,7 +57,6 @@ class WechatWebAdaptor extends BaseWebApi {
       home: "https://mp.weixin.qq.com",
       icon: "https://mp.weixin.qq.com/favicon.ico",
     }
-    this.logger.info(`get wechat metadata finished, flag => ${metadata}`)
     return metadata
   }
 
@@ -69,34 +64,28 @@ class WechatWebAdaptor extends BaseWebApi {
     let result: UserBlog[] = []
 
     const res = await this.weChatFetch("https://mp.weixin.qq.com/", undefined, "GET", {}, "text/html")
-    this.logger.debug("WechatWebAdaptor res=>", { res: res })
     const $ = cheerio.load(res)
     const scriptElement = $("script")[0]
     // 获取元素的文本内容
     const scriptText = $(scriptElement).text()
-    this.logger.debug("scriptElement =>", { scriptText: scriptText })
 
     const code = scriptText.substring(scriptText.indexOf("window.wx.commonData"))
     const wx = new Function("window.wx = {}; window.handlerNickname = function(){};" + code + "; return window.wx;")()
-    this.logger.debug(code, wx)
 
     const commonData = Object.assign({}, wx.commonData)
     delete (window as any).wx
     if (!commonData.data.t) {
       throw new Error("微信公众号未登录或者登录过期，请更新cookie")
     }
-    this.logger.info(`get wechat commonData =>`, commonData)
     const userblog: UserBlog = new UserBlog()
     userblog.blogid = commonData.data.user_name
     userblog.blogName = commonData.data.nick_name
     result.push(userblog)
 
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
   public async addPost(post: Post) {
-    this.logger.debug("addPost get metadata =>", { cfg: toRaw(this.cfg.metadata) })
 
     const url =
       "https://mp.weixin.qq.com/cgi-bin/operate_appmsg?t=ajax-response&sub=create&type=77&token=" +
@@ -237,7 +226,6 @@ class WechatWebAdaptor extends BaseWebApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    this.logger.debug("editPost get metadata =>", { cfg: toRaw(this.cfg.metadata) })
     let flag = false
     const url =
       "https://mp.weixin.qq.com/cgi-bin/operate_appmsg?t=ajax-response&sub=update&type=77&token=" +
@@ -378,7 +366,6 @@ class WechatWebAdaptor extends BaseWebApi {
     const token = this.cfg.metadata.token
     const url = `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
     const res = await this.webFetch(url, [], {}, "GET", "text/html")
-    this.logger.debug("get wechat post finished, res=>", res)
 
     const post = new Post()
 
@@ -389,13 +376,10 @@ class WechatWebAdaptor extends BaseWebApi {
     const match = scriptText.match(/infos\s*=\s*({.*?}},)/)
     if (match && match[1]) {
       const infoJSON = match[1].replace(/,$/, "")
-      this.logger.debug(`matched infoJSON ${typeof infoJSON} =>`, infoJSON)
       try {
         const info = JsonUtil.safeParse<any>(infoJSON, {} as any)
         if (!ObjectUtil.isEmptyObject(info)) {
-          this.logger.debug("found infos =>", info)
           const curItem = info.item.find((item: any) => item.app_id.toString() === postid)
-          this.logger.debug("curItem =>", curItem)
 
           post.title = curItem.title
           post.shortDesc = curItem.digest
@@ -433,7 +417,6 @@ class WechatWebAdaptor extends BaseWebApi {
       const err = resJson.base_resp
       throw new Error("微信公众号文章删除失败，错误内容：" + (err && err.errmsg ? err.errmsg : err.ret))
     }
-    this.logger.debug("delete wechat article res=>", resJson)
     flag = true
 
     return flag
@@ -449,7 +432,7 @@ class WechatWebAdaptor extends BaseWebApi {
         token = meta.token
       }
     } catch (e) {
-      this.logger.warn("wechat refresh token for preview url failed =>", e)
+      // 此处失败不阻断主流程
     }
     return `https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=77&appmsgid=${postid}&token=${token}&lang=zh_CN`
   }
@@ -458,7 +441,6 @@ class WechatWebAdaptor extends BaseWebApi {
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
 
-    this.logger.debug(`wechat start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // uploadUrl
       const ticket_id = this.cfg.metadata.commonData.data.user_name
@@ -513,13 +495,9 @@ class WechatWebAdaptor extends BaseWebApi {
     const cfg: BlogConfig = publishCfg?.cfg
     const updatedPost = _.cloneDeep(doc) as Post
     const html = updatedPost.html
-    this.logger.info("准备处理微信公众号正文")
-    this.logger.debug("html =>", { html: html })
     let updatedHtml = html
 
     updatedPost.html = updatedHtml
-    this.logger.info("微信公众号正文处理完毕")
-    this.logger.debug("updatedHtml =>", { updatedHtml: updatedHtml })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
@@ -557,12 +535,8 @@ class WechatWebAdaptor extends BaseWebApi {
 
     // 输出日志
     const apiUrl = url
-    this.logger.debug("向微信公众号请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向微信公众号请求数据，headers =>", headers)
-    this.logger.debug("向微信公众号请求数据，body =>", body)
 
     const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64", "text")
-    this.logger.debug("向微信公众号请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }

@@ -8,7 +8,6 @@
  */
 
 import katex from "katex"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 公式渲染
@@ -17,7 +16,6 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
  * @since 1.18.6
  */
 class KatexUtils {
-  private static logger = createAppLogger("katex-utils")
 
   /**
    * 获得要渲染 KaTeX 表达式的 HTML
@@ -25,7 +23,6 @@ class KatexUtils {
    * @param mathExpression katex
    */
   public static renderToString(mathExpression: string) {
-    this.logger.debug("准备处理 Katex =>", { mathExpression: mathExpression })
     return katex.renderToString(mathExpression)
   }
 }

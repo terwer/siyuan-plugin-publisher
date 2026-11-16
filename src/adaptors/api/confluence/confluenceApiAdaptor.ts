@@ -52,7 +52,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     const spaceKey = post.cate_slugs?.[0] ?? this.cfg.blogid
     // 判断文章里面是否包含图片
     const hasImage = ImageUtils.hasImageTag(post.description)
-    this.logger.debug(`new hasImage=>${hasImage}`)
     if (!hasImage) {
       // 如果没有图片，直接创建页面
       return await this.createPage(post.title, post.description, spaceKey)
@@ -64,7 +63,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     // 2、然后上传图片，图片需要从文章post.description中提取
     // 2.0 从文章中提取图片URL
     const imageUrls = ImageUtils.extractImageUrls(post.description)
-    this.logger.debug(`new imageUrls=>${imageUrls}`)
     // 2.1 调用 newMediaObject 上传图片
     let imageCount = 0
     for (const originUrl of imageUrls) {
@@ -110,7 +108,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     const confluencePostidKey = this.getConfluencePostidKey(postid)
 
     const page = await this.getPage(confluencePostidKey.pageId)
-    this.logger.debug("confluence page=>", page)
 
     const commonPost = new Post()
     commonPost.title = page.title
@@ -157,7 +154,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     try {
       // bits
       const bits = mediaObject.bits
-      this.logger.debug("newMediaObject on confluence =>", mediaObject)
       const url = `/rest/api/content/${pageId}/child/attachment`
       // formData
       const blob = new Blob([bits], { type: mediaObject.type })
@@ -166,7 +162,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       formData.append("file", blob, mediaObject.name)
       formData.append("minorEdit", "false")
       resJson = await this.confluenceMediaFetch(url, formData)
-      this.logger.debug("confluence upload media finished=>", resJson)
     } catch (e) {
       // 检查message中是否包含重复文件的关键词
       const errorMessage = e.message
@@ -187,13 +182,11 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         } else {
           fileName = match[1]
         }
-        this.logger.debug("get duplicate file：" + fileName)
       } else {
         this.logger.error("Error uploading image to confluence:", e)
         throw new Error("Error uploading image to confluence:" + e.toString())
       }
     }
-    this.logger.debug("newMediaObject success, start update metadata to page=>", resJson)
     // 正常情况从返回信息取图片
     if (!fileName) {
       const results = resJson.results || []
@@ -234,7 +227,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       limit: 100,
     }
     const result = await this.confluenceRequest(url, params, "GET")
-    this.logger.debug("confluence spaces=>", result)
     return result.results || []
   }
 
@@ -276,7 +268,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     }
 
     const result = await this.confluenceRequest(url, params, "POST")
-    this.logger.debug("confluence createPage=>", result)
 
     if (!result || !result.id) {
       throw new Error("请求 Confluence API 异常")
@@ -299,7 +290,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       expand: "ancestors",
     }
     const result = await this.confluenceRequest(url, params, "GET")
-    this.logger.debug("confluence pages list=>", result)
     return (result?.results ?? []).map((item: any) => ({ id: item.id, title: item.title }))
   }
 
@@ -415,8 +405,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
     method: "GET" | "POST" | "PUT" | "DELETE" = "POST"
   ): Promise<any> {
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    this.logger.debug("向 Confluence 请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向 Confluence 请求数据，params =>", params)
 
     let finalUrl = apiUrl
     let body: string | undefined = undefined
@@ -443,8 +431,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         // Referer: this.cfg.apiUrl,
         // Accept: "application/json",
       }
-      this.logger.debug("向 Confluence 请求数据，apiUrl =>", apiUrl)
-      this.logger.debug("向 Confluence 请求数据，params =>", body)
       const resJson = await this.apiFetch(finalUrl, [header], body, method, contentType, true, "base64")
       // const response = await fetch(finalUrl, {
       //   method: method,
@@ -466,7 +452,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
       // }
       //
       // const resJson = await response.json()
-      this.logger.debug("向 Confluence 请求数据，resJson =>", resJson)
       return resJson
     } catch (error) {
       this.logger.error("Confluence API 请求异常 =>", error)
@@ -486,7 +471,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         // Referer: this.cfg.apiUrl,
         // Accept: "application/json",
       }
-      this.logger.debug(`向 Confluence 请求数据上传文件，apiUrl => header:${header}`, apiUrl)
       return await this.apiFetch(apiUrl, [header], formData, "POST", contentType, true, "base64")
     } catch (error) {
       this.logger.error("Confluence 上传文件 API 请求异常 =>", error)
@@ -567,7 +551,6 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
         .replace(/&apos;/g, "'")
       return restored.replace(/<br>/g, "<br />")
     } catch (error) {
-      this.logger.warn("Failed to normalize Confluence content, fallback to original", error)
       return content
     }
   }

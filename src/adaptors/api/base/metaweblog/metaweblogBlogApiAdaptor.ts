@@ -11,7 +11,6 @@ import { Attachment, CategoryInfo, MediaObject, Post, PostStatusEnum, UserBlog }
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
 import { StrUtil } from "zhi-common"
-import { BrowserUtil } from "zhi-device"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
@@ -66,7 +65,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       this.cfg.username,
       this.cfg.password,
     ])
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -134,7 +132,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     }
 
     const postStruct = this.createPostStruct(post, false)
-    this.logger.debug("postStruct=>", postStruct)
     let ret = await this.metaweblogCall(MetaweblogConstants.METHOD_NEW_POST, [
       this.cfg.blogid,
       this.cfg.username,
@@ -144,7 +141,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     ])
     ret = ret + ""
     ret = ret.replace(/"/g, "")
-    this.logger.debug("ret=>", ret)
 
     return ret
   }
@@ -168,7 +164,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
     }
 
     const postStruct = this.createPostStruct(post, true)
-    this.logger.debug("postStruct=>", postStruct)
     const ret = await this.metaweblogCall(MetaweblogConstants.METHOD_EDIT_POST, [
       postid,
       this.cfg.username,
@@ -176,7 +171,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       postStruct,
       publish,
     ])
-    this.logger.debug("ret=>", ret)
     return ret
   }
 
@@ -188,7 +182,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       this.cfg.password,
       false,
     ])
-    this.logger.debug("ret=>", ret)
 
     return ret
   }
@@ -209,7 +202,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
         this.cfg.password,
       ])
       const dataArr = ret
-      this.logger.debug("获取的分类信息，dataArr=>", dataArr)
 
       dataArr.forEach((item: any) => {
         const cate = new CategoryInfo()
@@ -242,7 +234,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
           bits: mediaObject.bits
         },
       ])
-      this.logger.debug("上传媒体完成, ret =>", ret)
     } catch (e) {
       this.logger.error("媒体上传失败", e)
     }
@@ -275,7 +266,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
         this.cfg.apiUrl,
         this.logger
       ).catch((e) => {
-        this.logger.warn("ensureSiteReady failed, transport will fall back", e)
         return false
       })
     }

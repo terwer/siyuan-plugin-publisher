@@ -14,7 +14,6 @@ import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormat
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { StrUtil, YamlUtil } from "zhi-common"
-import { toRaw } from "vue"
 import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { ElMessage } from "element-plus"
@@ -57,11 +56,9 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       await this.safeDeletePost(testFilePath)
       flag = !StrUtil.isEmptyString(res?.content?.path)
     } catch (e) {
-      this.logger.info(`checkAuth error =>`, e)
       flag = false
     }
 
-    this.logger.info(`checkAuth finished => ${flag}`)
     return flag
   }
 
@@ -69,7 +66,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     const result: UserBlog[] = []
 
     const nodes = await this.githubClient.getGithubPageTreeNode("")
-    this.logger.debug("getGithubPageTreeNode =>", nodes)
 
     // 数据适配
     if (nodes && nodes.length > 0) {
@@ -80,13 +76,11 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       userblog.url = StrUtil.pathJoin(StrUtil.pathJoin(cfg.home, cfg.username), cfg.githubRepo)
       result.push(userblog)
     }
-    this.logger.debug("result result =>", result)
 
     return result
   }
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    this.logger.debug("start newPost =>", { post: toRaw(post) })
     const cfg = this.cfg as CommonGithubConfig
 
     // 路径处理
@@ -99,7 +93,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     if (docPath.startsWith("./")) {
       docPath = docPath.substring(2)
     }
-    this.logger.info("Github文章将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
     let finalRes: any
@@ -116,7 +109,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       try {
         await this.deletePost(docPath)
       } catch (e) {
-        this.logger.warn("尝试删除失败，忽略", e)
+        // 此处失败不阻断主流程
       }
       const res2 = await this.githubClient.publishGithubPage(docPath, post.description)
       if (!res2?.content?.path) {
@@ -130,10 +123,8 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-    this.logger.debug("start getPost =>", { postid: postid })
 
     const res = await this.githubClient.getGithubPage(postid)
-    this.logger.debug("getPost finished =>", res)
     if (!res) {
       throw new Error("Github 调用API异常")
     }
@@ -150,9 +141,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const yamlObj = await YamlUtil.yaml2ObjAsync(commonPost.description)
       const yamlFormatObj = new YamlFormatObj()
       yamlFormatObj.yamlObj = yamlObj
-      this.logger.debug("extract frontFormatter, yamlFormatObj =>", yamlFormatObj)
       commonPost = yamlAdaptor.convertToAttr(commonPost, yamlFormatObj, this.cfg)
-      this.logger.debug("handled yamlObj using YamlConverterAdaptor =>", yamlObj)
     }
 
     // 初始化知识空间
@@ -165,7 +154,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    this.logger.debug("start editPost =>", { postid: postid, post: toRaw(post) })
 
     // 检查是否需要更改目录
     const originalPath = postid
@@ -184,7 +172,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
     // 如果目录发生变化，先删除原文件，再在新目录创建
     if (originalDir !== newDir) {
-      this.logger.info(`目录已更改，从 ${originalDir} 移动到 ${newDir}`)
       try {
         // 删除原文件
         await this.githubClient.deleteGithubPage(originalPath)
@@ -256,16 +243,12 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const base64 = Base64.fromUint8Array(bits)
       const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images").imagePath
       const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images").absImgPath
-      this.logger.info("Github 图片将要最终发送到以下目录 =>", imageSavePath)
-      this.logger.info("图片可以使用下列链接访问", imageLinkPath)
       try {
-        const res = await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
-        this.logger.debug("github publishGithubPage res =>", res)
+        await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
       } catch (e) {
         this.logger.error("github publishGithubPage error =>", e)
         // 422 代表图片已存在
         if (e.status === 422) {
-          this.logger.warn("image already exists", e)
         } else {
           throw e
         }
@@ -281,7 +264,6 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       // toImagePath = StrUtil.pathJoin(toImagePath, encodeURI(savePath))
       // toImagePath = StrUtil.pathJoin(toImagePath, encodeURIComponent(mediaObject.name))
       // siteImgUrl = toImagePath
-      this.logger.info("Github 图片上传成功")
 
       return {
         attachment_id: siteImgId,

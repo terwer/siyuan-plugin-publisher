@@ -102,7 +102,7 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
       try {
         await this.baseExtendApi.pushMsg({ msg: featuredPost.featuredImageError, timeout: 7000 })
       } catch (pushError) {
-        this.logger.warn("特色图片失败提示推送失败", pushError)
+        // 此处失败不阻断主流程
       }
     }
   }
@@ -131,7 +131,6 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
       throw new Error("媒体库未返回附件 ID")
     }
 
-    this.logger.info(`特色图片已上传到媒体库，附件 ID => ${attachmentId}`)
     return attachmentId
   }
 

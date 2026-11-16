@@ -7,13 +7,10 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-
 /**
  * 用于处理Typecho相关操作的实用工具类
  */
 class TypechoUtils {
-  private static logger = createAppLogger("typecho-utils")
 
   /**
    * 解析给定的主页地址并生成相应的apiUrl地址
@@ -21,7 +18,6 @@ class TypechoUtils {
    * @param home - 主页地址
    */
   public static parseHomeAndUrl(home: string): { home: string; apiUrl: string } {
-    this.logger.debug(`Parsing Home address: ${home}`)
     // 解析主页地址
     let apiUrl = ""
     if (home.endsWith("/index.php/action/xmlrpc")) {
@@ -32,7 +28,6 @@ class TypechoUtils {
       apiUrl = `${home}/index.php/action/xmlrpc`
     }
 
-    this.logger.debug(`Parse result: home=${home}, apiUrl=${apiUrl}`)
     return { home, apiUrl }
   }
 }

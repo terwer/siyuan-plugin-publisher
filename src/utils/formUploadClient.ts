@@ -73,8 +73,6 @@ async function runFormUploadTransport(
   const { url, headers, formData, forceProxy = false, diagnostic } = request
   const header = headers.length > 0 ? headers[0] : {}
 
-  logger?.info(`[form-upload-transport] transport => ${transport}`, url)
-
   const run = async (): Promise<FormUploadResult> => {
     switch (transport) {
       case "plugin-node-fetch": {

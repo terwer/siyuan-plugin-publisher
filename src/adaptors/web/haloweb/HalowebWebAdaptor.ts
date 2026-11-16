@@ -23,7 +23,6 @@ class HalowebWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.halowebFetch("/actuator/globalinfo")
     const flag = !StrUtil.isEmptyString(res?.siteTitle)
-    this.logger.info(`get haloweb metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: "",
@@ -49,7 +48,6 @@ class HalowebWebAdaptor extends BaseWebApi {
       userblog.url = item.status.permalink
       result.push(userblog)
     })
-    this.logger.debug("get halo categories =>", result)
 
     return result
   }
@@ -60,7 +58,6 @@ class HalowebWebAdaptor extends BaseWebApi {
 
     // 加载最新
     const haloPost = await this.getHaloPost(name)
-    this.logger.debug("getPost haloPost =>", { name: name, haloPost: haloPost })
 
     const commonPost = new Post()
     commonPost.title = haloPost.post.spec.title
@@ -149,19 +146,15 @@ class HalowebWebAdaptor extends BaseWebApi {
 
     // 草稿
     const res = await this.halowebFetch("/apis/api.console.halo.run/v1alpha1/posts", params, "POST")
-    this.logger.debug("halo newPost res =>", res)
     if (!res?.metadata?.name) {
       throw new Error("Halo 文章发布失败")
     }
-    this.logger.debug("halo 文章草稿完成")
 
     // 发布
     await this.halowebFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
-    this.logger.debug("halo 文章发布完成")
 
     // 生成文章ID
     const postidMeta = new HalowebPostMeta(res.spec.slug, res.metadata.name, post.dateCreated)
-    this.logger.debug("postidMeta =>", postidMeta)
 
     // 需要更新一次，否则
 
@@ -176,7 +169,6 @@ class HalowebWebAdaptor extends BaseWebApi {
 
       // 加载最新
       let params = await this.getHaloPost(name)
-      this.logger.debug("get latest halo post =>", { name: name, haloPost: params })
 
       if (!params.post) {
         throw new Error("获取文章信息失败，如果文章删除，请强制删除解除关联")
@@ -225,7 +217,6 @@ class HalowebWebAdaptor extends BaseWebApi {
         {},
         "PUT"
       )
-      this.logger.debug("halo 文章发布完成")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
     }
@@ -250,7 +241,6 @@ class HalowebWebAdaptor extends BaseWebApi {
     // const unPublishUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/unpublish`
     const recycleUrl = `/apis/api.console.halo.run/v1alpha1/posts/${haloPostKey.name}/recycle`
     const res = await this.halowebFetch(recycleUrl, {}, "PUT")
-    this.logger.debug("halo deletePost res =>", res)
 
     if (!res?.metadata?.name) {
       throw new Error("Halo 文章删除失败")
@@ -273,7 +263,6 @@ class HalowebWebAdaptor extends BaseWebApi {
         cat.categoryDescription = item.spec.description
         cats.push(cat)
       })
-      this.logger.debug("get halo categories =>", cats)
     }
 
     return cats
@@ -294,7 +283,6 @@ class HalowebWebAdaptor extends BaseWebApi {
     let res: any
     try {
       const bits = mediaObject.bits
-      this.logger.debug("newMediaObject on halo =>", mediaObject)
 
       // get formData and Blob
       const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
@@ -313,7 +301,6 @@ class HalowebWebAdaptor extends BaseWebApi {
       // 发送请求
       res = await this.halowebFormFetch(uploadUrl, formData)
 
-      this.logger.debug("halo upload success, res =>", res)
       if (!res.metadata) {
         throw new Error("Halo图片上传失败 =>" + mediaObject.name)
       }
@@ -401,7 +388,6 @@ class HalowebWebAdaptor extends BaseWebApi {
       })
       .filter(Boolean) as string[]
 
-    this.logger.debug("newCategories =>", newCategories)
     return [...existNames, ...newCategories.map((item) => item.metadata.name)]
   }
 
@@ -439,7 +425,6 @@ class HalowebWebAdaptor extends BaseWebApi {
       })
       .filter(Boolean) as string[]
 
-    this.logger.debug("newTags =>", newTags)
     return [...existNames, ...newTags.map((item) => item.metadata.name)]
   }
 
@@ -501,17 +486,12 @@ class HalowebWebAdaptor extends BaseWebApi {
 
     // 打印日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    this.logger.debug("向 Halo 请求数据，apiUrl =>", apiUrl)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
-    this.logger.debug("向Halo网页版请求数据，apiUrl =>", apiUrl)
     // 使用兼容的fetch调用并返回统一的JSON数据
-    this.logger.debug("向Halo网页版请求数据，headers =>", headers)
-    this.logger.debug("向Halo网页版请求数据，body =>", body)
 
     const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
-    this.logger.debug("向Halo网页版请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }
@@ -540,14 +520,10 @@ class HalowebWebAdaptor extends BaseWebApi {
       body: formData,
     }
 
-    this.logger.debug("向Halo网页版发送表单数据，apiUrl =>", apiUrl)
-    this.logger.debug("向Halo网页版发送表单数据，options =>", options)
-
     const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData)
     if (resJson.error) {
       throw new Error("Halo网页版表单提交错误。详细错误 =>" + resJson.error)
     }
-    this.logger.debug("向Halo网页版发送表单数据，resJson =>", resJson)
 
     return resJson
   }

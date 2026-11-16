@@ -11,11 +11,8 @@ import { RemovableRef, StorageSerializers } from "@vueuse/core"
 import { PublishPreferenceCfg, SiyuanAiModel, SiyuanAiProvider } from "~/src/models/publishPreferenceCfg.ts"
 import { readonly } from "vue"
 import { SiyuanDevice } from "zhi-device"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import useCommonLocalStorage from "~/src/stores/common/useCommonLocalStorage.ts"
 import { Utils } from "~/src/utils/utils.ts"
-
-const logger = createAppLogger("use-publish-pref")
 
 // 共享单例：所有调用方（共享的 AI 设置组件）拿到同一个引用，保证选择与回填一致
 let prefConfig: RemovableRef<PublishPreferenceCfg> | null = null
@@ -122,7 +119,6 @@ const usePreferenceSettingStore = () => {
     const win = SiyuanDevice.siyuanWindow()
     const aiCfg = win?.siyuan?.config?.ai
     const snAiCfg = aiCfg?.openAI
-    logger.info("try load win.siyuan.config =>", aiCfg)
 
     const siyuanProviders = getSisyuanAiProviders()
 
@@ -135,7 +131,6 @@ const usePreferenceSettingStore = () => {
       cfg.value.experimentalAIApiModel = snAiCfg.apiModel
       cfg.value.experimentalAIApiMaxTokens = snAiCfg.apiMaxTokens
       cfg.value.experimentalAIApiTemperature = snAiCfg.apiTemperature
-      logger.info("use siyuan-note ai config (legacy openAI)")
     } else if (siyuanProviders.length > 0) {
       // 新版 config.ai.providers[]：默认选 agent.modelId，无则取第一个启用模型的 provider
       cfg.value.experimentalUseSiyuanNoteAIConfig = true
@@ -156,10 +151,8 @@ const usePreferenceSettingStore = () => {
       cfg.value.experimentalAIBaseUrl = resolved.p.baseURL
       cfg.value.experimentalAIApiModel = resolved.m.name
       cfg.value.experimentalSisyuanAiActiveModelId = resolved.m.id
-      logger.info("use siyuan-note ai config (providers)")
     } else {
       cfg.value.experimentalUseSiyuanNoteAIConfig = false
-      logger.info("use custom ai config")
     }
 
     // 初始化默认配置
