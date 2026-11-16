@@ -12,7 +12,6 @@ import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
-import { JsonUtil } from "zhi-common"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { Base64 } from "js-base64"
 import { createFormUploadClient } from "~/src/utils/formUploadClient.ts"
@@ -179,7 +178,6 @@ export class BaseBlogApi extends BlogApi {
    */
   public async apiFormFetch(url: string, headers: any[], formData: BodyInit, forceProxy: boolean = false) {
     const json = await this.formUploadClient.postJson({ url, headers, formData, forceProxy })
-    this.logger.debug("apiFormFetch success, resJson=>", json)
     return json as any
   }
 

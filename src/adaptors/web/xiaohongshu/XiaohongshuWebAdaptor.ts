@@ -31,11 +31,9 @@ class XiaohongshuWebAdaptor extends BaseWebApi {
 
     try {
       const res = await this.xiaohongshuFetch("/api/galaxy/user/info", header)
-      this.logger.debug("get xiaohongshu metadata res=>", res)
 
       // 验证是否成功
       const flag = res?.success === true && res?.code === 0 && !!res?.data?.userId
-      this.logger.info(`get xiaohongshu metadata finished, flag => ${flag}`)
 
       if (flag) {
         return {
@@ -101,8 +99,6 @@ class XiaohongshuWebAdaptor extends BaseWebApi {
     }
 
     // 发送请求并返回响应
-    this.logger.debug("xiaohongshu url =>", apiUrl)
-    this.logger.debug("xiaohongshu requestOptions =>", requestOptions)
     const res = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64", "text")
     return res
   }
@@ -122,8 +118,6 @@ class XiaohongshuWebAdaptor extends BaseWebApi {
       headers: mergedHeaders,
       body: formData,
     }
-    this.logger.debug("xiaohongshu form url =>", apiUrl)
-    this.logger.debug("xiaohongshu form options =>", options)
     const res = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
     return res
   }

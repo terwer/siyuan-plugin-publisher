@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
-import { computed, onMounted, reactive, toRaw } from "vue"
+import { computed, onMounted, reactive } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PicbedServiceTypeEnum, Post, PostUtil, YamlConvertAdaptor, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
@@ -153,7 +153,6 @@ const onYamlContentFocus = (event: any) => {
 }
 
 const onYamlContentInput = (val: any) => {
-  logger.debug("仅在常规发布使用")
   formData.isSaved = false
   formData.syncStatus = "info"
   formData.syncMessage = "已修改"
@@ -165,15 +164,11 @@ const doSaveContentChange = () => {
     formData.yamlFormatObj.formatter,
     formData.yamlFormatObj.mdContent
   )
-  logger.debug("val =>", formData.yamlContent)
   try {
     const yamlObj = YamlUtil.yaml2Obj(formData.yamlFormatObj.formatter)
     formData.yamlFormatObj.yamlObj = yamlObj
     formData.siyuanPost = formData.yamlAdaptor.convertToAttr(formData.siyuanPost, formData.yamlFormatObj, formData.cfg)
     // 在这里用 emit 更新到父组件
-    logger.debug("准备emit =>", {
-      post: toRaw(formData.siyuanPost),
-    })
     // 修改过需要设置为手动，不再自动生成
     formData.siyuanPost.yamlType = YamlStrategy.Yaml_custom_hand
     emit("emitSyncPost", formData.siyuanPost)
@@ -212,7 +207,6 @@ const handlePostToHoHtml = async (post: Post) => {
     case YamlStrategy.Yaml_custom_hand: {
       // 按平台适配器重新生成 YAML，并保留已保存 YAML 里适配器不负责的字段（issue #2054）
       yfmObj = await buildPlatformYamlFormatObj(formData.yamlAdaptor, post, formData.cfg)
-      logger.debug("常规发布，按平台适配器生成 YAML, =>", formData.apiType)
       break
     }
 
@@ -225,7 +219,6 @@ const handlePostToHoHtml = async (post: Post) => {
       yfmObj.mdContent = post.markdown
       yfmObj.mdFullContent = YamlUtil.addYamlToMd(yfmObj.formatter, yfmObj.mdContent)
       yfmObj.htmlContent = post.html
-      logger.debug("未找到YAML适配器，将生成公共的YAML")
       break
     }
   }
@@ -233,7 +226,6 @@ const handlePostToHoHtml = async (post: Post) => {
   // 初始化
   formData.yamlFormatObj = yfmObj
   onYamlShowTypeChange(formData.stype)
-  logger.info("编辑模式到 YAML 的同步已完成")
 }
 
 /**
@@ -258,7 +250,6 @@ const initImageNotice = async () => {
     formData.canPreviewUpload = formData.showImageNotice && !StrUtil.isEmptyString(formData.apiType)
   } catch (e) {
     // 提示属于辅助信息，读取失败不阻断源码展示
-    logger.warn("读取图片块失败，跳过源码模式图片提示", e)
   }
 }
 
@@ -323,9 +314,6 @@ const initPage = async () => {
     // 处理编辑模式到源码模式数据转换
     await handlePostToHoHtml(post)
 
-    logger.debug(`init Page in source mode, readonlyMode: ${formData.readonlyMode} =>`, {
-      siyuanPost: toRaw(formData.siyuanPost),
-    })
   } catch (e) {
     ElMessage.error(e.message)
     logger.error(t("main.opt.failure") + "=>", e)

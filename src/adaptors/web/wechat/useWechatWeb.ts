@@ -9,9 +9,8 @@
 
 import { WechatConfig } from "~/src/adaptors/web/wechat/wechatConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -24,16 +23,13 @@ import { PicbedServiceTypeEnum } from "zhi-blog-api"
  */
 const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-wechat-web")
 
   // 记录开始使用Wechat WebAuth
-  logger.info("Start using Wechat WebAuth...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
   let cfg: WechatConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -47,9 +43,7 @@ const useWechatWeb = async (key?: string, newCfg?: WechatConfig) => {
       const wechatCookie = Utils.emptyOrDefault(process.env.VITE_WECHAT_AUTH_TOKEN, "")
       cfg = new WechatConfig("", wechatCookie, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
-      logger.debug("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {

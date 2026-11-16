@@ -9,12 +9,10 @@
 
 import { SiyuanKernelApi } from "zhi-siyuan-api"
 import { StrUtil } from "zhi-common"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { BrowserUtil } from "zhi-device"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 
-const logger = createAppLogger("siyuan-util")
 const { isInSiyuanWidget, isInSiyuanBrowser } = useSiyuanDevice()
 
 /**
@@ -74,7 +72,6 @@ const getSiyuanNewWinPageId = () => {
 export const getSiyuanPageId = async (pageId?: string, force?: boolean) => {
   // 1、显式传递的ID优先处理
   if (!StrUtil.isEmptyString(pageId)) {
-    logger.debug("显示指定pageId=>", pageId)
     return pageId
   }
 

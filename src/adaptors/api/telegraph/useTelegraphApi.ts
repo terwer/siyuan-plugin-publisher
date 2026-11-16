@@ -14,19 +14,15 @@ import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
-  const logger = createAppLogger("use-telegraph-api")
-  logger.info("Start using Telegraph API...")
 
   const appInstance = new PublisherAppInstance()
 
   let cfg: TelegraphConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     const { getSetting } = usePublishSettingStore()
@@ -38,9 +34,7 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       const telegraphToken = Utils.emptyOrDefault(process.env.VITE_TELEGRAPH_TOKEN, "")
       cfg = new TelegraphConfig(telegraphUrl, telegraphToken, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
 
     // 初始化posidKey
@@ -60,7 +54,6 @@ const useTelegraphApi = async (key: string, newCfg?: TelegraphConfig) => {
   cfg.bundledPicbedSupported = false
 
   const blogApi = new TelegraphApiAdaptor(appInstance, cfg)
-  logger.info("Telegraph API created successfully.", cfg)
 
   return {
     cfg,

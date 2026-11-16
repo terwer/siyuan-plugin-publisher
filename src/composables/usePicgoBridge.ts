@@ -55,7 +55,6 @@ const usePicgoBridge = () => {
       // 文章中没有图片时直接返回：无需初始化图床内核，也无需校验 uploader 配置（issue #2050）
       const imageBlocks = await kernelApi.getImageBlocksByID(pageId)
       if (imageBlocks.length === 0) {
-        logger.info("文章中没有图片，跳过图床处理")
         return md
       }
 
@@ -80,7 +79,6 @@ const usePicgoBridge = () => {
           throw new Error(picgoPostResult.errmsg || "PicGo headless upload failed")
         }
       } else {
-        logger.info(picgoErrMsg + picgoPostResult.errmsg)
       }
     } catch (e) {
       const formatted = formatPublisherPicgoError(e)
@@ -104,17 +102,14 @@ const usePicgoBridge = () => {
   const getImageItemsFromMd = async (pageId: string, md: string): Promise<ImageItem[]> => {
     const imageParser = new ImageParser()
     let retImgs: ParsedImage[] = []
-    logger.debug("getImageItemsFromMd=>", { md })
     const parsedImages = imageParser.parseImagesToArray(md)
     retImgs = [...new Set([...retImgs, ...parsedImages])]
-    logger.debug("retImgs=>", retImgs)
 
     const attrs = await kernelApi.getBlockAttrs(pageId)
     const baseUrl = siyuanConfig.apiUrl ?? ""
     // 通用方法获取，保证单例
     const picgoPostApi = await SiyuanPicGo.getInstance(siyuanConfig as unknown as SiyuanConfigBridge, isDev)
     const imageItemArray = await picgoPostApi.doConvertImagesToImagesItemArray(attrs, retImgs, baseUrl)
-    logger.debug("imageItemArray=>", imageItemArray)
     return imageItemArray
   }
 
@@ -136,10 +131,8 @@ const usePicgoBridge = () => {
         // 其他情况，不使用图床
         s = PicbedServiceTypeEnum.None
       }
-      logger.info("使用默认的图床服务")
     } else {
       s = cfg.picbedService
-      logger.info("使用自定义图床服务")
     }
 
     return s

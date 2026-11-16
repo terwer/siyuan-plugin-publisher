@@ -15,7 +15,6 @@ import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConf
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * 本地系统适配器
@@ -26,7 +25,6 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
  * @since 1.38.0
  */
 const useLocalSystemApi = async (key: string, newCfg?: LocalSystemConfig) => {
-  const logger = createAppLogger("use-local-system-api")
   let cfg: LocalSystemConfig
   if (newCfg) {
     cfg = newCfg
@@ -34,7 +32,6 @@ const useLocalSystemApi = async (key: string, newCfg?: LocalSystemConfig) => {
     const { getSetting } = usePublishSettingStore()
     const setting = await getSetting()
     cfg = safeMergeConfig<LocalSystemConfig>(setting[key], LocalSystemConfig, [])
-    logger.info("Using configuration from settings...")
     if (StrUtil.isEmptyString(cfg.posidKey)) {
       cfg.posidKey = getDynPostidKey(key)
     }

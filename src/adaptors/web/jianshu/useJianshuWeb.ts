@@ -8,10 +8,9 @@
  */
 
 import { JianshuConfig } from "~/src/adaptors/web/jianshu/jianshuConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
@@ -24,16 +23,13 @@ import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
  */
 const useJianshuWeb = async (key?: string, newCfg?: JianshuConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-jianshu-web")
 
   // 记录开始使用Jianshu WebAuth
-  logger.info("Start using Jianshu WebAuth...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
   let cfg: JianshuConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -46,9 +42,7 @@ const useJianshuWeb = async (key?: string, newCfg?: JianshuConfig) => {
       // 从环境变量获取Jianshu的cookie
       const jianshuCookie = Utils.emptyOrDefault(process.env.VITE_JIANSHU_AUTH_TOKEN, "")
       cfg = new JianshuConfig("", jianshuCookie, middlewareUrl)
-      logger.debug("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
     if (StrUtil.isEmptyString(cfg.middlewareUrl)) {

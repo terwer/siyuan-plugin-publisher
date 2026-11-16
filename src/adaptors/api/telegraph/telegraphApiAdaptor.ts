@@ -8,7 +8,7 @@
  */
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { Attachment, MediaObject, Post, UserBlog } from "zhi-blog-api"
+import { Post, UserBlog } from "zhi-blog-api"
 import { TelegraphConfig, TelegraphPostType } from "~/src/adaptors/api/telegraph/telegraphConfig.ts"
 import { JsonUtil, StrUtil } from "zhi-common"
 import CookieUtils from "~/src/utils/cookieUtils.ts"
@@ -69,7 +69,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
 
       let cookies: any
       let checkJson = await this.telegraphFetch("/check", "page_id=0", "POST", headers, contentType)
-      this.logger.debug("checkJson =>", checkJson)
 
       if (checkJson["cors-received-headers"]) {
         // use cors proxy
@@ -105,7 +104,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
         cookies,
         tgCfg.forceReAuth
       )
-      this.logger.info(`是否需要刷新：${isUpdated}，是否强制刷新：${tgCfg.forceReAuth}`)
       if (isUpdated) {
         // cookies 每一次都是最新的
         const tphUuidObj = CookieUtils.getCookieObject(cookies, this.TPH_UUID_KEY)
@@ -116,13 +114,10 @@ class TelegraphApiAdaptor extends BaseBlogApi {
           corsCookieArray: cookieArray,
         }
       } else {
-        this.logger.warn("Cookie 还在有效期，可等待 Cookie 过期之后再进行操作", cookieArray)
       }
 
       result.push(userblog)
     }
-
-    this.logger.debug("get telegraph cfg =>", result)
 
     return result
   }
@@ -140,7 +135,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
         throw new Error(`Cookie ${this.TPH_UUID_KEY} 获取失败，无法新建文章`)
       }
       requestCookie = uuidCookie
-      this.logger.warn("当前为匿名发布")
     } else {
       if (StrUtil.isEmptyString(tgCfg.password) || StrUtil.isEmptyString(tgCfg.accessToken)) {
         throw new Error(`Cookie ${this.TPH_UUID_KEY},${this.TPH_TOKEN_KEY} 获取失败，无法新建文章`)
@@ -180,7 +174,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
           res.error
       )
     }
-    this.logger.debug("telegraph newPost resJson =>", res)
 
     const postMeta = {
       update_cookie: requestCookie,
@@ -235,7 +228,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
           res.error
       )
     }
-    this.logger.debug("telegraph editPost resJson =>", res)
 
     return true
   }
@@ -322,13 +314,9 @@ class TelegraphApiAdaptor extends BaseBlogApi {
 
     // 输出日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    this.logger.debug("向 Telegraph 请求数据，apiUrl =>", apiUrl)
     // 使用兼容的fetch调用并返回统一的JSON数据
-    this.logger.debug("向 Telegraph 请求数据，headers =>", headers)
-    this.logger.debug("向 Telegraph 请求数据，body =>", body)
 
     const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, true)
-    this.logger.debug("向 Telegraph 请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }
@@ -349,9 +337,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
       body: formData,
     }
 
-    this.logger.debug("向 Telegraph 发送表单数据，apiUrl =>", apiUrl)
-    this.logger.debug("向 Telegraph 发送表单数据，options =>", options)
-
     const resJson = await this.apiFormFetch(apiUrl, [headers], formData, true)
     if (resJson.error) {
       throw new Error(
@@ -359,7 +344,6 @@ class TelegraphApiAdaptor extends BaseBlogApi {
           resJson.error
       )
     }
-    this.logger.debug("向 Telegraph 发送表单数据，resJson =>", resJson)
 
     return resJson
   }

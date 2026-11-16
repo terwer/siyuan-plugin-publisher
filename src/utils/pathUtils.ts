@@ -31,7 +31,6 @@ export const openPathOrUrl = async (
       msg: "预览链接无效（about:），请检查发布结果。",
       timeout: 5000,
     })
-    logger.warn("Refused to open about url", value)
     return false
   }
 
@@ -42,7 +41,6 @@ export const openPathOrUrl = async (
         const { shell } = remote
         const filePath = isFileUrl(value) ? decodeURIComponent(value.replace("file://", "")) : value
         await shell.openPath(filePath)
-        logger.info("Opened local path", filePath)
         return true
       } catch (error) {
         await kernelApi.pushErrMsg({
@@ -58,7 +56,6 @@ export const openPathOrUrl = async (
       msg: "当前环境无法自动打开本地路径，请手动打开。",
       timeout: 5000,
     })
-    logger.warn("Cannot open local path in non-electron env", value)
     return false
   }
 
@@ -67,7 +64,6 @@ export const openPathOrUrl = async (
       const remote = mainWin.require("@electron/remote")
       const { shell } = remote
       await shell.openExternal(value)
-      logger.info("Opened external url", value)
       return true
     } catch (error) {
       await kernelApi.pushErrMsg({
@@ -82,10 +78,8 @@ export const openPathOrUrl = async (
   const win = existingWindow ?? window.open("", "_blank", "noreferrer")
   if (!win) {
     window.open(value, "_blank", "noreferrer")
-    logger.warn("Popup blocked, fallback window.open", value)
     return true
   }
   win.location.href = value
-  logger.info("Opened url in new window", value)
   return true
 }

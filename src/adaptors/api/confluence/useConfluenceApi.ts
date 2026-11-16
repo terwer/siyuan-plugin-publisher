@@ -15,16 +15,13 @@ import { CONFLUENCE_CONSTANTS } from "~/src/adaptors/api/confluence/confluenceCo
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-confluence-api")
 
   // 记录开始使用 Confluence API
-  logger.info("Start using Confluence API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
@@ -34,7 +31,6 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
 
   let cfg: ConfluenceConfig
   if (newCfg) {
-    logger.info("Merge the latest newCfg with constructor defaults...")
     cfg = Object.assign(defaults, newCfg)
   } else {
     // 从配置中获取数据
@@ -51,9 +47,7 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new ConfluenceConfig(confluenceHome, confluenceHome, confluenceAuthToken, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -78,7 +72,6 @@ const useConfluenceApi = async (key: string, newCfg?: ConfluenceConfig) => {
 
   // 创建 Confluence API 适配器
   const blogApi = new ConfluenceApiAdaptor(appInstance, cfg)
-  logger.info("Confluence API created successfully.", cfg)
 
   return {
     cfg,

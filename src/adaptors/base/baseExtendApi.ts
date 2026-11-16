@@ -188,7 +188,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       const y = numarr[0]
       const m = numarr[1]
       const d = numarr[2]
-      this.logger.debug("created numarr=>", numarr)
 
       let filename = cfg.mdFilenameRule
       // 年月日
@@ -234,7 +233,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       post.title = removeTitleNumber(post.title).replace(/\.md/g, "")
     }
 
-    this.logger.debug("处理MD文件名完成，post", { post: toRaw(post) })
     return post
   }
 
@@ -298,13 +296,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     }
 
     // 目录分类
-    this.logger.info("目录路径转换的分类 =>", pathCates)
     const mergedCategories = [...new Set([...(pathCates ?? []), ...(post?.categories ?? [])])].filter(
       (cate) => cate.trim() !== ""
     )
     post.categories = mergedCategories
-    this.logger.info("最终的分类 =>", post.categories)
-    this.logger.debug("目录路径转换完成，post", { post: toRaw(post) })
     return post
   }
 
@@ -355,7 +350,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     // 汇总结果
     post.markdown = md
-    this.logger.debug("markdown处理完毕，post", { post: toRaw(post) })
 
     return post
   }
@@ -395,8 +389,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const cfg: BlogConfig = publishCfg?.cfg
     const post = _.cloneDeep(doc) as Post
 
-    this.logger.debug("开始处理yaml，post", { post: toRaw(post) })
-
     const yamlAdaptor: YamlConvertAdaptor = this.api.getYamlAdaptor()
     switch (post.yamlType) {
       case YamlStrategy.Yaml_custom_auto: {
@@ -406,7 +398,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         post.yaml = yfmObj.formatter
         post.markdown = yfmObj.mdFullContent
         post.html = yfmObj.htmlContent
-        this.logger.info("rehandled yaml using YamlConverterAdaptor")
         break
       }
       case YamlStrategy.Yaml_custom_hand: {
@@ -421,11 +412,9 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
           post.yaml = yfmObj.formatter
           post.markdown = yfmObj.mdFullContent
           post.html = yfmObj.htmlContent
-          this.logger.info("assign latest custom yaml to md")
         } else {
           // 修复 formatter 未生效
           post.markdown = YamlUtil.addYamlToMd(post.yaml, post.markdown)
-          this.logger.info("assert yaml is saved by source mode, ignore")
         }
         break
       }
@@ -440,7 +429,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         post.yaml = yaml
         post.markdown = md
         post.html = LuteUtil.mdToHtml(md)
-        this.logger.info("yaml adaptor not found, using default")
         break
       }
     }
@@ -482,7 +470,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     //   this.logger.info("yaml adaptor not found, using default")
     // }
 
-    this.logger.debug("yaml处理之后，post", { post: toRaw(post) })
     return post
   }
 
@@ -499,7 +486,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const dynCfg: DynamicConfig = publishCfg?.dynCfg
 
     const post = _.cloneDeep(doc) as Post
-    this.logger.debug("图片处理之前, post =>", { post: toRaw(post) })
 
     // 获取图床服务
     const picbedService = cfg.picbedService
@@ -509,11 +495,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // 使用 PicGo headless lib 上传图片
         // ==========================
         // 图片替换
-        this.logger.info("使用 PicGo 图床内核上传图片")
-        this.logger.debug("开始图片处理, post =>", { post: toRaw(post) })
         try {
           post.markdown = await this.picgoBridge.handlePicgo(id, post.markdown)
-          this.logger.debug("图片处理完毕, post.markdown =>", { md: post.markdown })
         } catch (e: any) {
           const message = e?.message || e
           const diagnosticMessage = this.formatDiagnosticError(e)
@@ -532,16 +515,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         // ==========================
         // 使用平台上传图片
         // ==========================
-        this.logger.info("使用平台上传图片")
         let useMacro = false
         // 找到所有的图片
         const images = await this.getImagesFromMd(id, post.markdown)
         if (images.length === 0) {
-          this.logger.info("未找到图片，不处理")
           return post
         }
         // 批量处理图片上传
-        this.logger.info(`找到${images.length}张图片，开始上传`)
         const urlMap = {}
         const picbedName = this.getPicbedServiceName(cfg)
         for (const image of images) {
@@ -549,16 +529,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             const imageUrl = image.url
             // 忽略在线图片
             if (imageUrl.startsWith("http") && !imageUrl.startsWith(window.location.origin)) {
-              this.logger.warn(`忽略在线图片 ${imageUrl}`)
               continue
             }
             const base64Info = await this.readFileToBase64(imageUrl)
             const bits = base64ToBuffer(base64Info.imageBase64)
             const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
             mediaObject.post = post
-            this.logger.debug("before upload, mediaObject =>", mediaObject)
             const attachResult = await this.api.newMediaObject(mediaObject)
-            this.logger.debug("attachResult =>", attachResult)
             // =======
             // 旧版使用 URL，confluence 使用 macro，macro 优先
             // =======
@@ -588,15 +565,12 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
               }
               ;(post as any).imageUploadErrorDetails.push(`${image.name} 同步失败(使用${picbedName}): ${diagnosticMessage}`)
             } else {
-              this.logger.info("ignore error in macro mode")
             }
           }
         }
 
         // 图片替换
-        this.logger.info("平台图片全部上传完成，将开始进行连接替换，urlMap =>", urlMap)
         if (useMacro) {
-          this.logger.info("使用 Confluence 宏替换图片")
           // Confluence宏替换
           for (const key in urlMap) {
             if (urlMap.hasOwnProperty(key)) {
@@ -605,7 +579,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             }
           }
         } else {
-          this.logger.info("使用链接替换图片")
           // 其他链接替换
           const pictureReplacePattern = new RegExp(
             Object.keys(urlMap)
@@ -621,7 +594,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         break
       }
       default: {
-        this.logger.info("图片图床服务未指定，跳过图片处理")
         break
       }
     }
@@ -629,8 +601,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     // 利用 lute 把 md 转换成 html
     post.html = LuteUtil.mdToHtml(post.markdown)
 
-    this.logger.info("图片预处理全部完成")
-    this.logger.debug("图片处理之后，post", { post: toRaw(post) })
     return post
   }
 
@@ -664,10 +634,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   public async readFileToBase64(url: string): Promise<any> {
     let base64Info: any
     if (this.isSiyuanOrSiyuanNewWin) {
-      this.logger.info("Inside Siyuan notes, use the built-in request to obtain base64")
       base64Info = await remoteImageToBase64Info(url)
     } else {
-      this.logger.info("Outside the browser, use an image proxy")
       let response: any
       if (this.api instanceof BaseBlogApi) {
         const blogApi = this.api as BaseBlogApi
@@ -678,7 +646,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       } else {
         throw new Error("proxyFetch is not valid")
       }
-      this.logger.debug("readFileToBase64 proxyFetch response =>", response)
       const base64String = response.body
       let imageName = "unknown-image"
       if (url) {
@@ -691,7 +658,6 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       }
     }
 
-    this.logger.debug("readFileToBase64 proxyFetch base64Info =>", { base64Info })
     return base64Info
   }
 

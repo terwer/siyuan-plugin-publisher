@@ -35,8 +35,6 @@ class Vuepress2ApiAdaptor extends CommonGithubApiAdaptor {
 
     // 自定义处理
     const md = updatedPost.markdown
-    this.logger.info("准备处理 Vuepress2 正文")
-    this.logger.debug("md =>", { md: md })
     const yfm = YamlUtil.extractFrontmatter(md, true)
     let updatedMd = YamlUtil.extractMarkdown(md)
 
@@ -50,8 +48,6 @@ class Vuepress2ApiAdaptor extends CommonGithubApiAdaptor {
     // ======
 
     updatedPost.markdown = `${yfm}\n${updatedMd}`
-    this.logger.info("Vuepress2 正文处理完毕")
-    this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {

@@ -11,14 +11,12 @@
 // uses
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { inject, ref, computed } from "vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ArrowLeft, QuestionFilled } from "@element-plus/icons-vue"
 import { helpRegistry } from "~/src/helpConfigs/registry"
 import { StrUtil } from "zhi-common"
 import { routeLocationKey, routerKey } from "vue-router"
 import { siteUrl } from "~/src/utils/site"
 
-const logger = createAppLogger("back-page")
 const { t } = useAppI18n()
 
 // 容错获取 router/route：由上层按可选依赖注入，未提供时安全返回 undefined，不抛错。
@@ -53,13 +51,10 @@ const emit = defineEmits(["backEmit"])
 
 const onBack = () => {
   if (props.hasBackEmit) {
-    logger.info("using backEmit do back")
     emit("backEmit")
   } else if (router) {
-    logger.info("using router handle back")
     router.back()
   } else {
-    logger.warn("no backEmit and no router, cannot go back")
   }
 }
 

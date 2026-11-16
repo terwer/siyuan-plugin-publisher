@@ -9,7 +9,6 @@
 
 import { HalowebConfig } from "./HalowebConfig"
 import { HalowebWebAdaptor } from "~/src/adaptors/web/haloweb/HalowebWebAdaptor.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
@@ -33,16 +32,13 @@ const getHaloDynCfg = (setting: ISypConfig) => {
  */
 const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-haloweb-web")
 
   // 记录开始使用Csdn WebAuth
-  logger.info("Start using Haloweb WebAuth...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
   let cfg: HalowebConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -59,15 +55,12 @@ const useHalowebWeb = async (key?: string, newCfg?: HalowebConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new HalowebConfig(authOrigin, middlewareUrl)
       cfg.picbedService = PicbedServiceTypeEnum.Bundled
-      logger.debug("Configuration is empty, using default environment variables.")
     } else {
       if (!StrUtil.isEmptyString(authOrigin) && (authOrigin !== cfg.home || authOrigin !== cfg.apiUrl)) {
         // 说明已经改变了
         cfg.home = authOrigin
         cfg.apiUrl = authOrigin
-        logger.info("authUrl has changed, update cfg.home and cfg.apiUrl")
       }
-      logger.info("Using configuration from settings...")
     }
     // 下面是强制设置的配置
     const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)

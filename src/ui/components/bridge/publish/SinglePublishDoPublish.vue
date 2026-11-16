@@ -134,19 +134,14 @@ const handlePublish = async () => {
     isTimerInit.value = false
     formData.errMsg = ""
 
-    logger.info("保存到系统平台开始")
     for (const sysKey of sysKeys) {
       const sysPublishCfg = await getPublishCfg(sysKey)
       const siyuanPost = _.cloneDeep(formData.mergedPost) as Post
       await doSinglePublish(sysKey, id, sysPublishCfg, siyuanPost)
     }
-    logger.info("保存到系统平台结束")
 
-    logger.info("单个常规发布开始")
     formData.mergedPost.editMode = formData.editType
     const processResult = await doSinglePublish(key, id, formData.publishCfg as IPublishCfg, formData.mergedPost)
-    logger.info("normal publish processResult =>", processResult)
-    logger.info("单个常规发布结束")
 
     if (processResult.status) {
       // 如果是发布并且发布成功
@@ -263,7 +258,6 @@ const handleSyncSiyuanAttrToSiyuan = async () => {
     [SiyuanAttr.Custom_categories]: formData.mergedPost?.categories?.join(",") ?? [],
   }
   await kernelApi.setBlockAttrs(id, newAttrs)
-  logger.debug("保存内置平台属性", newAttrs)
 }
 
 const handleSyncPlatformAttrToSiyuan = async () => {
@@ -285,7 +279,6 @@ const handleSyncPlatformAttrToSiyuan = async () => {
   formData.mergedPost.yaml = yaml
   const yamlKey = getDynYamlKey(key)
   await kernelApi.setSingleBlockAttr(id, yamlKey, yaml)
-  logger.debug("保存当前平台属性", { yaml: toRaw(yaml) })
 }
 
 const getPlatformName = () => {
@@ -327,61 +320,50 @@ const topTitle = computed(() => {
 
 const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val
-  logger.debug("syncEditMode in single publish")
 }
 
 const syncAiSwitch = (val: boolean) => {
   formData.useAi = val
-  logger.debug(`syncAiSwitch in single publish => ${formData.useAi}`)
 }
 
 const syncPublishTitle = (val: string) => {
   formData.mergedPost.title = val
-  logger.debug("syncPublishTitle in single publish")
 }
 
 const syncDesc = (val: string) => {
   formData.mergedPost.shortDesc = val
   formData.mergedPost.mt_text_more = val
   formData.mergedPost.mt_excerpt = val
-  logger.debug("syncDesc in single publish")
 }
 
 const syncTags = (val: string[]) => {
   formData.mergedPost.mt_keywords = val?.join(",")
-  logger.debug("syncTags in single publish")
 }
 
 const syncTagSlugs = (val: string[]) => {
   formData.mergedPost.tags_slugs = val?.join(",")
-  logger.debug("syncTagSlugs in single publish")
 }
 
 const syncCates = (cates: string[]) => {
   formData.mergedPost.categories = cates
-  logger.debug("syncCates in single publish")
 }
 
 const syncCateSlugs = (cateSlugs: string[]) => {
   formData.mergedPost.cate_slugs = cateSlugs
-  logger.debug("syncCateSlugs in single publish")
 }
 
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.mergedPost.dateCreated = val1
   formData.mergedPost.dateUpdated = val2
-  logger.debug("syncPublishTime in single publish")
 }
 
 const syncPublishStatus = (val1: PostStatusEnum, val2: string) => {
   formData.mergedPost.post_status = val1
   formData.mergedPost.wp_password = val2
-  logger.debug("syncPublishStatus in single publish")
 }
 
 const syncPost = (post: Post) => {
   formData.mergedPost = post
-  logger.debug("syncPost in single publish")
 }
 
 // 特色图片：只有声明支持该能力的平台才展示表单与处理发布参数
@@ -389,11 +371,9 @@ const featuredImageEnabled = computed(() => isFeaturedImageEnabled(formData.publ
 
 const syncFeaturedImage = (url: string) => {
   ;(formData.mergedPost as FeaturedImagePost).featuredImage = url
-  logger.debug("syncFeaturedImage in single publish")
 }
 
 const onBack = () => {
-  logger.info("will go back in single-publish-do-publish")
   emit("back")
 }
 
@@ -437,7 +417,6 @@ const checkChatGPTEnabled = () => {
     }
   }
 
-  logger.info(`第${attempts}次尝试就检测AI状态: ${flag}`)
   return flag
 }
 
@@ -446,7 +425,6 @@ const isTimerInit = ref(false)
 const { loadingTime } = useLoadingTimer(isTimerInit)
 
 onMounted(async () => {
-  logger.info("获取到的ID为=>", id)
   try {
     // ==================
     // 初始化开始
@@ -481,7 +459,6 @@ onMounted(async () => {
       cfg: cfg,
     }
 
-    logger.debug("single publish inited mergedPost =>", toRaw(formData.mergedPost))
     // ==================
     // 初始化结束
     // ==================

@@ -10,13 +10,10 @@
 <script setup lang="ts">
 // props
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { onBeforeMount, reactive, toRaw } from "vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { reactive } from "vue"
 import { PicbedServiceTypeEnum } from "zhi-blog-api"
 import FieldGuide from "~/src/ui/components/bridge/common/help/FieldGuide.vue"
 import { useFieldPlaceholder } from "~/src/composables/useFieldPlaceholder.ts"
-
-const logger = createAppLogger("common-blog-setting")
 
 const props = defineProps({
   apiType: {
@@ -51,7 +48,6 @@ const toggleAdvance = () => {
 
 const syncDefaultPath = (cfg: any) => {
   cfg.blogid = cfg.defaultPath
-  logger.debug("sync defaultPath to blogid", { cfg: toRaw(cfg) })
 }
 </script>
 

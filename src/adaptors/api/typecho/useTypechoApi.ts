@@ -7,13 +7,12 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { TypechoConfig } from "~/src/adaptors/api/typecho/typechoConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { TypechoApiAdaptor } from "~/src/adaptors/api/typecho/typechoApiAdaptor.ts"
 import { CategoryTypeEnum } from "zhi-blog-api"
@@ -30,17 +29,14 @@ import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
  */
 export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-typecho-api")
 
   // 记录开始使用Typecho API
-  logger.info("Start using Typecho API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: TypechoConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -55,9 +51,7 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
       const typechoAuthToken = Utils.emptyOrDefault(process.env.VITE_TYPECHO_AUTH_TOKEN, "")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new TypechoConfig(typechoApiUrl, typechoUsername, typechoAuthToken, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -79,7 +73,6 @@ export const useTypechoApi = async (key?: string, newCfg?: TypechoConfig) => {
 
   // 创建Typecho API适配器
   const blogApi = new TypechoApiAdaptor(appInstance, cfg)
-  logger.info("Typecho API created successfully.", cfg)
 
   return {
     cfg,

@@ -135,7 +135,7 @@ async function resolveDocId(): Promise<string> {
       }
     }
   } catch (e) {
-    logger.debug("read active document failed", e)
+    // 此处失败不阻断主流程
   }
 
   return ""

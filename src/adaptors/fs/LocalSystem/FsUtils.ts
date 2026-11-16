@@ -39,7 +39,6 @@ class FsUtils {
    */
   public static getYamlAdaptor(cfg: LocalSystemConfig): YamlConvertAdaptor {
     const yamlType = cfg.fsYamlType
-    FsUtils.logger.debug(`YAML type: ${yamlType}`)
 
     // 默认使用LocalSystemYamlConvertAdaptor
     let yamlAdaptor: YamlConvertAdaptor = new LocalSystemYamlConvertAdaptor(cfg)
@@ -48,44 +47,34 @@ class FsUtils {
     try {
       switch (yamlType) {
         case FsYamlType.Hexo:
-          FsUtils.logger.info("Using Hexo YAML adapter")
           yamlAdaptor = new HexoYamlConverterAdaptor()
           break
         case FsYamlType.Hugo:
-          FsUtils.logger.info("Using Hugo YAML adapter")
           yamlAdaptor = new HugoYamlConverterAdaptor()
           break
         case FsYamlType.Jekyll:
-          FsUtils.logger.info("Using Jekyll YAML adapter")
           yamlAdaptor = new JekyllYamlConverterAdaptor()
           break
         case FsYamlType.Vuepress:
-          FsUtils.logger.info("Using Vuepress YAML adapter")
           yamlAdaptor = new VuepressYamlConverterAdaptor()
           break
         case FsYamlType.Vitepress:
-          FsUtils.logger.info("Using Vitepress YAML adapter")
           yamlAdaptor = new VitepressYamlConverterAdaptor()
           break
         case FsYamlType.Quartz:
-          FsUtils.logger.info("Using Quartz YAML adapter")
           yamlAdaptor = new QuartzYamlConverterAdaptor()
           break
         case FsYamlType.Vuepress2:
-          FsUtils.logger.info("Using Vuepress2 YAML adapter")
           yamlAdaptor = new Vuepress2YamlConverterAdaptor()
           break
         case FsYamlType.Astro:
-          FsUtils.logger.info("Using Astro YAML adapter")
           yamlAdaptor = new AstroYamlConverterAdaptor()
           break
         case FsYamlType.Docsify:
-          FsUtils.logger.info("Using Docsify YAML adapter")
           yamlAdaptor = new DocsifyYamlConverterAdaptor()
           break
         case FsYamlType.Default:
         default:
-          FsUtils.logger.info("Using default LocalSystem YAML adapter")
           yamlAdaptor = new LocalSystemYamlConvertAdaptor(cfg)
           break
       }

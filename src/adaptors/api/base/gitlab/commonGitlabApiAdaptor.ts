@@ -65,11 +65,9 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       await this.safeDeletePost(testFilePath)
       flag = !StrUtil.isEmptyString(res?.file_path)
     } catch (e) {
-      this.logger.info(`checkAuth error =>`, e)
       flag = false
     }
 
-    this.logger.info(`checkAuth finished => ${flag}`)
     return flag
   }
 
@@ -77,7 +75,6 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     const result: UserBlog[] = []
 
     const nodes = await this.gitlabClient.getRepositoryTree("")
-    this.logger.debug("getRepositoryTree =>", nodes)
 
     // 数据适配
     if (nodes && nodes.length > 0) {
@@ -88,13 +85,11 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       userblog.url = StrUtil.pathJoin(StrUtil.pathJoin(cfg.home, cfg.username), cfg.githubRepo)
       result.push(userblog)
     }
-    this.logger.debug("result result =>", result)
 
     return result
   }
 
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    this.logger.debug("start newPost =>", { post: toRaw(post) })
     const cfg = this.cfg as CommonGitlabConfig
 
     // 路径处理
@@ -107,13 +102,11 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     if (docPath.startsWith("./")) {
       docPath = docPath.substring(2)
     }
-    this.logger.info("Gitlab文章将要最终发送到以下目录 =>", docPath)
 
     // 开始发布
     let finalRes: any
     try {
       const res = await this.gitlabClient.createRepositoryFile(docPath, post.description)
-      this.logger.debug("gitlab newPost finished =>", res)
       if (!res?.file_path) {
         throw new Error("Gitlab 调用API异常 =>" + res?.message)
       }
@@ -124,7 +117,6 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       try {
         await this.deletePost(docPath)
       } catch (e) {
-        this.logger.warn("尝试删除失败，忽略", e)
       }
       const res2 = await this.gitlabClient.createRepositoryFile(docPath, post.description)
       if (!res2?.file_path) {
@@ -138,10 +130,8 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
-    this.logger.debug("start getPost =>", { postid: postid })
 
     const res = await this.gitlabClient.getRepositoryFile(postid)
-    this.logger.debug("gitlab getPost finished =>", res)
     if (!res) {
       throw new Error("Gitlab 调用API异常")
     }
@@ -159,9 +149,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       const yamlObj = await YamlUtil.yaml2ObjAsync(commonPost.description)
       const yamlFormatObj = new YamlFormatObj()
       yamlFormatObj.yamlObj = yamlObj
-      this.logger.debug("extract frontFormatter, yamlFormatObj =>", yamlFormatObj)
       commonPost = yamlAdaptor.convertToAttr(commonPost, yamlFormatObj, this.cfg)
-      this.logger.debug("handled yamlObj using YamlConverterAdaptor =>", yamlObj)
     }
 
     // 初始化知识空间
@@ -174,9 +162,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    this.logger.debug("start editPost =>", { postid: postid, post: toRaw(post) })
     const res = await this.gitlabClient.updateRepositoryFile(post.postid, post.description)
-    this.logger.debug("gitlab editPost finished =>", res)
 
     if (!res?.file_path) {
       throw new Error("Gitlab 调用API异常")
@@ -186,8 +172,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
   public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     try {
-      const resJson = await this.gitlabClient.deleteRepositoryFile(postid)
-      this.logger.debug("gitlab deletePost finished =>", resJson)
+      await this.gitlabClient.deleteRepositoryFile(postid)
     } catch (e) {
       throw new Error("Gitlab 调用API异常 =>" + e)
     }
@@ -239,9 +224,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
         this.cfg.blogid
       )
       let imageFullPath = imagePath
-      this.logger.info("Gitlab图片将要最终发送到以下目录 =>", imageFullPath)
       const res = await this.gitlabClient.createRepositoryFile(imageFullPath, base64, "base64")
-      this.logger.debug("gitlab createRepositoryFile res =>", res)
 
       const siteImgId = mediaObject.name
       const siteArticleId = mediaObject.name
@@ -251,7 +234,6 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
       toImagePath = StrUtil.pathJoin(toImagePath, "-/raw")
       toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubBranch)
       if (res?.exist) {
-        this.logger.warn("图片已存在，直接返回")
         toImagePath = StrUtil.pathJoin(toImagePath, imageFullPath)
       } else {
         if (StrUtil.isEmptyString(res.file_path)) {
@@ -260,7 +242,6 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
         toImagePath = StrUtil.pathJoin(toImagePath, res.file_path)
       }
       const siteImgUrl = toImagePath
-      this.logger.info("Gitlab 图片上传成功", siteImgUrl)
       return {
         attachment_id: siteImgId,
         date_created_gmt: new Date(),

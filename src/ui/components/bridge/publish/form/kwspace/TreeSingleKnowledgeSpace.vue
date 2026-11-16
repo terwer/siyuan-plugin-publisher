@@ -9,14 +9,12 @@
 
 <script setup lang="ts">
 import { ITreeSingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { onMounted, reactive, toRaw } from "vue"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
+import { onMounted, reactive } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { ElMessage } from "element-plus"
 import Adaptors from "~/src/adaptors"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 
-const logger = createAppLogger("tree-single-cateslugs")
 const { t } = useAppI18n()
 
 const props = defineProps({
@@ -77,7 +75,6 @@ const customLoad = async (node: any, resolve: any) => {
 }
 
 const onSelectChange = (val: any) => {
-  logger.debug("onSelectChange=>", val)
 
   if (val.isLeaf) {
     ElMessage.error("您当前选择的是页面，请注意，页面必须发布在目录下")
@@ -99,7 +96,6 @@ onMounted(() => {
     formData.knowledgeSpaceConfig.cfg.placeholder.knowledgeSpaceReadonlyModeTip =
       "当前为自动映射目录模式，将根据笔记层级自动生成目录😄"
   }
-  logger.debug("init tree data, cateSlugs =>", { cateSlugs: toRaw(formData.cateSlugs) })
 })
 </script>
 

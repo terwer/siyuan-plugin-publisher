@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { ElMessage } from "element-plus"
-import { inject, onMounted, reactive, ref, toRaw, watch } from "vue"
+import { inject, onMounted, reactive, ref, watch } from "vue"
 import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlog } from "zhi-blog-api"
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
@@ -119,7 +119,6 @@ watch(
     if (newBlogId !== oldBlogId) {
       // 只在实际数据变化时执行逻辑
       forceWatchBlogId(newBlogId)
-      logger.debug("Watch logic triggered:", newBlogId)
     }
   },
   { immediate: true }
@@ -161,7 +160,6 @@ const valiConf = async () => {
       formData.cfg.apiStatus = false
       errMsg = e2.toString()
     }
-    logger.info("======校验正常结束======")
   } catch (e) {
     if (typeof e === "boolean") {
       if (e === true) {
@@ -178,7 +176,6 @@ const valiConf = async () => {
         errMsg = t("setting.blog.vali.failed.check")
       }
 
-      logger.info("======校验修正结束======")
     } else {
       formData.cfg.apiStatus = false
       errMsg = e.toString()
@@ -218,7 +215,6 @@ const valiConf = async () => {
   })
 
   isLoading.value = false
-  logger.debug("Commonblog通用Setting验证完毕")
 }
 
 const afterValid = async (api: any) => {
@@ -251,11 +247,7 @@ const afterValid = async (api: any) => {
 }
 
 const saveConf = async (hideTip?: any) => {
-  logger.debug("prepare to store cfg=>", {
-    cfg: toRaw(formData.cfg),
-  })
 
-  logger.debug("Commonblog通用Setting保存配置")
   // 平台使用配置
   formData.setting[props.apiType] = formData.cfg
   // 平台基本配置
@@ -277,7 +269,6 @@ const saveConf = async (hideTip?: any) => {
 const initKwSpaces = async (keyword?: string) => {
   try {
     const commonblogApiAdaptor = await Adaptors.getAdaptor(props.apiType, formData.cfg as any)
-    logger.debug("commonblogApiAdaptor=>", commonblogApiAdaptor)
     const api = Utils.blogApi(appInstance, commonblogApiAdaptor)
     const usersBlogs = await api.getUsersBlogs(keyword)
     if (usersBlogs && usersBlogs.length > 0) {
@@ -290,7 +281,6 @@ const initKwSpaces = async (keyword?: string) => {
       })
 
       forceWatchBlogId(formData.cfg.blogid)
-      logger.debug("已强制刷新")
     }
   } catch (e) {
     // ElMessage.error(t("main.opt.failure") + "=>" + e)
@@ -302,7 +292,6 @@ const handleCateSearch = async () => {
   try {
     formData.isCateLoading = true
 
-    logger.debug("reload categories for single category woth search")
     formData.kwSpaces = []
     formData.cfg.blogid = undefined
     // 初始化知识空间
@@ -325,7 +314,6 @@ const initConf = async () => {
   formData.dynamicConfigArray = dynJsonCfg?.totalCfg || []
   formData.dynCfg = getDynCfgByKey(formData.dynamicConfigArray, props.apiType)
 
-  logger.debug("Commonblog通用Setting配置初始化")
   let conf = props.cfg as CommonBlogConfig
   // 如果没有配置。读取默认配置
   if (ObjectUtil.isEmptyObject(conf)) {
@@ -334,7 +322,6 @@ const initConf = async () => {
   }
 
   if (conf) {
-    logger.debug("get setting conf=>", conf)
     formData.cfg = conf
 
     // 初始化知识空间

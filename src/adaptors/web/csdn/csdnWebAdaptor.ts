@@ -40,7 +40,6 @@ class CsdnWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.csdnFetch("https://bizapi.csdn.net/blog-console-api/v1/user/info")
     const flag = !!res.data.username
-    this.logger.info(`get csdn metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: res.data.username,
@@ -58,7 +57,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     let result: UserBlog[] = []
 
     const res = await this.csdnFetch("https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all")
-    this.logger.debug("get csdn columns =>", res)
     if (res?.code === 200) {
       const columnList = res?.data?.list
       const column = columnList?.column ?? []
@@ -85,7 +83,6 @@ class CsdnWebAdaptor extends BaseWebApi {
       })
     }
 
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -93,7 +90,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     const cats = [] as CategoryInfo[]
 
     const res = await this.csdnFetch("https://bizapi.csdn.net/blog/phoenix/console/v1/column/list?type=all")
-    this.logger.debug("get csdn columns =>", res)
     if (res?.code === 200) {
       const columnList = res?.data?.list
       const column = columnList?.column ?? []
@@ -133,8 +129,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     const cfg: BlogConfig = publishCfg?.cfg
     const updatedPost = _.cloneDeep(doc) as Post
     const html = updatedPost.html
-    this.logger.info("准备处理CSDN正文")
-    this.logger.debug("html =>", { html: html })
     let updatedHtml = html
 
     // 处理数学公式
@@ -142,8 +136,6 @@ class CsdnWebAdaptor extends BaseWebApi {
 
     // 处理完毕
     updatedPost.html = updatedHtml
-    this.logger.info("CSDN正文处理完毕")
-    this.logger.debug("updatedHtml =>", { updatedHtml: updatedHtml })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
@@ -190,7 +182,6 @@ class CsdnWebAdaptor extends BaseWebApi {
       params,
       "POST"
     )
-    this.logger.debug("save csdn post res=>", res)
 
     if (res?.code !== 200) {
       throw new Error("CSDN文章发布失败，可能是等级不够导致，如过等级不够，请去掉文章标签")
@@ -241,19 +232,16 @@ class CsdnWebAdaptor extends BaseWebApi {
       params,
       "POST"
     )
-    this.logger.debug("save csdn post res=>", res)
 
     if (res?.code !== 200) {
       throw new Error("CSDN文章更新失败，可能是等级不够导致，如果等级不够，请去掉文章标签")
     }
 
-    this.logger.debug("edit csdn post res=>", res)
     return true
   }
 
   public async getPost(postid: string): Promise<Post> {
     const res = await this.csdnFetch(`https://bizapi.csdn.net/blog-console-api/v3/editor/getArticle?id=${postid}`)
-    this.logger.debug("get csdn post =>", res)
 
     const post = new Post()
     if (res?.code === 200) {
@@ -280,7 +268,6 @@ class CsdnWebAdaptor extends BaseWebApi {
         params,
         "POST"
       )
-      this.logger.debug("delete csdn article res=>", res)
 
       if (res?.code !== 200) {
         throw new Error(res?.message)
@@ -308,7 +295,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
 
-    this.logger.debug(`csdn start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // return await this.csdnUploadImage(file, filename)
       return await this.csdnUploadImage2025(file, filename)
@@ -341,7 +327,6 @@ class CsdnWebAdaptor extends BaseWebApi {
       return null
     }
     const uploadData = res.data
-    this.logger.debug("csdn image get sign info =>", uploadData)
     if (!uploadData) {
       throw new Error("CSDN图片签名信息获取失败 =>" + filename)
     }
@@ -367,7 +352,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     formData.append("x:x-image-suffix", uploadData.customParam["x-image-suffix"])
     formData.append("x:username", uploadData.customParam.username)
     formData.append("file", file)
-    this.logger.debug("csdn image upload start...")
     const headers = {}
     const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
     if (resJson.code !== 200) {
@@ -399,7 +383,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     const uploadData = res.data
-    this.logger.debug("csdn image uploadData =>", uploadData)
     if (!uploadData) {
       throw new Error("CSDN图片信息获取失败 =>" + filename)
     }
@@ -416,7 +399,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     formData.append("callback", uploadData.callbackUrl)
     formData.append("file", file)
 
-    this.logger.debug("csdn image upload strat...")
     const headers = {}
     const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
     if (resJson.code !== 200) {
@@ -476,8 +458,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     // 发送请求并返回响应
-    this.logger.debug("csdn url =>", url)
-    this.logger.debug("csdn requestOptions =>", requestOptions)
     const res = await this.webFetch(url, [mergedHeaders], params, method, contentType, true, "base64")
     return res
   }
@@ -526,8 +506,6 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
 
     // 发送请求并返回响应
-    this.logger.debug("csdn url =>", url)
-    this.logger.debug("csdn requestOptions =>", requestOptions)
     const res = await this.webFetch(url, [mergedHeaders], params, method, contentType, true, "base64")
     return res
   }
@@ -549,14 +527,10 @@ class CsdnWebAdaptor extends BaseWebApi {
       body: formData,
     }
 
-    this.logger.debug("向 CSDN 发送表单数据，apiUrl =>", apiUrl)
-    this.logger.debug("向 CSDN 发送表单数据，options =>", options)
-
     const resJson = await this.webFormFetch(apiUrl, [headers], formData, forceProxy)
     if (resJson.error) {
       throw new Error("CSDN 表单提交错误。详细错误 =>" + resJson.error)
     }
-    this.logger.debug("向 CSDN 发送表单数据，resJson =>", resJson)
 
     return resJson
   }

@@ -40,7 +40,7 @@ class HostSessionFetchUtil {
         return session
       }
     } catch (e) {
-      logger?.debug("HostSessionFetchUtil: @electron/remote unavailable", e)
+      // 此处失败不阻断主流程
     }
 
     try {
@@ -50,7 +50,7 @@ class HostSessionFetchUtil {
         return session
       }
     } catch (e) {
-      logger?.debug("HostSessionFetchUtil: electron.session unavailable", e)
+      // 此处失败不阻断主流程
     }
 
     return null
@@ -99,17 +99,14 @@ class HostSessionFetchUtil {
     const log = logger ?? createAppLogger("host-session-fetch")
     const doFetch = this.getSessionFetch(appInstance, log)
     if (!doFetch) {
-      log.warn("HostSessionFetchUtil: session fetch unavailable, skip readiness")
       return false
     }
     if (StrUtil.isEmptyString(home)) {
-      log.warn("HostSessionFetchUtil: empty home, skip readiness")
       return false
     }
 
     const target = StrUtil.isEmptyString(probeUrl) ? home : probeUrl
     if (await this.probe(doFetch, target, log)) {
-      log.info("HostSessionFetchUtil: site already ready")
       return true
     }
 
@@ -122,12 +119,10 @@ class HostSessionFetchUtil {
     while (Date.now() < deadline) {
       await new Promise((r) => setTimeout(r, 1500))
       if (await this.probe(doFetch, target, log)) {
-        log.info("HostSessionFetchUtil: site ready after visit")
         return true
       }
     }
 
-    log.warn("HostSessionFetchUtil: site not ready within timeout")
     return false
   }
 
@@ -136,11 +131,9 @@ class HostSessionFetchUtil {
     try {
       const res = await doFetch(url, { method: "GET" })
       const status = Number(res?.status ?? 0)
-      log.debug(`HostSessionFetchUtil: probe ${url} => ${status}`)
       // 中间页通常以 403 返回；能拿到其它状态说明已放行
       return status > 0 && status !== 403
     } catch (e) {
-      log.debug("HostSessionFetchUtil: probe failed", e)
       return false
     }
   }
@@ -156,7 +149,7 @@ class HostSessionFetchUtil {
     try {
       BrowserWindow = win.require("@electron/remote")?.BrowserWindow
     } catch (e) {
-      log.debug("HostSessionFetchUtil: BrowserWindow unavailable", e)
+      // 此处失败不阻断主流程
     }
     if (!BrowserWindow) {
       return false
@@ -172,10 +165,8 @@ class HostSessionFetchUtil {
         webPreferences: { contextIsolation: true, nodeIntegration: false },
       })
       await w.loadURL(url)
-      log.info("HostSessionFetchUtil: visited site for readiness")
       return true
     } catch (e) {
-      log.warn("HostSessionFetchUtil: visit site failed", e)
       return false
     } finally {
       try {
@@ -183,7 +174,7 @@ class HostSessionFetchUtil {
           w.destroy()
         }
       } catch (e) {
-        log.debug("HostSessionFetchUtil: destroy window failed", e)
+        // 此处失败不阻断主流程
       }
     }
   }

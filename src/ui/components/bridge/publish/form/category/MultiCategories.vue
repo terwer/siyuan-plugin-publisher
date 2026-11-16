@@ -9,14 +9,12 @@
 
 <script setup lang="ts">
 import { IMultiCategoriesConfig } from "~/src/types/ICategoryConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { onMounted, reactive, toRaw } from "vue"
+import { onMounted, reactive } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"
 import { StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
 
-const logger = createAppLogger("multi-categories")
 const { t } = useAppI18n()
 
 const props = defineProps({
@@ -50,10 +48,6 @@ const handleCatNodeClick = (event: any, data: any[], node: any, nodeItem: any) =
 }
 
 const handleCatNodeCheck = (data: any[], status: any) => {
-  logger.debug("checked item=>", {
-    data: toRaw(data),
-    status: toRaw(status),
-  })
 
   const cates = []
   const values = status.checkedKeys
@@ -61,30 +55,21 @@ const handleCatNodeCheck = (data: any[], status: any) => {
     cates.push(item.toString())
   })
   formData.categories = cates
-  logger.debug(" formData.categories=>", {
-    categories: toRaw(formData.categories),
-  })
 
   emit("emitSyncMultiCates", cates)
 }
 
 const handleRemoveTag = (val: string) => {
   const value = val
-  logger.debug("准备删除 =>", value)
 
   const cates = formData.categories.filter((cate) => cate !== value)
   formData.categories = cates
-  logger.debug("formData.categories=>", {
-    categories: toRaw(formData.categories),
-  })
 
   emit("emitSyncMultiCates", cates)
 }
 
 const onCatChange = (val: string) => {
-  const value = val
-  logger.debug("选中项已改变 =>", value)
-
+  val
   // const cates = value
   emit("emitSyncMultiCates", formData.cate.categorySelected)
 }
@@ -92,7 +77,6 @@ const onCatChange = (val: string) => {
 const initPage = async () => {
   if (formData.categoryConfig.cateEnabled) {
     let categoryInfoList: CategoryInfo[] = []
-    logger.debug(`useRemoteData => ${formData.useRemoteData}`)
     if (formData.useRemoteData) {
       // 获取远程分类列表
       const cfg = formData.categoryConfig.cfg
@@ -107,7 +91,6 @@ const initPage = async () => {
           return cateInfo
         })
       }
-      logger.debug("getCategories for multi categories", categoryInfoList)
 
       if (categoryInfoList.length > 0) {
         // 分类列表
@@ -115,9 +98,6 @@ const initPage = async () => {
           value: item.categoryName,
           label: item.categoryName,
         }))
-        logger.debug("get multi categoryList =>", {
-          categoryList: toRaw(formData.cate.categoryList),
-        })
 
         // 当前选中
         const cates = formData.categories
@@ -125,9 +105,6 @@ const initPage = async () => {
         formData.cate.categorySelected = cates
         // 默认未设置，获取第一个
         emit("emitSyncMultiCates", cates)
-        logger.debug("muti cates is syncing =>", {
-          cates: toRaw(cates),
-        })
       }
     } else {
       // 直接读取已有分类
@@ -151,7 +128,6 @@ const initPage = async () => {
         formData.cate.categorySelected = cates
       }
 
-      logger.debug("读取已有分类 =>", { cates: toRaw(cates) })
     }
   }
 }

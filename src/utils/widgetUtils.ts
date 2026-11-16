@@ -13,7 +13,6 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
-import { sanitizeCookieArrayForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
 
 const logger = createAppLogger("widget-utils")
@@ -97,7 +96,6 @@ const doOpenBrowserWindow = (
 
     const { isInSiyuanWidget } = useSiyuanDevice()
     if (!BrowserUtil.isElectron() && !isInSiyuanWidget) {
-      logger.info("BrowserWindow can ony be available in siyuan Electron environment")
       return
     }
 
@@ -107,8 +105,6 @@ const doOpenBrowserWindow = (
         url = BrowserUtil.setUrlParameter(url, key, value)
       })
     }
-
-    logger.info(StrUtil.f("Opening a new BrowserWindow from url => {0}", url))
 
     const mainWin = win ?? SiyuanDevice.siyuanWindow()
     const { app, BrowserWindow, getCurrentWindow } = mainWin.require("@electron/remote")
@@ -147,18 +143,15 @@ const doOpenBrowserWindow = (
     const session = newWindow.webContents.session
     session.webRequest.onBeforeSendHeaders({ urls: extraPreCfg.uaWhiteList }, (details: any, callback: any) => {
       const reqUrl = new URL(url)
-      console.warn("UA 已修改适配，当前请求为", reqUrl)
       if (extraPreCfg.headersMap[reqUrl.href]) {
         // headers自定义
         const newHeaders = extraPreCfg.headersMap[reqUrl.href]
         for (const key in newHeaders) {
           details.requestHeaders[key] = newHeaders[key]
         }
-        console.warn("使用自定义header")
       } else {
         // 使用统一 header
         details.requestHeaders["User-Agent"] = MockBrowser.HEADERS.MACOS_CHROME["User-Agent"]
-        console.warn("使用默认header")
       }
       callback({ cancel: false, requestHeaders: details.requestHeaders })
     })
@@ -175,7 +168,6 @@ const doOpenBrowserWindow = (
       if (extraScript) {
         try {
           const result = await newWindow.webContents.executeJavaScript(extraScript)
-          logger.info(`执行额外脚本成功：${result}`)
           await extraScriptCallback(result)
         } catch (error) {
           logger.error(`执行额外脚本失败：${error}`)
@@ -202,10 +194,8 @@ const doOpenBrowserWindow = (
         )
       })
       if (domainCookies.length > 0) {
-        logger.info(`读取所有cookies成功`, sanitizeCookieArrayForLog(domainCookies))
         await cookieCallback(dynCfg, domainCookies)
       } else {
-        logger.info(`未读取到Cookie`)
         await cookieCallback(dynCfg, [])
       }
     }
@@ -242,7 +232,6 @@ const doOpenBrowserWindow = (
     // 监听 close 事件
     newWindow.on("close", (evt: any) => {
       // readCookies()
-      logger.info("窗口关闭事件触发")
     })
     newWindow.loadURL(url)
 
@@ -260,7 +249,6 @@ const doOpenBrowserWindow = (
         newWindow.close()
       })
     } else {
-      logger.info("cookieCallback is undefined")
       newWindow.show()
     }
   } catch (e) {

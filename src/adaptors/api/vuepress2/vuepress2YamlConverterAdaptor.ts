@@ -10,7 +10,6 @@
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import { toRaw } from "vue"
 
 /**
  * Vuepress2 平台的YAML解析器
@@ -31,12 +30,10 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
    * @returns 返回YAML格式对象
    */
   public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
-    this.logger.debug("您正在使用 Vuepress2 Yaml Converter", { post: toRaw(post) })
     // 初始化yamlFormatObj
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
     } else {
-      this.logger.info("yaml 已存在，根据最新配置更新", { post: toRaw(post) })
       // 清空原有内容，确保使用最新配置
       yamlFormatObj.yamlObj = {}
     }
@@ -90,7 +87,6 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.mdContent = post.markdown
     yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(yamlFormatObj.formatter, yamlFormatObj.mdContent)
     yamlFormatObj.htmlContent = post.html
-    this.logger.info("生成默认的YAML")
 
     return yamlFormatObj
   }
@@ -104,7 +100,6 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
    * @returns 转换后的文章对象
    */
   public convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: BlogConfig): Post {
-    this.logger.debug("开始转换YAML到Post", yamlFormatObj)
     
     // 确保post对象存在
     if (!post) {
@@ -184,7 +179,6 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
       this.logger.error("YAML属性转换过程中发生异常", e)
     }
 
-    this.logger.debug("转换完成，post =>", post)
     return post
   }
 

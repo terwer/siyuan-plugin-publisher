@@ -47,7 +47,6 @@ class EnvUtil {
     try {
       const win = SiyuanDevice.siyuanWindow()
       if (!win?.fs) {
-        this.logger.warn("file system module not available")
         return false
       }
       const fs = win.fs
@@ -62,7 +61,6 @@ class EnvUtil {
       if (!fs.existsSync(normalizedPath)) {
         // 递归创建目录
         fs.mkdirSync(normalizedPath, { recursive: true })
-        this.logger.debug(`created directory: ${normalizedPath}`)
       }
       return true
     } catch (e) {
@@ -80,7 +78,6 @@ class EnvUtil {
     try {
       const win = SiyuanDevice.siyuanWindow()
       if (!win?.fs) {
-        this.logger.warn("file system module not available")
         return false
       }
 
@@ -90,7 +87,6 @@ class EnvUtil {
 
       // 直接写入文件
       fs.writeFileSync(normalizedPath, content, "utf-8")
-      this.logger.debug(`file written: ${normalizedPath}`)
       return true
     } catch (e) {
       this.logger.error(`failed to write file "${filePath}":`, e)
@@ -106,7 +102,6 @@ class EnvUtil {
     try {
       const win = SiyuanDevice.siyuanWindow()
       if (!win?.fs) {
-        this.logger.warn("file system module not available")
         return null
       }
 
@@ -116,11 +111,9 @@ class EnvUtil {
 
       if (fs.existsSync(normalizedPath)) {
         const content = fs.readFileSync(normalizedPath, "utf-8")
-        this.logger.debug(`file read: ${normalizedPath}`)
         return content
       }
 
-      this.logger.warn(`file not found: ${normalizedPath}`)
       return null
     } catch (e) {
       this.logger.error(`failed to read file "${filePath}":`, e)
@@ -136,7 +129,6 @@ class EnvUtil {
     try {
       const win = SiyuanDevice.siyuanWindow()
       if (!win?.fs) {
-        this.logger.warn("file system module not available")
         return false
       }
 
@@ -146,11 +138,9 @@ class EnvUtil {
 
       if (fs.existsSync(normalizedPath)) {
         fs.unlinkSync(normalizedPath)
-        this.logger.debug(`file deleted: ${normalizedPath}`)
         return true
       }
 
-      this.logger.warn(`file not found, skip deletion: ${normalizedPath}`)
       return false
     } catch (e) {
       this.logger.error(`failed to delete file "${filePath}":`, e)
@@ -168,7 +158,6 @@ class EnvUtil {
     try {
       const win = SiyuanDevice.siyuanWindow()
       if (!win?.fs) {
-        this.logger.warn("File system module not available")
         return false
       }
 
@@ -185,7 +174,6 @@ class EnvUtil {
       // 将Uint8Array转换为Buffer
       const buffer = Buffer.from(data)
       fs.writeFileSync(normalizedPath, buffer)
-      this.logger.debug(`Binary file written: ${normalizedPath} (${buffer.length} bytes)`)
       return true
     } catch (e) {
       this.logger.error(`Failed to write binary file "${filePath}":`, e)

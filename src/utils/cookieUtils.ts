@@ -10,13 +10,11 @@
 import * as _ from "lodash-es"
 import { StrUtil } from "zhi-common"
 import cookie from "cookie-parse"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
  * Cookie 工具类
  */
 class CookieUtils {
-  private static logger = createAppLogger("cookie-utils")
 
   /**
    * 添加 cookie 数组
@@ -106,9 +104,8 @@ class CookieUtils {
     let cookies = {}
     try {
       cookies = cookie.parse(value)
-      this.logger.debug("cookieObj", { keys: Object.keys(cookies) })
     } catch (e) {
-      this.logger.warn("Failed to parse cookie =>" + e)
+      // 此处失败不阻断主流程
     }
 
     return cookies

@@ -215,11 +215,11 @@ export const authorizeWebCookie = async (
 
     const requestDynCfg = buildWebCookieRequestDynCfg(dynCfg, cfg) ?? dynCfg
     if (StrUtil.isEmptyString(requestDynCfg.authUrl)) {
-      log.warn("web cookie authorization skipped because authUrl is empty", { platformKey: input.platformKey })
       return { status: "error", ok: false, error: new Error("authUrl is empty") }
     }
 
     const cookies = await captureCookies(requestDynCfg.authUrl, requestDynCfg)
+    // 用户点了「读取 Cookie」才会走到这里：只记录数量，便于事后确认是否真的拿到登录态
     log.info("web cookie capture finished", {
       platformKey: input.platformKey,
       cookieCount: cookies?.length ?? 0,
@@ -299,10 +299,6 @@ export const logoutWebCookieAuthorization = async (
       api = await getWebApi(input.platformKey, cfg)
     } catch (error) {
       if (!isYuqueweb && !StrUtil.isEmptyString(logoutUrl)) {
-        log.warn("web cookie logout adaptor unavailable, fallback to logoutUrl", {
-          platformKey: input.platformKey,
-          error: toSafeError(error).message,
-        })
         await openLogoutUrl(logoutUrl)
         return { status: "url_fallback", ok: true, mode: "url_fallback", logoutUrl }
       }
@@ -348,10 +344,6 @@ export const logoutWebCookieAuthorization = async (
             }
           }
 
-          log.info("web cookie logout remote action finished", {
-            platformKey: input.platformKey,
-            mode: "remote_action",
-          })
           syncInputDynAuthState(dynCfg, false)
           return {
             status: "logout_success",
@@ -375,10 +367,6 @@ export const logoutWebCookieAuthorization = async (
 
     if (!isYuqueweb && !StrUtil.isEmptyString(logoutUrl)) {
       await openLogoutUrl(logoutUrl)
-      log.info("web cookie logout fallback opened", {
-        platformKey: input.platformKey,
-        mode: "url_fallback",
-      })
       return { status: "url_fallback", ok: true, mode: "url_fallback", logoutUrl }
     }
 

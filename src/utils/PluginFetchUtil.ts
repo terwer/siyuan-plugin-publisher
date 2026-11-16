@@ -30,7 +30,7 @@ class PluginFetchUtil {
         const nfc = win.require(this.pluginLibPath(appInstance, "libs/node-fetch-cjs/dist/index.js"))
         return (nfc.default ?? nfc) as typeof fetch
       } catch (e) {
-        logger?.warn("plugin node-fetch unavailable, fallback to appInstance.fetch", e)
+        // 此处失败不阻断主流程
       }
     }
     return appInstance.fetch as typeof fetch

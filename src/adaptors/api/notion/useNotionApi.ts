@@ -15,23 +15,19 @@ import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-notion-api")
 
   // 记录开始使用 Notion API
-  logger.info("Start using Notion API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: NotionConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -45,9 +41,7 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
       const notionAuthToken = Utils.emptyOrDefault(process.env.VITE_NOTION_AUTH_TOKEN, "")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new NotionConfig(notionAuthToken, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -70,7 +64,6 @@ const useNotionApi = async (key: string, newCfg?: NotionConfig) => {
 
   // 创建 Notion API 适配器
   const blogApi = new NotionApiAdaptor(appInstance, cfg)
-  logger.info("Notion API created successfully.", cfg)
 
   return {
     cfg,

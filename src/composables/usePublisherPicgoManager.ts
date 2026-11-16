@@ -138,7 +138,6 @@ const getPublisherPicgoManager = async (): Promise<ISiyuanPicGoHeadlessManager> 
     managerPromise = createSiyuanPicGoHeadlessManager(siyuanConfig, { isDev })
       .then((manager) => {
         assertPublisherPicgoHeadlessContract(manager)
-        logger.info("PicGo headless manager is ready")
         return manager
       })
       .catch((error) => {

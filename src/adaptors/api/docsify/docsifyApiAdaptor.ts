@@ -35,8 +35,6 @@ class DocsifyApiAdaptor extends CommonGithubApiAdaptor {
 
     // 自定义处理
     const md = updatedPost.markdown
-    this.logger.info("准备处理 Docsify 正文")
-    this.logger.debug("md =>", { md: md })
     const yfm = YamlUtil.extractFrontmatter(md, true)
     let updatedMd = YamlUtil.extractMarkdown(md)
 
@@ -45,8 +43,6 @@ class DocsifyApiAdaptor extends CommonGithubApiAdaptor {
     // ======
 
     updatedPost.markdown = `${yfm}\n${updatedMd}`
-    this.logger.info("Docsify 正文处理完毕")
-    this.logger.debug("updatedMd =>", { yfm: yfm, updatedMd: updatedMd })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {

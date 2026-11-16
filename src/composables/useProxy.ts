@@ -60,7 +60,6 @@ const useProxy = (
       throw new Error("未配置跨域代理地址")
     }
     const apiUrl = `${corsProxyUrl.endsWith("/") ? corsProxyUrl : corsProxyUrl + "/"}${url}`
-    logger.info("corsXmlrpcPost url =>", apiUrl)
     const doFetch = PluginFetchUtil.getPluginNodeFetch(appInstance, logger)
     const res = await doFetch(apiUrl, {
       method: "POST",
@@ -142,10 +141,8 @@ const useProxy = (
       | "hex" = "text"
   ) => {
     if (isUseSiyuanProxy || (!isUseSiyuanProxy && forceProxy)) {
-      logger.info("Using Siyuan forwardProxy")
       return await siyuanProxyFetch(url, headers, params, method, contentType, payloadEncoding, responseEncoding)
     } else {
-      logger.info("Using middleware proxy fetch")
       const header = headers.length > 0 ? headers[0] : {}
       const fetchHeaders: Record<string, string> = {}
       for (const [k, v] of Object.entries(header)) {
@@ -160,10 +157,7 @@ const useProxy = (
         headers: fetchHeaders,
         body: params,
       }
-      logger.info("commonFetchClient url in proxyFetch =>", url)
-      logger.info("commonFetchClient fetchOptions in proxyFetch =>", sanitizeSensitiveForLog(fetchOptions))
       const res = await commonFetchClient.fetchCall(url, fetchOptions, forceProxy)
-      logger.debug("Result of proxyFetch in commonFetchClient =>", sanitizeSensitiveForLog(res))
       return res
     }
   }
@@ -187,7 +181,6 @@ const useProxy = (
       isHostSessionFetch,
       canUseHostSessionFetch: HostSessionFetchUtil.canUseSessionFetch(appInstance),
     })
-    logger.info(`XML-RPC transport => ${transport}`, url)
     let resText = await executeXmlrpcTransport(
       transport,
       {
@@ -205,7 +198,6 @@ const useProxy = (
     resText = XmlrpcUtil.removeXmlHeader(resText)
     const deserializer = new Deserializer()
     const resJson = await deserializer.deserializeMethodResponse(resText)
-    logger.debug("xmlrpc fetch result, resJson =>", resJson)
     return resJson
   }
 
@@ -236,7 +228,6 @@ const useProxy = (
     for (const [key, value] of Object.entries(header)) {
       const lowercaseKey = key.toLowerCase()
       if (UNSAFE_HEADERS.map((unsafeHeaderItem) => unsafeHeaderItem.toLowerCase()).includes(lowercaseKey)) {
-        logger.warn(`corsFetch header ${key} is not allowed`)
         xCorsHeaders[key] = value
         delete header[key]
       }
@@ -248,9 +239,6 @@ const useProxy = (
       headers: header,
       body: params,
     }
-
-    logger.debug("corsFetch url =>", apiUrl)
-    logger.debug("corsFetch options =>", sanitizeSensitiveForLog(options))
 
     const res = await fetch(apiUrl, options)
 
@@ -268,14 +256,11 @@ const useProxy = (
         corsRespHeaders[resp_key] = resp_value
       }
     }
-    logger.debug("corsFetch corsRespHeaders =>", sanitizeSensitiveForLog(corsRespHeaders))
 
     const resText = await res.text()
-    logger.debug("corsFetch resText =>", sanitizeSensitiveForLog(resText))
 
     const resJson = JsonUtil.safeParse<any>(resText, {})
     resJson["cors-received-headers"] = JSON.stringify(corsRespHeaders)
-    logger.debug("corsFetch resJson =>", sanitizeSensitiveForLog(resJson))
 
     return resJson
   }
@@ -331,7 +316,6 @@ const useProxy = (
     // GET or HEAD cannot have request body
     if (method !== "GET") {
       const myRequest = new Request("", { method: method, body: body })
-      console.log("generate temp myRequest =>", myRequest)
       payloadBuf = await myRequest.arrayBuffer()
 
       // contentType 需要自动设置
@@ -355,16 +339,6 @@ const useProxy = (
     }
 
     const proxyHeaders = [header]
-    logger.debug("siyuan forwardProxy url =>", reqUrl)
-    logger.debug(
-      "siyuan forwardProxy fetchOptions =>",
-      sanitizeSensitiveForLog({
-        headers,
-        payload,
-        method,
-        contentType,
-      })
-    )
     const fetchResult = await kernelApi.forwardProxy(
       reqUrl,
       proxyHeaders,
@@ -375,7 +349,6 @@ const useProxy = (
       responseEncoding,
       30000
     )
-    logger.debug("proxyFetch result =>", sanitizeSensitiveForLog(fetchResult))
 
     const proxyStatus = Number(fetchResult?.status ?? fetchResult?.StatusCode)
     const proxyBodyRaw = fetchResult?.body ?? fetchResult?.Body
@@ -412,7 +385,6 @@ const useProxy = (
       } else if (contentType === "text/xml") {
         return proxyBodyRaw
       } else {
-        logger.info("SiYuan proxy directly response fetchResult for content type:", contentType)
         return fetchResult
       }
     } else {

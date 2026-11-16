@@ -57,7 +57,6 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
   public async getUsersBlogs(_keyword?: string): Promise<Array<UserBlog>> {
     const localFsCfg = this.cfg as LocalSystemConfig
     // 确保保存路径存在
-    this.logger.debug("Ensure that the save path exists1...", localFsCfg)
     const absStorePath = localFsCfg.storePath
     const absImageStorePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath)
     const isPathOk = EnvUtil.ensurePath(absStorePath, CATE_AUTO_NAME)
@@ -77,32 +76,23 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     // 根据fsYamlType动态选择YAML适配器
     switch (localFsCfg.fsYamlType) {
       case FsYamlType.Hexo:
-        this.logger.info("使用 Hexo YAML 适配器")
         return new HexoYamlConverterAdaptor()
       case FsYamlType.Hugo:
-        this.logger.info("使用 Hugo YAML 适配器")
         return new HugoYamlConverterAdaptor()
       case FsYamlType.Jekyll:
-        this.logger.info("使用 Jekyll YAML 适配器")
         return new JekyllYamlConverterAdaptor()
       case FsYamlType.Vuepress:
-        this.logger.info("使用 VuePress YAML 适配器")
         return new VuepressYamlConverterAdaptor()
       case FsYamlType.Vuepress2:
-        this.logger.info("使用 VuePress2 YAML 适配器")
         return new Vuepress2YamlConverterAdaptor()
       case FsYamlType.Vitepress:
-        this.logger.info("使用 VitePress YAML 适配器")
         return new VitepressYamlConverterAdaptor()
       case FsYamlType.Quartz:
-        this.logger.info("使用 Quartz YAML 适配器")
         return new QuartzYamlConverterAdaptor()
       case FsYamlType.Astro:
-        this.logger.info("使用 Astro YAML 适配器")
         return new AstroYamlConverterAdaptor()
       case FsYamlType.Default:
       default:
-        this.logger.info("使用默认 YAML 适配器")
         return new LocalSystemYamlConvertAdaptor(localFsCfg)
     }
   }
@@ -218,7 +208,6 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     if (EnvUtil.ensurePath(storePath)) {
       // 直接写入文件
       flag = EnvUtil.writeFile(filePath, content)
-      this.logger.info(`Post saved locally: ${filePath}`)
     } else {
       this.logger.error(`Failed to create directory: ${storePath}`)
     }
@@ -248,17 +237,15 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
           // 复用与发布链路 handlePictures 完全一致的图片识别管线
           const imageItems = await getImageItemsFromMd(id, siyuanPost.markdown)
           const imageStorePath = localFsCfg.imageStorePath ?? "assets"
-          this.logger.debug("will delete assets", imageItems)
 
           for (const item of imageItems) {
             if (!item.name) continue
             const absImgPath = StrUtil.pathJoin(StrUtil.pathJoin(localFsCfg.storePath, imageStorePath), item.name)
-            this.logger.info(`deleting asset: ${absImgPath}`)
             EnvUtil.deleteFile(absImgPath)
           }
         }
       } catch (e) {
-        this.logger.warn("failed to clean up local assets, will still delete .md file", e)
+        // 此处失败不阻断主流程
       }
     }
 
@@ -270,7 +257,6 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     const bits = mediaObject.bits
     const localFsCfg = this.cfg as LocalSystemConfig
     // 确保保存路径存在
-    this.logger.debug("Ensure that the save path exists...", localFsCfg)
 
     // 存储基础路径
     let storePath = localFsCfg.storePath
@@ -292,7 +278,6 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
       // 写入媒体文件
       if (EnvUtil.writeBinaryFile(absMediaFilePath, bits)) {
         flag = true
-        this.logger.info(`media saved: ${absMediaFilePath}`)
       }
     }
     if (!flag) {

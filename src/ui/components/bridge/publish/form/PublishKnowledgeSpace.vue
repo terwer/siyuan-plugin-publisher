@@ -9,11 +9,8 @@
 
 <script setup lang="ts">
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { reactive, toRaw } from "vue"
+import { reactive } from "vue"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
-
-const logger = createAppLogger("publish-categories")
 
 const props = defineProps({
   knowledgeSpaceType: {
@@ -41,9 +38,6 @@ const emit = defineEmits(["emitSyncCateSlugs"])
 
 // methods
 const syncPubCateSlugs = (cateSlugs: string[]) => {
-  logger.debug("sync single cateSlugs =>", {
-    cateSlugs: toRaw(cateSlugs),
-  })
   emit("emitSyncCateSlugs", cateSlugs)
 }
 </script>

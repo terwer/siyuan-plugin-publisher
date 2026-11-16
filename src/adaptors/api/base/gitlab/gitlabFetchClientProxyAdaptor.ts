@@ -43,12 +43,8 @@ class GitlabFetchClientProxyAdaptor implements ICommonFetchClient {
       //   "body": {}
       // }
       const apiUrl = StrUtil.pathJoin(this.cfg.apiUrl, url)
-      this.logger.debug("gitlab fetch adaptor start")
-      this.logger.debug("apiUrl=>", apiUrl)
-      this.logger.debug("fetchOptions=>", fetchOptions)
 
       const resp: Response = await this.appInstance.fetch(apiUrl, fetchOptions)
-      this.logger.debug("gitlab fetch adaptor end，resp=>", resp)
       if (resp.ok) {
         return this.safeParseBodyJson(resp)
       } else {
