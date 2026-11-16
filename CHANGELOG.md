@@ -1,12 +1,27 @@
 # Changelog
 
+## [2.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.0...siyuan-plugin-publisher-v2.3.1) (2026-11-16)
+### 关键更新 / Key Updates
+**中文**
+* 修复 2.3.0 发布后插件无法加载的问题：2.3.0 的发行包将插件代码拆分为多个文件，思源加载插件时无法解析入口，插件因此未能启动。2.3.1 重新以单文件、自包含的形式打包 `index.js`，升级到 2.3.1 即可恢复插件。
+* 图片上传对齐 siyuan-plugin-picgo 3.1.1，内置 picgo headless 3.1.1，与 picgo 插件使用同一套上传引擎。
+**english**
+* fixes the plugin failing to load after the 2.3.0 release: the 2.3.0 package split the plugin code into several files, and siyuan could not resolve the entry when loading the plugin, so the plugin never started. 2.3.1 packages `index.js` as a single self-contained file again, so upgrading to 2.3.1 restores the plugin.
+* image uploads are aligned with siyuan-plugin-picgo 3.1.1 and its bundled picgo headless 3.1.1, so uploads use the same engine as the picgo plugin.
+### Bug Fixes
+* **deps:** bump actions/cache to v6 ([b7cb214](https://github.com/terwer/siyuan-plugin-publisher/commit/b7cb21489199d1057fce0c2cf6dcd4ad9191ea38))
+* **deps:** bump actions/checkout to v7 ([3c022a0](https://github.com/terwer/siyuan-plugin-publisher/commit/3c022a091f106066a0a3e0734efda52901c324c0))
+* **deps:** bump vue from 3.5.24 to 3.5.45 ([77166e6](https://github.com/terwer/siyuan-plugin-publisher/commit/77166e60f94503311a3de39b9e7486b53bef46a5))
+### Miscellaneous
+* **deps-dev:** bump @vitejs/plugin-vue from 6.0.7 to 6.0.11 ([995bdfa](https://github.com/terwer/siyuan-plugin-publisher/commit/995bdfa5896868f93b965e02922071ea00973f2f))
+* **deps-dev:** bump vite from 8.3.4 to 8.3.8 ([d69ae1f](https://github.com/terwer/siyuan-plugin-publisher/commit/d69ae1f8ebc4b75ee426a1072cc20d124840d3fd))
+* **deps-dev:** bump vue-tsc from 3.3.13 to 3.3.14 ([4a66bef](https://github.com/terwer/siyuan-plugin-publisher/commit/4a66bef481352bcd306dd288d0a4bf0acb663eb6))
+* **deps:** bump @types/node from 22.19.1 to 24.19.2 ([daa2aa5](https://github.com/terwer/siyuan-plugin-publisher/commit/daa2aa5f1adbc935fc282bc45d0d75223b6a0797))
 ## [2.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.1...siyuan-plugin-publisher-v2.3.0) (2026-11-15)
 ### Features
 * support a featured image when publishing to wordpress ([cf04256](https://github.com/terwer/siyuan-plugin-publisher/commit/cf04256017e0cb77258a19593c01f45d1da80678))
 * upload a local image as the wordpress featured image ([73b0bfb](https://github.com/terwer/siyuan-plugin-publisher/commit/73b0bfb66289f71ce9d53ec5bbfb0952cd316b2c))
-### Bug Fixes
 * **agent:** exclude the cdp endpoint from the http proxy ([db146ef](https://github.com/terwer/siyuan-plugin-publisher/commit/db146eff1556b734c554392634a0722ad1462334))
-### Miscellaneous
 * **deps:** bump zhi-siyuan-picgo to 3.1.0 ([1d06363](https://github.com/terwer/siyuan-plugin-publisher/commit/1d06363a7756787f841ae67738905234d4852c0c))
 ## [2.2.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.0...siyuan-plugin-publisher-v2.2.1) (2026-11-14)
 * anchor the plugin settings entry so desktop opens a popover, not the mobile sheet ([#2054](https://github.com/terwer/siyuan-plugin-publisher/issues/2054)) ([f43cc80](https://github.com/terwer/siyuan-plugin-publisher/commit/f43cc80806f419bd8c8b7901ecb87df961b4ae75))
