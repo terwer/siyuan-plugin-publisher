@@ -3,6 +3,19 @@
 ## [2.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.0...siyuan-plugin-publisher-v2.3.1) (2026-11-16)
 
 
+### 关键更新 / Key Updates
+
+**中文**
+
+* 修复 2.3.0 发布后插件无法加载的问题：2.3.0 的发行包将插件代码拆分为多个文件，思源加载插件时无法解析入口，插件因此未能启动。2.3.1 重新以单文件、自包含的形式打包 `index.js`，升级到 2.3.1 即可恢复插件。
+* 图片上传对齐 siyuan-plugin-picgo 3.1.1，内置 picgo headless 3.1.1，与 PicGo 插件使用同一套上传引擎。
+
+**English**
+
+* Fixes the plugin failing to load after the 2.3.0 release: the 2.3.0 package split the plugin code into several files, and SiYuan could not resolve the entry when loading the plugin, so the plugin never started. 2.3.1 packages `index.js` as a single self-contained file again, so upgrading to 2.3.1 restores the plugin.
+* Image uploads are aligned with siyuan-plugin-picgo 3.1.1 and its bundled picgo headless 3.1.1, so uploads use the same engine as the PicGo plugin.
+
+
 ### Bug Fixes
 
 * **deps:** bump actions/cache to v6 ([b7cb214](https://github.com/terwer/siyuan-plugin-publisher/commit/b7cb21489199d1057fce0c2cf6dcd4ad9191ea38))
