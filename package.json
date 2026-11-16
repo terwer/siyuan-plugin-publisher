@@ -54,7 +54,7 @@
     "vue": "^3.5.45",
     "vue-i18n": "^11.1.12",
     "vue-router": "^4.6.3",
-    "xmlbuilder2": "3.1.1",
+    "xmlbuilder2": "4.0.1",
     "zhi-blog-api": "^1.82.0",
     "zhi-common": "^1.35.0",
     "zhi-device": "^2.12.0",
