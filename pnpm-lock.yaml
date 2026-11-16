@@ -139,8 +139,8 @@ importers:
         specifier: ^24.10.1
         version: 24.19.2
       '@vitejs/plugin-vue':
-        specifier: ^6.0.7
-        version: 6.0.7(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))(vue@3.5.24(typescript@5.9.3))
+        specifier: ^6.0.11
+        version: 6.0.11(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))(vue@3.5.24(typescript@5.9.3))
       '@vitest/coverage-v8':
         specifier: ^5.0.4
         version: 5.0.4(vitest@5.0.4)
@@ -1907,12 +1907,12 @@ packages:
       vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
-  '@vitejs/plugin-vue@6.0.7':
-    resolution: {integrity: sha512-km+p+XdSz9Sxm5rqUbqcSfZYaAniKxWBj1KURl+Jr7UaPvvX7BmaWMdP69I5rrFDeQGyxAG7NXdc57vz+snhWg==}
+  '@vitejs/plugin-vue@6.0.11':
+    resolution: {integrity: sha512-m48lskIUJGlB6qUiYhDMI8nd2ngeidz2U4nKTjqI13cFMu5rH8JeEILPkDtK9Fk/TjBA2pkj8AlbenqDaKu+ww==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
-      vue: ^3.2.25
+      vue: ^3.2.25 || ^3.6.0-rc.15
 
   '@vitest/coverage-v8@5.0.4':
     resolution: {integrity: sha512-P5YcQY8Y6RmoE9xRXI38rT8pssbcubEzqtYTM2XQoxOXMDn04nRaTI1SM8qCl9/NfW3ag9GlzdSXu7IwO5Ft8A==}
@@ -7410,7 +7410,7 @@ snapshots:
       vite: 5.4.21(@types/node@24.19.2)(lightningcss@1.33.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)
       vue: 3.5.24(typescript@5.9.3)
 
-  '@vitejs/plugin-vue@6.0.7(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))(vue@3.5.24(typescript@5.9.3))':
+  '@vitejs/plugin-vue@6.0.11(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1))(vue@3.5.24(typescript@5.9.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.8(@types/node@24.19.2)(esbuild@0.28.0)(sass@1.94.0)(stylus@0.64.0)(terser@5.44.1)(tsx@4.19.2)(yaml@2.9.1)
