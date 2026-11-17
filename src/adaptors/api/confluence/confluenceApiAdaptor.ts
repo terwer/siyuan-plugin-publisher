@@ -50,10 +50,12 @@ class ConfluenceApiAdaptor extends BaseBlogApi {
   public async newPost(post: Post, publish?: boolean): Promise<string> {
     // 确保最新的文章ID都包含了空间信息
     const spaceKey = post.cate_slugs?.[0] ?? this.cfg.blogid
+    // 图片上传策略命中跳过时（issue #2040），正文里的本地图片保持原样，不再走 Confluence 附件上传
+    const imageUploadSkipped = (post as any).imageUploadSkipped === true
     // 判断文章里面是否包含图片
-    const hasImage = ImageUtils.hasImageTag(post.description)
+    const hasImage = !imageUploadSkipped && ImageUtils.hasImageTag(post.description)
     if (!hasImage) {
-      // 如果没有图片，直接创建页面
+      // 如果没有图片（或明确跳过自动上传），直接创建页面
       return await this.createPage(post.title, post.description, spaceKey)
     }
     // 如果有图片

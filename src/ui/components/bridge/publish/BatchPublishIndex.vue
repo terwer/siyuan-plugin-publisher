@@ -24,6 +24,7 @@ import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { PageEditMode, Post } from "zhi-blog-api"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import EditModeSelect from "~/src/ui/components/bridge/publish/form/EditModeSelect.vue"
+import PublishImageUploadPolicy from "~/src/ui/components/bridge/publish/form/PublishImageUploadPolicy.vue"
 import PublishTime from "~/src/ui/components/bridge/publish/form/PublishTime.vue"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
 import { SiyuanAttr } from "zhi-siyuan-api"
@@ -366,6 +367,9 @@ onMounted(async () => {
               <span class="platform">[{{ ret.key }}] {{ StrUtil.isEmptyString(ret.name) ? "" : `[${ret.name}]` }}</span>
               ，
               <a :href="ret.previewUrl" target="_blank">查看文章</a>
+              <span v-if="(ret.imageSkippedCount ?? 0) > 0" class="image-skipped-note">
+                （{{ t("imagePolicy.publishSkipped", { count: ret.imageSkippedCount }) }}）
+              </span>
             </p>
           </div>
         </div>
@@ -382,6 +386,9 @@ onMounted(async () => {
             />
             <!-- 编辑模式选择 -->
             <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />
+
+            <!-- 图片自动上传策略（issue 2040） -->
+            <publish-image-upload-policy :page-id="id" />
 
             <!--
             --------------------------------------
@@ -528,6 +535,10 @@ onMounted(async () => {
 
   .platform
     color var(--el-color-info)
+
+  .image-skipped-note
+    color var(--el-color-warning)
+    margin-left 4px
 
 :deep(.form-action .el-form-item__content)
   margin-left 0 !important

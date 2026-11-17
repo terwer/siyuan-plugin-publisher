@@ -44,6 +44,7 @@ import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
 import { removeMarkdownHeadingNumbers, removeTitleNumber } from "~/src/utils/titleNumber.ts"
 import { SypConfig } from "~/syp.config.ts"
@@ -487,8 +488,25 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     const post = _.cloneDeep(doc) as Post
 
-    // 获取图床服务
-    const picbedService = cfg.picbedService
+    // 图片自动上传策略：文章设置 > 目录排除规则 > 平台图床设置（issue #2040）
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
+    const imageUploadPolicy = await resolveImageUploadPolicy({
+      kernelApi: this.kernelApi,
+      docId: id,
+      rules: getReadOnlyPublishPreferenceSetting().value.imageUploadExcludeDirs,
+    })
+    const skipAutoUpload = imageUploadPolicy.skip === true
+    if (skipAutoUpload) {
+      const skippedCount = countLocalMarkdownImages(post.markdown)
+      ;(post as any).imageUploadSkipped = true
+      ;(post as any).imageUploadSkippedCount = skippedCount
+      this.logger.info(
+        `[image-upload-policy] skip doc=${id || "-"} source=${imageUploadPolicy.source} images=${skippedCount}`
+      )
+    }
+
+    // 获取图床服务；命中跳过策略时等价于「不使用图床」，保留原始图片链接
+    const picbedService = skipAutoUpload ? PicbedServiceTypeEnum.None : cfg.picbedService
     switch (picbedService) {
       case PicbedServiceTypeEnum.PicGo: {
         // ==========================
