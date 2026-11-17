@@ -35,6 +35,24 @@ defineOptions({
   inheritAttrs: false,
 })
 
+/** Popper placement, matching the type ElTooltip accepts. */
+type TooltipPlacement =
+  | "auto"
+  | "auto-start"
+  | "auto-end"
+  | "top"
+  | "top-start"
+  | "top-end"
+  | "bottom"
+  | "bottom-start"
+  | "bottom-end"
+  | "right"
+  | "right-start"
+  | "right-end"
+  | "left"
+  | "left-start"
+  | "left-end"
+
 const props = withDefaults(
   defineProps<{
     content?: string
@@ -45,7 +63,7 @@ const props = withDefaults(
     inlineFlex?: boolean
     tag?: string
     triggerClass?: string
-    placement?: string
+    placement?: TooltipPlacement
     showAfter?: number
     hideAfter?: number
     teleported?: boolean

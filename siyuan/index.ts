@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { App, confirm, getFrontend, IObject, Plugin } from "siyuan"
+import { App, confirm, getFrontend, Plugin } from "siyuan"
 import { SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
 import { createSiyuanAppLogger } from "./appLogger"
 import { Topbar } from "./topbar"
@@ -37,7 +37,7 @@ export default class PublisherPlugin extends Plugin {
   private publishSetting: any
   private prefSetting: any
 
-  constructor(options: { app: App; id: string; name: string; i18n: IObject }) {
+  constructor(options: { app: App; name: string; displayName: string; i18n: Record<string, string> }) {
     super(options)
 
     this.logger = createSiyuanAppLogger("index")
