@@ -6,14 +6,12 @@
  *  Everyone is permitted to copy and distribute verbatim copies
  *  of this license document, but changing it is not allowed.
  */
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PublisherLuteInstance } from "~/src/publisherLuteInstance.ts"
 
 /**
  * Lute 工具类
  */
 class LuteUtil {
-  private static logger = createAppLogger("lute-util")
 
   /**
    * 使用 Lute 渲染 HTML
@@ -83,7 +81,6 @@ class LuteUtil {
     })
     // 开始渲染
     const html = lute.MarkdownStr("", md)
-    this.logger.debug("md to html =>", { html })
     return html
   }
 }

@@ -16,7 +16,6 @@ import { WordpressConfig } from "~/src/adaptors/api/wordpress/wordpressConfig.ts
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
@@ -31,17 +30,14 @@ import { Utils } from "~/src/utils/utils.ts"
  */
 export const useWordpressdotcomApi = async (key?: string, newCfg?: WordpressdotcomConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-wordpress-dot-com-api")
 
   // 记录开始使用Wordpress.com API
-  logger.info("Start using Wordpress.com API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: WordpressdotcomConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -59,9 +55,7 @@ export const useWordpressdotcomApi = async (key?: string, newCfg?: Wordpressdotc
       const wordpressAuthToken = Utils.emptyOrDefault(process.env.VITE_WORDPRESS_AUTH_TOKEN, "")
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new WordpressConfig(wordpressApiUrl, wordpressUsername, wordpressAuthToken, middlewareUrl)
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -83,7 +77,6 @@ export const useWordpressdotcomApi = async (key?: string, newCfg?: Wordpressdotc
 
   // 创建 Wordpress.com API 适配器
   const blogApi = new WordpressdotcomApiAdaptor(appInstance, cfg)
-  logger.info("Wordpress.com API created successfully.", cfg)
 
   return {
     cfg,

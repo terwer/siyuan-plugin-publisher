@@ -123,26 +123,16 @@ const handlePublish = async () => {
       const publishCfg = await getPublishCfg(key)
       formData.publishCfg = publishCfg
       if (sysKeys.includes(key)) {
-        logger.info(`开始发布 [${key}] 系统内置平台`)
         batchItemPost = siyuanPost
       } else {
-        logger.info(`开始发布 [${key}] 自定义平台`)
         // 平台相关的元数据初始化
         batchItemPost = await initPublishMethods.assignInitAttrs(siyuanPost, id, formData.publishCfg)
 
         // 合并属性
         if (formData.distriPattern === DistributionPattern.Override) {
           batchItemPost = initPublishMethods.doOverideBatchPost(siyuanPost, batchItemPost)
-          logger.debug("批量分发模式文章已覆盖", {
-            siyuanPost: toRaw(siyuanPost),
-            mergedPost: toRaw(batchItemPost),
-          })
         } else {
           batchItemPost = initPublishMethods.doMergeBatchPost(siyuanPost, batchItemPost)
-          logger.debug("批量分发模式文章已合并", {
-            siyuanPost: toRaw(siyuanPost),
-            mergedPost: toRaw(batchItemPost),
-          })
         }
       }
 
@@ -207,7 +197,6 @@ const doDelete = async () => {
     formData.successBatchResults = []
     for (const key of formData.dynList) {
       if (sysKeys.includes(key)) {
-        logger.info(`[${key}] 系统内置平台，不可删除，跳过`)
         continue
       }
       // 初始化属性
@@ -257,51 +246,42 @@ const handleSyncToSiyuan = async () => {
     [SiyuanAttr.Custom_categories]: formData.siyuanPost.categories.join(","),
   }
   await kernelApi.setBlockAttrs(id, newAttrs)
-  logger.info("内置平台，保存属性", newAttrs)
   ElMessage.success("属性已经成功同步到思源")
 }
 
 const syncAiSwitch = (val: boolean) => {
   formData.useAi = val
-  logger.debug(`syncAiSwitch in batch publish => ${formData.useAi}`)
 }
 
 const syncPublishTitle = (val: string) => {
   formData.siyuanPost.title = val
-  logger.debug("syncPublishTitle in batch publish")
 }
 
 const syncEditMode = async (val: PageEditMode) => {
   formData.editType = val
-  logger.debug("syncEditMode in batch publish")
 }
 
 const syncDynList = (selectedKeys: string[]) => {
   formData.dynList = selectedKeys
-  logger.debug("syncDynList in batch publish")
 }
 
 const syncDesc = (val: string) => {
   formData.siyuanPost.shortDesc = val
   formData.siyuanPost.mt_text_more = val
   formData.siyuanPost.mt_excerpt = val
-  logger.debug("syncDesc in batch publish")
 }
 
 const syncTags = (val: string[]) => {
   formData.siyuanPost.mt_keywords = val?.join(",")
-  logger.debug("syncTags in batch publish")
 }
 
 const syncCates = (cates: string[]) => {
   formData.siyuanPost.categories = cates
-  logger.debug("syncCates in batch publish")
 }
 
 const syncPublishTime = (val1: Date, val2: Date) => {
   formData.siyuanPost.dateCreated = val1
   formData.siyuanPost.dateUpdated = val2
-  logger.debug("syncPublishTime in batch publish")
 }
 
 const handleRefresh = () => {
@@ -322,7 +302,6 @@ const checkChatGPTEnabled = () => {
     }
   }
 
-  logger.info(`第${attempts}次尝试就检测AI状态: ${flag}`)
   return flag
 }
 
@@ -340,7 +319,6 @@ onMounted(async () => {
   const siyuanPost = await blogApi.getPost(id)
   // 元数据初始化
   formData.siyuanPost = await initPublishMethods.assignInitSlug(siyuanPost, id, formData.publishCfg)
-  logger.debug("batch inited siyuanPost =>", toRaw(formData.siyuanPost))
   // ==================
   // 初始化结束
   // ==================

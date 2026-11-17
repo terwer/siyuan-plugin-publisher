@@ -10,7 +10,7 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
 import * as cheerio from "cheerio"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { StrUtil } from "zhi-common"
 import { md5Hex } from "~/src/utils/cryptoUtils.ts"
 import { getAliOssClient } from "~/src/vendors/alioss/s3oss.ts"
 import * as _ from "lodash-es"
@@ -45,7 +45,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
       "https://www.zhihu.com/api/v4/me?include=account_status%2Cis_bind_phone%2Cis_force_renamed%2Cemail%2Crenamed_fullname"
     )
     const flag = !!res.uid
-    this.logger.info(`get zhihu metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: res.uid,
@@ -81,7 +80,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     //   result.push(useBlog)
     // })
     const columns = await this.getColumns()
-    this.logger.debug("get columns=>", columns)
 
     columns.forEach((column: any) => {
       const useBlog = new UserBlog()
@@ -92,7 +90,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
       result.push(useBlog)
     })
 
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -104,8 +101,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     const cfg: BlogConfig = publishCfg?.cfg
     const updatedPost = _.cloneDeep(doc) as Post
     const html = updatedPost.html
-    this.logger.info("准备处理知乎正文")
-    this.logger.debug("html =>", { html: html })
     let updatedHtml = html
 
     // 处理表格
@@ -115,8 +110,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     // 处理完毕
     updatedPost.html = updatedHtml
-    this.logger.info("知乎正文处理完毕")
-    this.logger.debug("updatedHtml =>", { updatedHtml: updatedHtml })
 
     // 发布格式
     if (cfg?.pageType == PageTypeEnum.Markdown) {
@@ -134,7 +127,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
       content: post.description,
     })
     const res = await this.zhihuFetch("https://zhuanlan.zhihu.com/api/articles/drafts", params, "POST")
-    this.logger.debug("save zhihu draft res=>", res)
 
     if (!res.id) {
       throw new Error("知乎文章发布失败")
@@ -151,9 +143,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
       commercial_report_info: { commercial_types: [] },
       commercial_zhitask_bind_info: null,
     })
-    const pubRes = await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${res.id}/publish`, pubParams, "PUT")
-    this.logger.debug("publish zhihu article pubRes=>", pubRes)
-
+    await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${res.id}/publish`, pubParams, "PUT")
     // 收录文章到专栏
     const column = post.cate_slugs?.[0] ?? this.cfg.blogid
     await this.addPostToColumn(column, postid)
@@ -174,7 +164,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     })
 
     const draftRes = await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/draft`, params, "PATCH")
-    this.logger.debug("updated zhihu draft =>", draftRes)
     if (draftRes?.error?.message) {
       throw new Error(`知乎文章更新失败：[${draftRes.error.name}] ` + draftRes.error.message)
     }
@@ -187,13 +176,11 @@ class ZhihuWebAdaptor extends BaseWebApi {
       commercial_report_info: { commercial_types: [] },
       commercial_zhitask_bind_info: null,
     })
-    const pubRes = await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/publish`, pubParams, "PUT")
-
+    await this.zhihuFetch(`https://zhuanlan.zhihu.com/api/articles/${postid}/publish`, pubParams, "PUT")
     // 收录文章到专栏
     // const column = post.cate_slugs?.[0] ?? this.cfg.blogid
     // await this.addPostToColumn(column, postid)
 
-    this.logger.debug("edit zhihu pubRes=>", pubRes)
     return true
   }
 
@@ -205,7 +192,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     let flag = false
     try {
       const res = await this.zhihuFetch(`https://www.zhihu.com/api/v4/articles/${postid}`, undefined, "DELETE")
-      this.logger.debug("delete zhihu article res=>", res)
       if (res.success) {
         flag = true
       } else {
@@ -250,7 +236,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
     //   })
     // }
     const columns = await this.getColumns()
-    this.logger.debug("get columns=>", columns)
 
     columns.forEach((column: any) => {
       const cat = new CategoryInfo()
@@ -267,9 +252,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
   public async uploadFile(mediaObject: MediaObject): Promise<any> {
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
-    const filename = mediaObject.name
-
-    this.logger.debug(`zhihu start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // 1. 获取图片hash
       const ab = await file.arrayBuffer()
@@ -279,15 +261,12 @@ class ZhihuWebAdaptor extends BaseWebApi {
         image_hash: hash,
         source: "article",
       })
-      this.logger.debug("zhihu uploadFile, params =>", params)
       const fileResp = await this.zhihuFormFetch("https://api.zhihu.com/images", params, {})
-      this.logger.debug("zhihu uploadFile, fileResp =>", fileResp)
 
       // 2. 开始上传
       const upload_file = fileResp.upload_file
       if (fileResp.upload_file.state == 1) {
         const imgDetail = await this.untilImageDone(upload_file.image_id)
-        this.logger.debug("imgDetail", imgDetail)
         upload_file.object_key = imgDetail.original_hash
       } else {
         const token = fileResp.upload_token
@@ -295,8 +274,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
           const client = await getAliOssClient("https://zhihu-pics-upload.zhimg.com", "zhihu-pics", token, {
             appInstance: this.appInstance,
           })
-          const finalUrl = await client.put(upload_file.object_key, new Blob([bits]))
-          this.logger.debug("zhihu uploadFile finished", { client, finalUrl })
+          await client.put(upload_file.object_key, new Blob([bits]))
         } catch (e) {
           this.logger.error("知乎图片上传失败 =>", e)
           throw new Error("知乎图片上传失败, 错误原因 =>" + e)
@@ -362,13 +340,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     // 输出日志
     const apiUrl = url
-    this.logger.debug("向 Zhihu 请求数据，apiUrl =>", apiUrl)
     // 使用兼容的fetch调用并返回统一的JSON数据
-    this.logger.debug("向 Zhihu 请求数据，headers =>", headers)
-    this.logger.debug("向 Zhihu 请求数据，body =>", body)
 
     const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
-    this.logger.debug("向 Zhihu 请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }
@@ -399,14 +373,10 @@ class ZhihuWebAdaptor extends BaseWebApi {
       body: formData,
     }
 
-    this.logger.debug("向知乎发送表单数据，apiUrl =>", apiUrl)
-    this.logger.debug("向知乎发送表单数据，options =>", options)
-
     const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
     if (resJson.error) {
       throw new Error("知乎表单提交错误。详细错误 =>" + resJson.error)
     }
-    this.logger.debug("向知乎发送表单数据，resJson =>", resJson)
 
     return resJson
   }
@@ -420,7 +390,6 @@ class ZhihuWebAdaptor extends BaseWebApi {
    */
   private async addPostToColumn(columnId: string, articleId: string) {
     if (StrUtil.isEmptyString(columnId) || StrUtil.isEmptyString(articleId)) {
-      this.logger.info("文章或者专栏为空，不收录")
       return
     }
 
@@ -430,22 +399,17 @@ class ZhihuWebAdaptor extends BaseWebApi {
     } catch (e) {
       this.logger.error("文章收录到专栏失败", e)
     }
-    this.logger.info("文章收录到专栏成功")
   }
 
   private async untilImageDone(image_id: string): Promise<any> {
     const that = this
     return new Promise(function (resolve, reject) {
       function waitToNext() {
-        that.logger.debug("untilImageDone start processing...", image_id)
         ;(async () => {
           const imgDetail = await that.zhihuFetch(`https://api.zhihu.com/images/${image_id}`, undefined, "GET")
-          that.logger.debug("imgDetail", imgDetail)
           if (imgDetail.status != "processing") {
-            that.logger.info("image upload all done")
             resolve(imgDetail)
           } else {
-            that.logger.debug("go next", waitToNext)
             setTimeout(waitToNext, 300)
           }
         })()

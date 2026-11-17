@@ -38,7 +38,6 @@ class JsonStorage implements StorageLike {
     const basePath = win?.siyuan.config.system.dataDir
     this.filePath = this.path.join(basePath, filePath)
     const storeDir = this.path.dirname(this.filePath)
-    this.logger.info("store dir =>", storeDir)
     // 确保有目录
     if (!this.fs.existsSync(storeDir)) {
       this.fs.mkdirSync(storeDir)
@@ -47,7 +46,6 @@ class JsonStorage implements StorageLike {
     if (!this.fs.existsSync(this.filePath)) {
       this.writeFile({})
     }
-    this.logger.info("ininted json local storage in =>", this.filePath)
   }
 
   /**

@@ -29,7 +29,6 @@ class JuejinWebAdaptor extends BaseWebApi {
     if (!flag) {
       throw new Error(`掘金平台校验失败，详细错误：code: ${res?.err_no}，msg: ${res?.err_msg}`)
     }
-    this.logger.info(`get juejin metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: res.data.user_id,
@@ -56,7 +55,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       "POST",
       header
     )
-    this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
       const cates = res.data
@@ -70,7 +68,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       })
     }
 
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -83,10 +80,8 @@ class JuejinWebAdaptor extends BaseWebApi {
    * 签名 URL 由掘金读取端动态重签，持久层不存任何域名与签名。
    */
   public async uploadFile(mediaObject: MediaObject): Promise<any> {
-    const filename = mediaObject.name
     const rawBits: any = mediaObject.bits
     const bytes = rawBits instanceof Uint8Array ? rawBits : new Uint8Array(rawBits)
-    this.logger.info(`juejin start uploadFile ${filename}, bytes => ${bytes.length}`)
 
     // 1. STS 临时凭证。uuid 仅供上报，服务端不做校验，随机生成即可
     const teaUuid = String(Math.floor(Math.random() * 9e18))
@@ -105,7 +100,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       logger: this.logger,
       requestJson: async (req) => {
         if (casePreservingFetch) {
-          this.logger.debug(`[byte-imagex] via case-preserving node:https => ${req.method} ${req.url.slice(0, 80)}`)
           const raw = await casePreservingFetch({
             url: req.url,
             method: req.method,
@@ -117,7 +111,6 @@ class JuejinWebAdaptor extends BaseWebApi {
           }
           return JsonUtil.safeParse<any>(raw.text, {} as any)
         }
-        this.logger.warn("[byte-imagex] case-preserving fetch unavailable, fallback to webFetch")
         return await this.webFetch(
           req.url,
           [req.headers ?? {}],
@@ -148,7 +141,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       mainUrl = imgUrlRes?.data?.main_url ?? ""
     } catch (e) {
       getImgUrlErr = e
-      this.logger.warn("juejin fetch image main url failed =>", e)
     }
     if (!mainUrl) {
       // 无法生成可访问 URL 时显式失败，避免静默写入裸 URI 导致文章页相对链接
@@ -157,7 +149,6 @@ class JuejinWebAdaptor extends BaseWebApi {
           (getImgUrlErr?.message ?? JSON.stringify(getImgUrlErr)?.slice(0, 300))
       )
     }
-    this.logger.debug("juejin uploadFile finished", { storeUri: result.storeUri, mainUrl })
 
     return {
       id: result.storeUri,
@@ -216,7 +207,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       theme_ids: [],
     })
     const draftRes = await this.juejinFetch(draftUrl, draftParams, "POST", {})
-    this.logger.debug("juejin add post =>", draftRes)
     if (draftRes.err_no !== 0) {
       throw new Error("掘金文章草稿保存错误 =>" + draftRes.err_msg)
     }
@@ -283,7 +273,6 @@ class JuejinWebAdaptor extends BaseWebApi {
     })
     // 更新草稿
     const draftRes = await this.juejinFetch(draftUpdateUrl, draftParams, "POST", {})
-    this.logger.debug("juejin update post =>", draftRes)
     if (draftRes.err_no !== 0) {
       throw new Error("掘金文章更新错误 =>" + draftRes.err_msg)
     }
@@ -310,7 +299,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       article_id: pageId,
     })
     const res = await this.juejinFetch(url, params, "POST", {})
-    this.logger.debug("juejin delete post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章删除失败 =>" + res.err_msg)
     }
@@ -327,7 +315,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       article_id: pageId,
     })
     const res = await this.juejinFetch(url, params, "POST", {})
-    this.logger.debug("juejin get post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章获取失败 =>" + res.err_msg)
     }
@@ -363,7 +350,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       "POST",
       header
     )
-    this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
       res.data.forEach((item: any) => {
@@ -390,7 +376,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       sort_type: 1,
     })
     const res = await this.juejinFetch("https://api.juejin.cn/tag_api/v1/query_tag_list", params, "POST", header)
-    this.logger.info(`get juejin categories`, res.data)
 
     if (res.data && res.data.length > 0) {
       res.data.forEach((item: any) => {
@@ -440,7 +425,6 @@ class JuejinWebAdaptor extends BaseWebApi {
       theme_ids: [],
     })
     const res = await this.juejinFetch(url, params, "POST", {})
-    this.logger.debug("juejin publish post res =>", res)
     if (res.err_no !== 0) {
       throw new Error("掘金文章发布失败 =>" + (res?.err_msg ?? res))
     }
@@ -470,12 +454,8 @@ class JuejinWebAdaptor extends BaseWebApi {
 
     // 输出日志
     const apiUrl = url
-    this.logger.debug("向掘金请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向掘金请求数据，headers =>", headers)
-    this.logger.debug("向掘金请求数据，body =>", body)
 
     const resJson = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64")
-    this.logger.debug("向掘金请求数据，resJson =>", resJson)
 
     return resJson ?? null
   }

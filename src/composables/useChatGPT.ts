@@ -134,9 +134,7 @@ const useChatGPT = () => {
         temperature: pref.value.experimentalAIApiTemperature,
       }
 
-      logger.debug("chat q =>", { q, opts })
       const res = await api.sendMessage(q, opts)
-      logger.debug("chat res =>", res)
       if (opts.stream) {
         return res
       } else {

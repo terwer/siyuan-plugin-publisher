@@ -8,7 +8,7 @@
   -->
 
 <script setup lang="ts">
-import { onMounted, reactive, toRaw } from "vue"
+import { onMounted, reactive } from "vue"
 import { StrUtil } from "zhi-common"
 import { TagInfo } from "zhi-blog-api"
 import Adaptors from "~/src/adaptors"
@@ -51,13 +51,10 @@ const emit = defineEmits(["emitSyncTagSlugs"])
 // methods
 const handleCatNodeSingleCheck = (val: any) => {
   const value = val
-  logger.debug("value=>", value)
-  logger.debug("label=>", value)
 
   const tagSlugs = []
   tagSlugs.push(value)
   formData.tagSlugs = tagSlugs
-  logger.debug("tagSlugs=>", formData.tagSlugs)
 
   emit("emitSyncTagSlugs", tagSlugs)
 }
@@ -68,7 +65,6 @@ const initPage = async () => {
   const cfg = formData.cfg
   const api = await Adaptors.getAdaptor(formData.apiType, cfg)
   tagInfoList = await api.getTags()
-  logger.debug("getTags for single slug tag", tagInfoList)
 
   if (tagInfoList.length > 0) {
     // 分类列表
@@ -79,7 +75,6 @@ const initPage = async () => {
 
     // 当前选中
     formData.tag.tagSelected = (formData.tagSlugs?.[0] ?? "") as string
-    logger.debug("读取已有别名标签 =>", { tagSlugs: toRaw(formData.tagSlugs) })
   }
 }
 

@@ -11,7 +11,7 @@ import { CategoryInfo, Post, UserBlog } from "zhi-blog-api"
 import { YuqueConfig } from "~/src/adaptors/api/yuque/yuqueConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
-import { ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil } from "zhi-common"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { assertYuqueApiResponse, toYuqueApiUserError } from "~/src/adaptors/api/yuque/yuqueApiError.ts"
 
@@ -67,7 +67,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
     const yuquePostidKey = this.getYuquePostidKey(postid)
 
     const yuqueDoc = await this.getDoc(yuquePostidKey.docId, yuquePostidKey.docRepo)
-    this.logger.debug("yuqueDoc=>", yuqueDoc)
 
     const commonPost = new Post()
     commonPost.title = yuqueDoc.title
@@ -122,7 +121,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
   private async getRepos() {
     const url = "/users/" + this.cfg.username + "/repos"
     const repos = await this.yuqueRequest(url, {}, "GET")
-    this.logger.debug("yuque repos=>", repos)
     return repos
   }
 
@@ -138,7 +136,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
     let url = "/repos/" + this.cfg.blogid + "/docs"
     if (repo) {
       url = "/repos/" + repo + "/docs"
-      this.logger.warn("yuque addDoc with repo", repo)
     }
     const params = {
       title,
@@ -147,7 +144,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
       body: content,
     }
     const result = await this.yuqueRequest(url, params, "POST")
-    this.logger.debug("yuqueRequest addDoc=>", result)
     if (!result) {
       throw new Error("请求语雀API异常")
     }
@@ -179,7 +175,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
     let url = "/repos/" + this.cfg.blogid + "/docs/" + docId
     if (repo) {
       url = "/repos/" + repo + "/docs/" + docId
-      this.logger.warn("yuque updateDoc with repo", repo)
     }
     const params = {
       title,
@@ -229,7 +224,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
     let url = "/repos/" + this.cfg.blogid + "/docs/" + docId
     if (repo) {
       url = "/repos/" + repo + "/docs/" + docId
-      this.logger.warn("yuque delDoc with repo", repo)
     }
     const result = await this.yuqueRequest(url, {}, "DELETE")
     if (!result) {
@@ -249,7 +243,6 @@ class YuqueApiAdaptor extends BaseBlogApi {
     let url = "/repos/" + this.cfg.blogid + "/docs/" + docId
     if (repo) {
       url = "/repos/" + repo + "/docs/" + docId
-      this.logger.warn("yuque getDoc with repo", repo)
     }
     const result = await this.yuqueRequest(url, {}, "GET")
     if (!result) {
@@ -280,13 +273,10 @@ class YuqueApiAdaptor extends BaseBlogApi {
 
     // 打印日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    this.logger.debug("向语雀请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向语雀请求数据，params =>", params)
 
     try {
       const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
       const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64")
-      this.logger.debug("向语雀请求数据，resJson =>", resJson)
 
       assertYuqueApiResponse(resJson)
 

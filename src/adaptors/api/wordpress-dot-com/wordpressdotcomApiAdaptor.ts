@@ -42,7 +42,6 @@ class WordpressdotcomApiAdaptor extends MetaweblogBlogApiAdaptor {
       this.cfg.username,
       this.cfg.password,
     ])
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -54,7 +53,6 @@ class WordpressdotcomApiAdaptor extends MetaweblogBlogApiAdaptor {
       this.cfg.password,
       false,
     ])
-    this.logger.debug("ret=>", ret)
 
     return ret
   }

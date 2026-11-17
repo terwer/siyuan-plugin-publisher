@@ -82,7 +82,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const user = await this.yuquewebFetch("/api/mine")
     const flag = !StrUtil.isEmptyString(user?.login)
-    this.logger.info(`get yuqueweb metadata finished, flag => ${flag}`)
 
     return {
       flag,
@@ -115,7 +114,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
       "x-csrf-token": csrfToken,
       "x-login": login,
     })
-    this.logger.info("yuqueweb logout finished", { login })
     return true
   }
 
@@ -141,10 +139,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
       throw new Error("未获取到可发布的语雀知识库，请确认当前语雀账号已有知识库写入权限。")
     }
 
-    this.logger.debug(
-      "get yuqueweb books =>",
-      result.map((item) => ({ blogid: item.blogid, blogName: item.blogName }))
-    )
     return result
   }
 
@@ -171,7 +165,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
     }
 
     const meta = this.buildPostMeta(createdDoc, bookMeta)
-    this.logger.debug("yuqueweb newPost meta =>", meta)
     return meta.toPostid()
   }
 
@@ -211,7 +204,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
       return true
     } catch (e) {
       if (e instanceof YuquewebRequestError && e.status === 404) {
-        this.logger.warn("yuqueweb deletePost: remote doc already missing, allow local unbind")
         return true
       }
       throw e
@@ -332,7 +324,7 @@ class YuquewebWebAdaptor extends BaseWebApi {
           })
         }
       } catch (e) {
-        this.logger.warn("yuqueweb get books failed", { path, err: this.sanitizeForLog(e?.toString?.() ?? e) })
+        // 此处失败不阻断主流程
       }
     }
 
@@ -547,10 +539,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
         if (StrUtil.isEmptyString(meta.slug)) {
           throw e
         }
-        this.logger.warn("yuqueweb getPost by id failed, fallback to slug", {
-          id: meta.id,
-          err: this.sanitizeForLog(e?.toString?.() ?? e),
-        })
       }
     }
 
@@ -679,7 +667,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
     try {
       return decodeURIComponent(content)
     } catch (e) {
-      this.logger.warn("yuqueweb decode confirmed content failed", this.sanitizeForLog(e?.toString?.() ?? e))
       return content
     }
   }
@@ -720,12 +707,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
     const body =
       method === "GET" || method === "DELETE" || ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
 
-    this.logger.debug("yuqueweb request", {
-      method,
-      apiUrl: this.sanitizeForLog(apiUrl),
-      bodyKeys: params && typeof params === "object" ? Object.keys(params) : [],
-    })
-
     const diagnostic: WebRequestDiagnostic = {
       stage: "web-fetch",
       url: apiUrl,
@@ -762,7 +743,6 @@ class YuquewebWebAdaptor extends BaseWebApi {
       stage: "web-form-fetch",
       url: apiUrl,
     })
-    this.logger.debug("yuqueweb form request", { apiUrl: this.sanitizeForLog(apiUrl) })
 
     try {
       const resJson = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true, { diagnostic })

@@ -150,10 +150,6 @@ const tagMethods = {
           formData.tag.dynamicTags.push(resJson.tags[i])
         }
       }
-      logger.info("使用AI智能生成的标签结果 =>", {
-        inputWord: inputWord,
-        chatText: chatText,
-      })
 
       // const hotTags = await SmartUtil.autoTags(formData.html, 5)
       // for (let i = 0; i < hotTags.length; i++) {
@@ -172,7 +168,6 @@ const tagMethods = {
   },
   onPlatformTagChange: (val: string) => {
     const value = val
-    logger.debug("选中项已改变 =>", value)
 
     emit("emitSyncTags", formData.tag.dynamicTags)
   },
@@ -188,9 +183,7 @@ const initPage = async () => {
       value: item.tagName,
       label: item.tagName,
     }))
-    logger.debug("getTags for platforms", formData.tag.platformTags)
   } else {
-    logger.warn("tagConfig not found, ignore tags")
   }
 }
 

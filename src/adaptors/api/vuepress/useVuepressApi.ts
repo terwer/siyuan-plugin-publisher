@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { VuepressApiAdaptor } from "~/src/adaptors/api/vuepress/vuepressApiAdaptor.ts"
 import { VuepressConfig } from "~/src/adaptors/api/vuepress/vuepressConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
@@ -16,23 +16,19 @@ import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepre
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-vuepress-api")
 
   // 记录开始使用 Vuepress API
-  logger.info("Start using Vuepress API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: VuepressConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -50,9 +46,7 @@ const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new VuepressConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[filename].md"
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -86,7 +80,6 @@ const useVuepressApi = async (key: string, newCfg?: VuepressConfig) => {
 
   // 创建 Vuepress API 适配器
   const blogApi = new VuepressApiAdaptor(appInstance, cfg)
-  logger.info("Vuepress API created successfully.", cfg)
 
   return {
     cfg,

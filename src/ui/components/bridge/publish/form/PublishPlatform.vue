@@ -43,7 +43,6 @@ const formData = reactive({
 const emit = defineEmits(["emitSyncDynList"])
 
 if (emit) {
-  logger.info("selectedKeys=>", formData.selectedKeys)
   emit("emitSyncDynList", formData.selectedKeys)
 }
 const handleCheck = (key: string) => {
@@ -56,7 +55,6 @@ const handleCheck = (key: string) => {
   }
 
   if (emit) {
-    logger.info("selectedKeys=>", formData.selectedKeys)
     emit("emitSyncDynList", formData.selectedKeys)
   }
 }

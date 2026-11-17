@@ -15,7 +15,6 @@ import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogC
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
@@ -30,17 +29,14 @@ import { Utils } from "~/src/utils/utils.ts"
  */
 export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-metaweblog-api")
 
   // 记录开始使用Metaweblog API
-  logger.info("Start using Metaweblog API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: MetaweblogConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -56,9 +52,7 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
 
       cfg = new MetaweblogConfig("", metaweblogApiUrl, metaweblogUsername, metaweblogAuthToken, middlewareUrl)
-      logger.debug("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -81,7 +75,6 @@ export const useMetaweblogApi = async (key?: string, newCfg?: MetaweblogConfig) 
   const blogApi = new MetaweblogBlogApiAdaptor(appInstance, cfg)
 
   // 记录Metaweblog API创建成功
-  logger.info("Metaweblog API created successfully.")
 
   return {
     cfg,

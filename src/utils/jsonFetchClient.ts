@@ -252,10 +252,7 @@ async function runJsonFetchTransport(
     responseEncoding = "text",
     diagnostic,
   } = request
-  const { logger, attachDiagnosticError } = deps
-
-  logger?.info(`[json-fetch-transport] transport => ${transport}`, url)
-
+  const { attachDiagnosticError } = deps
   const run = async (): Promise<unknown> => {
     switch (transport) {
       case "plugin-node-fetch": {

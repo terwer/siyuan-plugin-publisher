@@ -169,8 +169,7 @@ const buildSigV4Authorization = async (
 // 客户端
 // ==========================
 const createByteImagexClient = (deps: ByteImagexClientDeps) => {
-  const logger = deps.logger
-
+  deps.logger
   const signedApiRequest = async (
     method: "GET" | "POST",
     action: string,
@@ -185,7 +184,6 @@ const createByteImagexClient = (deps: ByteImagexClientDeps) => {
       .join("&")
     const { authorization, amzDate } = await buildSigV4Authorization(method, query, stsToken)
     const url = `${IMAGEX_API_HOST}/?${rawQuery}`
-    logger?.debug(`[byte-imagex] ${action} request =>`, url)
     return await deps.requestJson({
       url,
       method,
@@ -218,7 +216,6 @@ const createByteImagexClient = (deps: ByteImagexClientDeps) => {
     // 2. TOS 直传（原始字节流 + 强制 CRC32 校验头）
     const crc32 = crc32Hex(bytes)
     const objectUrl = `https://${uploadHost}/${storeInfo.StoreUri}`
-    logger?.info(`[byte-imagex] uploading ${bytes.length} bytes to ${objectUrl}, crc32=${crc32}`)
     const putRes = await deps.requestJson({
       url: objectUrl,
       method: "POST",
@@ -246,7 +243,6 @@ const createByteImagexClient = (deps: ByteImagexClientDeps) => {
     if (firstResult?.UriStatus !== 2000) {
       throw new Error("字节 ImageX 提交上传失败 => " + JSON.stringify(commitRes)?.slice(0, 500))
     }
-    logger?.info(`[byte-imagex] upload committed, storeUri => ${firstResult.Uri}`)
 
     return {
       storeUri: firstResult.Uri ?? storeInfo.StoreUri,

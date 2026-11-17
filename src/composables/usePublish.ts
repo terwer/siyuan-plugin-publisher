@@ -9,7 +9,7 @@
 
 import { ElMessage } from "element-plus"
 import * as _ from "lodash-es"
-import { reactive, toRaw } from "vue"
+import { reactive } from "vue"
 import {
   BlogConfig,
   Post,
@@ -88,15 +88,11 @@ const usePublish = () => {
       const block = await kernelApi.getBlockByID(id)
       box = block?.box
     } catch (e) {
-      logger.warn(`getBlockByID for notebook validation failed id=${id}=>`, e)
+      // 取不到块信息时不做笔记本校验，交给后面的发布流程报错
     }
 
     if (box && !allowed.includes(box)) {
       throw new Error(`该文档所属笔记本（${box}）不在发布的授权笔记本集合内，无法发布。`)
-    }
-
-    if (!box) {
-      logger.warn(`未获取到文档 ${id} 的笔记本信息，按未限定处理（放过）。`)
     }
   }
 
@@ -125,7 +121,6 @@ const usePublish = () => {
 
       // 系统内置
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
-      logger.info(`isSys=>${isSys}`)
 
       // 校验
       if (isSys) {
@@ -143,9 +138,11 @@ const usePublish = () => {
       }
       singleFormData.isAdd = StrUtil.isEmptyString(postid)
 
+      // 事后排查只需要「对哪篇文档、往哪个平台、做什么」，过程不再逐条记录
+      logger.info(`[publish] start platform=${key} doc=${id} action=${singleFormData.isAdd ? "create" : "update"}`)
+
       // 确保每次发布都是新的副本
       const post = _.cloneDeep(doc) as Post
-      logger.debug("准备开始发布处理, doc =>", { post: toRaw(doc) })
       // 保证postid一致
       post.postid = postid
 
@@ -155,11 +152,7 @@ const usePublish = () => {
       // ===================================
       // 文章预处理开始
       // ===================================
-      logger.info(`开始文章预处理, isAdd =>${singleFormData.isAdd}`)
-      logger.debug(`post=>`, toRaw(post))
       const finalPost = await api.preEditPost(post, id, publishCfg)
-      logger.info(`文章全部预处理完毕，id=${id},key=${key}`)
-      logger.debug(`最终结果 =>`, { finalPost: toRaw(finalPost) })
       // 检查图片上传错误（preEditPost内部图片上传失败时不抛异常，而是收集到post自定义属性上）
       const imageErrors = (finalPost as any).imageUploadErrors as string[] | undefined
       if (imageErrors && imageErrors.length > 0) {
@@ -180,7 +173,6 @@ const usePublish = () => {
 
       // 处理发布：新增 或者 更新
       if (singleFormData.isAdd) {
-        logger.info("文章未发布，准备发布")
 
         // result 正常情况下就是 postid
         const result = await api.newPost(finalPost)
@@ -194,14 +186,10 @@ const usePublish = () => {
         setting[id] = postMeta
         await updateSetting(setting)
 
-        logger.info("new post=>", result)
-        logger.info("文章发布成功")
       } else {
-        logger.info("文章已发布，准备更新")
 
         // result 正常情况下是 true
-        const result = await api.editPost(postid, finalPost)
-
+        await api.editPost(postid, finalPost)
         // 写入属性到配置
         const postMeta = ObjectUtil.getProperty(setting, id, {})
         let shouldUpdateSetting = false
@@ -209,21 +197,18 @@ const usePublish = () => {
         // 这里更新 slug 的原因是历史文章有可能没有生成过别名；如果用户在发布页修改了别名，也要以本次成功发布后的别名为准。
         // eslint-disable-next-line no-prototype-builtins
         if (!postMeta.hasOwnProperty(SiyuanAttr.Custom_slug) && !StrUtil.isEmptyString(finalPost.wp_slug)) {
-          logger.info("检测到未生成过别名，准备更新别名")
           postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
           shouldUpdateSetting = true
         } else if (
           !StrUtil.isEmptyString(finalPost.wp_slug) &&
           postMeta[SiyuanAttr.Custom_slug] !== finalPost.wp_slug
         ) {
-          logger.info(`检测到别名已更新，从 ${postMeta[SiyuanAttr.Custom_slug]} 更新为 ${finalPost.wp_slug}`)
           postMeta[SiyuanAttr.Custom_slug] = finalPost.wp_slug
           shouldUpdateSetting = true
         }
 
         // 检查是否因为目录变更导致postid变化
         if (finalPost.postid && finalPost.postid !== postid) {
-          logger.info(`文章目录已更改，更新postid从 ${postid} 到 ${finalPost.postid}`)
           postMeta[cfg.posidKey] = finalPost.postid
           shouldUpdateSetting = true
           // 更新当前使用的postid
@@ -236,8 +221,6 @@ const usePublish = () => {
           await updateSetting(setting)
         }
 
-        logger.info("edit post=>", result)
-        logger.info("文章更新成功")
       }
 
       // 特色图片失败不改变发布结果，但要把原因带给上层，便于界面提示与排障
@@ -252,10 +235,8 @@ const usePublish = () => {
         logger.warn(`特色图片处理失败（正文已发布）=> ${featuredImageError}`)
       }
 
-      logger.info("发布完成，准备处理文章属性、元数据")
       // 保存属性用于初始化
       if (isSys) {
-        logger.info("内置平台，忽略保存属性")
       } else {
         // 保存属性
         const yamlKey = getDynYamlKey(key)
@@ -268,16 +249,18 @@ const usePublish = () => {
         const templates = []
         updatePlatformMetadata(key, tags, cates, templates)
       }
-      logger.info("文章属性处理完成")
 
       // 更新预览链接
       postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
 
       singleFormData.publishProcessStatus = true
+      logger.info(`[publish] success platform=${key} postid=${postid} url=${postPreviewUrl ?? ""}`)
     } catch (e) {
       singleFormData.errMsg = sanitizePublishText(t("main.opt.failure") + "=>" + e)
       publishErrorDetails = formatPublishDiagnosticError(e)
-      // logger.error(t("main.opt.failure") + "=>", e)
+      // 失败必须可定位：错误原文 + 请求阶段/HTTP 状态/诊断信息
+      logger.error(`[publish] failed platform=${key} doc=${id}: ${String(e?.message ?? e)}`)
+      logger.error(`[publish] failed detail platform=${key} doc=${id}: ${publishErrorDetails}`)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
         timeout: 7000,
@@ -342,17 +325,16 @@ const usePublish = () => {
 
         setting[id] = updatedPostMeta
         await updateSetting(setting)
-        logger.info(`[${key}] [${id}] 文章发布信息已移除`)
 
         // 清空属性
         const yamlKey = getDynYamlKey(key)
         await kernelApi.setSingleBlockAttr(id, yamlKey, "")
-        logger.info(`[${key}] [${id}] 属性已移除`)
       }
     } catch (e) {
       singleFormData.errMsg = t("main.opt.failure") + "=>" + e
       deleteErrorDetails = formatPublishDiagnosticError(e)
-      // logger.error(t("main.opt.failure") + "=>", e)
+      logger.error(`[publish] delete failed platform=${key} doc=${id}: ${String(e?.message ?? e)}`)
+      logger.error(`[publish] delete failed detail platform=${key} doc=${id}: ${deleteErrorDetails}`)
       // ElMessage.error(singleFormData.errMsg)
       await kernelApi.pushErrMsg({
         msg: singleFormData.errMsg,
@@ -399,13 +381,11 @@ const usePublish = () => {
       // 清空属性
       const yamlKey = getDynYamlKey(key)
       await kernelApi.setSingleBlockAttr(id, yamlKey, "")
-      logger.info(`[${key}] [${id}] 属性已移除`)
 
       await kernelApi.pushMsg({
         msg: t("main.opt.ok"),
         timeout: 2000,
       })
-      logger.info(`[${key}] [${id}] 文章发布信息已强制移除`)
       ElMessage.success(`[${key}] [${id}] 文章发布信息已强制移除`)
       return true
     } catch (e) {
@@ -466,7 +446,7 @@ const usePublish = () => {
         }
       }
     } catch (e) {
-      logger.warn("读取块属性失败，回退到单属性查询 =>", e)
+      // 此处失败不阻断主流程
     }
     return (await kernelApi.getSingleBlockAttr(id, wantKey)) ?? ""
   }
@@ -489,12 +469,10 @@ const usePublish = () => {
       const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_slug, post.wp_slug)
       if (!StrUtil.isEmptyString(slug)) {
         post.wp_slug = slug
-        logger.info("Using existing siyuan note slug")
       } else {
         // 如果wp_slug为空，则生成一个新的slug
         const slug = await AliasTranslator.getPageSlug(post.title, true)
         post.wp_slug = `${slug}`
-        logger.info("Generated new slug")
       }
 
       // 发布状态
@@ -529,17 +507,14 @@ const usePublish = () => {
           // 有适配器
           if (StrUtil.isEmptyString(checkYaml)) {
             const yamlFormatObj = yamlAdaptor.convertToYaml(post, undefined, cfg)
-            logger.info("YAML未保存，使用适配器生成默认的yamlFormatObj", { yamlFormatObj: toRaw(yamlFormatObj) })
             post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
             post.yamlType = YamlStrategy.Yaml_custom_auto
-            logger.debug("使用适配器初始化转换yamlObj到post完成 =>", { post: toRaw(post) })
           } else {
             const yamlFormatObj = new YamlFormatObj()
             const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
             yamlFormatObj.yamlObj = yamlObj
             post = yamlAdaptor.convertToAttr(post, yamlFormatObj, cfg)
             post.yamlType = YamlStrategy.Yaml_custom_hand
-            logger.info("有适配器且YAML已保存，始终保持最新的 YAML", { post: toRaw(post) })
           }
         } else {
           post.yamlType = YamlStrategy.YAML_default
@@ -548,10 +523,8 @@ const usePublish = () => {
             const yamlObj = await YamlUtil.yaml2ObjAsync(yaml)
             post.yaml = yaml
             PostUtil.fromYaml(post, yamlObj)
-            logger.info("读取已经存在的YAML，无适配器，使用fromYaml生成默认的yamlObj", { post: toRaw(post) })
           } else {
             // 未保存过，默认不处理
-            logger.info("未保存过YAML，未找到适配器，默认不处理", { post: toRaw(post) })
           }
         }
 
@@ -603,13 +576,11 @@ const usePublish = () => {
       // 思源笔记原始文章数据
       const siyuanPost = await blogApi.getPost(id)
       if (method === MethodEnum.METHOD_ADD) {
-        logger.info("Add, using siyuan post")
         // 更新属性
         mergedPost = _.cloneDeep(siyuanPost) as Post
         mergedPost.mt_keywords = mergedPost?.mt_keywords ?? ""
         mergedPost.categories = mergedPost?.categories ?? []
       } else {
-        logger.info("Reading post from remote platform")
         if (StrUtil.isEmptyString(postid)) {
           throw new Error("未找到postid，将无法进行更新")
         }
@@ -617,7 +588,6 @@ const usePublish = () => {
         // 查询平台文章
         const platformPost = await api.getPost(postid)
         mergedPost = _.cloneDeep(platformPost) as Post
-        logger.debug("get init platformPost ok =>", mergedPost)
         // 标题以思源笔记为准（思源是权威源）。web 平台适配器的 getPost 通常不返回标题，
         // 若直接使用 platformPost.title 会得到空字符串，导致编辑表单标题丢失。
         if (StrUtil.isEmptyString(mergedPost.title)) {
@@ -663,8 +633,6 @@ const usePublish = () => {
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
       }
-
-      logger.debug("doInitPage finished mergedPost =>", toRaw(mergedPost))
 
       return {
         mergedPost,

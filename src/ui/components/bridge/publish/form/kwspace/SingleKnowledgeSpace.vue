@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ISingleCategoryConfig } from "~/src/types/ICategoryConfig.ts"
-import { computed, onMounted, reactive, ref, toRaw } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { CategoryInfo } from "zhi-blog-api"
@@ -56,13 +56,10 @@ const cateTitle = computed(() => {
 // methods
 const handleCatNodeSingleCheck = (val: any) => {
   const value = val
-  logger.debug("value=>", value)
-  logger.debug("label=>", value)
 
   const cateSlugs = []
   cateSlugs.push(value)
   formData.cateSlugs = cateSlugs
-  logger.debug("cateSlugs=>", formData.cateSlugs)
 
   emit("emitSyncSingleCateSlugs", cateSlugs)
 }
@@ -71,7 +68,6 @@ const handleCateSearch = async () => {
   try {
     formData.isCateLoading = true
 
-    logger.debug("reload categories for single category woth search")
     formData.cate.categoryList = []
     formData.cate.categorySelected = undefined
     await initPage(false)
@@ -91,7 +87,6 @@ const initPage = async (showInitSelect: boolean) => {
   const cfg = formData.knowledgeSpaceConfig.cfg
   const api = await Adaptors.getAdaptor(formData.knowledgeSpaceConfig.apiType, cfg)
   categoryInfoList = await api.getCategories(formData.ksKeyword)
-  logger.debug("getCategories for single category", categoryInfoList)
 
   if (categoryInfoList.length > 0) {
     // 分类列表
@@ -104,7 +99,6 @@ const initPage = async (showInitSelect: boolean) => {
   // 当前选中：知识空间为配置存值、编辑时只读，即使分类列表为空也回退到配置的默认专栏
   if (showInitSelect) {
     formData.cate.categorySelected = (formData.cateSlugs?.[0] ?? cfg.blogid ?? "") as string
-    logger.debug("读取已有知识空间 =>", { cateSlugs: toRaw(formData.cateSlugs) })
   }
 }
 

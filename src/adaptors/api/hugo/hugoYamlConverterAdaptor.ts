@@ -7,10 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
-import { toRaw } from "vue"
 
 /**
  * Hugo平台的YAML解析器
@@ -20,10 +18,8 @@ import { toRaw } from "vue"
  * @since 0.8.1
  */
 class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
-  private readonly logger = createAppLogger("hugo-yaml-converter-adaptor")
 
   public convertToYaml(post: Post, yamlFormatObj?: YamlFormatObj, cfg?: BlogConfig): YamlFormatObj {
-    this.logger.debug("您正在使用 Hugo Yaml Converter", { post: toRaw(post) })
     // 没有的情况默认初始化一个
     if (!yamlFormatObj) {
       yamlFormatObj = new YamlFormatObj()
@@ -106,24 +102,20 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
         })
       }
     } else {
-      this.logger.info("yaml 已保存，不使用预设", { post: toRaw(post) })
     }
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
-    this.logger.debug("yaml=>", yaml)
 
     yamlFormatObj.formatter = yaml
     yamlFormatObj.mdContent = post.markdown
     yamlFormatObj.mdFullContent = YamlUtil.addYamlToMd(yamlFormatObj.formatter, yamlFormatObj.mdContent)
     yamlFormatObj.htmlContent = post.html
-    this.logger.info("生成默认的YAML")
 
     return yamlFormatObj
   }
 
   public convertToAttr(post: Post, yamlFormatObj: YamlFormatObj, cfg?: BlogConfig): Post {
-    this.logger.debug("开始转换YAML到Post", yamlFormatObj)
 
     // 标题
     if (yamlFormatObj.yamlObj?.title) {
@@ -150,7 +142,6 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
     // 添加新的YAML
     post.yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)
 
-    this.logger.debug("转换完成，post =>", post)
     return post
   }
 }

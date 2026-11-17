@@ -8,7 +8,6 @@
  */
 
 import { SiYuanApiAdaptor, SiyuanConfig, SiyuanKernelApi } from "zhi-siyuan-api"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { useSiyuanSettingStore } from "~/src/stores/useSiyuanSettingStore.ts"
 import { Utils } from "~/src/utils/utils.ts"
@@ -18,7 +17,6 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
  * 通用 Siyuan API 封装
  */
 export const useSiyuanApi = () => {
-  const logger = createAppLogger("use-siyuan-api")
   const { getReadOnlySiyuanSetting } = useSiyuanSettingStore()
   const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
@@ -52,8 +50,6 @@ export const useSiyuanApi = () => {
     // const storeViaSiyuanApi = process.env.VITE_DEFAULT_TYPE === "siyuan"
     const defaultType = process.env.VITE_DEFAULT_TYPE ?? "siyuan"
     const storeViaSiyuanApi = defaultType === "siyuan"
-    logger.info("defaultType=>", defaultType)
-    logger.info("storeViaSiyuanApi=>", String(storeViaSiyuanApi))
     return storeViaSiyuanApi
   }
 

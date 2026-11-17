@@ -11,7 +11,6 @@ import { Attachment, CategoryInfo, MediaObject, Post, PostStatusEnum, UserBlog }
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { MetaweblogConstants } from "~/src/adaptors/api/base/metaweblog/metaweblogConstants.ts"
 import { StrUtil } from "zhi-common"
-import { BrowserUtil } from "zhi-device"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
 import { useProxy } from "~/src/composables/useProxy.ts"
@@ -66,7 +65,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       this.cfg.username,
       this.cfg.password,
     ])
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -120,31 +118,22 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
    * 新建文章
    *
    * @param post - 文章
-   * @param publish - 可选，不传递默认是发布，传递false才是草稿
+   * @param publish - 可选，不传递时按文章自身状态推导：草稿存为草稿，其余直接发布
    */
   public async newPost(post: Post, publish?: boolean): Promise<string> {
-    publish = publish ?? true
-
-    // 不传递默认是发布，传递false才是草稿
-    const postStatus = post.post_status
-    post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
-    // 以设置的状态为准
-    if (postStatus !== post.post_status) {
-      post.post_status = postStatus
-    }
+    const shouldPublish = this.resolvePublishFlag(post, publish)
+    this.applyPostStatus(post, shouldPublish)
 
     const postStruct = this.createPostStruct(post, false)
-    this.logger.debug("postStruct=>", postStruct)
     let ret = await this.metaweblogCall(MetaweblogConstants.METHOD_NEW_POST, [
       this.cfg.blogid,
       this.cfg.username,
       this.cfg.password,
       postStruct,
-      publish,
+      shouldPublish,
     ])
     ret = ret + ""
     ret = ret.replace(/"/g, "")
-    this.logger.debug("ret=>", ret)
 
     return ret
   }
@@ -154,30 +143,66 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
    *
    * @param postid - 文章ID
    * @param post - 文章
-   * @param publish - 可选，不传递默认是发布，传递false才是草稿
+   * @param publish - 可选，不传递时按文章自身状态推导：草稿存为草稿，其余直接发布
    */
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    publish = publish ?? true
-
-    // 不传递默认是发布，传递false才是草稿
-    const postStatus = post.post_status
-    post.post_status = publish === false ? PostStatusEnum.PostStatusEnum_Draft : PostStatusEnum.PostStatusEnum_Publish
-    // 以设置的状态为准
-    if (postStatus !== post.post_status) {
-      post.post_status = postStatus
-    }
+    const shouldPublish = this.resolvePublishFlag(post, publish)
+    this.applyPostStatus(post, shouldPublish)
 
     const postStruct = this.createPostStruct(post, true)
-    this.logger.debug("postStruct=>", postStruct)
     const ret = await this.metaweblogCall(MetaweblogConstants.METHOD_EDIT_POST, [
       postid,
       this.cfg.username,
       this.cfg.password,
       postStruct,
-      publish,
+      shouldPublish,
     ])
-    this.logger.debug("ret=>", ret)
     return ret
+  }
+
+  /**
+   * 解析 MetaWeblog 的 `publish` 参数。
+   *
+   * `metaWeblog.newPost` / `metaWeblog.editPost` 用这个布尔参数区分「直接发布」与「存草稿」，
+   * 而文章结构里的 `post_status` 并非所有站点都会读取（博客园等站点只认这个布尔参数）。
+   * 调用方没有显式指定时，必须由界面上选择的状态推导出来，否则「草稿」会被当成「发布」。
+   *
+   * @param post - 文章
+   * @param publish - 调用方显式指定的发布标记
+   * @private
+   */
+  private resolvePublishFlag(post: Post, publish?: boolean): boolean {
+    if (publish !== undefined) {
+      return publish
+    }
+    return (
+      post.post_status !== PostStatusEnum.PostStatusEnum_Draft &&
+      post.post_status !== PostStatusEnum.PostStatusEnum_AutoDraft
+    )
+  }
+
+  /**
+   * 让文章结构里的状态与 `publish` 参数保持一致。
+   *
+   * 存草稿时结构里必须是草稿状态；发布时保留用户选择的「发布 / 私密」，
+   * 未选择或原本是草稿时补成发布。
+   *
+   * @param post - 文章
+   * @param shouldPublish - 是否按发布处理
+   * @private
+   */
+  private applyPostStatus(post: Post, shouldPublish: boolean): void {
+    if (!shouldPublish) {
+      post.post_status = PostStatusEnum.PostStatusEnum_Draft
+      return
+    }
+    if (
+      StrUtil.isEmptyString(post.post_status as unknown as string) ||
+      post.post_status === PostStatusEnum.PostStatusEnum_Draft ||
+      post.post_status === PostStatusEnum.PostStatusEnum_AutoDraft
+    ) {
+      post.post_status = PostStatusEnum.PostStatusEnum_Publish
+    }
   }
 
   public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
@@ -188,7 +213,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
       this.cfg.password,
       false,
     ])
-    this.logger.debug("ret=>", ret)
 
     return ret
   }
@@ -209,7 +233,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
         this.cfg.password,
       ])
       const dataArr = ret
-      this.logger.debug("获取的分类信息，dataArr=>", dataArr)
 
       dataArr.forEach((item: any) => {
         const cate = new CategoryInfo()
@@ -242,7 +265,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
           bits: mediaObject.bits
         },
       ])
-      this.logger.debug("上传媒体完成, ret =>", ret)
     } catch (e) {
       this.logger.error("媒体上传失败", e)
     }
@@ -275,7 +297,6 @@ class MetaweblogBlogApiAdaptor extends BaseBlogApi {
         this.cfg.apiUrl,
         this.logger
       ).catch((e) => {
-        this.logger.warn("ensureSiteReady failed, transport will fall back", e)
         return false
       })
     }

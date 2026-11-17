@@ -38,7 +38,6 @@ class NotionApiAdaptor extends BaseBlogApi {
       userblog.url = item.public_url
       result.push(userblog)
     })
-    this.logger.debug("get usersBlogs result=>", result)
 
     return result
   }
@@ -77,8 +76,6 @@ class NotionApiAdaptor extends BaseBlogApi {
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
     const notionPostidKey = this.getNotionPostidKey(postid)
     const notionPage = await this.getPage(notionPostidKey.pageId)
-    this.logger.debug("notionPage=>", notionPage)
-    this.logger.debug("postid=>", postid)
     const commonPost = new Post()
     const titles = notionPage?.properties?.title?.title ?? []
     commonPost.title = titles.map((x: any) => x.plain_text).join("")
@@ -136,7 +133,6 @@ class NotionApiAdaptor extends BaseBlogApi {
     }
     const resp = await this.notionRequest("/search", params, "POST")
     const pages = resp.results as any
-    this.logger.debug("notion pages=>", pages)
 
     // https://stackoverflow.com/a/75537092/4037224
     if (pages.length === 0) {
@@ -166,7 +162,6 @@ class NotionApiAdaptor extends BaseBlogApi {
       },
       children: notionObject,
     }
-    this.logger.debug("before createPage =>", { markdownText, notionObject })
     const resp = await this.notionRequest("/pages", params, "POST")
     if (resp.object !== "page") {
       throw new Error("Notion create page error")
@@ -179,7 +174,6 @@ class NotionApiAdaptor extends BaseBlogApi {
   }
 
   private async deletePage(pageId: string): Promise<boolean> {
-    this.logger.debug("before deletePage, pageId=>", pageId)
     const url = `/pages/${pageId}`
     const params = {
       archived: true,
@@ -200,7 +194,6 @@ class NotionApiAdaptor extends BaseBlogApi {
   }
 
   private async getPage(pageId: string): Promise<any> {
-    this.logger.debug("before getPage, pageId=>", pageId)
     const url = `/pages/${pageId}`
     const resp = await this.notionRequest(url, {}, "GET")
     if (resp.object !== "page") {
@@ -255,13 +248,10 @@ class NotionApiAdaptor extends BaseBlogApi {
 
     // 打印日志
     const apiUrl = `${this.cfg.apiUrl}${url}`
-    this.logger.debug("向Notion请求数据，apiUrl =>", apiUrl)
-    this.logger.debug("向Notion请求数据，params =>", params)
 
     // 使用兼容的fetch调用并返回统一的JSON数据
     const body = ObjectUtil.isEmptyObject(params) ? undefined : JSON.stringify(params)
     const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, true, "base64", "text")
-    this.logger.debug("向Notion请求数据，resJson =>", resJson)
 
     if (resJson?.status === 400 || resJson?.status === 401 || resJson?.status === 404 || resJson?.status === 429) {
       throw new Error(resJson?.message)

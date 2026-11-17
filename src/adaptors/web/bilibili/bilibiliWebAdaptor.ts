@@ -29,7 +29,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
   public async getMetaData(): Promise<any> {
     const res = await this.bilibiliFetch("https://member.bilibili.com/x/web/elec/user")
     const flag = res.code === 0
-    this.logger.info(`get bilibili metadata finished, flag => ${flag}`)
     return {
       flag: flag,
       uid: res.data.mid,
@@ -55,7 +54,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       false,
       true
     )
-    this.logger.debug("get bilibili lists res =>", res)
     const columnList = res?.data?.lists
 
     // 普通专栏
@@ -70,7 +68,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       })
     }
 
-    this.logger.debug("getUsersBlogs=>", result)
     return result
   }
 
@@ -79,22 +76,18 @@ class BilibiliWebAdaptor extends BaseWebApi {
     const newPost = await super.preEditPost(post, id, publishCfg)
     const dynCfg = publishCfg.dynCfg
     const bilibiliMetaDataCfg = publishCfg.setting[dynCfg.platformKey]
-    this.logger.debug("preEditPost bilibiliMetaDataCfg =>", bilibiliMetaDataCfg)
     this.bilibiliMetaDataCfg = bilibiliMetaDataCfg
     return newPost
   }
 
   public async addPost(post: Post) {
     const userId = this.bilibiliMetaDataCfg.metadata.uid
-    this.logger.debug("get userId from preEditPost=>", userId)
     const upload_id = BilibiliUtils.genUploadId(userId)
     // 文集：优先使用发布时选择的分类，否则回退到配置页选择的文集（blogid）
     const listIdRaw = post.cate_slugs?.[0] ?? this.cfg.blogid ?? ""
     const listId = StrUtil.isEmptyString(String(listIdRaw)) ? 0 : listIdRaw
     // 适配 B 站专门格式
-    this.logger.debug("bilibili before parse, md=>", post.markdown)
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
-    this.logger.debug("bilibili add post blibiliDatas=>", parsedBilibiliContent)
     const params = JSON.stringify({
       raw_content: JSON.stringify({
         ops: parsedBilibiliContent.ops,
@@ -193,7 +186,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
     //   },
     //   draft_id_str: "337255",
     // })
-    this.logger.debug("bilibili after parse, params=>", params)
     const res = await this.bilibiliFetch(
       "/x/dynamic/feed/create/opus",
       {},
@@ -210,7 +202,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
     //   ttl: 1,
     //   data: { dyn_id_str: "1011828307105153060", dyn_type: 64, dyn_rid: 40119259, art_editor_jump_feed: 1 },
     // }
-    this.logger.debug("bilibili add post res=>", res)
     if (res?.code !== 0) {
       throw new Error(`哔哩哔哩文章发布失败，可能原因：${res?.code} ${res?.message}`)
     }
@@ -228,9 +219,7 @@ class BilibiliWebAdaptor extends BaseWebApi {
     const listIdRaw = post.cate_slugs?.[0] ?? this.cfg.blogid ?? ""
     const listId = StrUtil.isEmptyString(String(listIdRaw)) ? 0 : listIdRaw
     // 适配 B 站专门格式
-    this.logger.debug("bilibili before parse, md=>", post.markdown)
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
-    this.logger.debug("bilibili add post blibiliDatas=>", parsedBilibiliContent)
     const params = JSON.stringify({
       raw_content: JSON.stringify({
         ops: parsedBilibiliContent.ops,
@@ -256,7 +245,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       },
       dyn_id_str: this.getDynId(postid),
     })
-    this.logger.debug("bilibili after parse, params=>", params)
     const res = await this.bilibiliFetch(
       "/x/dynamic/feed/edit/opus",
       {},
@@ -266,12 +254,10 @@ class BilibiliWebAdaptor extends BaseWebApi {
       false,
       true
     )
-    this.logger.debug("bilibili edit post res=>", res)
     if (res?.code !== 0) {
       // 代表编辑次数用完，用 EL 的警告提示，然后改成保存草稿
       if (res?.code === 37419) {
         await this.addDraft(post)
-        this.logger.warn("B站文章编辑次数用尽，已自动保存为草稿，明天可继续提交")
         ElMessage.warning("B站文章编辑次数用尽，已自动保存为草稿，明天可继续提交")
         return true
       }
@@ -296,7 +282,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       false,
       true
     )
-    this.logger.debug("bilibili delete post res=>", res)
     if (res?.code !== 0) {
       throw new Error(`哔哩哔哩文章删除失败，可能原因：${res?.code} ${res?.message}`)
     }
@@ -315,7 +300,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       false,
       true
     )
-    this.logger.debug("get bilibili post =>", res)
     const post = new Post()
     if (res?.code === 0) {
       const bilibiliPost = res?.data
@@ -344,7 +328,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       false,
       true
     )
-    this.logger.debug("get bilibili lists =>", res)
     if (res?.code === 0) {
       const lists = res.data.lists
       if (lists && lists.length > 0) {
@@ -365,7 +348,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
   public async uploadFile(mediaObject: MediaObject): Promise<any> {
     const file = new Blob([mediaObject.bits], { type: mediaObject.type })
     const filename = mediaObject.name
-    this.logger.debug(`bilibili start uploadFile ${filename}=>`, file)
     if (file instanceof Blob) {
       // uploadUrl
       const uploadUrl = "/x/article/creative/article/upcover"
@@ -381,7 +363,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
 
       // 发送请求
       const res = await this.bilibiliFormFetch(uploadUrl, formData)
-      this.logger.debug("bilibili uploadFile res=>", res)
       if (res?.code != 0) {
         this.logger.error(`哔哩哔哩图片上传失败，可能原因：${res?.code} ${res?.message}`)
         throw new Error(`哔哩哔哩图片上传失败，可能原因：${res?.code} ${res?.message}`)
@@ -415,9 +396,7 @@ class BilibiliWebAdaptor extends BaseWebApi {
 
   private async addDraft(post: Post) {
     // 适配 B 站专门格式
-    this.logger.debug("bilibili before parse, md=>", post.markdown)
     const parsedBilibiliContent = BilibiliUtils.parseMd(post.markdown)
-    this.logger.debug("bilibili add post blibiliDatas=>", parsedBilibiliContent)
     const params = {
       type: 3,
       title: post.title,
@@ -447,9 +426,7 @@ class BilibiliWebAdaptor extends BaseWebApi {
     for (const key in params) {
       formData.append(key, params[key] ?? "")
     }
-    const res = await this.bilibiliFormFetch("/x/article/creative/draft/addupdate", formData)
-    this.logger.debug("bilibili add draft res=>", res)
-  }
+    await this.bilibiliFormFetch("/x/article/creative/draft/addupdate", formData)  }
 
   // ================
   // private methods
@@ -486,8 +463,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
     }
 
     // 发送请求并返回响应
-    this.logger.debug("bilibili url =>", apiUrl)
-    this.logger.debug("bilibili requestOptions =>", requestOptions)
     const res = await this.webFetch(apiUrl, [mergedHeaders], body, method, contentType, true, "base64", "text")
     return res
   }
@@ -512,8 +487,6 @@ class BilibiliWebAdaptor extends BaseWebApi {
       headers: mergedHeaders,
       body: formData,
     }
-    this.logger.debug("bilibili form url =>", apiUrl)
-    this.logger.debug("bilibili form options =>", options)
     const res = await this.webFormFetch(apiUrl, [mergedHeaders], formData, true)
     return res
   }

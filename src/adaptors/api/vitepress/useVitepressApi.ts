@@ -8,7 +8,7 @@
  */
 
 import { CategoryTypeEnum } from "zhi-blog-api"
-import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
+import { ObjectUtil, StrUtil } from "zhi-common"
 import { VitepressApiAdaptor } from "~/src/adaptors/api/vitepress/vitepressApiAdaptor.ts"
 import { VitepressConfig } from "~/src/adaptors/api/vitepress/vitepressConfig.ts"
 import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
@@ -16,23 +16,19 @@ import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vite
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
-import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 import { Utils } from "~/src/utils/utils.ts"
 
 const useVitepressApi = async (key: string, newCfg?: VitepressConfig) => {
   // 创建应用日志记录器
-  const logger = createAppLogger("use-vitepress-api")
 
   // 记录开始使用 Vitepress API
-  logger.info("Start using Vitepress API...")
 
   // 创建应用实例
   const appInstance = new PublisherAppInstance()
 
   let cfg: VitepressConfig
   if (newCfg) {
-    logger.info("Initialize with the latest newCfg passed in...")
     cfg = newCfg
   } else {
     // 从配置中获取数据
@@ -50,9 +46,7 @@ const useVitepressApi = async (key: string, newCfg?: VitepressConfig) => {
       const middlewareUrl = Utils.emptyOrDefault(process.env.VITE_MIDDLEWARE_URL, SHARED_PROXY_MIDDLEWARE)
       cfg = new VitepressConfig(githubUsername, githubAuthToken, githubRepo, githubBranch, middlewareUrl)
       cfg.mdFilenameRule = "[slug].md"
-      logger.info("Configuration is empty, using default environment variables.")
     } else {
-      logger.info("Using configuration from settings...")
     }
     // 初始化posidKey
     if (StrUtil.isEmptyString(cfg.posidKey)) {
@@ -86,7 +80,6 @@ const useVitepressApi = async (key: string, newCfg?: VitepressConfig) => {
 
   // 创建 Vitepress API 适配器
   const blogApi = new VitepressApiAdaptor(appInstance, cfg)
-  logger.info("Vitepress API created successfully.", cfg)
 
   return {
     cfg,
