@@ -84,45 +84,45 @@ importers:
         specifier: 4.0.1
         version: 4.0.1
       zhi-blog-api:
-        specifier: ^1.82.0
-        version: 1.82.0(typescript@5.9.3)
+        specifier: ^1.84.0
+        version: 1.84.0(typescript@5.9.3)
       zhi-common:
-        specifier: ^1.36.0
-        version: 1.36.0(typescript@5.9.3)
+        specifier: ^1.38.0
+        version: 1.38.0(typescript@5.9.3)
       zhi-device:
-        specifier: ^2.13.0
-        version: 2.13.0
+        specifier: ^2.15.0
+        version: 2.15.0
       zhi-fetch-middleware:
-        specifier: ^0.14.0
-        version: 0.14.0(typescript@5.9.3)
+        specifier: ^0.16.0
+        version: 0.16.0(typescript@5.9.3)
       zhi-github-middleware:
-        specifier: ^0.6.0
-        version: 0.6.0(typescript@5.9.3)
+        specifier: ^0.8.0
+        version: 0.8.0(typescript@5.9.3)
       zhi-gitlab-middleware:
-        specifier: ^0.13.0
-        version: 0.13.0(typescript@5.9.3)
+        specifier: ^0.15.0
+        version: 0.15.0(typescript@5.9.3)
       zhi-lib-base:
-        specifier: ^0.9.0
-        version: 0.9.0
+        specifier: ^0.12.0
+        version: 0.12.0
       zhi-notion-markdown:
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^0.4.0
+        version: 0.4.0
       zhi-siyuan-api:
-        specifier: ^2.38.0
-        version: 2.38.0(typescript@5.9.3)
+        specifier: ^2.39.0
+        version: 2.39.0(typescript@5.9.3)
       zhi-siyuan-picgo:
-        specifier: ^3.1.1
-        version: 3.1.1(typescript@5.9.3)
+        specifier: ^3.1.3
+        version: 3.1.3(typescript@5.9.3)
       zhi-xmlrpc-middleware:
-        specifier: ^0.7.0
-        version: 0.7.0(typescript@5.9.3)
+        specifier: ^0.9.0
+        version: 0.9.0(typescript@5.9.3)
     devDependencies:
       '@halo-dev/api-client':
         specifier: ^2.21.1
         version: 2.21.1(axios@1.21.1)
       '@terwer/eslint-config-custom':
-        specifier: ^1.4.0
-        version: 1.4.0(@nuxt/eslint-config@0.1.1(eslint@8.57.0))(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.9.3))(eslint@8.57.0)(typescript@5.9.3))(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-config-turbo@1.13.4(eslint@8.57.0))(eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint@8.57.0)(prettier@2.8.8))(eslint-plugin-svelte@2.39.2(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@24.19.2)(typescript@5.9.3)))(eslint-plugin-vue@9.26.0(eslint@8.57.0))(eslint@8.57.0)(prettier-plugin-svelte@2.10.1(prettier@2.8.8)(svelte@4.2.18))(prettier@2.8.8)(typescript@5.9.3)
+        specifier: ^1.6.0
+        version: 1.6.0(@nuxt/eslint-config@0.1.1(eslint@8.57.0))(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.9.3))(eslint@8.57.0)(typescript@5.9.3))(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-config-turbo@1.13.4(eslint@8.57.0))(eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint@8.57.0)(prettier@2.8.8))(eslint-plugin-svelte@2.39.2(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@24.19.2)(typescript@5.9.3)))(eslint-plugin-vue@9.26.0(eslint@8.57.0))(eslint@8.57.0)(prettier-plugin-svelte@2.10.1(prettier@2.8.8)(svelte@4.2.18))(prettier@2.8.8)(typescript@5.9.3)
       '@types/iframe-resizer':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1630,8 +1630,8 @@ packages:
   '@sxzz/popperjs-es@2.11.7':
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
 
-  '@terwer/eslint-config-custom@1.4.0':
-    resolution: {integrity: sha512-MCClfUyJSpNGNmB+gHymoCzID7Oww/JH1I73Uu9YTaA8/x1S2cbMIxHVj20nYafmkSLgEtIqpERzPNAAJ/3Ubw==}
+  '@terwer/eslint-config-custom@1.6.0':
+    resolution: {integrity: sha512-iEePfkm+/oyExafmSx7xDn+6nbl4bZC0fY2HemdYyI4NjfJEZBFft/m+/PSvTGzVtoSVd/vaBma6CvCSoHP0ig==}
     peerDependencies:
       '@nuxt/eslint-config': ^0.1.1
       '@typescript-eslint/eslint-plugin': ^5.57.1
@@ -5094,11 +5094,11 @@ packages:
   unist-util-visit@5.1.0:
     resolution: {integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==}
 
-  universal-picgo-store@3.1.1:
-    resolution: {integrity: sha512-eERSbbjv0cSPs6bog3jQXLpx0ykjQV3s0IG3pU4+Drng14Bvjq1r65PuBb9oqXTDxN6fPHvj/416xDi+LjRvzA==}
+  universal-picgo-store@3.1.3:
+    resolution: {integrity: sha512-L/oE5RaxUFrOjTHUzDQnRKe+KTNroxqbzfCm4U+zrwt3mONwtPvQ8TA6lJuP5Xp0931Zce5/vKndxZf5zNAoUw==}
 
-  universal-picgo@3.1.1:
-    resolution: {integrity: sha512-j4HPnhh0t+0obLlyvfbT5u2U8BvnV/0X6YR82iJtRLFuMFcsLvGfLa4fwvgImjjP9AyxC0yGqESivTmnaZSrfw==}
+  universal-picgo@3.1.3:
+    resolution: {integrity: sha512-W1PGd9y+6nhHSwjcQAeATlxWDrVkfSREoIh8bEmjxl0UP0njdV3Jl8WMNlyQIkVmyhbUfi/OlPC1PIuboX4QVA==}
 
   universal-user-agent@6.0.1:
     resolution: {integrity: sha512-yCzhz6FN2wU1NiiQRogkTQszlQSlpWaw8SvVegAc+bDxbzHgh1vX8uIe8OYyMH6DwH+sdTJsgMl36+mSMdRJIQ==}
@@ -5190,6 +5190,7 @@ packages:
 
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
@@ -5585,44 +5586,38 @@ packages:
     resolution: {integrity: sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==}
     engines: {node: '>=12.20'}
 
-  zhi-blog-api@1.82.0:
-    resolution: {integrity: sha512-5EkLTaPeAJQw+KT7THijKeZ0S6ahnWcve7spBufkSaqKq3ESiDUOPfQDVWI1kju6O2vFrmvWp4idJVWh6YWMQg==}
+  zhi-blog-api@1.84.0:
+    resolution: {integrity: sha512-Yqm5k2L7SvwoZ+Hr+eyBqXx2njaKBZkplYfpKmYg3ZONYDcIEicuyMZ5xwDXkbyl0e4WDARpBIzpaFEaCGcblw==}
 
-  zhi-common@1.35.0:
-    resolution: {integrity: sha512-PX/NpBXxbw2CxMWQhOWQSKouznuFRdZ0IQVR7T8vOkdctONbH2QgIMlFyL656IiiK659vuQibYSwp9PzEC6X1w==}
+  zhi-common@1.38.0:
+    resolution: {integrity: sha512-Kj+ZWVT721paIVrb5T5wOqK0ssrE66VAagIDYSmezsf6gTicpT1K/FGKIKUC+WKx19hja98UbBL2oekMnAobig==}
 
-  zhi-common@1.36.0:
-    resolution: {integrity: sha512-Q61AZ5e6cvqgINNve300Y/EmP57VtK1bq74SU1Q4nNhpnqaCZTGp3ZrnWvPcc/0c4UWC9q0j4tK7GRktyChO6w==}
+  zhi-device@2.15.0:
+    resolution: {integrity: sha512-iwT/7Cugn0eVShAF0irw08obKghOd07Olc9uRkc9Hf54JOZlMmbz6PC3RA9TCnwqEFQ8BZM5gSOOSjdyu0JNpA==}
 
-  zhi-device@2.13.0:
-    resolution: {integrity: sha512-bxz1wN5ZOVSRtB1sQbEAQiWvIYbfPEMBepjXO6GWZ9oSuYEEwLGLh0jwYHFexcdWdcVbntX5PhNyd4fz864wMw==}
+  zhi-fetch-middleware@0.16.0:
+    resolution: {integrity: sha512-QBkGx10ycu97NjdHVTYGZHDgvs8cClrQ1qZW8gaZhP3vytz+KGT7SqRcOmQ0q/CJJQ20JDqZcoGteqezNSIrjw==}
 
-  zhi-fetch-middleware@0.14.0:
-    resolution: {integrity: sha512-VuHKb9PhZRkvLxnL7FVsv2UvkKM67b19lh4CTYfPQIo0JPRM4+u6j0UeVgoAeFstwc/MbpenaSocFWxr6usaCA==}
+  zhi-github-middleware@0.8.0:
+    resolution: {integrity: sha512-MFHGPGMAPWKnlE9zVsgj/Wwn88UVdAEqDNMJ/XxcoDiT+y46zr3jQdad6J2l8cJ1Cqr5GsW0hFFLYR5O2Vo9Kg==}
 
-  zhi-github-middleware@0.6.0:
-    resolution: {integrity: sha512-uqpD067Z5dA0XospfBDnQZM3HvNBItjbvLgN+m5TGTJ9+CUBB1d3nLyIHH3J7NzPiQiadEHwL7jlEri3q7L8eA==}
+  zhi-gitlab-middleware@0.15.0:
+    resolution: {integrity: sha512-5RkW5Fus8kIOeJ3MxcFehO7+irLAXUzL6SvahzfjHorYszku/2O9oaJ/p2nmLEU1w8TAE6epwcHzjTFUUkPIhQ==}
 
-  zhi-gitlab-middleware@0.13.0:
-    resolution: {integrity: sha512-sek4EHHW0A5qNW0eelNWKKuhU7VUuK2z53YjEAwuX5BiosVcxQ9hTrQ+u6RlyRMzRa3PyYsM/95i7fq2WNL1Pw==}
+  zhi-lib-base@0.12.0:
+    resolution: {integrity: sha512-RB7Wpeadj1lf0UL1Ty0kuSsBm9rP+BKS9zHSiFWYziNux44eQpZPJD87ZVRyEIyDBgR3ZXND7osTlvi763xnoQ==}
 
-  zhi-lib-base@0.8.0:
-    resolution: {integrity: sha512-3Ky5p6KvLWpXy2tlb/JIfSEKLSe5w43PBLM6g+hNcWwpL9S62emgcpUAHzGWBbC0vlLBLungt2LOsmwAfhrZ0w==}
+  zhi-notion-markdown@0.4.0:
+    resolution: {integrity: sha512-aCdTwptS6hUSGovZ21ebzE46HvIbZRE/ufCd7yA08goP9nnOKSs4DJjzlLTp+gFnXUCp3Tuxqx1X0Oa2nRuVzA==}
 
-  zhi-lib-base@0.9.0:
-    resolution: {integrity: sha512-jO9Hm9SE99fJyZH5NX/DL067g5uj2/4b9uy4Jei+UrbqQKloFQ0rOCwa/tGeBO8N6j2UCFWPK65uvgByT8MJMQ==}
+  zhi-siyuan-api@2.39.0:
+    resolution: {integrity: sha512-Gs8y7MAAuVykA/N4kwTpEt/6qav7ZRaAq0ZIE3Bo3RnyYVspkVB5kr2zLFISwKb8Uj3tR+ZUCOUbTSin6nTGmA==}
 
-  zhi-notion-markdown@0.2.0:
-    resolution: {integrity: sha512-zC6gtTyw40JeddRdkH/IGnW+hCaMQwyvyPTKFp/bp/lsgA1oRlR9vtFYcaX8NKSS4jSoBY13XoEr9YQhwhsmSg==}
+  zhi-siyuan-picgo@3.1.3:
+    resolution: {integrity: sha512-Jsj31kM9F3O5Oz+6mC4a81YbK4Z82klpFzciENf2Nuj+NQnafrdP36aIiNsaYFH+OOzf5F+8LLs62b/xch+vUw==}
 
-  zhi-siyuan-api@2.38.0:
-    resolution: {integrity: sha512-NxDp2WVGI/9uWVr3tArxwBNdkXpa8q6sWzEVcJlUl+TzQckfMTh13CueNGosvraWt5OUTsYpBCMg9TkysuT+Dg==}
-
-  zhi-siyuan-picgo@3.1.1:
-    resolution: {integrity: sha512-oE6J3OEmqfbw9chDTJasRZ4fOoLrlXxIZkuJjtC9Ysz2oXmHU+LADYUFifYAt5qX5pwoE/UuVhtewGM5ffLLIA==}
-
-  zhi-xmlrpc-middleware@0.7.0:
-    resolution: {integrity: sha512-BmXBcSAbIeKQTrBDYilRrma36Q/jQSh8J3DzfK6g6ESHSk6Bjqrm2+WlLIOGwIdEnKNUlX2vNp38sTlIAmd1GA==}
+  zhi-xmlrpc-middleware@0.9.0:
+    resolution: {integrity: sha512-6Ga/QLwmPQwtfGku9tNRel7VQIo7Fvb/X8TrLOAKeufMWuCN2fO7zy+xQJdvMA8T6CIoCUzcBniFPDIV4rZ0BA==}
 
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
@@ -6915,7 +6910,7 @@ snapshots:
 
   '@sxzz/popperjs-es@2.11.7': {}
 
-  '@terwer/eslint-config-custom@1.4.0(@nuxt/eslint-config@0.1.1(eslint@8.57.0))(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.9.3))(eslint@8.57.0)(typescript@5.9.3))(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-config-turbo@1.13.4(eslint@8.57.0))(eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint@8.57.0)(prettier@2.8.8))(eslint-plugin-svelte@2.39.2(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@24.19.2)(typescript@5.9.3)))(eslint-plugin-vue@9.26.0(eslint@8.57.0))(eslint@8.57.0)(prettier-plugin-svelte@2.10.1(prettier@2.8.8)(svelte@4.2.18))(prettier@2.8.8)(typescript@5.9.3)':
+  '@terwer/eslint-config-custom@1.6.0(@nuxt/eslint-config@0.1.1(eslint@8.57.0))(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.9.3))(eslint@8.57.0)(typescript@5.9.3))(astro-eslint-parser@0.13.3)(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint-config-turbo@1.13.4(eslint@8.57.0))(eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint@8.57.0)(prettier@2.8.8))(eslint-plugin-svelte@2.39.2(eslint@8.57.0)(svelte@4.2.18)(ts-node@10.9.1(@types/node@24.19.2)(typescript@5.9.3)))(eslint-plugin-vue@9.26.0(eslint@8.57.0))(eslint@8.57.0)(prettier-plugin-svelte@2.10.1(prettier@2.8.8)(svelte@4.2.18))(prettier@2.8.8)(typescript@5.9.3)':
     dependencies:
       '@nuxt/eslint-config': 0.1.1(eslint@8.57.0)
       '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.9.3))(eslint@8.57.0)(typescript@5.9.3)
@@ -8533,7 +8528,7 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.2
+      hasown: 2.0.4
 
   esbuild-android-64@0.14.47:
     optional: true
@@ -9332,7 +9327,7 @@ snapshots:
       call-bound: 1.0.4
       gopd: 1.2.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.2
+      hasown: 2.0.4
 
   is-stream@2.0.1: {}
 
@@ -11044,11 +11039,11 @@ snapshots:
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
 
-  universal-picgo-store@3.1.1:
+  universal-picgo-store@3.1.3:
     dependencies:
-      zhi-lib-base: 0.8.0
+      zhi-lib-base: 0.12.0
 
-  universal-picgo@3.1.1:
+  universal-picgo@3.1.3:
     dependencies:
       '@aws-sdk/client-s3': 3.1169.0
       '@aws-sdk/s3-request-presigner': 3.1169.0
@@ -11063,8 +11058,8 @@ snapshots:
       js-yaml: 5.5.0
       mime: 4.1.2
       queue: 7.0.0
-      universal-picgo-store: 3.1.1
-      zhi-lib-base: 0.8.0
+      universal-picgo-store: 3.1.3
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -11551,64 +11546,52 @@ snapshots:
 
   yocto-queue@1.2.2: {}
 
-  zhi-blog-api@1.82.0(typescript@5.9.3):
+  zhi-blog-api@1.84.0(typescript@5.9.3):
     dependencies:
-      zhi-common: 1.35.0(typescript@5.9.3)
-      zhi-lib-base: 0.8.0
+      zhi-common: 1.38.0(typescript@5.9.3)
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
-  zhi-common@1.35.0(typescript@5.9.3):
-    dependencies:
-      js-yaml: 4.1.1
-      shorthash2: 1.0.5
-      transliteration: 2.3.5
-      vue: 3.5.45(typescript@5.9.3)
-      zhi-lib-base: 0.8.0
-    transitivePeerDependencies:
-      - typescript
-
-  zhi-common@1.36.0(typescript@5.9.3):
+  zhi-common@1.38.0(typescript@5.9.3):
     dependencies:
       js-yaml: 4.1.1
       shorthash2: 1.0.5
       transliteration: 2.3.5
       vue: 3.5.45(typescript@5.9.3)
-      zhi-lib-base: 0.9.0
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
-  zhi-device@2.13.0: {}
+  zhi-device@2.15.0: {}
 
-  zhi-fetch-middleware@0.14.0(typescript@5.9.3):
+  zhi-fetch-middleware@0.16.0(typescript@5.9.3):
     dependencies:
-      zhi-common: 1.36.0(typescript@5.9.3)
-      zhi-device: 2.13.0
-      zhi-lib-base: 0.9.0
+      zhi-common: 1.38.0(typescript@5.9.3)
+      zhi-device: 2.15.0
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
-  zhi-github-middleware@0.6.0(typescript@5.9.3):
+  zhi-github-middleware@0.8.0(typescript@5.9.3):
     dependencies:
       '@octokit/core': 5.2.2
       js-base64: 3.7.8
-      zhi-common: 1.36.0(typescript@5.9.3)
-      zhi-lib-base: 0.9.0
+      zhi-common: 1.38.0(typescript@5.9.3)
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
-  zhi-gitlab-middleware@0.13.0(typescript@5.9.3):
+  zhi-gitlab-middleware@0.15.0(typescript@5.9.3):
     dependencies:
-      zhi-fetch-middleware: 0.14.0(typescript@5.9.3)
-      zhi-lib-base: 0.9.0
+      zhi-fetch-middleware: 0.16.0(typescript@5.9.3)
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
-  zhi-lib-base@0.8.0: {}
+  zhi-lib-base@0.12.0: {}
 
-  zhi-lib-base@0.9.0: {}
-
-  zhi-notion-markdown@0.2.0:
+  zhi-notion-markdown@0.4.0:
     dependencies:
       '@tryfabric/martian': 1.2.4
       notion-to-md: 3.1.9
@@ -11616,33 +11599,33 @@ snapshots:
       - encoding
       - supports-color
 
-  zhi-siyuan-api@2.38.0(typescript@5.9.3):
+  zhi-siyuan-api@2.39.0(typescript@5.9.3):
     dependencies:
-      zhi-blog-api: 1.82.0(typescript@5.9.3)
-      zhi-common: 1.35.0(typescript@5.9.3)
-      zhi-lib-base: 0.8.0
+      zhi-blog-api: 1.84.0(typescript@5.9.3)
+      zhi-common: 1.38.0(typescript@5.9.3)
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
-  zhi-siyuan-picgo@3.1.1(typescript@5.9.3):
+  zhi-siyuan-picgo@3.1.3(typescript@5.9.3):
     dependencies:
       js-md5: 0.8.3
-      universal-picgo: 3.1.1
+      universal-picgo: 3.1.3
       uuid: 9.0.1
-      zhi-common: 1.36.0(typescript@5.9.3)
-      zhi-device: 2.13.0
-      zhi-lib-base: 0.8.0
-      zhi-siyuan-api: 2.38.0(typescript@5.9.3)
+      zhi-common: 1.38.0(typescript@5.9.3)
+      zhi-device: 2.15.0
+      zhi-lib-base: 0.12.0
+      zhi-siyuan-api: 2.39.0(typescript@5.9.3)
     transitivePeerDependencies:
       - debug
       - supports-color
       - typescript
 
-  zhi-xmlrpc-middleware@0.7.0(typescript@5.9.3):
+  zhi-xmlrpc-middleware@0.9.0(typescript@5.9.3):
     dependencies:
-      zhi-common: 1.36.0(typescript@5.9.3)
-      zhi-device: 2.13.0
-      zhi-lib-base: 0.9.0
+      zhi-common: 1.38.0(typescript@5.9.3)
+      zhi-device: 2.15.0
+      zhi-lib-base: 0.12.0
     transitivePeerDependencies:
       - typescript
 
