@@ -20,6 +20,24 @@ import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
+const HALO_BASIC_AUTH_ERROR_CODE = "HALO_BASIC_AUTH_DISABLED"
+const HALO_BASIC_AUTH_DISABLED_MESSAGE =
+  "Halo API 鉴权失败：Halo 2.20 及以上默认关闭 HTTP Basic Auth。请在 Halo 容器的启动命令中追加 --halo.security.basic-auth.disabled=false 后重启容器，或改用 Halo 网页版授权。参考：https://docs.halo.run/developer-guide/restful-api/introduction/#basic-auth"
+
+/**
+ * Halo 2.20+ 默认关闭 Basic Auth，API 请求会被重定向到登录页并返回 HTML。
+ * 用独立 code 标记，便于调用方在 catch 中保留这条可操作提示，而不是继续抛出 TypeError。
+ */
+function createHaloBasicAuthDisabledError(): Error {
+  const error = new Error(HALO_BASIC_AUTH_DISABLED_MESSAGE)
+  ;(error as any).code = HALO_BASIC_AUTH_ERROR_CODE
+  return error
+}
+
+function isHaloBasicAuthDisabledError(error: unknown): boolean {
+  return error instanceof Error && (error as any).code === HALO_BASIC_AUTH_ERROR_CODE
+}
+
 /**
  * Halo API 适配器 V2.9.0
  * @see [Halo API](https://github.com/halo-sigs/vscode-extension-halo/blob/main/src/service/index.ts)
@@ -29,6 +47,16 @@ class HaloApiAdaptor extends BaseBlogApi {
   constructor(appInstance: any, cfg: HaloConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("halo-api-adaptor-v29")
+  }
+
+  /**
+   * 配置页「验证」时提前确认 Basic Auth 可用。
+   * Halo 2.20+ 默认关闭 Basic Auth，这里会抛出可直接展示的提示，
+   * 避免用户保存后到发布阶段才看到难以理解的二次报错。
+   */
+  public async checkAuth(): Promise<boolean> {
+    await this.haloFetch("/apis/api.console.halo.run/v1alpha1/posts?page=1&size=1", {}, "GET")
+    return true
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -192,6 +220,9 @@ class HaloApiAdaptor extends BaseBlogApi {
       await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
+      if (isHaloBasicAuthDisabledError(e)) {
+        throw e
+      }
     }
 
     return flag
@@ -297,6 +328,9 @@ class HaloApiAdaptor extends BaseBlogApi {
       }
     } catch (e) {
       this.logger.error("Error uploading image to halo:", e)
+      if (isHaloBasicAuthDisabledError(e)) {
+        throw e
+      }
       throw new Error("Error uploading image to halo:" + e.toString())
     }
 
@@ -351,6 +385,9 @@ class HaloApiAdaptor extends BaseBlogApi {
         content: content,
       })
     } catch (error) {
+      if (isHaloBasicAuthDisabledError(error)) {
+        throw error
+      }
       return Promise.resolve(undefined)
     }
   }
@@ -399,7 +436,10 @@ class HaloApiAdaptor extends BaseBlogApi {
 
   private async getHaloCategories() {
     const categories = await this.haloFetch("/apis/content.halo.run/v1alpha1/categories", {}, "GET")
-    return Promise.resolve(categories.items)
+    if (!Array.isArray(categories?.items)) {
+      throw createHaloBasicAuthDisabledError()
+    }
+    return categories.items
   }
 
   public async getTagNames(displayNames: string[]): Promise<string[]> {
@@ -441,7 +481,10 @@ class HaloApiAdaptor extends BaseBlogApi {
 
   private async getHaloTags() {
     const tags = await this.haloFetch("/apis/content.halo.run/v1alpha1/tags", {}, "GET")
-    return Promise.resolve(tags.items)
+    if (!Array.isArray(tags?.items)) {
+      throw createHaloBasicAuthDisabledError()
+    }
+    return tags.items
   }
 
   /**
@@ -474,7 +517,24 @@ class HaloApiAdaptor extends BaseBlogApi {
     const body = ObjectUtil.isEmptyObject(params) ? "" : JSON.stringify(params)
     const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, false, "base64", "text")
 
-    return resJson ?? null
+    return this.assertHaloJsonResponse(resJson)
+  }
+
+  /**
+   * Halo REST API 只返回 JSON。Basic Auth 被关闭时，请求会被重定向到登录页并拿到 HTML；
+   * 在进入业务解析前抛出可操作错误，避免后续在 .items/.metadata 上抛 TypeError。
+   */
+  private assertHaloJsonResponse(res: any): any {
+    if (typeof res === "string" || res == null) {
+      throw createHaloBasicAuthDisabledError()
+    }
+    if (typeof res === "object") {
+      const status = Number((res as any).status)
+      if (status === 401 || status === 403) {
+        throw createHaloBasicAuthDisabledError()
+      }
+    }
+    return res
   }
 
   /**
@@ -491,8 +551,8 @@ class HaloApiAdaptor extends BaseBlogApi {
     }
 
     const resJson = await this.apiFormFetch(url, [header], formData)
-    return resJson
+    return this.assertHaloJsonResponse(resJson)
   }
 }
 
-export { HaloApiAdaptor }
+export { HaloApiAdaptor, HALO_BASIC_AUTH_DISABLED_MESSAGE }
