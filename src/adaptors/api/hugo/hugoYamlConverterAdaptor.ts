@@ -8,7 +8,8 @@
  */
 
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 
 /**
  * Hugo平台的YAML解析器
@@ -89,18 +90,13 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
       // }
 
       // 上面是固定配置。下面是个性配置
-      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
-      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+      applyDynYamlCfg(yamlFormatObj.yamlObj, cfg?.dynYamlCfg, post, {
         // toc
-        yamlFormatObj.yamlObj.toc = true
+        toc: true,
 
         // isCJKLanguage
-        yamlFormatObj.yamlObj.isCJKLanguage = true
-      } else {
-        Object.keys(dynYamlCfg).forEach((key) => {
-          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
-        })
-      }
+        isCJKLanguage: true,
+      })
     } else {
     }
 

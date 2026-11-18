@@ -9,8 +9,9 @@
 
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 
 /**
  * Vuepress平台的YAML解析器
@@ -117,12 +118,7 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 上面是固定配置。下面是个性配置
     try {
-      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
-      if (!ObjectUtil.isEmptyObject(dynYamlCfg)) {
-        Object.keys(dynYamlCfg).forEach((key) => {
-          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
-        })
-      }
+      applyDynYamlCfg(yamlFormatObj.yamlObj, cfg?.dynYamlCfg, post)
     } catch (e) {
       this.logger.error("动态YAML配置解析失败", e)
     }

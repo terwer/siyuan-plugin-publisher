@@ -8,7 +8,8 @@
  */
 
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 
 /**
  * Vitepress 平台的YAML解析器
@@ -60,22 +61,17 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // 上面是固定配置。下面是个性配置
-    const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
-    if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+    applyDynYamlCfg(yamlFormatObj.yamlObj, cfg?.dynYamlCfg, post, {
       // outline
-      yamlFormatObj.yamlObj.outline = "deep"
+      outline: "deep",
 
       // sidebar
-      yamlFormatObj.yamlObj.sidebar = false
+      sidebar: false,
 
       // prev && next
-      yamlFormatObj.yamlObj.prev = false
-      yamlFormatObj.yamlObj.next = false
-    } else {
-      Object.keys(dynYamlCfg).forEach((key) => {
-        yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
-      })
-    }
+      prev: false,
+      next: false,
+    })
 
     // formatter
     let yaml = YamlUtil.obj2Yaml(yamlFormatObj.yamlObj)

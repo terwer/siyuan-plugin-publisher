@@ -56,8 +56,8 @@ export const gitlabastroHelpConfig: PageHelpConfig = {
       placeholder: "/images",
     },
     dynYamlCfg: {
-      tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时不追加额外字段；Astro 默认写入 title、description、pubDate（yyyy-MM-dd）、tags、categories、keywords。",
-      placeholder: "{\"draft\": false}",
+      tip: "YAML 预设配置（JSON 对象），发布时逐键合并进文章 Front Matter，同名键覆盖自动字段。取值支持占位符：[createDate-格式]、[updateDate-格式]（如 [createDate-YYYY-MM-DD]）、[tags]、[categories]（整个值就是占位符时输出 YAML 数组）、[title]、[slug]，例如 {\"updatedDate\":\"[createDate-YYYY-MM-DD]\"}。留空时不追加额外字段；Astro 默认写入 title、description、pubDate（yyyy-MM-dd）、tags、categories、keywords。",
+      placeholder: "{\"updatedDate\":\"[createDate-YYYY-MM-DD]\"}",
     },
     defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
     author: { tip: "commit 作者名，会写入仓库的提交记录，建议填自己的 GitLab 用户名或显示名。", placeholder: "your-name" },
