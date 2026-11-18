@@ -1,16 +1,10 @@
 # Changelog
 
 ## [2.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.1...siyuan-plugin-publisher-v2.4.0) (2026-11-18)
-
-
 ### Features
-
 * **image:** control automatic image upload per directory and document ([#2040](https://github.com/terwer/siyuan-plugin-publisher/issues/2040)) ([#2085](https://github.com/terwer/siyuan-plugin-publisher/issues/2085)) ([575b20a](https://github.com/terwer/siyuan-plugin-publisher/commit/575b20a2807010d0a8065789076abac767180063))
 * **yaml:** resolve placeholders in the YAML preset configuration ([#2035](https://github.com/terwer/siyuan-plugin-publisher/issues/2035)) ([#2086](https://github.com/terwer/siyuan-plugin-publisher/issues/2086)) ([551f2bd](https://github.com/terwer/siyuan-plugin-publisher/commit/551f2bda1e9420249af94ad4b7f1aa4d992a3196))
-
-
 ### Bug Fixes
-
 * **cnblogs:** honor the selected post type and draft status ([#2080](https://github.com/terwer/siyuan-plugin-publisher/issues/2080)) ([685ad08](https://github.com/terwer/siyuan-plugin-publisher/commit/685ad08f2b7eb236d65819186cea5dd060538ae7))
 * **deps:** bump @iconify/json from 2.2.408 to 2.2.557 ([#2079](https://github.com/terwer/siyuan-plugin-publisher/issues/2079)) ([5883019](https://github.com/terwer/siyuan-plugin-publisher/commit/5883019bf0b3e1bf60fe20dc69f59017e7499c40))
 * **deps:** bump actions/setup-node from 4 to 7 ([#2082](https://github.com/terwer/siyuan-plugin-publisher/issues/2082)) ([4364b84](https://github.com/terwer/siyuan-plugin-publisher/commit/4364b84244cd8c0d7ef3ed0f004c34819926b908))
@@ -22,13 +16,9 @@
 * detect the current document when a rich title protyle comes first ([#2087](https://github.com/terwer/siyuan-plugin-publisher/issues/2087)) ([#2088](https://github.com/terwer/siyuan-plugin-publisher/issues/2088)) ([f7a678a](https://github.com/terwer/siyuan-plugin-publisher/commit/f7a678aa943b9ff4800db4bd81ae46677c20d06a))
 * **halo:** surface disabled Basic Auth as an actionable error ([#2089](https://github.com/terwer/siyuan-plugin-publisher/issues/2089)) ([0911a89](https://github.com/terwer/siyuan-plugin-publisher/commit/0911a89d3fb397f69488236ec7a8a61eaf93c0b1))
 * **logger:** keep only errors on the console ([#2074](https://github.com/terwer/siyuan-plugin-publisher/issues/2074)) ([4d00335](https://github.com/terwer/siyuan-plugin-publisher/commit/4d003356ea375a3552e0550d38b643ac6f866c6d))
-
-
 ### Miscellaneous
-
 * **deps-dev:** bump unplugin-auto-import from 20.2.0 to 20.3.0 ([#2078](https://github.com/terwer/siyuan-plugin-publisher/issues/2078)) ([983f5ef](https://github.com/terwer/siyuan-plugin-publisher/commit/983f5ef69e3455e47d49c2a2b8dcf46ab2f4db70))
 * **deps-dev:** bump vercel from 48.10.2 to 48.12.1 ([#2077](https://github.com/terwer/siyuan-plugin-publisher/issues/2077)) ([8454a69](https://github.com/terwer/siyuan-plugin-publisher/commit/8454a69f24b89269c918419755ad1cf480b3a84e))
-
 ## [2.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.0...siyuan-plugin-publisher-v2.3.1) (2026-11-16)
 ### 关键更新 / Key Updates
 **中文**
@@ -37,17 +27,14 @@
 **english**
 * fixes the plugin failing to load after the 2.3.0 release: the 2.3.0 package split the plugin code into several files, and siyuan could not resolve the entry when loading the plugin, so the plugin never started. 2.3.1 packages `index.js` as a single self-contained file again, so upgrading to 2.3.1 restores the plugin.
 * image uploads are aligned with siyuan-plugin-picgo 3.1.1 and its bundled picgo headless 3.1.1, so uploads use the same engine as the picgo plugin.
-### Bug Fixes
 * **deps:** bump actions/cache to v6 ([b7cb214](https://github.com/terwer/siyuan-plugin-publisher/commit/b7cb21489199d1057fce0c2cf6dcd4ad9191ea38))
 * **deps:** bump actions/checkout to v7 ([3c022a0](https://github.com/terwer/siyuan-plugin-publisher/commit/3c022a091f106066a0a3e0734efda52901c324c0))
 * **deps:** bump vue from 3.5.24 to 3.5.45 ([77166e6](https://github.com/terwer/siyuan-plugin-publisher/commit/77166e60f94503311a3de39b9e7486b53bef46a5))
-### Miscellaneous
 * **deps-dev:** bump @vitejs/plugin-vue from 6.0.7 to 6.0.11 ([995bdfa](https://github.com/terwer/siyuan-plugin-publisher/commit/995bdfa5896868f93b965e02922071ea00973f2f))
 * **deps-dev:** bump vite from 8.3.4 to 8.3.8 ([d69ae1f](https://github.com/terwer/siyuan-plugin-publisher/commit/d69ae1f8ebc4b75ee426a1072cc20d124840d3fd))
 * **deps-dev:** bump vue-tsc from 3.3.13 to 3.3.14 ([4a66bef](https://github.com/terwer/siyuan-plugin-publisher/commit/4a66bef481352bcd306dd288d0a4bf0acb663eb6))
 * **deps:** bump @types/node from 22.19.1 to 24.19.2 ([daa2aa5](https://github.com/terwer/siyuan-plugin-publisher/commit/daa2aa5f1adbc935fc282bc45d0d75223b6a0797))
 ## [2.3.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.2.1...siyuan-plugin-publisher-v2.3.0) (2026-11-15)
-### Features
 * support a featured image when publishing to wordpress ([cf04256](https://github.com/terwer/siyuan-plugin-publisher/commit/cf04256017e0cb77258a19593c01f45d1da80678))
 * upload a local image as the wordpress featured image ([73b0bfb](https://github.com/terwer/siyuan-plugin-publisher/commit/73b0bfb66289f71ce9d53ec5bbfb0952cd316b2c))
 * **agent:** exclude the cdp endpoint from the http proxy ([db146ef](https://github.com/terwer/siyuan-plugin-publisher/commit/db146eff1556b734c554392634a0722ad1462334))
