@@ -56,7 +56,7 @@
     "vue-i18n": "^11.4.22",
     "vue-router": "^4.6.3",
     "xmlbuilder2": "4.0.3",
-    "zhi-blog-api": "^1.84.0",
+    "zhi-blog-api": "^1.85.0",
     "zhi-common": "^1.38.0",
     "zhi-device": "^2.15.0",
     "zhi-fetch-middleware": "^0.16.0",

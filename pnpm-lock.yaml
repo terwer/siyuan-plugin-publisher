@@ -87,8 +87,8 @@ importers:
         specifier: 4.0.3
         version: 4.0.3
       zhi-blog-api:
-        specifier: ^1.84.0
-        version: 1.84.0(typescript@5.9.3)
+        specifier: ^1.85.0
+        version: 1.85.0(typescript@5.9.3)
       zhi-common:
         specifier: ^1.38.0
         version: 1.38.0(typescript@5.9.3)
@@ -5596,8 +5596,14 @@ packages:
   zhi-blog-api@1.84.0:
     resolution: {integrity: sha512-Yqm5k2L7SvwoZ+Hr+eyBqXx2njaKBZkplYfpKmYg3ZONYDcIEicuyMZ5xwDXkbyl0e4WDARpBIzpaFEaCGcblw==}
 
+  zhi-blog-api@1.85.0:
+    resolution: {integrity: sha512-epq+c+lad52nZEVcnAPD37w2u4xHGf+ji7Eccy7BU6uMSO8Sd35D7BzMQ03kaU/rowVFrJsy2tEO5z1c1MwU7Q==}
+
   zhi-common@1.38.0:
     resolution: {integrity: sha512-Kj+ZWVT721paIVrb5T5wOqK0ssrE66VAagIDYSmezsf6gTicpT1K/FGKIKUC+WKx19hja98UbBL2oekMnAobig==}
+
+  zhi-common@1.39.0:
+    resolution: {integrity: sha512-ndw9kCQpCnpKgNOdyaqjah29atPHIh649ZyixKlWNynZrniijA3Q5U5gqRsJ9JRw5T+llQtJCws/jRpaaDDLsg==}
 
   zhi-device@2.15.0:
     resolution: {integrity: sha512-iwT/7Cugn0eVShAF0irw08obKghOd07Olc9uRkc9Hf54JOZlMmbz6PC3RA9TCnwqEFQ8BZM5gSOOSjdyu0JNpA==}
@@ -5613,6 +5619,9 @@ packages:
 
   zhi-lib-base@0.12.0:
     resolution: {integrity: sha512-RB7Wpeadj1lf0UL1Ty0kuSsBm9rP+BKS9zHSiFWYziNux44eQpZPJD87ZVRyEIyDBgR3ZXND7osTlvi763xnoQ==}
+
+  zhi-lib-base@0.13.0:
+    resolution: {integrity: sha512-bfp+Zreuf2tqNKsbJZMQQRsbMeeR+Ag1qYujmkicLy+PXwodunQ/iKH59J1Ky1CbweY/mO1v9FhI29H8qS7aiw==}
 
   zhi-notion-markdown@0.4.0:
     resolution: {integrity: sha512-aCdTwptS6hUSGovZ21ebzE46HvIbZRE/ufCd7yA08goP9nnOKSs4DJjzlLTp+gFnXUCp3Tuxqx1X0Oa2nRuVzA==}
@@ -11575,6 +11584,13 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  zhi-blog-api@1.85.0(typescript@5.9.3):
+    dependencies:
+      zhi-common: 1.39.0(typescript@5.9.3)
+      zhi-lib-base: 0.13.0
+    transitivePeerDependencies:
+      - typescript
+
   zhi-common@1.38.0(typescript@5.9.3):
     dependencies:
       js-yaml: 4.1.1
@@ -11582,6 +11598,16 @@ snapshots:
       transliteration: 2.3.5
       vue: 3.5.45(typescript@5.9.3)
       zhi-lib-base: 0.12.0
+    transitivePeerDependencies:
+      - typescript
+
+  zhi-common@1.39.0(typescript@5.9.3):
+    dependencies:
+      js-yaml: 4.3.2
+      shorthash2: 1.0.5
+      transliteration: 2.3.5
+      vue: 3.5.45(typescript@5.9.3)
+      zhi-lib-base: 0.13.0
     transitivePeerDependencies:
       - typescript
 
@@ -11612,6 +11638,8 @@ snapshots:
       - typescript
 
   zhi-lib-base@0.12.0: {}
+
+  zhi-lib-base@0.13.0: {}
 
   zhi-notion-markdown@0.4.0:
     dependencies:

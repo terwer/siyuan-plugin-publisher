@@ -20,6 +20,8 @@ import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
  * Halo 网页授权适配器
  */
 class HalowebWebAdaptor extends BaseWebApi {
+  private halowebSlugStrategyPromise?: Promise<string | undefined>
+
   public async getMetaData(): Promise<any> {
     const res = await this.halowebFetch("/actuator/globalinfo")
     const flag = !StrUtil.isEmptyString(res?.siteTitle)
@@ -34,6 +36,18 @@ class HalowebWebAdaptor extends BaseWebApi {
       home: res.externalUrl,
       icon: "https://g.csdnimg.cn/static/logo/favicon32.ico",
     }
+  }
+
+  /**
+   * 按 Halo 站点「别名生成策略」生成新建文章的默认别名。
+   *
+   * Halo 服务端接口不会根据站点策略补别名，控制台是在前端生成后提交的；
+   * 这里读取 globalinfo 的 postSlugGenerationStrategy，按同样规则生成。
+   * 旧版 Halo 没有该字段或读取失败时回退到插件既有的按标题规则，不阻断发布。
+   */
+  public async getDefaultSlug(title: string): Promise<string> {
+    const strategy = await this.getHalowebSlugStrategy()
+    return HaloUtils.generateSlug(title, strategy)
   }
 
   public async getUsersBlogs(): Promise<UserBlog[]> {
@@ -426,6 +440,21 @@ class HalowebWebAdaptor extends BaseWebApi {
       .filter(Boolean) as string[]
 
     return [...existNames, ...newTags.map((item) => item.metadata.name)]
+  }
+
+  /**
+   * 读取站点别名生成策略，同一适配器实例只请求一次；失败时返回 undefined 回退按标题。
+   */
+  private getHalowebSlugStrategy(): Promise<string | undefined> {
+    if (!this.halowebSlugStrategyPromise) {
+      this.halowebSlugStrategyPromise = this.halowebFetch("/actuator/globalinfo")
+        .then((res) => res?.postSlugGenerationStrategy)
+        .catch((e) => {
+          this.logger.warn("get haloweb globalinfo failed, fallback to title slug", e)
+          return undefined
+        })
+    }
+    return this.halowebSlugStrategyPromise
   }
 
   private async getHaloCategories(): Promise<any[]> {

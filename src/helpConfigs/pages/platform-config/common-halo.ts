@@ -48,6 +48,10 @@ export const haloHelpConfig: PageHelpConfig = {
       q: "查看链接打不开？",
       a: "确认预览规则（默认为 /archives/{slug}）与文章 slug 匹配，且文章已发布为非草稿状态再访问。",
     },
+    {
+      q: "文章别名和 Halo 站点设置不一致？",
+      a: "Halo 2.10+ 新建文章时会读取站点的「别名生成策略」（按标题 / 时间戳 / Short UUID / UUID）生成默认别名；在发布页手动修改的别名优先。更新已发布文章沿用原别名，避免链接变化。",
+    },
   ],
   tour: [
     {
