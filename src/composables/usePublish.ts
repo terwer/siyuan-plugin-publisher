@@ -456,6 +456,32 @@ const usePublish = () => {
   }
 
   /**
+   * 通过 zhi-blog-api 的共享契约获取平台默认别名。
+   *
+   * 平台未提供站点级别名策略、读取失败或返回空值时返回 undefined，由调用方
+   * 回退到插件既有的按标题生成规则，避免因站点接口异常阻断发布。
+   */
+  const resolveSiteDefaultSlug = async (title: string, publishCfg: IPublishCfg): Promise<string | undefined> => {
+    if (StrUtil.isEmptyString(title)) {
+      return undefined
+    }
+
+    const key = publishCfg.dynCfg?.platformKey
+    if (StrUtil.isEmptyString(key)) {
+      return undefined
+    }
+
+    try {
+      const api = await getPublishApi(key, publishCfg.cfg)
+      const slug = await api.getDefaultSlug(title)
+      return StrUtil.isEmptyString(slug) ? undefined : slug
+    } catch (e) {
+      logger.warn(`[publish] resolve platform default slug failed, fallback to title slug: ${String(e)}`)
+      return undefined
+    }
+  }
+
+  /**
    * 初始化调用
    *
    * @param post - 文章对象
@@ -469,14 +495,17 @@ const usePublish = () => {
       const postMeta = ObjectUtil.getProperty(setting, id, {})
 
       const post = _.cloneDeep(doc) as Post
-      // 别名
+      // 别名：用户保存过的自定义别名优先；否则按平台站点策略或标题生成
       const slug = ObjectUtil.getProperty(postMeta, SiyuanAttr.Custom_slug, post.wp_slug)
       if (!StrUtil.isEmptyString(slug)) {
         post.wp_slug = slug
       } else {
         // 如果wp_slug为空，则生成一个新的slug
-        const slug = await AliasTranslator.getPageSlug(post.title, true)
-        post.wp_slug = `${slug}`
+        let newSlug = await resolveSiteDefaultSlug(post.title, publishCfg)
+        if (StrUtil.isEmptyString(newSlug)) {
+          newSlug = await AliasTranslator.getPageSlug(post.title, true)
+        }
+        post.wp_slug = `${newSlug}`
       }
 
       // 发布状态

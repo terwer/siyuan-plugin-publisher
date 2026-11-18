@@ -44,9 +44,23 @@ function isHaloBasicAuthDisabledError(error: unknown): boolean {
  * @see [Halo docs](https://docs.halo.run/getting-started/install/docker-compose/)
  */
 class HaloApiAdaptor extends BaseBlogApi {
+  private haloGlobalInfoPromise?: Promise<any>
+
   constructor(appInstance: any, cfg: HaloConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("halo-api-adaptor-v29")
+  }
+
+  /**
+   * 按 Halo 站点「别名生成策略」生成新建文章的默认别名。
+   *
+   * Halo 服务端接口不会根据站点策略补别名，控制台是在前端生成后提交的；
+   * 这里读取 globalinfo 的 postSlugGenerationStrategy，按同样规则生成。
+   * 旧版 Halo 没有该字段或读取失败时回退到插件既有的按标题规则，不阻断发布。
+   */
+  public async getDefaultSlug(title: string): Promise<string> {
+    const globalInfo = await this.getHaloGlobalInfo()
+    return HaloUtils.generateSlug(title, globalInfo?.postSlugGenerationStrategy)
   }
 
   /**
@@ -485,6 +499,20 @@ class HaloApiAdaptor extends BaseBlogApi {
       throw createHaloBasicAuthDisabledError()
     }
     return tags.items
+  }
+
+  /**
+   * 读取 Halo 站点公开信息（含别名生成策略），同一适配器实例只请求一次。
+   * 失败时返回 null，由调用方回退到按标题生成别名。
+   */
+  private getHaloGlobalInfo(): Promise<any> {
+    if (!this.haloGlobalInfoPromise) {
+      this.haloGlobalInfoPromise = this.haloFetch("/actuator/globalinfo", {}, "GET").catch((e) => {
+        this.logger.warn("get halo globalinfo failed, fallback to title slug", e)
+        return null
+      })
+    }
+    return this.haloGlobalInfoPromise
   }
 
   /**

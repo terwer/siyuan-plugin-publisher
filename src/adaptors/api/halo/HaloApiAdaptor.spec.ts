@@ -7,8 +7,9 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { describe, expect, it, vi } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { Post } from "zhi-blog-api"
+import { AliasTranslator } from "zhi-common"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
 import {
@@ -103,5 +104,50 @@ describe("HaloApiAdaptor Basic Auth 提示", () => {
     })
 
     await expect(api.editPost(postid, createPost())).rejects.toThrow(HALO_BASIC_AUTH_DISABLED_MESSAGE)
+  })
+})
+
+describe("HaloApiAdaptor.getDefaultSlug", () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it("新建文章按站点 Short UUID 策略生成别名", async () => {
+    const { api, apiFetch } = createAdaptor()
+    apiFetch.mockResolvedValue({ postSlugGenerationStrategy: "shortUUID" })
+
+    const slug = await api.getDefaultSlug("Halo 策略测试")
+
+    expect(slug).toMatch(/^[0-9a-zA-Z]{8}$/)
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+    expect(String(apiFetch.mock.calls[0][0])).toContain("/actuator/globalinfo")
+    expect(apiFetch.mock.calls[0][3]).toBe("GET")
+  })
+
+  it("同一适配器实例只读取一次站点策略", async () => {
+    const { api, apiFetch } = createAdaptor()
+    apiFetch.mockResolvedValue({ postSlugGenerationStrategy: "timestamp" })
+
+    const first = await api.getDefaultSlug("标题")
+    const second = await api.getDefaultSlug("标题")
+
+    expect(first).toBe(second)
+    expect(apiFetch).toHaveBeenCalledTimes(1)
+  })
+
+  it("旧版没有策略时回退按标题生成，不阻断发布", async () => {
+    const { api, apiFetch } = createAdaptor()
+    apiFetch.mockResolvedValue({ siteTitle: "旧版 Halo" })
+    vi.spyOn(AliasTranslator, "getPageSlug").mockResolvedValue("fallback-slug")
+
+    await expect(api.getDefaultSlug("标题")).resolves.toBe("fallback-slug")
+  })
+
+  it("读取站点策略失败时回退按标题生成", async () => {
+    const { api, apiFetch } = createAdaptor()
+    apiFetch.mockRejectedValue(new Error("globalinfo unavailable"))
+    vi.spyOn(AliasTranslator, "getPageSlug").mockResolvedValue("fallback-slug")
+
+    await expect(api.getDefaultSlug("标题")).resolves.toBe("fallback-slug")
   })
 })

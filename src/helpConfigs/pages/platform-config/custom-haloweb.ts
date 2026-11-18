@@ -37,6 +37,10 @@ export const halowebHelpConfig: PageHelpConfig = {
     { q: "Halo 版本要求？", a: "需要 Halo 2.20 及以上版本。" },
     { q: "Cookie 验证失败？", a: "确认浏览器已登录 Halo 后台，或重新读取 Cookie。登录状态失效后接口会返回登录页，表现为配置验证异常。" },
     { q: "图片该选什么图床？", a: "Halo 网页版使用平台内置图片链路，默认 Bundled 即可。" },
+    {
+      q: "文章别名和 Halo 站点设置不一致？",
+      a: "新建文章时会读取 Halo 的「别名生成策略」（按标题 / 时间戳 / Short UUID / UUID）生成默认别名；在发布页手动修改的别名优先。更新已发布文章沿用原别名，避免链接变化。",
+    },
   ],
   tour: [
     {
