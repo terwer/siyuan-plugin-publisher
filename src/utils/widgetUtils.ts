@@ -14,6 +14,7 @@ import { DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import { MockBrowser } from "~/src/utils/MockBrowser.ts"
 import { extraPreCfg } from "~/src/platforms/pre.ts"
 import { EnvUtil } from "~/src/utils/EnvUtil.ts"
+import { getPageIdFromDocument } from "~/src/utils/pageIdFromDocument.ts"
 
 const logger = createAppLogger("widget-utils")
 
@@ -264,14 +265,7 @@ const doOpenBrowserWindow = (
  * @returns 返回页面的节点ID，如果不存在，则返回undefined
  */
 export const getMainWindowPageId = (doc: Document): string | undefined => {
-  // 查找包含 protyle 类但不包含 fn__none 的 div 元素
-  const protyleElement = doc.querySelector("div.protyle:not(.fn__none)")
-
-  // 在该 div 元素下查找包含 protyle-title 类的 div 元素，并获取 data-node-id 属性的值
-  const protyleTitleElement = protyleElement?.querySelector("div.protyle-title")
-  const nodeId = protyleTitleElement?.getAttribute("data-node-id")
-
-  return nodeId
+  return getPageIdFromDocument(doc) || undefined
 }
 
 /**
