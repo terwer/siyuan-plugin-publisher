@@ -14,6 +14,7 @@ import { BlogAdaptor, PageTypeEnum, PasswordType, PicbedServiceTypeEnum, UserBlo
 import { JsonUtil, ObjectUtil, StrUtil } from "zhi-common"
 import Adaptors from "~/src/adaptors"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
+import { validateDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 import { PLATFORM_CONFIG_ACTION_BRIDGE_KEY } from "~/src/ui/components/settings/bridge/platformConfigActionBridge.ts"
 import FieldGuide from "~/src/ui/components/bridge/common/help/FieldGuide.vue"
 import { useFieldPlaceholder } from "~/src/composables/useFieldPlaceholder.ts"
@@ -143,7 +144,22 @@ const toggleCookieManualEditor = () => {
 }
 
 // methods
+/**
+ * YAML 预设配置（dynYamlCfg）必须是合法的 JSON 对象：非法时阻止保存并给出可读提示，
+ * 避免像以前一样被静默忽略（发布时看不出配置为什么没生效）。
+ */
+const ensureDynYamlCfgValid = (): boolean => {
+  if (!validateDynYamlCfg((formData.cfg as any)?.dynYamlCfg)) {
+    return true
+  }
+  ElMessage.error(t("setting.blog.type.github.dyn.yaml.invalid"))
+  return false
+}
+
 const valiConf = async () => {
+  if (!ensureDynYamlCfgValid()) {
+    return
+  }
   isLoading.value = true
 
   let errMsg: any
@@ -247,6 +263,9 @@ const afterValid = async (api: any) => {
 }
 
 const saveConf = async (hideTip?: any) => {
+  if (!ensureDynYamlCfgValid()) {
+    return
+  }
 
   // 平台使用配置
   formData.setting[props.apiType] = formData.cfg

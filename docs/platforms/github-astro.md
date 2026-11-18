@@ -44,6 +44,32 @@ Astro 的发布目录固定为内容集合目录（默认 `src/content/blog`）�
 3. 「查看文章」打开仓库 blob 地址；站点线上地址由内容集合的文件路径决定，需站点已构建部署。
 4. 带图发布时图片上传到 `public/images`，文章引用 `/images/<图片名>`。
 
+## 六、YAML 预设配置与占位符
+
+「YAML 预设配置」填一个 JSON 对象，发布时逐键合并进 Front Matter；同名键会覆盖插件自动生成的字段。取值支持占位符，发布时按当前文章解析：
+
+| 占位符 | 含义 | 示例 |
+|---|---|---|
+| `[createDate-格式]` | 文章创建时间；格式为日期格式串，省略时 `YYYY-MM-DD` | `[createDate-YYYY-MM-DD]`、`[createDate-YYYY-MM-DD HH:mm:ss]` |
+| `[updateDate-格式]` | 文章更新时间；没有更新时间时用创建时间 | `[updateDate-YYYY-MM-DD]` |
+| `[tags]` | 标签 | `[tags]` |
+| `[categories]` | 分类 | `[categories]` |
+| `[title]` | 文章标题 | `[title]` |
+| `[slug]` | 文章别名 | `[slug]` |
+
+整个值就是占位符时保留原生类型（`[tags]`、`[categories]` 输出 YAML 数组）；写在句子里时按文本替换（多个标签用逗号连接）。未知写法原样保留，不会被替换。
+
+例如 Astro 内容集合需要 `updatedDate` 时：
+
+```json
+{
+  "updatedDate": "[createDate-YYYY-MM-DD]",
+  "author": "terwer"
+}
+```
+
+配置必须是合法的 JSON 对象，保存时会校验；解析失败的配置不会再被静默忽略。
+
 ## 常见问题
 
 - **验证通过但发布失败**：确认 Token 对目标仓库有 push 权限、仓库名与分支正确。权限不足会收到 401/403。

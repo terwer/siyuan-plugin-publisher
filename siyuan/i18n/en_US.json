@@ -391,6 +391,7 @@
   "setting.blog.type.github.site.tip": "Author's page, defaults to: [GitHub URL]/[Username] if left empty. Please do not change the key, translate the value to English.",
   "setting.blog.type.github.dyn.yaml": "YAML Preset Configuration",
   "setting.blog.type.github.dyn.yaml.tip": "YAML Preset Configuration, if you do not understand what it is for, please do not configure. JSON format, for example: {\"sidebar\": false}",
+  "setting.blog.type.github.dyn.yaml.invalid": "The YAML preset configuration must be a valid JSON object (for example {\"draft\": false}). Please fix it before saving.",
   "setting.blog.type.github.images.path": "Image store path",
   "setting.blog.type.github.images.path.tip": "Image store path, eg:images",
   "setting.blog.type.github.image.link.path": "Image URL path",

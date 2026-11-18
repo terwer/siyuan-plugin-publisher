@@ -8,8 +8,9 @@
  */
 
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
-import { DateUtil, JsonUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 
 /**
  * Quartz平台的YAML解析器
@@ -81,16 +82,11 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
       }
 
       // 上面是固定配置。下面是个性配置
-      const dynYamlCfg = JsonUtil.safeParse<any>(cfg?.dynYamlCfg ?? "{}", {})
-      if (ObjectUtil.isEmptyObject(dynYamlCfg)) {
+      applyDynYamlCfg(yamlFormatObj.yamlObj, cfg?.dynYamlCfg, post, {
         // Quartz 特定配置
-        yamlFormatObj.yamlObj.enableToc = true
-        yamlFormatObj.yamlObj.enableBackLinks = true
-      } else {
-        Object.keys(dynYamlCfg).forEach((key) => {
-          yamlFormatObj.yamlObj[key] = dynYamlCfg[key]
-        })
-      }
+        enableToc: true,
+        enableBackLinks: true,
+      })
     } else {
     }
 
