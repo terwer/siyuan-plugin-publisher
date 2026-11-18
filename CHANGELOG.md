@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.1...siyuan-plugin-publisher-v2.4.0) (2026-11-18)
+
+
+### Features
+
+* **image:** control automatic image upload per directory and document ([#2040](https://github.com/terwer/siyuan-plugin-publisher/issues/2040)) ([#2085](https://github.com/terwer/siyuan-plugin-publisher/issues/2085)) ([575b20a](https://github.com/terwer/siyuan-plugin-publisher/commit/575b20a2807010d0a8065789076abac767180063))
+* **yaml:** resolve placeholders in the YAML preset configuration ([#2035](https://github.com/terwer/siyuan-plugin-publisher/issues/2035)) ([#2086](https://github.com/terwer/siyuan-plugin-publisher/issues/2086)) ([551f2bd](https://github.com/terwer/siyuan-plugin-publisher/commit/551f2bda1e9420249af94ad4b7f1aa4d992a3196))
+
+
+### Bug Fixes
+
+* **cnblogs:** honor the selected post type and draft status ([#2080](https://github.com/terwer/siyuan-plugin-publisher/issues/2080)) ([685ad08](https://github.com/terwer/siyuan-plugin-publisher/commit/685ad08f2b7eb236d65819186cea5dd060538ae7))
+* **deps:** bump @iconify/json from 2.2.408 to 2.2.557 ([#2079](https://github.com/terwer/siyuan-plugin-publisher/issues/2079)) ([5883019](https://github.com/terwer/siyuan-plugin-publisher/commit/5883019bf0b3e1bf60fe20dc69f59017e7499c40))
+* **deps:** bump actions/setup-node from 4 to 7 ([#2082](https://github.com/terwer/siyuan-plugin-publisher/issues/2082)) ([4364b84](https://github.com/terwer/siyuan-plugin-publisher/commit/4364b84244cd8c0d7ef3ed0f004c34819926b908))
+* **deps:** bump pnpm/action-setup from 4 to 6 ([#2083](https://github.com/terwer/siyuan-plugin-publisher/issues/2083)) ([ee02321](https://github.com/terwer/siyuan-plugin-publisher/commit/ee02321a48339e64902c8717efdb71aeffe6a778))
+* **deps:** bump vue-i18n from 11.1.12 to 11.4.20 ([#2075](https://github.com/terwer/siyuan-plugin-publisher/issues/2075)) ([77291a5](https://github.com/terwer/siyuan-plugin-publisher/commit/77291a5d333497bbc5b507d014e4a1754688d40a))
+* **deps:** bump xmlbuilder2 from 3.1.1 to 4.0.1 ([#2069](https://github.com/terwer/siyuan-plugin-publisher/issues/2069)) ([b63b7db](https://github.com/terwer/siyuan-plugin-publisher/commit/b63b7dbef0d616b8d6b0a3ebff894d12b703423a))
+* **deps:** update compatible dependencies ([#2084](https://github.com/terwer/siyuan-plugin-publisher/issues/2084)) ([d7e7ec4](https://github.com/terwer/siyuan-plugin-publisher/commit/d7e7ec457844bdc6257eb4d11bf03992abdc14f8))
+* **deps:** upgrade the zhi framework and zhi-siyuan-picgo to 3.1.3 ([#2081](https://github.com/terwer/siyuan-plugin-publisher/issues/2081)) ([6d4b3ec](https://github.com/terwer/siyuan-plugin-publisher/commit/6d4b3ecca9545fddd8b43ab54acec26440632562))
+* detect the current document when a rich title protyle comes first ([#2087](https://github.com/terwer/siyuan-plugin-publisher/issues/2087)) ([#2088](https://github.com/terwer/siyuan-plugin-publisher/issues/2088)) ([f7a678a](https://github.com/terwer/siyuan-plugin-publisher/commit/f7a678aa943b9ff4800db4bd81ae46677c20d06a))
+* **halo:** surface disabled Basic Auth as an actionable error ([#2089](https://github.com/terwer/siyuan-plugin-publisher/issues/2089)) ([0911a89](https://github.com/terwer/siyuan-plugin-publisher/commit/0911a89d3fb397f69488236ec7a8a61eaf93c0b1))
+* **logger:** keep only errors on the console ([#2074](https://github.com/terwer/siyuan-plugin-publisher/issues/2074)) ([4d00335](https://github.com/terwer/siyuan-plugin-publisher/commit/4d003356ea375a3552e0550d38b643ac6f866c6d))
+
+
+### Miscellaneous
+
+* **deps-dev:** bump unplugin-auto-import from 20.2.0 to 20.3.0 ([#2078](https://github.com/terwer/siyuan-plugin-publisher/issues/2078)) ([983f5ef](https://github.com/terwer/siyuan-plugin-publisher/commit/983f5ef69e3455e47d49c2a2b8dcf46ab2f4db70))
+* **deps-dev:** bump vercel from 48.10.2 to 48.12.1 ([#2077](https://github.com/terwer/siyuan-plugin-publisher/issues/2077)) ([8454a69](https://github.com/terwer/siyuan-plugin-publisher/commit/8454a69f24b89269c918419755ad1cf480b3a84e))
+
 ## [2.3.1](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.0...siyuan-plugin-publisher-v2.3.1) (2026-11-16)
 ### 关键更新 / Key Updates
 **中文**
