@@ -239,6 +239,9 @@
           </template>
         </template>
       </article>
+
+      <!-- 按目录排除自动上传（issue 2040） -->
+      <image-upload-exclude-dirs-settings />
     </div>
   </section>
 </template>
@@ -264,6 +267,7 @@ import { DynamicConfig, DynamicJsonCfg, PlatformType } from "~/src/platforms/dyn
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import ImageUploadExcludeDirsSettings from "~/src/ui/components/settings/ImageUploadExcludeDirsSettings.vue"
 
 interface PicBedOption {
   value: PicBedServiceTypeEnum

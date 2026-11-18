@@ -93,6 +93,11 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
       return
     }
 
+    // 图片自动上传策略命中跳过时（issue #2040），特色图片同样不自动上传
+    if ((post as any).imageUploadSkipped === true) {
+      return
+    }
+
     try {
       featuredPost.featuredImageAttachmentId = await this.uploadFeaturedImage(featuredImage, post)
     } catch (e: any) {

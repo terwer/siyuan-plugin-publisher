@@ -24,6 +24,7 @@ import { StrUtil } from "zhi-common"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import EditModeSelect from "~/src/ui/components/bridge/publish/form/EditModeSelect.vue"
+import PublishImageUploadPolicy from "~/src/ui/components/bridge/publish/form/PublishImageUploadPolicy.vue"
 import PublishTime from "~/src/ui/components/bridge/publish/form/PublishTime.vue"
 import { pre } from "~/src/platforms/pre.ts"
 import { ICategoryConfig } from "~/src/types/ICategoryConfig.ts"
@@ -150,6 +151,9 @@ const handlePublish = async () => {
       } else {
         formData.actionEnable = true
         ElMessage.success("文章更新成功！")
+      }
+      if ((processResult.imageSkippedCount ?? 0) > 0) {
+        ElMessage.warning(t("imagePolicy.publishSkipped", { count: processResult.imageSkippedCount }))
       }
     } else {
       formData.actionEnable = true
@@ -508,6 +512,9 @@ onMounted(async () => {
             <el-form label-width="100px">
               <!-- 编辑模式选择 -->
               <edit-mode-select v-model:edit-type="formData.editType" @emitSyncEditMode="syncEditMode" />
+
+              <!-- 图片自动上传策略（issue 2040） -->
+              <publish-image-upload-policy :page-id="id" />
 
               <!--
               --------------------------------------

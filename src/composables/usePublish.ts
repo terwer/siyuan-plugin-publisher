@@ -113,6 +113,7 @@ const usePublish = () => {
     let postid: string
     let postPreviewUrl: string
     let publishErrorDetails = ""
+    let imageSkippedCount = 0
     singleFormData.errMsg = ""
     singleFormData.publishProcessStatus = false
     try {
@@ -153,6 +154,8 @@ const usePublish = () => {
       // 文章预处理开始
       // ===================================
       const finalPost = await api.preEditPost(post, id, publishCfg)
+      // 图片自动上传策略命中跳过时，把跳过数量回传给界面提示（issue #2040）
+      imageSkippedCount = Number((finalPost as any).imageUploadSkippedCount ?? 0)
       // 检查图片上传错误（preEditPost内部图片上传失败时不抛异常，而是收集到post自定义属性上）
       const imageErrors = (finalPost as any).imageUploadErrors as string[] | undefined
       if (imageErrors && imageErrors.length > 0) {
@@ -275,6 +278,7 @@ const usePublish = () => {
       previewUrl: postPreviewUrl,
       errMsg: sanitizePublishText(singleFormData.errMsg),
       errDetails: sanitizePublishText(publishErrorDetails || singleFormData.errMsg),
+      imageSkippedCount: imageSkippedCount,
     }
   }
 

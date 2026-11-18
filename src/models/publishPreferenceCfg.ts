@@ -8,6 +8,7 @@
  */
 
 import { PreferenceConfig } from "zhi-blog-api"
+import type { ImageUploadExcludeDirRule } from "~/src/utils/imageUploadPolicy.ts"
 
 /**
  * 思源笔记 AI 模型（对应 config.ai.providers[].models[]）
@@ -107,6 +108,9 @@ class PublishPreferenceCfg extends PreferenceConfig {
   // 发布源笔记本（issue #2044）：按笔记本限定发布来源；空=不限制（向后兼容）
   public publishSourceNotebooks?: string[]
 
+  // 图片自动上传的目录排除规则（issue #2040）：命中的目录默认不上传图片
+  public imageUploadExcludeDirs?: ImageUploadExcludeDirRule[]
+
   constructor() {
     super()
     this.experimentalUseSiyuanNoteAIConfig = true
@@ -125,6 +129,7 @@ class PublishPreferenceCfg extends PreferenceConfig {
     this.allowChangeSlug = false
 
     this.publishSourceNotebooks = []
+    this.imageUploadExcludeDirs = []
   }
 }
 

@@ -20,11 +20,14 @@ import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
+import { resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useAppI18n()
 const { kernelApi } = useSiyuanApi()
+const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
 
 /**
  * 预览入口的能力形状：由 BaseWebApi / BaseBlogApi 提供（与发布链路同源）
@@ -77,8 +80,10 @@ const formData = reactive({
   yamlContent: "",
   isSaved: true,
 
-  // 图片处理提示：正文含图片时，提示上传与链接替换在发布时进行
+  // 正文含图片时，提示上传与链接替换在发布时进行
   showImageNotice: false,
+  // 图片自动上传策略命中跳过（issue 2040）：不提供「上传并预览」入口
+  imageUploadSkipped: false,
   // 单平台场景（PicGo / 平台图床）且正文含图片时，可手动触发「上传并预览替换后的内容」；
   // 批量分发没有单平台上下文，不提供预览
   canPreviewUpload: false,
@@ -235,14 +240,37 @@ const handlePostToHoHtml = async (post: Post) => {
  * 正文包含图片且图床服务会处理图片时，提示此处显示的是原始 Markdown。
  */
 const initImageNotice = async () => {
-  // 图床服务为「不使用」时，图片不会被上传或替换，无需提示
-  const picbedService = (formData.cfg as CommonBlogConfig)?.picbedService
-  if (picbedService === PicbedServiceTypeEnum.None) {
-    return
-  }
   if (StrUtil.isEmptyString(formData.pageId)) {
     return
   }
+
+  // 图片自动上传策略命中跳过时，只提示「按设置不上传」，不提供上传预览（issue 2040）
+  try {
+    const policy = await resolveImageUploadPolicy({
+      kernelApi,
+      docId: formData.pageId,
+      rules: getReadOnlyPublishPreferenceSetting().value.imageUploadExcludeDirs,
+    })
+    formData.imageUploadSkipped = policy.skip
+  } catch (e) {
+    formData.imageUploadSkipped = false
+  }
+
+  // 图床服务为「不使用」或策略跳过时，图片不会被上传或替换
+  const picbedService = (formData.cfg as CommonBlogConfig)?.picbedService
+  const noUpload = picbedService === PicbedServiceTypeEnum.None || formData.imageUploadSkipped
+  if (noUpload) {
+    if (formData.imageUploadSkipped) {
+      try {
+        const imageBlocks = await kernelApi.getImageBlocksByID(formData.pageId)
+        formData.showImageNotice = (imageBlocks?.length ?? 0) > 0
+      } catch (e) {
+        // 提示属于辅助信息，读取失败不阻断源码展示
+      }
+    }
+    return
+  }
+
   try {
     const imageBlocks = await kernelApi.getImageBlocksByID(formData.pageId)
     formData.showImageNotice = (imageBlocks?.length ?? 0) > 0
@@ -269,6 +297,22 @@ const toggleImagePreview = async () => {
     formData.previewMode = false
     onYamlShowTypeChange(formData.stype)
     return
+  }
+  // 防御：发布策略可能在组件初始化后变化，点击前再确认一次，避免绕过「不自动上传」
+  try {
+    const policy = await resolveImageUploadPolicy({
+      kernelApi,
+      docId: formData.pageId,
+      rules: getReadOnlyPublishPreferenceSetting().value.imageUploadExcludeDirs,
+    })
+    if (policy.skip) {
+      formData.imageUploadSkipped = true
+      formData.canPreviewUpload = false
+      ElMessage.warning(t("imagePolicy.previewBlocked"))
+      return
+    }
+  } catch (e) {
+    // 策略读取失败时保持原行为，发布链路仍会再次判断
   }
   formData.previewLoading = true
   try {
@@ -349,7 +393,13 @@ onMounted(async () => {
     <el-form-item v-if="formData.showImageNotice">
       <el-alert :closable="false" class="top-yaml-tip image-preview-tip" type="warning">
         <template #title>
-          <span>{{ formData.previewMode ? t("yaml.image.preview.tip") : t("yaml.image.tip") }}</span>
+          <span>{{
+            formData.imageUploadSkipped
+              ? t("imagePolicy.previewTip")
+              : formData.previewMode
+                ? t("yaml.image.preview.tip")
+                : t("yaml.image.tip")
+          }}</span>
           <el-button
             v-if="formData.canPreviewUpload"
             link
