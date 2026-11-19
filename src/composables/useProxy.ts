@@ -18,6 +18,7 @@ import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import PluginFetchUtil from "~/src/utils/PluginFetchUtil.ts"
 import HostSessionFetchUtil from "~/src/utils/HostSessionFetchUtil.ts"
 import { executeXmlrpcTransport, resolveXmlrpcTransport } from "~/src/utils/xmlrpcTransport.ts"
+import { decodeProxyResponseBody } from "~/src/utils/proxyResponseBody.ts"
 
 /**
  * 用于处理代理请求的自定义 hook
@@ -354,12 +355,15 @@ const useProxy = (
     const proxyBodyRaw = fetchResult?.body ?? fetchResult?.Body
 
     if (!(proxyStatus >= 200 && proxyStatus < 300)) {
+      // 读取二进制（如图片）时 responseEncoding=base64，错误体同样是 base64 编码，
+      // 必须按实际编码还原，否则会把 base64 串当成错误信息（issue #2028）
+      const proxyBodyText = decodeProxyResponseBody(proxyBodyRaw, responseEncoding)
       // 兼容 CSDN 错误提示
-      const bodyJson = JsonUtil.safeParse<any>(proxyBodyRaw, {})
+      const bodyJson = JsonUtil.safeParse<any>(proxyBodyText, {})
       const proxyMessage = !StrUtil.isEmptyString(bodyJson?.msg)
         ? bodyJson?.msg
         : StrUtil.decodeUnicodeToChinese(
-            StrUtil.isEmptyString(proxyBodyRaw) ? `请求异常：${proxyStatus}` : String(proxyBodyRaw)
+            StrUtil.isEmptyString(proxyBodyText) ? `请求异常：${proxyStatus}` : proxyBodyText
           )
       const proxyError = new Error(proxyMessage)
       ;(proxyError as any).status = proxyStatus
@@ -368,7 +372,7 @@ const useProxy = (
         transport: "siyuan-forward-proxy",
         url: reqUrl,
         status: proxyStatus,
-        responseBodyPreview: sanitizeSensitiveForLog(String(proxyBodyRaw ?? "")).slice(0, 1000),
+        responseBodyPreview: sanitizeSensitiveForLog(proxyBodyText).slice(0, 1000),
       }
       ;(proxyError as any).diagnosticMessage = JSON.stringify((proxyError as any).diagnostic, null, 2)
       throw proxyError
