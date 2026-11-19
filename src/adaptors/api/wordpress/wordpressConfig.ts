@@ -8,7 +8,7 @@
  */
 
 import { MetaweblogConfig } from "~/src/adaptors/api/base/metaweblog/metaweblogConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, CoverMode, PageTypeEnum } from "zhi-blog-api"
 import WordpressUtils from "~/src/adaptors/api/wordpress/wordpressUtils.ts"
 
 /**
@@ -45,6 +45,8 @@ class WordpressConfig extends MetaweblogConfig {
 
     // WordPress 的文章支持特写图（featured image）：图片先上传到媒体库拿到附件 ID，
     // 再随 metaWeblog.newPost / metaWeblog.editPost 的文章结构提交，见 WordpressApiAdaptor。
+    this.coverEnabled = true
+    this.coverMode = CoverMode.Upload
     this.featuredImageEnabled = true
   }
 }

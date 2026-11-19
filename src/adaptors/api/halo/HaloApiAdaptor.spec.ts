@@ -8,7 +8,7 @@
  */
 
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { Post } from "zhi-blog-api"
+import { CoverSource, Post } from "zhi-blog-api"
 import { AliasTranslator } from "zhi-common"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { HaloConfig } from "~/src/adaptors/api/halo/HaloConfig.ts"
@@ -151,5 +151,134 @@ describe("HaloApiAdaptor.getDefaultSlug", () => {
     vi.spyOn(AliasTranslator, "getPageSlug").mockResolvedValue("fallback-slug")
 
     await expect(api.getDefaultSlug("标题")).resolves.toBe("fallback-slug")
+  })
+})
+
+describe("HaloApiAdaptor 封面与更新链路", () => {
+  const createCoverPost = () => {
+    const post = createPost()
+    post.cover = "http://siyuan/assets/cover.png"
+    post.coverSource = CoverSource.TitleImage
+    return post
+  }
+
+  const haloPost = (cover: string) => {
+    return {
+      metadata: { name: "post-1", version: 1 },
+      spec: {
+        title: "旧标题",
+        slug: "old-slug",
+        cover,
+        headSnapshot: "head-1",
+        releaseSnapshot: "release-1",
+        excerpt: { autoGenerate: true, raw: "" },
+        categories: [],
+        tags: [],
+      },
+      status: {},
+    }
+  }
+
+  const haloContent = () => {
+    return { snapshotName: "head-1", raw: "旧正文", content: "<p>旧正文</p>", rawType: "markdown" }
+  }
+
+  it("newPost 把解析出的封面链接写入 spec.cover", async () => {
+    const { api, apiFetch } = createAdaptor()
+    let created: any
+    apiFetch.mockImplementation(async (url: string, _headers: any, body: string, method: string) => {
+      if (String(url).endsWith("/publish")) {
+        return { metadata: { name: "post-1" } }
+      }
+      if (String(url).includes("/apis/api.console.halo.run/v1alpha1/posts") && method === "POST") {
+        created = JSON.parse(body)
+        return { metadata: { name: "post-1" }, spec: { slug: "halo-basic-auth" } }
+      }
+      return {}
+    })
+
+    await api.newPost(createCoverPost())
+
+    expect(created.post.spec.cover).toBe("http://siyuan/assets/cover.png")
+  })
+
+  it("editPost 单次提交 post+content，并写入封面链接", async () => {
+    const { api, apiFetch } = createAdaptor()
+    let updated: any
+    let updateCount = 0
+    apiFetch.mockImplementation(async (url: string, _headers: any, body: string, method: string) => {
+      const target = String(url)
+      if (target.endsWith("/head-content")) {
+        return haloContent()
+      }
+      if (target.endsWith("/publish")) {
+        return { metadata: { name: "post-1" } }
+      }
+      if (target.includes("/apis/api.console.halo.run/v1alpha1/posts/post-1") && method === "PUT") {
+        updated = JSON.parse(body)
+        updateCount++
+        return { metadata: { name: "post-1" } }
+      }
+      if (target.includes("/apis/content.halo.run/v1alpha1/posts/post-1")) {
+        return haloPost("")
+      }
+      return {}
+    })
+    const postid = JSON.stringify({ name: "post-1", slug: "old-slug", year: "2026", month: "11", day: "18" })
+
+    await expect(api.editPost(postid, createCoverPost())).resolves.toBe(true)
+
+    expect(updateCount).toBe(1)
+    expect(updated.post.spec.cover).toBe("http://siyuan/assets/cover.png")
+    expect(updated.content.rawType).toBe("markdown")
+    expect(updated.content.raw).toBe(createCoverPost().markdown)
+  })
+
+  it("editPost 在没有新封面时保留 Halo 现有封面", async () => {
+    const { api, apiFetch } = createAdaptor()
+    let updated: any
+    apiFetch.mockImplementation(async (url: string, _headers: any, body: string, method: string) => {
+      const target = String(url)
+      if (target.endsWith("/head-content")) {
+        return haloContent()
+      }
+      if (target.endsWith("/publish")) {
+        return { metadata: { name: "post-1" } }
+      }
+      if (target.includes("/apis/api.console.halo.run/v1alpha1/posts/post-1") && method === "PUT") {
+        updated = JSON.parse(body)
+        return { metadata: { name: "post-1" } }
+      }
+      if (target.includes("/apis/content.halo.run/v1alpha1/posts/post-1")) {
+        return haloPost("http://localhost:8090/upload/manual-cover.png")
+      }
+      return {}
+    })
+    const postid = JSON.stringify({ name: "post-1", slug: "old-slug", year: "2026", month: "11", day: "18" })
+
+    await api.editPost(postid, createPost())
+
+    expect(updated.post.spec.cover).toBe("http://localhost:8090/upload/manual-cover.png")
+  })
+
+  it("editPost 不再吞掉更新失败", async () => {
+    const { api, apiFetch } = createAdaptor()
+    apiFetch.mockImplementation(async (url: string, _headers: any, _body: string, method: string) => {
+      const target = String(url)
+      if (target.endsWith("/head-content")) {
+        return haloContent()
+      }
+      if (target.includes("/apis/content.halo.run/v1alpha1/posts/post-1")) {
+        return haloPost("")
+      }
+      if (target.includes("/apis/api.console.halo.run/v1alpha1/posts/post-1") && method === "PUT") {
+        throw new Error("network down")
+      }
+      return {}
+    })
+    const postid = JSON.stringify({ name: "post-1", slug: "old-slug", year: "2026", month: "11", day: "18" })
+
+    await expect(api.editPost(postid, createPost())).rejects.toThrow("network down")
+
   })
 })

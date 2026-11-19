@@ -12,6 +12,7 @@ import { toRaw } from "vue"
 import {
   BlogConfig,
   CategoryInfo,
+  CoverSource,
   MediaObject,
   PageEditMode,
   PageTypeEnum,
@@ -48,6 +49,14 @@ import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
 import { removeMarkdownHeadingNumbers, removeTitleNumber } from "~/src/utils/titleNumber.ts"
+import { isCoverEnabled, resolveCoverLink, stripLeadingDocTitleImage } from "~/src/utils/coverImage.ts"
+import { getFeaturedImage, type FeaturedImagePost } from "~/src/utils/featuredImage.ts"
+import {
+  getMediaCacheContext,
+  normalizeMediaCacheEndpoint,
+  setMediaCacheContext,
+  type MediaCacheContext,
+} from "~/src/utils/mediaCacheContext.ts"
 import { SypConfig } from "~/syp.config.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
@@ -93,6 +102,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * @returns 一个 Promise，解析为编辑后的文章
    */
   public async preEditPost(post: Post, id?: string, publishCfg?: any): Promise<Post> {
+    // 处理通用封面：题头图/自定义封面优先，并从正文中剔除题头图
+    post = await this.handleCoverImage(post, id, publishCfg)
     // 处理MD文件名
     post = await this.handleFilename(post, id, publishCfg)
     // 处理摘要
@@ -107,6 +118,13 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     post = await this.handleYaml(post, id, publishCfg)
     // 处理其他
     post = await this.handleOther(post, id, publishCfg)
+    // 题头图/自定义都没有时，回退到正文首图
+    post = this.resolveCoverFallbacks(post, publishCfg)
+    // 媒体缓存上下文只在内存中传递，供平台适配器复用附件
+    const mediaCacheContext = this.buildMediaCacheContext(id, publishCfg)
+    if (mediaCacheContext) {
+      setMediaCacheContext(post, mediaCacheContext)
+    }
     return post
   }
 
@@ -476,6 +494,138 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   }
 
   /**
+   * 处理通用封面来源。
+   *
+   * 支持原生封面字段的平台按「思源题头图 → 自定义封面」先取候选；
+   * 正文首图在图片处理完成后由 {@link resolveCoverFallbacks} 补齐。
+   * 题头图同时从正文中剔除，避免它重复出现在正文首图。
+   *
+   * @param doc - 要处理的文章
+   * @param id - 思源文档 ID
+   * @param publishCfg - 发布配置
+   */
+  private async handleCoverImage(doc: Post, id?: string, publishCfg?: any): Promise<Post> {
+    const cfg = publishCfg?.cfg as BlogConfig | undefined
+    if (!isCoverEnabled(cfg)) {
+      return doc
+    }
+
+    const post = _.cloneDeep(doc) as Post
+    const featuredPost = post as FeaturedImagePost
+    const custom = getFeaturedImage(post)
+    const customPreferred = featuredPost.featuredImageTouched === true && !StrUtil.isEmptyString(custom)
+
+    if (customPreferred) {
+      post.cover = resolveCoverLink(this.kernelApi, custom)
+      post.coverSource = CoverSource.Custom
+    }
+
+    if (!StrUtil.isEmptyString(id)) {
+      try {
+        const attrs = await this.kernelApi.getBlockAttrs(id)
+        const titleImage = SiyuanKernelApi.parseDocTitleImage(attrs)
+        if (!StrUtil.isEmptyString(titleImage)) {
+          post.markdown = stripLeadingDocTitleImage(post.markdown, titleImage)
+          if (!customPreferred) {
+            post.cover = this.kernelApi.resolveDocTitleImageUrl(titleImage)
+            post.coverSource = CoverSource.TitleImage
+          }
+        }
+      } catch (e) {
+        this.logger.warn(`读取文档题头图失败，跳过封面映射 doc=${id}`, e)
+      }
+    }
+
+    // zhi 的 SiYuanApiAdaptor.getPost 可能已经把题头图写入 Post.cover
+    if (!customPreferred && !StrUtil.isEmptyString(post.cover) && !post.coverSource) {
+      post.coverSource = CoverSource.TitleImage
+    }
+
+    return post
+  }
+
+  /**
+   * 题头图/自定义封面都没有时，回退到正文首图。
+   *
+   * @param post - 图片处理后的文章
+   * @param publishCfg - 发布配置
+   */
+  private resolveCoverFallbacks(post: Post, publishCfg?: any): Post {
+    const cfg = publishCfg?.cfg as BlogConfig | undefined
+    if (!isCoverEnabled(cfg)) {
+      return post
+    }
+
+    if (StrUtil.isEmptyString(post.cover)) {
+      const firstImage = PostUtil.extractFirstImage(post)
+      if (!StrUtil.isEmptyString(firstImage)) {
+        post.cover = resolveCoverLink(this.kernelApi, firstImage)
+        post.coverSource = CoverSource.FirstBodyImage
+      }
+    }
+
+    if (StrUtil.isEmptyString(post.cover)) {
+      const custom = getFeaturedImage(post)
+      if (!StrUtil.isEmptyString(custom)) {
+        post.cover = resolveCoverLink(this.kernelApi, custom)
+        post.coverSource = CoverSource.Custom
+      }
+    }
+
+    return post
+  }
+
+  /**
+   * 构造文档级媒体缓存上下文。
+   *
+   * 仅用于平台适配器复用附件；没有文档 ID 时不挂载。
+   *
+   * @param id - 思源文档 ID
+   * @param publishCfg - 发布配置
+   */
+  private buildMediaCacheContext(id?: string, publishCfg?: any): MediaCacheContext | undefined {
+    if (StrUtil.isEmptyString(id)) {
+      return undefined
+    }
+
+    return {
+      kernelApi: this.kernelApi,
+      docId: id,
+      platformKey: publishCfg?.dynCfg?.platformKey ?? "",
+      endpoint: normalizeMediaCacheEndpoint(this.cfg.apiUrl || this.cfg.home || ""),
+    }
+  }
+
+  /**
+   * 思源内核 API 地址。
+   *
+   * 浏览器扩展/网页版没有思源宿主 origin，解析 `assets/...` 这类相对资源时必须使用内核地址。
+   */
+  public getSiyuanApiBaseUrl(): string {
+    return (this.kernelApi as any)?.siyuanConfig?.apiUrl ?? ""
+  }
+
+  /**
+   * 创建带媒体缓存上下文的媒体对象。
+   *
+   * 平台适配器上传封面等正文外图片时也应使用本方法，保证与正文图片共享去重缓存。
+   *
+   * @param post - 文章
+   * @param name - 文件名
+   * @param mimeType - 媒体类型
+   * @param bits - 文件字节
+   */
+  public createMediaObject(post: Post, name: string, mimeType: string, bits: any): MediaObject {
+    const mediaObject = new MediaObject(name, mimeType, bits)
+    mediaObject.post = post
+    const context = getMediaCacheContext(post)
+    if (context) {
+      setMediaCacheContext(mediaObject, context)
+    }
+    return mediaObject
+  }
+
+  /**
    * 处理图片
    *
    * @param doc - 要处理图片的 Post 对象
@@ -488,6 +638,10 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const dynCfg: DynamicConfig = publishCfg?.dynCfg
 
     const post = _.cloneDeep(doc) as Post
+    const mediaCacheContext = this.buildMediaCacheContext(id, publishCfg)
+    if (mediaCacheContext) {
+      setMediaCacheContext(post, mediaCacheContext)
+    }
 
     // 图片自动上传策略：文章设置 > 目录排除规则 > 平台图床设置（issue #2040）
     const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
@@ -552,8 +706,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             }
             const base64Info = await this.readFileToBase64(imageUrl)
             const bits = base64ToBuffer(base64Info.imageBase64)
-            const mediaObject = new MediaObject(image.name, base64Info.mimeType, bits)
-            mediaObject.post = post
+            const mediaObject = this.createMediaObject(post, image.name, base64Info.mimeType, bits)
             const attachResult = await this.api.newMediaObject(mediaObject)
             // =======
             // 旧版使用 URL，confluence 使用 macro，macro 优先
