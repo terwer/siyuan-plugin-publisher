@@ -7,8 +7,8 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import * as cheerio from "cheerio"
 import KatexUtils from "~/src/utils/katexUtils.ts"
+import { HtmlMathUtils } from "~/src/utils/htmlMathUtils.ts"
 import { SHARED_SERVICE_API } from "~/src/utils/constants.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
 import { hmacSha256Base64 } from "~/src/utils/cryptoUtils.ts"
@@ -102,42 +102,17 @@ class CsdnUtils {
   }
 
   public static processCsdnMath(html: string): string {
-    const $ = cheerio.load(html, {
-      xml: {
-        xmlMode: true,
-        decodeEntities: false,
-      },
-    });
-
-    // 选择除了代码块及其子元素之外的所有元素
-    $('body').find('*').not('pre, code, pre *, code *').each((index, element) => {
-      const $element = $(element);
-      const originalHtml = $element.html();
-
-      if (!originalHtml) return;
-
-      // 处理数学公式
-      let processedHtml = originalHtml;
-
-      // 处理 $$...$$ 显示公式
-      processedHtml = processedHtml.replace(/\$\$([^$]+)\$\$/g, (match, mathContent) => {
-        const mathHtml = KatexUtils.renderToString(mathContent.trim());
-        return `<span class="katex--display">${mathHtml}</span>`;
-      });
-
-      // 处理 $...$ 行内公式
-      processedHtml = processedHtml.replace(/\$([^$]+)\$/g, (match, mathContent) => {
-        const mathHtml = KatexUtils.renderToString(mathContent.trim());
-        return `<span class="katex--inline">${mathHtml}</span>`;
-      });
-
-      // 只有当内容发生变化时才更新
-      if (processedHtml !== originalHtml) {
-        $element.html(processedHtml);
+    return HtmlMathUtils.replaceMath(html, (expression, display) => {
+      try {
+        const mathHtml = KatexUtils.renderToString(expression)
+        return display
+          ? `<span class="katex--display">${mathHtml}</span>`
+          : `<span class="katex--inline">${mathHtml}</span>`
+      } catch {
+        // KaTeX 无法解析的 $...$ 保留原文，避免一条坏公式中断整篇发布
+        return null
       }
-    });
-
-    return $.html();
+    })
   }
 
   /**

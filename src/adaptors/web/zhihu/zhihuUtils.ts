@@ -8,6 +8,7 @@
  */
 
 import * as cheerio from "cheerio"
+import { HtmlMathUtils } from "~/src/utils/htmlMathUtils.ts"
 
 /**
  * 知乎工具类
@@ -45,84 +46,15 @@ class ZhihuUtils {
   }
 
   public static processZHMath(html: string): string {
-    // 使用Cheerio加载HTML
-    const $ = cheerio.load(html, {
-      xml: {
-        xmlMode: true,
-        decodeEntities: false,
-      },
+    return HtmlMathUtils.replaceMath(html, (expression) => {
+      const src = `//www.zhihu.com/equation?tex=${encodeURIComponent(expression)}`
+      const alt = expression
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+      return `<img eeimg="1" src="${src}" alt="${alt}" />`
     })
-
-    // 处理两个$符号和一个$符号包裹的公式
-    const mathRegex = /\$\$([^\$]+)\$\$|\$([^\$]+)\$/g
-
-    const elems = $("*:not(pre)")
-    elems.each((_index, element) => {
-      const content = $(element).html() ?? ""
-      const newContent = content.replace(mathRegex, (_match, doubleDollarContent, singleDollarContent) => {
-        const mathContent = doubleDollarContent || singleDollarContent
-        return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}" 
-            alt="${mathContent}" />`
-      })
-      $(element).html(newContent)
-    })
-
-    // 输出修改后的HTML
-    return $.html()
-
-    //   // 使用Cheerio加载HTML
-    //   const $ = cheerio.load(html, { xmlMode: true })
-    //
-    //   // // 选择所有带有类名"language-math"的<span>元素
-    //   // $("span.language-math").each((index, element) => {
-    //   //   // 获取元素的文本内容
-    //   //   const mathContent = $(element).text()
-    //   //
-    //   //   // 创建替代的<img>标签
-    //   //   const imgTag = `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //   //     alt="${mathContent}" />`
-    //   //
-    //   //   // 用新的<img>标签替换原始元素
-    //   //   $(element).replaceWith(imgTag)
-    //   // })
-    //   //
-    //   // // 选择所有带有类名"language-math"的<div>元素
-    //   // $("div.language-math").each((index, element) => {
-    //   //   // 获取元素的文本内容
-    //   //   const mathContent = $(element).text()
-    //   //
-    //   //   // 创建替代的<img>标签
-    //   //   const imgTag = `<p><img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //   //     alt="${mathContent}"/></p>`
-    //   //
-    //   //   // 用新的<img>标签替换原始元素
-    //   //   $(element).replaceWith(imgTag)
-    //   // })
-    //
-    //   // 处理两个$符号包裹的公式
-    //   const doubleDollarRegex = /\$\$([^$]+)\$\$/g
-    //   $("*:not(pre)").each((index, element) => {
-    //     const content = $(element).html()
-    //     const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
-    //       return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //       alt="${mathContent}" />`
-    //     })
-    //     $(element).html(newContent)
-    //   })
-    //
-    //   // 处理一个$符号包裹的公式
-    //   const singleDollarRegex = /\$([^$]+)\$/g
-    //   $("*:not(pre)").each((index, element) => {
-    //     const content = $(element).html()
-    //     const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
-    //       return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //       alt="${mathContent}" />`
-    //     })
-    //     $(element).html(newContent)
-    //   })
-    //
-    //   // 输出修改后的HTML
-    //   return $.html()
   }
 }
 
