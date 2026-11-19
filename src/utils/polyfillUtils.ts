@@ -97,7 +97,11 @@ function readFileToBase64(url: string): Promise<string> {
     ;(async () => {
       let body = null
       try {
-        const response = await window.fetch(url)
+        const response = await window.fetch(url, { credentials: "same-origin" })
+        // 未登录/无权限时不能把错误响应当成图片读取（issue #2028）
+        if (!response.ok) {
+          throw new Error(`图片读取失败：请求返回 HTTP ${response.status}`)
+        }
         body = await response.blob()
       } catch (e) {
         return reject(e)

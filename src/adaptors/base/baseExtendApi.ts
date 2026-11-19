@@ -43,6 +43,7 @@ import ImageUtils from "~/src/utils/ImageUtils.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
+import { shouldReadImageDirectly } from "~/src/utils/imageReadRoute.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
@@ -647,11 +648,14 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
   /**
    * 读取文件并将其转换为 Base64 编码
    *
+   * 浏览器宿主（如浏览器访问 Docker/远程部署的思源）里，同源图片由页面直接读取，
+   * 以保留浏览器登录会话；只有跨源图片才交给发布传输层代理（issue #2028）。
+   *
    * @param url - 要读取的文件的 URL
    */
   public async readFileToBase64(url: string): Promise<any> {
     let base64Info: any
-    if (this.isSiyuanOrSiyuanNewWin) {
+    if (shouldReadImageDirectly(url, { inSiyuanDesktop: this.isSiyuanOrSiyuanNewWin })) {
       base64Info = await remoteImageToBase64Info(url)
     } else {
       let response: any
