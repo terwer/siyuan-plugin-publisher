@@ -127,6 +127,8 @@ describe("HaloApiAdaptor.getDefaultSlug", () => {
   it("同一适配器实例只读取一次站点策略", async () => {
     const { api, apiFetch } = createAdaptor()
     apiFetch.mockResolvedValue({ postSlugGenerationStrategy: "timestamp" })
+    // timestamp 策略依赖 Date.now()，冻结时间才能断言两次调用结果一致
+    vi.spyOn(Date, "now").mockReturnValue(1795054800000)
 
     const first = await api.getDefaultSlug("标题")
     const second = await api.getDefaultSlug("标题")
