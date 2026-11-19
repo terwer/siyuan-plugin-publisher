@@ -374,7 +374,9 @@ const syncPost = (post: Post) => {
 const featuredImageEnabled = computed(() => isFeaturedImageEnabled(formData.publishCfg?.cfg))
 
 const syncFeaturedImage = (url: string) => {
-  ;(formData.mergedPost as FeaturedImagePost).featuredImage = url
+  const featuredPost = formData.mergedPost as FeaturedImagePost
+  featuredPost.featuredImage = url
+  featuredPost.featuredImageTouched = true
 }
 
 const onBack = () => {

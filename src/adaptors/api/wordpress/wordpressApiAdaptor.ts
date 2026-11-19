@@ -88,7 +88,8 @@ class WordpressApiAdaptor extends MetaweblogBlogApiAdaptor {
     featuredPost.featuredImageAttachmentId = undefined
     featuredPost.featuredImageError = undefined
 
-    const featuredImage = getFeaturedImage(post)
+    // 通用封面解析结果优先；没有时兼容旧的 featuredImage 表单字段
+    const featuredImage = StrUtil.isEmptyString(post.cover) ? getFeaturedImage(post) : post.cover
     if (StrUtil.isEmptyString(featuredImage)) {
       return
     }

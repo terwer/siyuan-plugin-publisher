@@ -18,6 +18,7 @@ import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
 import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
+import { uploadHaloMediaWithCache } from "~/src/utils/haloMediaCache.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 const HALO_BASIC_AUTH_ERROR_CODE = "HALO_BASIC_AUTH_DISABLED"
@@ -144,6 +145,7 @@ class HaloApiAdaptor extends BaseBlogApi {
     params.post.metadata.name = sypIdUtil.randomUuid()
     params.post.spec.title = post.title
     params.post.spec.slug = post.wp_slug
+    params.post.spec.cover = post.cover ?? ""
 
     // 标签和分类
     try {
@@ -181,25 +183,28 @@ class HaloApiAdaptor extends BaseBlogApi {
   }
 
   public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
-    let flag = false
     try {
       const haloPostKey = this.getHaloPostidKey(postid)
       const name = haloPostKey.name
 
       // 加载最新
-      let params: PostRequest = await this.getHaloPost(name)
-
-      if (!params.post) {
+      const params: PostRequest = await this.getHaloPost(name)
+      if (!params?.post) {
         throw new Error("获取文章信息失败，如果文章删除，请强制删除解除关联")
       }
 
-      // 根据已发布类型确定 raw 的数据
-      if (params.content.rawType === "markdown") {
-        params.content.raw = post.markdown
-      } else {
-        params.content.raw = HaloUtils.addIdToH1_H6(post.html)
+      // 通用封面解析结果：题头图/正文首图/自定义链接直接写入 spec.cover
+      if (!StrUtil.isEmptyString(post.cover)) {
+        params.post.spec.cover = post.cover
       }
-      params.content.content = HaloUtils.addIdToH1_H6(post.html)
+
+      // 根据已发布类型确定 raw 的数据
+      const content = {
+        rawType: params.content.rawType,
+        raw: params.content.rawType === "markdown" ? post.markdown : HaloUtils.addIdToH1_H6(post.html),
+        content: HaloUtils.addIdToH1_H6(post.html),
+      }
+      params.content = content as any
 
       if (StrUtil.isEmptyString(post.shortDesc)) {
         params.post.spec.excerpt.autoGenerate = true
@@ -226,20 +231,16 @@ class HaloApiAdaptor extends BaseBlogApi {
       // 发布时间
       params.post.spec.publishTime = post.dateCreated.toISOString()
 
-      // 更新文章信息
-      await this.haloFetch(`/apis/content.halo.run/v1alpha1/posts/${name}`, params.post, "PUT")
-      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/content`, params.content, "PUT")
+      // 标题、正文与封面一次提交，避免 2.9 上分两步更新产生的竞态
+      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}`, params, "PUT")
 
       // 重新发布
-      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${params.post.metadata.name}/publish`, {}, "PUT")
+      await this.haloFetch(`/apis/api.console.halo.run/v1alpha1/posts/${name}/publish`, {}, "PUT")
+      return true
     } catch (e) {
       this.logger.error("Halo文章更新失败", e)
-      if (isHaloBasicAuthDisabledError(e)) {
-        throw e
-      }
+      throw e
     }
-
-    return flag
   }
 
   public async getPost(postid: string, useSlug?: boolean): Promise<Post> {
@@ -316,6 +317,18 @@ class HaloApiAdaptor extends BaseBlogApi {
   }
 
   public async newMediaObject(mediaObject: MediaObject, customHandler?: any): Promise<Attachment> {
+    return await uploadHaloMediaWithCache(mediaObject, {
+      upload: () => this.uploadMediaObject(mediaObject),
+      isAttachmentAlive: (attachmentId) => this.isAttachmentAlive(attachmentId),
+    })
+  }
+
+  /**
+   * 实际上传媒体到 Halo 附件库。
+   *
+   * @param mediaObject - 媒体对象
+   */
+  private async uploadMediaObject(mediaObject: MediaObject): Promise<Attachment> {
     let res: any
     try {
       const bits = mediaObject.bits
@@ -332,7 +345,6 @@ class HaloApiAdaptor extends BaseBlogApi {
       formData.append("file", blob, mediaObject.name)
       formData.append("policyName", "default-policy")
       formData.append("groupName", "")
-      formData.append("file", blob, mediaObject.name)
 
       // 发送请求
       res = await this.haloFormFetch(uploadUrl, formData)
@@ -371,6 +383,27 @@ class HaloApiAdaptor extends BaseBlogApi {
       id: siteArticleId,
       file: mediaObject.name,
       url: siteImgUrl,
+    }
+  }
+
+  /**
+   * 校验缓存中的附件是否仍存在于 Halo。
+   *
+   * @param attachmentId - 附件 ID
+   */
+  private async isAttachmentAlive(attachmentId: string): Promise<boolean> {
+    if (StrUtil.isEmptyString(attachmentId)) {
+      return false
+    }
+    try {
+      const res = await this.haloFetch(`/apis/storage.halo.run/v1alpha1/attachments/${attachmentId}`, {}, "GET")
+      // 明确 404 才判定附件已删除；其它异常按存在处理，避免网络抖动导致重复上传
+      if (res?.status === 404) {
+        return false
+      }
+      return true
+    } catch {
+      return true
     }
   }
 

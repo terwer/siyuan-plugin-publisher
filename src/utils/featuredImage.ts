@@ -47,6 +47,12 @@ export interface FeaturedImagePost extends Post {
    */
   featuredImageCleared?: boolean
   /**
+   * 用户是否主动修改过封面（输入、上传或清空）。
+   *
+   * 为 true 时自定义封面优先于自动解析的题头图/正文首图；否则按默认顺序解析。
+   */
+  featuredImageTouched?: boolean
+  /**
    * 发布过程中上传得到的附件 ID，由适配器在调用平台接口前填充。
    */
   featuredImageAttachmentId?: string
@@ -172,6 +178,7 @@ export const initFeaturedImageFromYaml = (post: Post): Post => {
   const saved = readFeaturedImageFromYaml(post?.yaml)
   if (!StrUtil.isEmptyString(saved) && StrUtil.isEmptyString(getFeaturedImage(post))) {
     featuredImagePost.featuredImage = saved
+    featuredImagePost.featuredImageTouched = true
   }
   return post
 }
