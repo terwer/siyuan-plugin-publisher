@@ -131,18 +131,22 @@ class MdUtils {
   /**
    * 获取一个字符串的人类可读版本
    *
+   * 规范化顺序：先把空白转成 `-`，再按中英文边界补 `-`，最后移除非法字符。
+   * 空白必须在移除非法字符之前处理，否则空格会先被当成非法字符删掉，
+   * 词与词之间就会粘连（issue #1628）。
+   *
    * @param input
    */
   public static getHumanFilename(input: string): string {
     return (
       input
+        // 空白是词分隔符，先统一替换为 -
+        .replace(/\s+/g, "-")
         // 在中文与英文/数字之间添加 -
         .replace(/([\u4e00-\u9fa5])([a-zA-Z0-9])/g, "$1-$2")
         .replace(/([a-zA-Z0-9])([\u4e00-\u9fa5])/g, "$1-$2")
         // 移除非法字符，保留 / - _ . ~
         .replace(/[^\w\u4e00-\u9fa5\/\-_.~]/g, "")
-        // 将空格替换为 -
-        .replace(/\s+/g, "-")
         // 合并连续的 /
         .replace(/\/+/g, "/")
         // 合并连续的 -

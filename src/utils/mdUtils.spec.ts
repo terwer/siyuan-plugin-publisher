@@ -7,7 +7,7 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import { describe, it } from "vitest"
+import { describe, expect, it } from "vitest"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 
 describe("test mdUtils", () => {
@@ -84,5 +84,10 @@ $$
   it("test getHumanFilename3", () => {
     const result = MdUtils.getHumanFilename("测试123abc中文")
     console.log(result)
+  })
+
+  it("keeps the separator at the original space (#1628)", () => {
+    expect(MdUtils.getHumanFilename("ELRS LED指示灯状态")).toBe("ELRS-LED-指示灯状态")
+    expect(MdUtils.getHumanFilename("hello world")).toBe("hello-world")
   })
 })
