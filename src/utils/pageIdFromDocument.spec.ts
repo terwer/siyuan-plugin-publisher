@@ -26,7 +26,50 @@ describe("getPageIdFromDocument", () => {
     expect(getPageIdFromDocument(document)).toBe("20260526165741-p675vq6")
   })
 
-  it("跳过隐藏标签页标题里的 protyle-lite-fragment", () => {
+  it("多分屏时取活动分屏聚焦页签对应的文档", () => {
+    document.body.innerHTML = `
+      <div class="layout__wnd">
+        <ul class="layout-tab-bar">
+          <li class="item item--focus" data-id="tab-left">
+            <span class="item__text" data-document-title-id="doc-left">左侧文档</span>
+          </li>
+        </ul>
+        <div class="fn__flex-1 protyle" data-id="tab-left">
+          <div class="protyle-title" data-node-id="doc-left">左侧文档</div>
+        </div>
+      </div>
+      <div class="layout__wnd layout__wnd--active">
+        <ul class="layout-tab-bar">
+          <li class="item item--focus" data-id="tab-right">
+            <span class="item__text" data-document-title-id="doc-right">右侧文档</span>
+          </li>
+        </ul>
+        <div class="fn__flex-1 protyle" data-id="tab-right">
+          <div class="protyle-title" data-node-id="doc-right">右侧文档</div>
+        </div>
+      </div>`
+
+    // 按文档顺序取第一个可见编辑器会误取左侧分屏，当前文档应是活动分屏的右侧文档
+    expect(getPageIdFromDocument(document)).toBe("doc-right")
+  })
+
+  it("活动文档的正文编辑器尚未挂载时读取页签标题上的文档 ID", () => {
+    document.body.innerHTML = `
+      <div class="layout__wnd layout__wnd--active">
+        <ul class="layout-tab-bar">
+          <li class="item item--focus" data-id="tab-active">
+            <span class="item__text" data-document-title-id="doc-active">活动文档</span>
+          </li>
+        </ul>
+      </div>
+      <div class="fn__flex-1 protyle" data-id="tab-other">
+        <div class="protyle-title" data-node-id="doc-other">其他文档</div>
+      </div>`
+
+    expect(getPageIdFromDocument(document)).toBe("doc-active")
+  })
+
+  it("跳过隐藏标签页里的标题，返回可见文档", () => {
     document.body.innerHTML = `
       <div class="fn__flex-1 protyle fn__none">
         <div class="protyle-title" data-node-id="20260526165741-hidden">
@@ -39,7 +82,6 @@ describe("getPageIdFromDocument", () => {
         </div>
       </div>`
 
-    // 只取第一个 div.protyle 会命中隐藏标签页里的标题片段，导致返回空字符串（issue #2087）
     expect(getPageIdFromDocument(document)).toBe("20260526165741-active")
   })
 
