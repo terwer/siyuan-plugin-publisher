@@ -24,6 +24,7 @@ import { SiyuanAttr } from "zhi-siyuan-api"
 import Adaptors from "~/src/adaptors"
 import { usePublishConfig } from "~/src/composables/usePublishConfig.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
+import { usePublishRecords } from "~/src/composables/usePublishRecords.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
 import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
@@ -59,6 +60,7 @@ const usePublish = () => {
   const { getPublishApi } = usePublishConfig()
   const { updatePlatformMetadata } = usePlatformMetadataStore()
   const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
+  const { unbind: unbindPublishRecord } = usePublishRecords()
 
   // datas
   const singleFormData = reactive({
@@ -363,28 +365,16 @@ const usePublish = () => {
    */
   const doForceSingleDelete = async (key: string, id: string, publishCfg: IPublishCfg): Promise<boolean> => {
     try {
-      const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
-      const dynCfg: DynamicConfig = publishCfg.dynCfg
 
       // 检测是否发布
       const posidKey = cfg.posidKey
       if (StrUtil.isEmptyString(posidKey)) {
         throw new Error("配置错误，posidKey不能为空，请检查配置")
       }
-      const postMeta = ObjectUtil.getProperty(setting, id, {})
-      const updatedPostMeta = { ...postMeta }
-      if (updatedPostMeta.hasOwnProperty(posidKey)) {
-        delete updatedPostMeta[posidKey]
-      }
-      // 别名不能删除，因为别的平台可能还用
 
-      setting[id] = updatedPostMeta
-      await updateSetting(setting)
-
-      // 清空属性
-      const yamlKey = getDynYamlKey(key)
-      await kernelApi.setSingleBlockAttr(id, yamlKey, "")
+      // 只解除「文档 ↔ 平台」的本地关联（含平台 YAML 属性），别名保留，因为别的平台可能还在用
+      await unbindPublishRecord(id, key, posidKey)
 
       await kernelApi.pushMsg({
         msg: t("main.opt.ok"),

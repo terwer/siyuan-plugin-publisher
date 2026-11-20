@@ -44,7 +44,7 @@ const navItems: Array<{ key: SettingsSection; label: string }> = [
   { key: "account", label: t("nav.account") },
   { key: "picbed", label: t("nav.picbed") },
   { key: "preference", label: t("nav.preference") },
-  { key: "repair", label: t("nav.repair") },
+  { key: "records", label: t("nav.records") },
   { key: "ai", label: t("nav.ai") },
   { key: "about", label: t("nav.about") },
 ]
