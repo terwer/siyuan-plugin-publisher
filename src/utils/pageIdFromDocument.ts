@@ -10,12 +10,29 @@
 /**
  * 从宿主 DOM 读取当前文档的节点 ID。
  *
- * 富文本标题（`protyle-title__rich`）本身也带 `protyle` 类，且位于隐藏标签页中的标题片段
- * 不会被 `fn__none` 过滤；只按文档顺序取第一个 `protyle` 会命中标题片段，导致读不到正文
- * 编辑器而显示「未检测到当前文档」。这里只认真正的文档编辑器（issue #2087）。
+ * 不能按 DOM 顺序取第一个 `protyle`：富文本标题片段也带 `protyle` 类，隐藏页签里的标题
+ * 片段不会被自身的 `fn__none` 过滤；分屏时另一个（同样可见的）编辑器也可能排在前面。
+ * 这里优先按活动窗口的焦点页签定位真正的编辑器，再回退到「第一个未隐藏的文档标题节点」，
+ * 后者不依赖 `protyle-lite-fragment` 类名，兼容旧版宿主（issue #2087）。
  */
 export const getPageIdFromDocument = (doc: Document): string => {
-  const protyleElement = doc.querySelector("div.protyle:not(.fn__none):not(.protyle-lite-fragment)")
-  const protyleTitleElement = protyleElement?.querySelector("div.protyle-title")
-  return protyleTitleElement?.getAttribute("data-node-id") ?? ""
+  const getTitlePageId = (title: Element | null | undefined): string => title?.getAttribute("data-node-id") ?? ""
+
+  // 活动窗口的焦点页签才是当前文档；分屏里另一个编辑器即使可见也不能当作当前文档
+  const activeTabId = doc
+    .querySelector(".layout__wnd--active .layout-tab-bar .item--focus[data-id]")
+    ?.getAttribute("data-id")
+  if (activeTabId) {
+    const activeEditor = Array.from(doc.querySelectorAll("div.protyle[data-id]")).find(
+      (editor) => editor.getAttribute("data-id") === activeTabId
+    )
+    const activeTitle = activeEditor?.querySelector("div.protyle-title[data-node-id]")
+    if (activeTitle) {
+      return getTitlePageId(activeTitle)
+    }
+  }
+
+  // 回退：直接找文档标题节点，跳过隐藏页签（标题带 fn__none 祖先）里的标题
+  const titles = Array.from(doc.querySelectorAll("div.protyle-title[data-node-id]"))
+  return getTitlePageId(titles.find((title) => title.closest(".fn__none") === null))
 }
