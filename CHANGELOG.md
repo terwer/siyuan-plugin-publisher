@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.5.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.4.0...siyuan-plugin-publisher-v2.5.0) (2026-11-21)
+
+
+### Features
+
+* **cover:** resolve covers through the shared zhi contract ([#2092](https://github.com/terwer/siyuan-plugin-publisher/issues/2092)) ([7cd63a9](https://github.com/terwer/siyuan-plugin-publisher/commit/7cd63a965b33a4ec69ac6933899ae33e234e5874))
+* **ui:** redesign published article records management ([#2097](https://github.com/terwer/siyuan-plugin-publisher/issues/2097)) ([#2100](https://github.com/terwer/siyuan-plugin-publisher/issues/2100)) ([2be13a0](https://github.com/terwer/siyuan-plugin-publisher/commit/2be13a052d0893d387a35e41b218f963d819efb9))
+
+
+### Bug Fixes
+
+* detect the active document by the focused tab ([#2087](https://github.com/terwer/siyuan-plugin-publisher/issues/2087)) ([#2098](https://github.com/terwer/siyuan-plugin-publisher/issues/2098)) ([2e430ee](https://github.com/terwer/siyuan-plugin-publisher/commit/2e430ee8799754990fd2d762d26ab3dc506e1e18))
+* **halo:** follow the site slug generation strategy ([#1596](https://github.com/terwer/siyuan-plugin-publisher/issues/1596)) ([#2090](https://github.com/terwer/siyuan-plugin-publisher/issues/2090)) ([08009c7](https://github.com/terwer/siyuan-plugin-publisher/commit/08009c7130e69be40010d4ed99f29a2afd025698))
+* **image:** read same-origin assets with the browser session ([#2028](https://github.com/terwer/siyuan-plugin-publisher/issues/2028)) ([#2093](https://github.com/terwer/siyuan-plugin-publisher/issues/2093)) ([2c11a78](https://github.com/terwer/siyuan-plugin-publisher/commit/2c11a7849f0d8dd9b9d9037b2fb270a63f78c797))
+* **publish:** keep spaces as separators in md filenames ([#1628](https://github.com/terwer/siyuan-plugin-publisher/issues/1628)) ([#2095](https://github.com/terwer/siyuan-plugin-publisher/issues/2095)) ([8b1bacb](https://github.com/terwer/siyuan-plugin-publisher/commit/8b1bacb615a76c2f50f7b5d79bd7ec17df2b097f))
+
 ## [2.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.1...siyuan-plugin-publisher-v2.4.0) (2026-11-18)
 ### Features
 * **image:** control automatic image upload per directory and document ([#2040](https://github.com/terwer/siyuan-plugin-publisher/issues/2040)) ([#2085](https://github.com/terwer/siyuan-plugin-publisher/issues/2085)) ([575b20a](https://github.com/terwer/siyuan-plugin-publisher/commit/575b20a2807010d0a8065789076abac767180063))
