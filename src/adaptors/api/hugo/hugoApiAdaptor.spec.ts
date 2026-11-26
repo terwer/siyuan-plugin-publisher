@@ -100,6 +100,20 @@ describe("HugoApiAdaptor 页面目录（Leaf Bundle）", () => {
     )
   })
 
+  it("平台切到 bundle 后，更新旧单文件文章仍使用单文件图片路径", async () => {
+    const { api, calls } = createAdaptor(CONTENT_LAYOUT_LEAF_BUNDLE)
+    const post = makePost()
+    post.postid = "content/post/legacy-single.md"
+    const media = new MediaObject("legacy.jpg", "image/jpeg", new Uint8Array([1]))
+    media.post = post
+
+    const attachment = await api.newMediaObject(media)
+
+    expect(calls[0].method).toBe("publish")
+    expect(calls[0].args[0]).toBe("static/images/legacy.jpg")
+    expect(attachment.url).toBe("/images/legacy.jpg")
+  })
+
   it("单文件模式保持原有路径与图片链接行为", async () => {
     const { api, calls } = createAdaptor(CONTENT_LAYOUT_SINGLE)
     await api.newPost(makePost())

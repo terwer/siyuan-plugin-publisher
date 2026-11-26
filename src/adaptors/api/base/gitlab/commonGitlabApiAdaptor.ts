@@ -15,6 +15,7 @@ import {
   isLeafBundlePostPath,
   resolveLeafBundleImageLink,
   resolveLeafBundleImagePathForPost,
+  usesLeafBundleForPost,
   resolveLeafBundlePostPath,
   resolvePostMdFilename,
   resolvePreviewSlug,
@@ -271,7 +272,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const isBundle = isLeafBundleLayout(this.cfg as any)
+      const isBundle = usesLeafBundleForPost(this.cfg as any, mediaObject.post)
       let imageFullPath: string
       if (isBundle) {
         // 页面目录：图片与 index.md 同目录，正文用相对文件名引用

@@ -24,6 +24,7 @@ import {
   resolvePostMdFilename,
   resolvePreviewSlug,
   stripMarkdownExtension,
+  usesLeafBundleForPost,
 } from "~/src/adaptors/api/base/contentLayout.ts"
 
 describe("Hugo 内容组织方式（Content Layout）", () => {
@@ -36,6 +37,15 @@ describe("Hugo 内容组织方式（Content Layout）", () => {
 
     it("leaf-bundle 才启用页面目录", () => {
       expect(isLeafBundleLayout({ contentLayout: CONTENT_LAYOUT_LEAF_BUNDLE })).toBe(true)
+    })
+
+    it("按文章实际形态决定本次是否按页面目录处理", () => {
+      const bundleCfg = { contentLayout: CONTENT_LAYOUT_LEAF_BUNDLE }
+      expect(usesLeafBundleForPost(bundleCfg, {})).toBe(true)
+      expect(usesLeafBundleForPost(bundleCfg, { postid: "content/post/new/index.md" })).toBe(true)
+      // 平台切到 bundle 后，更新旧的单文件文章仍走单文件，避免断图
+      expect(usesLeafBundleForPost(bundleCfg, { postid: "content/post/old.md" })).toBe(false)
+      expect(usesLeafBundleForPost({ contentLayout: CONTENT_LAYOUT_SINGLE }, {})).toBe(false)
     })
   })
 

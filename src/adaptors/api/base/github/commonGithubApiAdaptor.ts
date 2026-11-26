@@ -15,6 +15,7 @@ import {
   isLeafBundlePostPath,
   resolveLeafBundleImageLink,
   resolveLeafBundleImagePathForPost,
+  usesLeafBundleForPost,
   resolveLeafBundlePostPath,
   resolvePostMdFilename,
   resolvePreviewSlug,
@@ -308,7 +309,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
       const base64 = Base64.fromUint8Array(bits)
       let imageSavePath: string
       let imageLinkPath: string
-      if (isLeafBundleLayout(this.cfg as any)) {
+      if (usesLeafBundleForPost(this.cfg as any, mediaObject.post)) {
         // 页面目录：图片与 index.md 同目录，正文用相对文件名引用
         const mediaPost = mediaObject.post
         imageSavePath = resolveLeafBundleImagePathForPost(mediaPost, mediaObject.name, this.cfg.blogid)

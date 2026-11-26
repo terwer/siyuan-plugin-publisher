@@ -10,7 +10,7 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
-import { isLeafBundleLayout, resolveHugoBundleUrl } from "~/src/adaptors/api/base/contentLayout.ts"
+import { resolveHugoBundleUrl, usesLeafBundleForPost } from "~/src/adaptors/api/base/contentLayout.ts"
 import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
@@ -35,7 +35,7 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
       // url
       // 页面目录（Leaf Bundle）使用目录式地址；单文件保持原有 .html 约定，避免改变既有站点链接。
       if (cfg.yamlLinkEnabled) {
-        yamlFormatObj.yamlObj.url = isLeafBundleLayout(cfg as any)
+        yamlFormatObj.yamlObj.url = usesLeafBundleForPost(cfg as any, post)
           ? resolveHugoBundleUrl(cfg as any, post.wp_slug)
           : "/post/" + post.wp_slug + ".html"
       }

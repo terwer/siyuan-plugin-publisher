@@ -32,7 +32,7 @@ export const gitlabhugoHelpConfig: PageHelpConfig = {
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "main" },
     defaultPath: { tip: "Hugo 文章存储目录，默认 content/post。发布后的 .md 会写入该目录。", placeholder: "content/post" },
     contentLayout: {
-      tip: "内容组织方式：单文件写入「存储目录/<文件名>.md」，图片按下面的图片存储目录上传；页面目录（Leaf Bundle）写入「存储目录/<目录名>/index.md」，图片自动放入同一目录并在正文中相对引用。默认单文件；切换只影响之后发布或更新的文章，不会自动搬迁历史文章。",
+      tip: "内容组织方式：单文件写入「存储目录/<文件名>.md」，图片按下面的图片存储目录上传；页面目录（Leaf Bundle）写入「存储目录/<目录名>/index.md」，图片自动放入同一目录并在正文中相对引用。默认单文件；切换只影响之后新发布的文章；已发布文章更新时保持原路径与图片方式，不会自动搬迁或改造。",
     },
     mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md（文章别名）。页面目录模式下，去掉 .md 后的名称会作为文章目录名（如 my-post/index.md）。", placeholder: "[slug].md" },
     previewPostUrl: {

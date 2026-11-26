@@ -63,6 +63,18 @@ export const isLeafBundlePostPath = (postid?: string): boolean =>
   /(^|\/)index\.(md|markdown)$/i.test(normalizeRepoPath(postid))
 
 /**
+ * 这篇文章本次是否应按页面目录布局处理。
+ *
+ * 新文章（无 postid）跟随平台配置；已发布文章按它**实际所在的文件形态**处理：
+ * 旧的 `<slug>.md` 即使平台已切到 leaf-bundle，更新时仍走单文件，
+ * 避免把图片写到 bundle 目录而正文仍指向旧的单文件路径。
+ */
+export const usesLeafBundleForPost = (
+  cfg: { contentLayout?: string } | null | undefined,
+  post: { postid?: string } | null | undefined
+): boolean => isLeafBundleLayout(cfg) && (!post?.postid || isLeafBundlePostPath(post.postid))
+
+/**
  * 解析文章实际使用的 md 文件名。
  *
  * `mdFilename` 由 `BaseExtendApi.handleFilename()` 按 `mdFilenameRule` 生成；
