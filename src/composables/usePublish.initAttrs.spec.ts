@@ -149,6 +149,28 @@ describe("usePublish.assignInitAttrs", () => {
     expect(post.yamlType).toBe(YamlStrategy.Yaml_custom_hand)
   })
 
+  it("把不同 YAML 适配器写在不同字段的摘要/标签归一化", async () => {
+    const adaptor2 = {
+      convertToYaml: vi.fn(),
+      convertToAttr: vi.fn((post: Post) => {
+        post.mt_excerpt = "平台摘要"
+        post.mt_keywords = ["标签甲", "标签乙"] as unknown as string
+        return post
+      }),
+    }
+    mockGetYamlAdaptor.mockResolvedValue(adaptor2)
+    mockGetBlockAttrs.mockResolvedValue({
+      [`custom-github-hexo-t3st01-yaml`]: "---\ndescription: 平台摘要\n---",
+    })
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createPublishCfg())
+
+    expect(post.shortDesc).toBe("平台摘要")
+    expect(post.mt_excerpt).toBe("平台摘要")
+    expect(post.mt_keywords).toBe("标签甲,标签乙")
+  })
+
   it("更新时间不退回 YAML 里的旧值（文档时间更晚时以文档为准）", async () => {
     mockGetBlockAttrs.mockResolvedValue({ [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---" })
 

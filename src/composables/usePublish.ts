@@ -35,6 +35,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { normalizePlatformPostMetadata } from "~/src/adaptors/base/platformPostMetadata.ts"
 import {
   initFeaturedImageFromYaml,
   isFeaturedImageEnabled,
@@ -551,6 +552,9 @@ const usePublish = () => {
           }
         }
 
+        // 统一摘要/标签字段，兼容 Astro/Docsify 只写 mt_excerpt 或历史 YAML 的标签格式
+        post = normalizePlatformPostMetadata(post)
+
         // 更新时间以思源文档为准（issue #2054）：YAML 里的 updated 是上次发布时的快照，
         // 直接沿用会让「更新时间」停在首次发布之后不再前进；文档时间更晚时采用文档时间。
         if (
@@ -608,8 +612,8 @@ const usePublish = () => {
           throw new Error("未找到postid，将无法进行更新")
         }
 
-        // 查询平台文章
-        const platformPost = await api.getPost(postid)
+        // 查询平台文章；不同平台 YAML 适配器写摘要/标签的字段不一致，先统一再与思源合并
+        const platformPost = normalizePlatformPostMetadata(await api.getPost(postid))
         mergedPost = _.cloneDeep(platformPost) as Post
         // 标题以思源笔记为准（思源是权威源）。web 平台适配器的 getPost 通常不返回标题，
         // 若直接使用 platformPost.title 会得到空字符串，导致编辑表单标题丢失。
