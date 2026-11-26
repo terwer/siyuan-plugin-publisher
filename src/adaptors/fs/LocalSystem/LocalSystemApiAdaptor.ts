@@ -27,6 +27,7 @@ import { VuepressYamlConverterAdaptor } from "~/src/adaptors/api/vuepress/vuepre
 import { Vuepress2ApiAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2ApiAdaptor.ts"
 import { Vuepress2YamlConverterAdaptor } from "~/src/adaptors/api/vuepress2/vuepress2YamlConverterAdaptor.ts"
 import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
+import { isLeafBundlePostPath, stripMarkdownExtension, usesLeafBundleForPost } from "~/src/adaptors/api/base/contentLayout.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
@@ -181,25 +182,24 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
   }
 
   public async newPost(post: Post, _publish?: boolean): Promise<string> {
-    const localFsCfg = this.cfg as LocalSystemConfig
-
-    const title = post.title
     const originTitle = post.originalTitle
-    // const slug = post.wp_slug
     const content = post.description
-    // const yaml = post.yaml
+    const storePath = this.resolveStorePath(post)
 
-    // 存储基础路径
-    let storePath = localFsCfg.storePath
-    if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
-      storePath = localFsCfg.realStorePath
+    if (this.isHugoBundlePost(post)) {
+      const bundleDir = EnvUtil.joinPath(storePath, this.resolveBundleDirName(post))
+      const filePath = EnvUtil.joinPath(bundleDir, "index.md")
+      if (!EnvUtil.ensurePath(bundleDir)) {
+        this.logger.error(`Failed to create directory: ${bundleDir}`)
+        throw new Error(`文档发布到文件系统失败: ${filePath}，请打开开发者工具查看错误日志`)
+      }
+      if (!EnvUtil.writeFile(filePath, content)) {
+        throw new Error(`文档发布到文件系统失败: ${filePath}，请打开开发者工具查看错误日志`)
+      }
+      return filePath
     }
 
-    // 保存到文件
-    // 文件路径是 storePath
-    // 文件名是 originTitle.md
-    // 文件内容是 content
-    // 清理文件名并添加扩展名
+    // 单文件：storePath/<originTitle>.md
     const fileName = `${EnvUtil.sanitizeFilename(originTitle)}.md`
     const filePath = EnvUtil.joinPath(storePath, fileName)
 
@@ -218,13 +218,37 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     return filePath
   }
 
-  public async editPost(_postid: string, post: Post, publish?: boolean): Promise<boolean> {
+  public async editPost(postid: string, post: Post, publish?: boolean): Promise<boolean> {
+    // 页面目录更新沿用原 index.md 所在目录，避免标题变化时写到新目录、旧文件残留
+    if (this.isHugoBundlePost(post) && isLeafBundlePostPath(postid)) {
+      const filePath = EnvUtil.joinPath(EnvUtil.dirname(postid), "index.md")
+      const dirReady = EnvUtil.ensurePath(EnvUtil.dirname(filePath))
+      if (!dirReady || !EnvUtil.writeFile(filePath, post.description)) {
+        throw new Error(`文档更新到文件系统失败: ${filePath}，请打开开发者工具查看错误日志`)
+      }
+      return true
+    }
+
     await this.newPost(post, publish)
     return true
   }
 
   public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
     const localFsCfg = this.cfg as LocalSystemConfig
+
+    // 页面目录：删除 index.md，并清理同目录根级资源（子目录中的自定义资源保留）
+    if (this.isHugoBundlePost() && isLeafBundlePostPath(postid)) {
+      const bundleDir = EnvUtil.dirname(postid)
+      const indexDeleted = EnvUtil.deleteFile(postid)
+      for (const entry of EnvUtil.readDir(bundleDir)) {
+        if (entry === "index.md") continue
+        const filePath = EnvUtil.joinPath(bundleDir, entry)
+        if (!EnvUtil.isDirectory(filePath)) {
+          EnvUtil.deleteFile(filePath)
+        }
+      }
+      return indexDeleted
+    }
 
     // 仅在 Bundled 图床模式且拿到思源文档 ID 时，通过正式识别管线清理本地资源
     if (localFsCfg.picbedService === PicbedServiceTypeEnum.Bundled && id) {
@@ -256,25 +280,32 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
   public async newMediaObject(mediaObject: MediaObject): Promise<Attachment> {
     const bits = mediaObject.bits
     const localFsCfg = this.cfg as LocalSystemConfig
-    // 确保保存路径存在
+    const mediaPost = mediaObject.post
+    const storePath = this.resolveStorePath(mediaPost)
+    const isBundle = this.isHugoBundlePost(mediaPost)
 
-    // 存储基础路径
-    let storePath = localFsCfg.storePath
-    if (storePath.includes(CATE_AUTO_NAME) && mediaObject.post?.cate_slugs?.length > 0) {
-      // 自动分类场景：优先使用当前文档的分类路径，不信任历史缓存
-      storePath = storePath.replace(CATE_AUTO_NAME, mediaObject.post.cate_slugs[0])
-    } else if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
-      // 非自动分类场景，或 post.cate_slugs 不可用时，使用 realStorePath
-      storePath = localFsCfg.realStorePath
+    let absMediaFilePath: string
+    let url: string
+    let link: string
+
+    if (isBundle) {
+      // 页面目录：图片与 index.md 同目录，正文使用相对文件名
+      const bundleDir =
+        mediaPost?.postid && isLeafBundlePostPath(mediaPost.postid)
+          ? EnvUtil.dirname(mediaPost.postid)
+          : EnvUtil.joinPath(storePath, this.resolveBundleDirName(mediaPost))
+      absMediaFilePath = EnvUtil.joinPath(bundleDir, mediaObject.name)
+      url = mediaObject.name
+      link = bundleDir
+    } else {
+      const absImagePath = EnvUtil.joinPath(storePath, localFsCfg.imageStorePath ?? "assets")
+      absMediaFilePath = EnvUtil.joinPath(absImagePath, mediaObject.name)
+      url = absMediaFilePath.replace(storePath, ".")
+      link = storePath
     }
 
-    const absStorePath = storePath
-    const absImagePath = StrUtil.pathJoin(absStorePath, localFsCfg.imageStorePath ?? "assets")
-    let absMediaFilePath = StrUtil.pathJoin(absImagePath, mediaObject.name)
-    const fileDir = EnvUtil.dirname(absMediaFilePath)
-
     let flag = false
-    if (EnvUtil.ensurePath(fileDir)) {
+    if (EnvUtil.ensurePath(EnvUtil.dirname(absMediaFilePath))) {
       // 写入媒体文件
       if (EnvUtil.writeBinaryFile(absMediaFilePath, bits)) {
         flag = true
@@ -284,12 +315,11 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
       throw new Error(`媒体发布到文件系统失败: ${absMediaFilePath}，请打开开发者工具查看错误日志`)
     }
     const id = sypIdUtil.newUuid()
-    const url = absMediaFilePath.replace(absStorePath, ".")
     return {
       attachment_id: id,
       date_created_gmt: new Date(),
       parent: 0,
-      link: absStorePath,
+      link: link,
       title: mediaObject.name,
       caption: "",
       description: "",
@@ -310,6 +340,47 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
 
   public async getPreviewUrl(postid: string): Promise<string> {
     return "file://" + postid
+  }
+
+  // ================
+  // private methods
+  // ================
+  /**
+   * 当前文章是否按 Hugo 页面目录（Leaf Bundle）导出。
+   *
+   * 仅 Hugo YAML 类型支持；已发布文章按实际 postid 形态判断，
+   * 旧的单文件文章即便平台切到 bundle，更新时仍走单文件。
+   */
+  private isHugoBundlePost(post?: Post): boolean {
+    const localFsCfg = this.cfg as LocalSystemConfig
+    return localFsCfg.fsYamlType === FsYamlType.Hugo && usesLeafBundleForPost(localFsCfg as any, post)
+  }
+
+  /**
+   * 解析本次导出的基础目录（处理 [auto] 与 realStorePath）
+   */
+  private resolveStorePath(post?: Post): string {
+    const localFsCfg = this.cfg as LocalSystemConfig
+    let storePath = localFsCfg.storePath
+    if (storePath.includes(CATE_AUTO_NAME) && (post?.cate_slugs?.length ?? 0) > 0) {
+      // 自动分类场景：优先使用当前文档的分类路径，不信任历史缓存
+      storePath = storePath.replace(CATE_AUTO_NAME, post.cate_slugs[0])
+    } else if (!StrUtil.isEmptyString(localFsCfg.realStorePath)) {
+      // 非自动分类场景，或 post.cate_slugs 不可用时，使用 realStorePath
+      storePath = localFsCfg.realStorePath
+    }
+    return storePath
+  }
+
+  /**
+   * 页面目录名：沿用本地系统原有的标题命名（LocalSystemConfig 没有文件名规则）
+   */
+  private resolveBundleDirName(post?: Post): string {
+    // LocalSystemConfig 没有文件名规则，Post 的 mdFilename 默认值是 "test"，不能拿来当目录名；
+    // 沿用本地系统原有的标题命名，保持与单文件导出一致。
+    const raw = post?.originalTitle || post?.title || post?.mdFilename || "untitled"
+    const base = raw.split(/[\\/]/).pop() || raw
+    return EnvUtil.sanitizeFilename(stripMarkdownExtension(base)) || "untitled"
   }
 }
 

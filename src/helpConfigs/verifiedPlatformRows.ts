@@ -313,8 +313,8 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "fs_LocalSystem",
     config: localSystemHelpConfig,
     ConfigClass: LocalSystemConfig,
-    // 本地系统无鉴权行（passwordType=None），独有 3 行：存储路径 / 媒体存储路径 / YAML 类型
-    required: ["pageType", "picbedService", "storePath", "imageStorePath", "fsYamlType"],
+    // 本地系统无鉴权行（passwordType=None）；Hugo YAML 类型下额外渲染内容组织方式
+    required: ["pageType", "picbedService", "storePath", "imageStorePath", "fsYamlType", "contentLayout"],
   },
   {
     platformKey: "custom_Yuqueweb",

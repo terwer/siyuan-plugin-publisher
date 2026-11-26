@@ -122,6 +122,54 @@ class EnvUtil {
   }
 
   /**
+   * 列出目录下的直接子项名称（不含递归）
+   * @param dirPath 目录路径
+   */
+  public static readDir(dirPath: string): string[] {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        return []
+      }
+
+      const fs = win.fs
+      const pathModule = win.require("path")
+      const normalizedPath = pathModule.normalize(dirPath)
+
+      if (fs.existsSync(normalizedPath)) {
+        return fs.readdirSync(normalizedPath)
+      }
+
+      return []
+    } catch (e) {
+      this.logger.error(`failed to read dir "${dirPath}":`, e)
+      return []
+    }
+  }
+
+  /**
+   * 判断路径是否为目录
+   * @param filePath 文件或目录路径
+   */
+  public static isDirectory(filePath: string): boolean {
+    try {
+      const win = SiyuanDevice.siyuanWindow()
+      if (!win?.fs) {
+        return false
+      }
+
+      const fs = win.fs
+      const pathModule = win.require("path")
+      const normalizedPath = pathModule.normalize(filePath)
+
+      return fs.existsSync(normalizedPath) && fs.statSync(normalizedPath).isDirectory()
+    } catch (e) {
+      this.logger.error(`failed to stat "${filePath}":`, e)
+      return false
+    }
+  }
+
+  /**
    * 删除文件
    * @param filePath 文件路径
    */

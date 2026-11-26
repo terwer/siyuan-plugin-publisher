@@ -35,9 +35,16 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
       // url
       // 页面目录（Leaf Bundle）使用目录式地址；单文件保持原有 .html 约定，避免改变既有站点链接。
       if (cfg.yamlLinkEnabled) {
-        yamlFormatObj.yamlObj.url = usesLeafBundleForPost(cfg as any, post)
-          ? resolveHugoBundleUrl(cfg as any, post.wp_slug)
-          : "/post/" + post.wp_slug + ".html"
+        // 本地系统导出没有仓库 content/ 的相对位置，无法可靠推导目录式 URL；
+        // 页面目录模式留给 Hugo 按实际导出路径生成，避免写死错误 url。
+        const isLocalSystemExport = typeof (cfg as any).fsYamlType === "string"
+        if (usesLeafBundleForPost(cfg as any, post)) {
+          if (!isLocalSystemExport) {
+            yamlFormatObj.yamlObj.url = resolveHugoBundleUrl(cfg as any, post.wp_slug)
+          }
+        } else {
+          yamlFormatObj.yamlObj.url = "/post/" + post.wp_slug + ".html"
+        }
       }
 
       // date

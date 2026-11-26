@@ -75,6 +75,17 @@ describe("Hugo YAML 永久链接与内容组织方式", () => {
     expect(converter.convertToYaml(post, undefined, cfg).yamlObj.url).toBe("/post/leaf-bundle-contract.html")
   })
 
+  it("本地系统导出页面目录不写死 url，交给 Hugo 按导出路径决定", () => {
+    const cfg = {
+      yamlLinkEnabled: true,
+      contentLayout: CONTENT_LAYOUT_LEAF_BUNDLE,
+      fsYamlType: "hugo",
+    } as any
+    const converter = new HugoYamlConverterAdaptor()
+    const yamlObj = converter.convertToYaml(makePost(), undefined, cfg).yamlObj
+    expect(yamlObj.url).toBeUndefined()
+  })
+
   it("关闭 YAML 永久链接时不写 url", () => {
     const cfg = new HugoConfig("user", "token", "blog", "main")
     cfg.yamlLinkEnabled = false
