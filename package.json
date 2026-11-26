@@ -66,7 +66,7 @@
     "zhi-notion-markdown": "^0.4.0",
     "zhi-siyuan-api": "^2.41.0",
     "zhi-siyuan-picgo": "^3.2.1",
-    "zhi-xmlrpc-middleware": "^0.9.0"
+    "zhi-xmlrpc-middleware": "^0.10.0"
   },
   "devDependencies": {
     "@halo-dev/api-client": "^2.27.0",
