@@ -10,6 +10,7 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Astro平台的YAML解析器
@@ -27,12 +28,8 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       // title
       yamlFormatObj.yamlObj.title = post.title
 
-      // description
-      if (!StrUtil.isEmptyString(post.mt_excerpt)) {
-        yamlFormatObj.yamlObj.description = post.mt_excerpt
-      } else {
-        yamlFormatObj.yamlObj.description = ""
-      }
+      // description（表单绑定 shortDesc，发布前 BaseExtendApi 会同步到 mt_excerpt）
+      yamlFormatObj.yamlObj.description = post.shortDesc || post.mt_excerpt || ""
 
       // pubDate
       // let tzstr = "+00:00"
@@ -55,8 +52,7 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
+        yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
       }
 
       // categories
@@ -66,7 +62,7 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // seo
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        yamlFormatObj.yamlObj.keywords = post.mt_keywords
+        yamlFormatObj.yamlObj.keywords = normalizeTagValue(post.mt_keywords).join(",")
       }
 
       // 上面是固定配置。下面是个性配置
@@ -97,14 +93,18 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.pubDate)
     }
 
-    // 摘要
-    post.mt_excerpt = yamlFormatObj.yamlObj?.description
+    // 摘要：表单绑定 shortDesc，必须同时回填两个字段
+    const description = yamlFormatObj.yamlObj?.description
+    if (typeof description === "string" && description.trim() !== "") {
+      post.shortDesc = description
+      post.mt_excerpt = description
+    }
 
     // 题图
     // 暂不支持
 
-    // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    // 标签：兼容数组、字符串、单数 tag 与空值
+    post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj?.tags ?? yamlFormatObj.yamlObj?.tag)
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

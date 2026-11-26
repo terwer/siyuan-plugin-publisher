@@ -11,6 +11,7 @@ import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-ap
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Quartz平台的YAML解析器
@@ -44,8 +45,7 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
+        yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
       }
 
       // categories
@@ -120,7 +120,7 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
     post.shortDesc = yamlFormatObj.yamlObj?.description
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj?.tags ?? yamlFormatObj.yamlObj?.tag)
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

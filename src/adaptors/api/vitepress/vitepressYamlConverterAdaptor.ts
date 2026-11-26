@@ -10,6 +10,7 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { normalizeTagValue } from "~/src/utils/tagValue.ts"
 
 /**
  * Vitepress 平台的YAML解析器
@@ -45,7 +46,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
       yamlFormatObj.yamlObj.head.push({
         name: "keywords",
-        content: post.mt_keywords.split(",").join(" "),
+        content: normalizeTagValue(post.mt_keywords).join(" "),
       })
     }
     if (!StrUtil.isEmptyString(post.shortDesc)) {
@@ -107,7 +108,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
       for (let i = 0; i < head.length; i++) {
         const m = head[i]
         if (m?.name === "keywords" && !StrUtil.isEmptyString(m.content)) {
-          post.mt_keywords = m.content?.split(" ").join(",")
+          post.mt_keywords = typeof m.content === "string" ? m.content.split(/\s+/).filter(Boolean).join(",") : ""
           break
         }
       }

@@ -251,6 +251,39 @@ describe("usePublish.doInitSinglePage", () => {
     vi.clearAllMocks()
   })
 
+  it("normalizes platform summary/tags before merging", async () => {
+    const siyuanPost = new Post()
+    siyuanPost.title = "思源标题"
+    siyuanPost.markdown = "# 正文"
+    mockSiyuanGetPost.mockResolvedValue(siyuanPost)
+
+    // Astro/Docsify 的 YAML 适配器把摘要写在 mt_excerpt，标签可能是数组
+    const platformPost = new Post()
+    platformPost.mt_excerpt = "平台摘要"
+    platformPost.mt_keywords = ["标签甲", "标签乙"] as unknown as string
+    mockGetPublishApi.mockResolvedValue({
+      getPost: vi.fn(async () => platformPost),
+      getPreviewUrl: vi.fn(async () => "https://platform.local/view/1"),
+    })
+
+    const { initPublishMethods } = usePublish()
+    const publishCfg = createPublishCfg({
+      "20260822111111-m260uak": { "custom-custom_Yuqueweb-post-id": "post-1" },
+    })
+    publishCfg.cfg.posidKey = "custom-custom_Yuqueweb-post-id"
+
+    const { mergedPost } = await initPublishMethods.doInitSinglePage(
+      "custom_Yuqueweb",
+      "20260822111111-m260uak",
+      MethodEnum.METHOD_EDIT,
+      publishCfg
+    )
+
+    expect(mergedPost.shortDesc).toBe("平台摘要")
+    expect(mergedPost.mt_excerpt).toBe("平台摘要")
+    expect(mergedPost.mt_keywords).toBe("标签甲,标签乙")
+  })
+
   it("backs up the siyuan title when platform getPost returns an empty title (web platforms)", async () => {
     // 思源侧文档（权威源，标题/正文都应有值）
     const siyuanPost = new Post()

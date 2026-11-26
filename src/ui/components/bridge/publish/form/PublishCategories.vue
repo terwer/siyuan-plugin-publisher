@@ -15,7 +15,9 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { CategoryAIResult, prompt } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { normalizeAiCategories, parseAiJson, pickAiField } from "~/src/ai/aiResult.ts"
+import { aiErrorI18nKey, aiParseFailureI18nKey, classifyAiError } from "~/src/ai/aiError.ts"
+import { StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
 
 const logger = createAppLogger("publish-categories")
@@ -91,19 +93,24 @@ const fetchCate = async () => {
     const chatText = await chat(inputWord, {
       name: "categories",
       systemMessage: getChatInput(formData?.md, formData.html),
+      timeoutMs: 2 * 60 * 1000,
+      silent: true,
+      throwOnError: true,
     })
-    if (StrUtil.isEmptyString(chatText)) {
-      ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+    const parsed = parseAiJson(chatText)
+    if (!parsed.ok) {
+      ElMessage.error(t(aiParseFailureI18nKey(parsed.reason ?? "invalid-json")))
       return
     }
-    const resJson = JsonUtil.safeParse<CategoryAIResult>(chatText, {} as CategoryAIResult)
-    if (!resJson?.categories || resJson?.categories.length == 0) {
-      throw new Error("文档信息量太少，未能抽取有效信息")
+    const categories = normalizeAiCategories(pickAiField(parsed.value, "categories", "category"))
+    if (categories.length === 0) {
+      ElMessage.error(t("ai.error.empty"))
+      return
     }
-    formData.recommCates = resJson.categories
+    formData.recommCates = categories
   } catch (e: any) {
     logger.error(t("main.opt.failure") + "=>", e)
-    ElMessage.error(t("main.opt.failure") + "=>" + e)
+    ElMessage.error(t(aiErrorI18nKey(classifyAiError(e))))
   } finally {
     formData.isLoading = false
   }

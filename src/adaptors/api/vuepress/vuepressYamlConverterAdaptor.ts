@@ -12,6 +12,7 @@ import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-ap
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Vuepress平台的YAML解析器
@@ -57,7 +58,7 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
       yamlFormatObj.yamlObj.meta.push({
         name: "keywords",
-        content: post.mt_keywords.split(",").join(" ") || "",
+        content: normalizeTagValue(post.mt_keywords).join(" ") || "",
       })
     }
     if (!StrUtil.isEmptyString(post.shortDesc)) {
@@ -69,13 +70,7 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // tags
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      try {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
-      } catch (e) {
-        this.logger.error("标签分割失败", e)
-        yamlFormatObj.yamlObj.tags = []
-      }
+      yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
     }
 
     // categories
@@ -199,9 +194,7 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // 标签
       try {
-        if (Array.isArray(yamlFormatObj.yamlObj.tags) && yamlFormatObj.yamlObj.tags.length > 0) {
-          post.mt_keywords = yamlFormatObj.yamlObj.tags.join(",")
-        }
+        post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj.tags)
       } catch (e) {
         this.logger.error("标签解析失败", e)
       }
