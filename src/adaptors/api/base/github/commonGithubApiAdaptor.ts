@@ -9,6 +9,16 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { resolvePlatformImagePath } from "~/src/adaptors/api/base/platformImagePath.ts"
+import {
+  dirnameRepoPath,
+  isLeafBundleLayout,
+  isLeafBundlePostPath,
+  resolveLeafBundleImageLink,
+  resolveLeafBundleImagePathForPost,
+  resolveLeafBundlePostPath,
+  resolvePostMdFilename,
+  resolvePreviewSlug,
+} from "~/src/adaptors/api/base/contentLayout.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { Attachment, MediaObject, Post, UserBlog, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { CommonGithubClient, GithubConfig } from "zhi-github-middleware"
@@ -86,7 +96,9 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     // 路径处理
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
     const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID() + ".md"
-    let docPath = StrUtil.pathJoin(savePath, filename)
+    let docPath = isLeafBundleLayout(cfg as any)
+      ? resolveLeafBundlePostPath(savePath, resolvePostMdFilename(post))
+      : StrUtil.pathJoin(savePath, filename)
     if (docPath.startsWith("/")) {
       docPath = docPath.substring(1)
     }
@@ -105,9 +117,11 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
       finalRes = res
     } catch (e) {
-      // 失败之后尝试删除旧数据再发一次
+      // 失败之后尝试删除旧数据再发一次。
+      // 注意：这里只删目标 md 文件，不能走 deletePost()——页面目录模式下它会连带清理
+      // 同目录图片，而图片已在 handlePictures 阶段上传，删掉会导致新文章缺图。
       try {
-        await this.deletePost(docPath)
+        await this.githubClient.deleteGithubPage(docPath)
       } catch (e) {
         // 此处失败不阻断主流程
       }
@@ -165,6 +179,11 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
 
     // 获取新的目录路径
     const newDir = post.cate_slugs?.[0] ?? originalDir
+    if (isLeafBundleLayout(this.cfg as any) && isLeafBundlePostPath(originalPath) && originalDir !== newDir) {
+      // 页面目录的图片与 index.md 同目录；只移动 md 会留下断图，直接拒绝更安全。
+      // Hugo 平台本身不允许改发布目录（allowKnowledgeSpaceChange=false），正常 UI 不会走到这里。
+      throw new Error("页面目录（Leaf Bundle）模式暂不支持修改发布目录，请删除后重新发布")
+    }
     let newPath = StrUtil.pathJoin(newDir, filename)
     if (newPath.startsWith("/")) {
       newPath = newPath.substring(1)
@@ -199,11 +218,57 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
   }
 
   public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
+    if (isLeafBundleLayout(this.cfg as any) && isLeafBundlePostPath(postid)) {
+      return await this.deleteLeafBundle(postid)
+    }
+
     const res = await this.githubClient.deleteGithubPage(postid)
     if (!res?.commit?.sha) {
       throw new Error("Github 调用API异常")
     }
     return true
+  }
+
+  /**
+   * 删除页面目录（Leaf Bundle）
+   *
+   * GitHub Contents API 没有“删除目录”接口，只能列出目录后逐个删除文件。
+   * 图片按设计放在 bundle 根目录，因此一次列出即可；若用户自行建了子目录，
+   * 这些条目删除会失败，但不阻断 index.md 的删除。
+   */
+  private async deleteLeafBundle(postid: string): Promise<boolean> {
+    const bundleDir = dirnameRepoPath(postid)
+    const paths = new Set<string>([postid])
+
+    try {
+      const nodes = await this.githubClient.getGithubPageTreeNode(bundleDir)
+      nodes.forEach((node: any) => {
+        if (node?.value) {
+          paths.add(node.value)
+        }
+      })
+    } catch (e) {
+      // 列目录失败时至少删除 index.md，避免整个删除流程不可用
+      this.logger.warn("list bundle dir failed, fallback to delete index.md only", e)
+    }
+
+    let indexDeleted = false
+    for (const filePath of paths) {
+      try {
+        const res = await this.githubClient.deleteGithubPage(filePath)
+        if (filePath === postid) {
+          indexDeleted = !!res?.commit?.sha
+        }
+      } catch (e) {
+        if (filePath === postid) {
+          throw new Error("Github 调用API异常")
+        }
+        // 子目录或并发删除失败不阻断：index.md 删除成功即视为文章已删除
+        this.logger.warn(`delete bundle asset failed: ${filePath}`, e)
+      }
+    }
+
+    return indexDeleted
   }
 
   public async getCategoryTreeNodes(docPath: string): Promise<any[]> {
@@ -229,7 +294,7 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     if (!postid) {
       throw new Error("postid 不能为空")
     }
-    const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
+    const newPostid = resolvePreviewSlug(postid)
     previewUrl = this.cfg.previewPostUrl.replace("[postid]", newPostid)
     // 路径组合
     // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
@@ -241,8 +306,17 @@ class CommonGithubApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      const imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images").imagePath
-      const imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images").absImgPath
+      let imageSavePath: string
+      let imageLinkPath: string
+      if (isLeafBundleLayout(this.cfg as any)) {
+        // 页面目录：图片与 index.md 同目录，正文用相对文件名引用
+        const mediaPost = mediaObject.post
+        imageSavePath = resolveLeafBundleImagePathForPost(mediaPost, mediaObject.name, this.cfg.blogid)
+        imageLinkPath = resolveLeafBundleImageLink(mediaObject.name)
+      } else {
+        imageSavePath = this.getImagePath(this.cfg.imageStorePath, mediaObject, "source/images").imagePath
+        imageLinkPath = this.getImagePath(this.cfg.imageLinkPath, mediaObject, "images").absImgPath
+      }
       try {
         await this.githubClient.publishGithubPage(imageSavePath, base64, "base64")
       } catch (e) {

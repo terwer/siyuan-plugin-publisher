@@ -173,7 +173,7 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "github_Hugo",
     config: hugoHelpConfig,
     ConfigClass: HugoConfig,
-    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "yamlLinkEnabled"],
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "contentLayout", "yamlLinkEnabled"],
   },
   {
     platformKey: "github_Jekyll",
@@ -226,7 +226,7 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "gitlab_Gitlabhugo",
     config: gitlabhugoHelpConfig,
     ConfigClass: GitlabhugoConfig,
-    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "yamlLinkEnabled"],
+    required: [...COMMON_FORM, "username", ...GITHUB_ROWS, "contentLayout", "yamlLinkEnabled"],
     hookFlags: { knowledgeSpaceEnabled: true },
   },
   {
