@@ -27,6 +27,9 @@ import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
  * @since 0.9.0
  */
 class ZhihuWebAdaptor extends BaseWebApi {
+  /** 当前登录账号的 url_token 缓存，供专栏接口使用 */
+  private resolvedColumnUsername?: string
+
   // /**
   //  * 初始化知乎 API 适配器
   //  *
@@ -42,9 +45,13 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
   public async getMetaData(): Promise<any> {
     const res = await this.zhihuFetch(
-      "https://www.zhihu.com/api/v4/me?include=account_status%2Cis_bind_phone%2Cis_force_renamed%2Cemail%2Crenamed_fullname"
+      "https://www.zhihu.com/api/v4/me?include=account_status%2Cis_bind_phone%2Cis_force_renamed%2Cemail%2Crenamed_fullname%2Curl_token"
     )
     const flag = !!res.uid
+    // 用户名不再需要用户填写：读取登录态时用当前账号的 url_token 自动填充（隐藏字段，仅作兼容兜底）
+    if (flag && !StrUtil.isEmptyString(res.url_token)) {
+      this.cfg.username = res.url_token
+    }
     return {
       flag: flag,
       uid: res.uid,
@@ -80,6 +87,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
     //   result.push(useBlog)
     // })
     const columns = await this.getColumns()
+    // 用户名不再由用户填写：验证时把当前登录账号的 url_token 回填到配置（隐藏字段，仅作兼容兜底）
+    const resolvedUsername = this.resolvedColumnUsername ?? this.cfg.username
+    const metadataMap = StrUtil.isEmptyString(resolvedUsername) ? undefined : { username: resolvedUsername }
 
     columns.forEach((column: any) => {
       const useBlog = new UserBlog()
@@ -87,6 +97,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
       useBlog.blogid = item.id
       useBlog.blogName = item.title
       useBlog.url = item.url
+      if (metadataMap) {
+        useBlog.metadataMap = metadataMap
+      }
       result.push(useBlog)
     })
 
@@ -107,6 +120,8 @@ class ZhihuWebAdaptor extends BaseWebApi {
     updatedHtml = ZhihuUtils.processZHTable(updatedHtml)
     // 处理数学公式
     updatedHtml = ZhihuUtils.processZHMath(updatedHtml)
+    // 处理代码块（保留语言，触发知乎语法高亮）
+    updatedHtml = ZhihuUtils.processZHCodeBlock(updatedHtml)
 
     // 处理完毕
     updatedPost.html = updatedHtml
@@ -300,10 +315,15 @@ class ZhihuWebAdaptor extends BaseWebApi {
   // ===================================================================================================================
   // 知乎 API
   private async getColumns(): Promise<any[]> {
+    const username = await this.resolveColumnUsername()
+    if (StrUtil.isEmptyString(username)) {
+      return []
+    }
+
     let res: any
     try {
       res = await this.zhihuFetch(
-        `https://www.zhihu.com/api/v4/members/${this.cfg.username}/column-contributions?include=data%5B*%5D.column.intro%2Cfollowers%2Carticles_count%2Cvoteup_count%2Citems_count&offset=0&limit=20`,
+        `https://www.zhihu.com/api/v4/members/${username}/column-contributions?include=data%5B*%5D.column.intro%2Cfollowers%2Carticles_count%2Cvoteup_count%2Citems_count&offset=0&limit=20`,
         undefined,
         "GET"
       )
@@ -311,6 +331,31 @@ class ZhihuWebAdaptor extends BaseWebApi {
       this.logger.error("zhihu get columns error", e)
     }
     return res?.data ?? []
+  }
+
+  /**
+   * 解析当前登录账号的 url_token。
+   *
+   * 知乎专栏接口依赖用户名（url_token），历史上要求用户手填且填错就会“无法获取专栏”。
+   * 这里以 `/api/v4/me` 返回的当前账号为准，手填值仅作兜底，Docker/远程浏览器宿主同样生效。
+   */
+  private async resolveColumnUsername(): Promise<string> {
+    if (this.resolvedColumnUsername !== undefined) {
+      return this.resolvedColumnUsername
+    }
+
+    try {
+      const me = await this.zhihuFetch("https://www.zhihu.com/api/v4/me?include=url_token")
+      if (!StrUtil.isEmptyString(me?.url_token)) {
+        this.resolvedColumnUsername = me.url_token
+        return this.resolvedColumnUsername
+      }
+    } catch (e) {
+      this.logger.error("zhihu resolve username error", e)
+    }
+
+    this.resolvedColumnUsername = this.cfg.username
+    return this.resolvedColumnUsername
   }
 
   // ================

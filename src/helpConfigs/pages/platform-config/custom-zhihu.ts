@@ -8,14 +8,11 @@ import { platformDocUrl } from "~/src/utils/site"
 export const zhihuHelpConfig: PageHelpConfig = {
   pageId: "platform-config/custom_Zhihu",
   helpUrl: platformDocUrl("custom-zhihu"),
-  summary: "通过 Cookie 授权发布到知乎专栏。图片默认上传到知乎；已发布文章暂不支持更换所属专栏。",
+  summary:
+    "通过 Cookie 授权发布到知乎专栏。专栏按当前登录账号自动获取，无需填写用户名；图片默认上传到知乎；已发布文章暂不支持更换所属专栏。",
   fields: {
     home: { tip: "默认是知乎专栏地址 https://zhuanlan.zhihu.com，通常不需要修改。", placeholder: "https://zhuanlan.zhihu.com" },
     apiUrl: { tip: "默认是知乎专栏 API 地址，除非平台接口变更，一般保持默认。", placeholder: "https://zhuanlan.zhihu.com/api" },
-    username: {
-      tip: "你的知乎用户名，即个人主页地址 zhihu.com/people/<用户名> 里的那一段。必须填对，否则读取不到专栏列表。",
-      placeholder: "your-zhihu-name",
-    },
     password: {
       tip:
         "Cookie 授权：点「1 去登录」登录知乎，关闭登录窗口保存登录态后点「2 自动读取 Cookie」写入本账号；" +
@@ -35,7 +32,7 @@ export const zhihuHelpConfig: PageHelpConfig = {
   },
   faq: [
     { q: "为什么不能修改所属专栏？", a: "知乎平台限制导致已发布文档暂不支持直接编辑专栏。需要移动时，取消/删除原文后重新选择专栏发布。" },
-    { q: "读取不到专栏？", a: "先确认「用户名」填的是知乎用户名（个人主页地址里那一段），并已读取 Cookie，然后再点验证。验证通过后专栏列表才会出现，选中并保存即可。" },
+    { q: "读取不到专栏？", a: "专栏按当前登录账号自动获取，不需要填写用户名。请先确认已读取 Cookie（「1 去登录」→ 登录后关闭窗口 → 「2 自动读取 Cookie」），再点验证；验证通过后专栏列表才会出现，选中并保存即可。若仍为空，请确认登录的是同一账号且该账号有专栏。" },
     { q: "没有专栏可以发布吗？", a: "可以。不设置专栏不影响发布，只是文章不会被收录到专栏里，之后可随时回来修改。" },
     { q: "验证通过但发布失败？", a: "多半是账号不一致：例如手机用微信登录、电脑用手机号登录，两者不是同一个账号。请确认登录的是同一个账号；仍不行可删除工作空间的 data/storage/syp/sy-p-plus-cfg.json 后重新配置（会清掉全部平台配置，请先备份）。" },
     {

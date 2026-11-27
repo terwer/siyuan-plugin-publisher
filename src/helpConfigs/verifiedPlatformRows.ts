@@ -334,9 +334,9 @@ export const VERIFIED_PLATFORM_ROWS: VerifiedPlatformRows[] = [
     platformKey: "custom_Zhihu",
     config: zhihuHelpConfig,
     ConfigClass: ZhihuConfig,
-    required: [...COMMON_FORM, "username", "blogid"],
-    // useZhihuWeb.ts 打开专栏行
-    hookFlags: { knowledgeSpaceEnabled: true },
+    required: [...COMMON_FORM, "blogid"],
+    // useZhihuWeb.ts 打开专栏行、关闭用户名行（专栏按当前登录账号自动解析）
+    hookFlags: { knowledgeSpaceEnabled: true, usernameEnabled: false },
   },
   {
     platformKey: "custom_Csdn",
