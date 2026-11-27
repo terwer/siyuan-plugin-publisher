@@ -23,6 +23,8 @@ import { parseDocAttrs } from "~/src/utils/docAttrs.ts"
  * - `[tags]` / `[categories]`：标签/分类；整个取值就是该占位符时输出 YAML 数组，
  *   写在句子中时用逗号连接。
  * - `[title]` / `[slug]`：标题/别名。
+ * - `[cover]`：本次发布设置的封面图地址（仅支持 Front Matter 封面的静态站平台）。
+ *   整个取值就是该占位符时输出字符串，封面为空时省略该字段；写在句子中时按文本替换。
  * - `[attr:属性名]`：思源文档属性（来自发布前合并进 `Post.attrs` 的完整文档属性）。
  *   属性名按文档中保存的完整名称匹配（大小写不敏感兜底）；可追加类型后缀：
  *   `[attr:custom-weight|int]`、`[attr:custom-score|float]`、`[attr:custom-draft|bool]`。
@@ -49,9 +51,11 @@ type TextToken = "tags" | "categories" | "title" | "slug"
 
 const DATE_TOKEN = /\[(createDate|updateDate)(?:-([^\[\]]+))?\]/g
 const TEXT_TOKEN = /\[(tags|categories|title|slug)\]/g
+const COVER_TOKEN = /\[cover\]/g
 const ATTR_TOKEN = /\[attr:([^\[\]|]+)(?:\|([^\[\]]+))?\]/g
 const WHOLE_DATE_TOKEN = /^\[(createDate|updateDate)(?:-([^\[\]]+))?\]$/
 const WHOLE_TEXT_TOKEN = /^\[(tags|categories|title|slug)\]$/
+const WHOLE_COVER_TOKEN = /^\[cover\]$/
 const WHOLE_ATTR_TOKEN = /^\[attr:([^\[\]|]+)(?:\|([^\[\]]+))?\]$/
 
 /** 判断 JSON 解析结果是否为普通对象 */
@@ -72,6 +76,9 @@ const splitTags = (post: Post): string[] =>
 
 /** 文章分类（保证是数组副本） */
 const postCategories = (post: Post): string[] => (Array.isArray(post.categories) ? [...post.categories] : [])
+
+/** 本次发布设置的封面图地址 */
+const postCover = (post: Post): string => (post.cover ?? "").trim()
 
 /** 文本占位符的数组形态，用于「整个取值就是占位符」的场景 */
 const resolveTextArray = (token: TextToken, post: Post): string[] | string => {
@@ -192,6 +199,12 @@ const resolveString = (value: string, post: Post, attrs: Record<string, unknown>
     return resolveTextArray(wholeText[1] as TextToken, post)
   }
 
+  const wholeCover = WHOLE_COVER_TOKEN.exec(value)
+  if (wholeCover) {
+    const cover = postCover(post)
+    return cover === "" ? ABSENT : cover
+  }
+
   const wholeAttr = WHOLE_ATTR_TOKEN.exec(value)
   if (wholeAttr) {
     return resolveAttrToken(wholeAttr[1], wholeAttr[2], attrs)
@@ -202,6 +215,7 @@ const resolveString = (value: string, post: Post, attrs: Record<string, unknown>
       resolveDate(token as DateToken, format, post)
     )
     .replace(TEXT_TOKEN, (_match, token: string) => resolveTextString(token as TextToken, post))
+    .replace(COVER_TOKEN, () => postCover(post))
     .replace(ATTR_TOKEN, (_match, name: string, type: string | undefined) => {
       const resolved = resolveAttrToken(name, type, attrs)
       return resolved === ABSENT ? "" : String(resolved)

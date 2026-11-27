@@ -736,6 +736,7 @@
   "publisher.post.password.tip": "Please enter the password for the article; leave blank if not setting one",
   "publisher.post.featuredImage": "Cover image",
   "publisher.post.featuredImage.tip": "Defaults to the SiYuan title image, then the first body image; you can also enter a link or upload a custom image",
+  "publisher.post.featuredImage.tipYaml": "Upload an image or enter an image URL; it is uploaded to the blog with the post. Leave blank to set no cover",
   "publisher.post.featuredImage.useBodyImage": "Use first body image",
   "publisher.post.featuredImage.upload": "Upload image",
   "publisher.post.featuredImage.uploadSuccess": "Image uploaded",

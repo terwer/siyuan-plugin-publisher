@@ -59,7 +59,7 @@ export const gitlabhexoHelpConfig: PageHelpConfig = {
       tip: "开启后把文章永久链接写入 Front Matter，供站点按自定义链接生成页面；Hexo 构建器会读取该字段。",
     },
     dynYamlCfg: {
-      tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时 Hexo 默认写入 comments: true、toc: true。",
+      tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时 Hexo 默认写入 comments: true、toc: true。详细发布设置封面后可用 [cover] 映射主题封面字段，例如 {\"index_img\":\"[cover]\"}。",
       placeholder: "{\"comments\": true}",
     },
     defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
@@ -82,6 +82,10 @@ export const gitlabhexoHelpConfig: PageHelpConfig = {
     {
       q: "图片要怎么发布？",
       a: "默认使用「当前平台」图床，图片提交到仓库 source/images，文章中引用相对路径 ../images/<图片名>；Hexo 构建后 source/images 会复制到站点根目录，相对引用在源码与构建产物中都能显示。",
+    },
+    {
+      q: "封面图怎么设置？",
+      a: "详细发布模式填写「封面图」后发布即可，图片与正文图片走同一套上传通道，Front Matter 默认写 cover。主题使用其它字段（如 index_img、banner_img）时，用「YAML 预设配置」的 [cover] 映射到主题字段。",
     },
     {
       q: "查看链接打不开？",

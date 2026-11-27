@@ -27,7 +27,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishRecords } from "~/src/composables/usePublishRecords.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { DynamicConfig, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynCoverKey, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -38,11 +38,13 @@ import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { mergeDocAttrs } from "~/src/utils/docAttrs.ts"
 import { normalizePlatformPostMetadata } from "~/src/adaptors/base/platformPostMetadata.ts"
 import {
+  getFeaturedImage,
   initFeaturedImageFromYaml,
   isFeaturedImageEnabled,
   syncFeaturedImageYaml,
   type FeaturedImagePost,
 } from "~/src/utils/featuredImage.ts"
+import { isYamlCoverEnabled } from "~/src/utils/yamlCover.ts"
 import { SypConfig } from "~/syp.config.ts"
 
 /**
@@ -179,9 +181,9 @@ const usePublish = () => {
           singleFormData.errMsg
       )
 
-      // 特色图片：只有声明该能力的平台才把发布参数同步进平台 YAML 属性，
-      // 其它平台的属性内容保持不变。
-      if (isFeaturedImageEnabled(cfg)) {
+      // 静态站封面由发布层写入 Front Matter，表单选择保存在平台元数据里，
+      // 不能写进平台 YAML（否则内部字段会进入已发布正文）。
+      if (!isYamlCoverEnabled(cfg) && isFeaturedImageEnabled(cfg)) {
         syncFeaturedImageYaml(finalPost)
       }
       // ===================================
@@ -238,6 +240,19 @@ const usePublish = () => {
           await updateSetting(setting)
         }
 
+      }
+
+      // 静态站封面选择保存在平台元数据里，更新时回填；不写入平台 YAML。
+      if (isYamlCoverEnabled(cfg)) {
+        const coverKey = getDynCoverKey(key)
+        const coverValue = getFeaturedImage(finalPost)
+        const coverMeta = ObjectUtil.getProperty(setting, id, {})
+        const hasSavedCover = Object.prototype.hasOwnProperty.call(coverMeta, coverKey)
+        if ((coverValue !== "" || hasSavedCover) && (!hasSavedCover || coverMeta[coverKey] !== coverValue)) {
+          coverMeta[coverKey] = coverValue
+          setting[id] = coverMeta
+          await updateSetting(setting)
+        }
       }
 
       // 特色图片失败不改变发布结果，但要把原因带给上层，便于界面提示与排障
@@ -540,6 +555,7 @@ const usePublish = () => {
       const dynCfg: DynamicConfig = publishCfg.dynCfg
       const key = dynCfg.platformKey
       const isSys = pre.systemCfg.some((item) => item.platformKey === key)
+      const postMeta = ObjectUtil.getProperty(setting, id, {})
 
       // 别名
       const slugedPost = await initPublishMethods.assignInitSlug(doc, id, publishCfg)
@@ -595,8 +611,14 @@ const usePublish = () => {
           post.dateUpdated = docDateUpdated
         }
 
-        // 特色图片：按平台能力从平台属性回填，未声明该能力的平台不读取
-        if (isFeaturedImageEnabled(cfg)) {
+        // 封面：静态站从平台元数据回填（封面最终写 Front Matter，不能混进平台 YAML）；
+        // 原生封面平台仍从平台 YAML 的 featured_image 回填。
+        if (isYamlCoverEnabled(cfg)) {
+          const savedCover = ObjectUtil.getProperty(postMeta, getDynCoverKey(key), "")
+          if (!StrUtil.isEmptyString(savedCover)) {
+            ;(post as FeaturedImagePost).featuredImage = savedCover
+          }
+        } else if (isFeaturedImageEnabled(cfg)) {
           initFeaturedImageFromYaml(post)
         }
       }

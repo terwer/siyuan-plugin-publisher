@@ -126,6 +126,83 @@ describe("BaseExtendApi 通用封面解析", () => {
     expect(result.markdown).toContain("![image](assets/cover.png)")
   })
 
+  it("静态站封面：思源资源上传后写入平台地址", async () => {
+    const { extendApi, api, cfg, publishCfg } = createExtendApi({})
+    ;(cfg as any).coverEnabled = false
+    ;(cfg as any).yamlCoverEnabled = true
+    api.newMediaObject.mockResolvedValue({ url: "../images/cover.png" })
+    ;(extendApi as any).readFileToBase64 = vi.fn(async () => ({
+      imageName: "cover.png",
+      mimeType: "image/png",
+      imageBase64: "AAAA",
+    }))
+    const post = createPost("# 正文") as FeaturedImagePost
+    post.featuredImage = "assets/cover.png"
+    post.featuredImageTouched = true
+
+    const result = await extendApi.preEditPost(post, "doc-1", publishCfg)
+
+    expect(result.cover).toBe("../images/cover.png")
+    expect(result.coverSource).toBe(CoverSource.Custom)
+    expect(api.newMediaObject).toHaveBeenCalledTimes(1)
+  })
+
+  it("静态站封面：远程地址与站内路径直接使用，不重复上传", async () => {
+    const { extendApi, api, cfg, publishCfg } = createExtendApi({})
+    ;(cfg as any).coverEnabled = false
+    ;(cfg as any).yamlCoverEnabled = true
+
+    const remotePost = createPost("# 正文") as FeaturedImagePost
+    remotePost.featuredImage = "https://img.example.com/cover.png"
+    remotePost.featuredImageTouched = true
+    const remoteResult = await extendApi.preEditPost(remotePost, "doc-1", publishCfg)
+
+    expect(remoteResult.cover).toBe("https://img.example.com/cover.png")
+    expect(api.newMediaObject).not.toHaveBeenCalled()
+
+    const pathPost = createPost("# 正文") as FeaturedImagePost
+    pathPost.featuredImage = "../images/cover.png"
+    pathPost.featuredImageTouched = true
+    const pathResult = await extendApi.preEditPost(pathPost, "doc-1", publishCfg)
+
+    expect(pathResult.cover).toBe("../images/cover.png")
+    expect(api.newMediaObject).not.toHaveBeenCalled()
+  })
+
+  it("静态站封面：用户清空后不写封面", async () => {
+    const { extendApi, api, cfg, publishCfg } = createExtendApi({})
+    ;(cfg as any).coverEnabled = false
+    ;(cfg as any).yamlCoverEnabled = true
+    const post = createPost("# 正文") as FeaturedImagePost
+    post.featuredImage = ""
+    post.featuredImageTouched = true
+
+    const result = await extendApi.preEditPost(post, "doc-1", publishCfg)
+
+    expect(result.cover).toBeUndefined()
+    expect(api.newMediaObject).not.toHaveBeenCalled()
+  })
+
+  it("静态站封面：上传失败只记录提示，不阻断正文", async () => {
+    const { extendApi, api, cfg, publishCfg } = createExtendApi({})
+    ;(cfg as any).coverEnabled = false
+    ;(cfg as any).yamlCoverEnabled = true
+    api.newMediaObject.mockRejectedValue(new Error("upload failed"))
+    ;(extendApi as any).readFileToBase64 = vi.fn(async () => ({
+      imageName: "cover.png",
+      mimeType: "image/png",
+      imageBase64: "AAAA",
+    }))
+    const post = createPost("# 正文") as FeaturedImagePost
+    post.featuredImage = "assets/cover.png"
+    post.featuredImageTouched = true
+
+    const result = await extendApi.preEditPost(post, "doc-1", publishCfg)
+
+    expect(result.markdown).toContain("# 正文")
+    expect((result as FeaturedImagePost).featuredImageError).toContain("封面图设置失败")
+  })
+
   it("开启去除挂件HTML时清理第三方插件写入的 HTML 块", async () => {
     const { extendApi, publishCfg, kernelApi } = createExtendApi({})
     const card = [

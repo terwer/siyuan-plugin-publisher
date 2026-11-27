@@ -53,6 +53,15 @@ import { removeMarkdownHeadingNumbers, removeTitleNumber } from "~/src/utils/tit
 import { removeHtmlBlocksFromSiyuanMarkdown } from "~/src/utils/siyuanHtmlBlockCleaner.ts"
 import { isCoverEnabled, resolveCoverLink, stripLeadingDocTitleImage } from "~/src/utils/coverImage.ts"
 import { getFeaturedImage, type FeaturedImagePost } from "~/src/utils/featuredImage.ts"
+import { toFeaturedImageMediaName } from "~/src/utils/featuredImageMedia.ts"
+import {
+  getYamlCoverKey,
+  isPlatformCoverPath,
+  isRemoteCoverUrl,
+  isYamlCoverEnabled,
+  needsCoverUpload,
+  removeYamlCoverKey,
+} from "~/src/utils/yamlCover.ts"
 import {
   getMediaCacheContext,
   normalizeMediaCacheEndpoint,
@@ -156,6 +165,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     }
     // 处理Md
     post = await this.handleMd(post, id, publishCfg)
+    // 处理静态站 Front Matter 封面：上传图片并记录平台可用地址，供 YAML 生成使用
+    post = await this.handleYamlCover(post, publishCfg)
     // 处理YAML
     post = await this.handleYaml(post, id, publishCfg)
     // 处理其他
@@ -764,6 +775,71 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         post.cover = resolveCoverLink(this.kernelApi, custom)
         post.coverSource = CoverSource.Custom
       }
+    }
+
+    return post
+  }
+
+  /**
+   * 处理静态站 Front Matter 封面。
+   *
+   * 与原生封面平台不同，静态站的封面是主题读取的 Front Matter 字段：
+   * 用户上传的思源资源需要先提交到平台图片仓库，再把平台可用地址交给 YAML 生成层。
+   * 用户主动清空时还要删掉已保存 YAML 里的旧封面，避免 mergeYamlObjs 把旧值合并回来。
+   *
+   * @param doc - 要处理的文章
+   * @param publishCfg - 发布配置
+   */
+  private async handleYamlCover(doc: Post, publishCfg?: any): Promise<Post> {
+    const cfg = publishCfg?.cfg as BlogConfig | undefined
+    if (!isYamlCoverEnabled(cfg)) {
+      return doc
+    }
+
+    const post = _.cloneDeep(doc) as Post
+    const featuredPost = post as FeaturedImagePost
+    const desired = featuredPost.featuredImage
+    const raw = (desired ?? "").trim()
+
+    if (raw === "") {
+      // 用户主动清空：删除已保存的封面字段；未触碰时保留源码模式里手写的封面
+      if (featuredPost.featuredImageTouched === true) {
+        post.yaml = removeYamlCoverKey(post.yaml, getYamlCoverKey(cfg))
+        post.cover = undefined
+        post.coverSource = undefined
+      }
+      return post
+    }
+
+    try {
+      if (isRemoteCoverUrl(raw) || isPlatformCoverPath(raw)) {
+        post.cover = raw
+      } else if (needsCoverUpload(raw)) {
+        if ((post as any).imageUploadSkipped === true) {
+          featuredPost.featuredImageError = "已按设置跳过图片自动上传，封面图未上传"
+          return post
+        }
+
+        const absoluteUrl = resolveCoverLink(this.kernelApi, raw)
+        const base64Info = await this.readFileToBase64(absoluteUrl)
+        const mediaObject = this.createMediaObject(
+          post,
+          toFeaturedImageMediaName(base64Info.imageName, base64Info.mimeType),
+          base64Info.mimeType,
+          base64ToBuffer(base64Info.imageBase64)
+        )
+        const attachment = await this.api.newMediaObject(mediaObject)
+        const platformUrl = attachment?.url ?? attachment?.link
+        if (StrUtil.isEmptyString(platformUrl)) {
+          throw new Error("平台未返回封面图片地址")
+        }
+        post.cover = platformUrl
+      }
+      post.coverSource = CoverSource.Custom
+    } catch (e: any) {
+      const message = e?.message || String(e)
+      featuredPost.featuredImageError = `封面图设置失败：${message}`
+      this.logger.error("封面图上传失败", e)
     }
 
     return post

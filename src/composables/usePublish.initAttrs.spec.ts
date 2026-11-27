@@ -11,7 +11,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { createPinia, setActivePinia } from "pinia"
 import { Post, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
 import { usePublish } from "~/src/composables/usePublish.ts"
-import { AuthMode, PlatformType, SubPlatformType, type DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import { AuthMode, getDynCoverKey, PlatformType, SubPlatformType, type DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
 const mockGetBlockAttrs = vi.hoisted(() => vi.fn())
@@ -213,12 +213,30 @@ describe("usePublish.assignInitAttrs", () => {
     expect(mockGetBlockAttrs).toHaveBeenCalledTimes(1)
   })
 
-  it("读取平台 YAML 时复用同一次文档属性查询", async () => {
-    mockGetBlockAttrs.mockResolvedValue({ [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---" })
+  it("静态站封面从平台元数据回填，更新时能继续使用", async () => {
+    mockGetBlockAttrs.mockResolvedValue({})
+    const publishCfg = createPublishCfg()
+    ;(publishCfg.cfg as any).yamlCoverEnabled = true
+    ;(publishCfg.cfg as any).featuredImageEnabled = true
+    ;(publishCfg.setting as any)[DOC_ID] = {
+      [getDynCoverKey(PLATFORM_KEY)]: "assets/cover.png",
+    }
 
     const { initPublishMethods } = usePublish()
-    await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createPublishCfg())
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, publishCfg)
 
-    expect(mockGetBlockAttrs).toHaveBeenCalledTimes(1)
+    expect((post as any).featuredImage).toBe("assets/cover.png")
+  })
+
+  it("静态站未设置封面时保持空值，不用题头图/正文首图自动补", async () => {
+    mockGetBlockAttrs.mockResolvedValue({})
+    const publishCfg = createPublishCfg()
+    ;(publishCfg.cfg as any).yamlCoverEnabled = true
+    ;(publishCfg.cfg as any).featuredImageEnabled = true
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, publishCfg)
+
+    expect((post as any).featuredImage).toBeUndefined()
   })
 })

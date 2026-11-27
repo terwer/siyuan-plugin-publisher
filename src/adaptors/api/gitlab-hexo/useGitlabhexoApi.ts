@@ -72,6 +72,9 @@ const useGitlabhexoApi = async (key: string, newCfg?: GitlabhexoConfig) => {
   // picbed service
   cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true
+  // 封面图：Hexo 的封面是主题读取的 Front Matter 字段，由共用发布层上传并写入。
+  cfg.featuredImageEnabled = true
+  cfg.yamlCoverEnabled = true
 
   // 创建 Hexo 的 yamlAdaptor
   const yamlAdaptor = new GitlabhexoYamlConverterAdaptor()
