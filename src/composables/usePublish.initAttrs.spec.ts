@@ -179,4 +179,46 @@ describe("usePublish.assignInitAttrs", () => {
 
     expect(post.dateUpdated?.getTime()).toBe(DOC_UPDATED.getTime())
   })
+
+  it("把完整文档属性合并进 Post.attrs，供 YAML 预设读取", async () => {
+    mockGetBlockAttrs.mockResolvedValue({
+      "custom-cover": "cover.png",
+      "custom-publish-status": "publish",
+      [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---",
+    })
+    const doc = createDoc()
+    doc.attrs = JSON.stringify({ "custom-publish-status": "draft", "custom-publish-time": "2026-01-01" })
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(doc, DOC_ID, createPublishCfg())
+
+    expect(JSON.parse(post.attrs ?? "{}")).toMatchObject({
+      "custom-cover": "cover.png",
+      "custom-publish-status": "draft",
+      "custom-publish-time": "2026-01-01",
+    })
+  })
+
+  it("读取文档属性异常时保留已有 Post.attrs，并回退到单属性查询", async () => {
+    mockGetBlockAttrs.mockRejectedValue(new Error("kernel busy"))
+    mockGetSingleBlockAttr.mockResolvedValue("---\ntitle: fallback\n---")
+    const doc = createDoc()
+    doc.attrs = JSON.stringify({ "custom-publish-status": "publish" })
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(doc, DOC_ID, createPublishCfg())
+
+    expect(post.attrs).toBe(doc.attrs)
+    expect(post.yamlType).toBe(YamlStrategy.Yaml_custom_hand)
+    expect(mockGetBlockAttrs).toHaveBeenCalledTimes(1)
+  })
+
+  it("读取平台 YAML 时复用同一次文档属性查询", async () => {
+    mockGetBlockAttrs.mockResolvedValue({ [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---" })
+
+    const { initPublishMethods } = usePublish()
+    await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createPublishCfg())
+
+    expect(mockGetBlockAttrs).toHaveBeenCalledTimes(1)
+  })
 })

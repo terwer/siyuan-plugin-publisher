@@ -9,6 +9,7 @@
 
 import type { Post } from "zhi-blog-api"
 import dayjs from "dayjs"
+import { parseDocAttrs } from "~/src/utils/docAttrs.ts"
 
 /**
  * 「YAML 预设配置」（dynYamlCfg）的共享解析与合并。
@@ -22,6 +23,11 @@ import dayjs from "dayjs"
  * - `[tags]` / `[categories]`：标签/分类；整个取值就是该占位符时输出 YAML 数组，
  *   写在句子中时用逗号连接。
  * - `[title]` / `[slug]`：标题/别名。
+ * - `[attr:属性名]`：思源文档属性（来自发布前合并进 `Post.attrs` 的完整文档属性）。
+ *   属性名按文档中保存的完整名称匹配（大小写不敏感兜底）；可追加类型后缀：
+ *   `[attr:custom-weight|int]`、`[attr:custom-score|float]`、`[attr:custom-draft|bool]`。
+ *   整个取值就是该占位符时保留转换后的原生类型，写在句子中时按文本替换；属性不存在
+ *   或为空时整个取值会被省略，类型转换失败时保留原字符串。
  *
  * 未知占位符原样保留；取值不是字符串时不做替换；整个取值就是占位符时保留原生类型。
  *
@@ -35,13 +41,18 @@ const DEFAULT_DATE_FORMAT = "YYYY-MM-DD"
 /** JSON 对象里不应该被写回 Front Matter 的键（避免原型污染） */
 const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"])
 
+/** 属性占位符解析结果为「不存在」时的内部标记，用于省略整个取值 */
+const ABSENT = Symbol("absent")
+
 type DateToken = "createDate" | "updateDate"
 type TextToken = "tags" | "categories" | "title" | "slug"
 
 const DATE_TOKEN = /\[(createDate|updateDate)(?:-([^\[\]]+))?\]/g
 const TEXT_TOKEN = /\[(tags|categories|title|slug)\]/g
+const ATTR_TOKEN = /\[attr:([^\[\]|]+)(?:\|([^\[\]]+))?\]/g
 const WHOLE_DATE_TOKEN = /^\[(createDate|updateDate)(?:-([^\[\]]+))?\]$/
 const WHOLE_TEXT_TOKEN = /^\[(tags|categories|title|slug)\]$/
+const WHOLE_ATTR_TOKEN = /^\[attr:([^\[\]|]+)(?:\|([^\[\]]+))?\]$/
 
 /** 判断 JSON 解析结果是否为普通对象 */
 const isPlainRecord = (value: unknown): value is Record<string, unknown> => {
@@ -96,8 +107,81 @@ const resolveDate = (token: DateToken, format: string | undefined, post: Post): 
   return parsed.format(normalizedFormat)
 }
 
+/** 文档属性值转成文本；只接受可安全写入 YAML 的标量 */
+const attrValueToText = (value: unknown): string | undefined => {
+  if (typeof value === "string") {
+    return value
+  }
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value)
+  }
+  return undefined
+}
+
+/** 按名称查找文档属性；精确命中优先，兼容历史大写属性名 */
+const lookupDocAttr = (attrs: Record<string, unknown>, name: string): unknown => {
+  if (Object.prototype.hasOwnProperty.call(attrs, name)) {
+    return attrs[name]
+  }
+  const lowerName = name.toLowerCase()
+  const matchedKey = Object.keys(attrs).find((key) => key.toLowerCase() === lowerName)
+  return matchedKey === undefined ? undefined : attrs[matchedKey]
+}
+
+/** 按类型后缀转换属性值；转换失败时保留原字符串 */
+const coerceAttrValue = (text: string, type: string | undefined): unknown => {
+  switch (type?.trim().toLowerCase()) {
+    case "int": {
+      const trimmed = text.trim()
+      if (!/^[+-]?\d+$/.test(trimmed)) {
+        return text
+      }
+      const parsed = Number.parseInt(trimmed, 10)
+      return Number.isSafeInteger(parsed) ? parsed : text
+    }
+    case "float": {
+      const trimmed = text.trim()
+      if (trimmed === "") {
+        return text
+      }
+      const parsed = Number(trimmed)
+      return Number.isFinite(parsed) ? parsed : text
+    }
+    case "bool": {
+      const normalized = text.trim().toLowerCase()
+      if (normalized === "true") {
+        return true
+      }
+      if (normalized === "false") {
+        return false
+      }
+      return text
+    }
+    default:
+      return text
+  }
+}
+
+/** 解析一个属性占位符；不存在或为空时返回 ABSENT */
+const resolveAttrToken = (
+  name: string,
+  type: string | undefined,
+  attrs: Record<string, unknown>
+): unknown | typeof ABSENT => {
+  const attrName = name.trim()
+  if (attrName === "" || FORBIDDEN_KEYS.has(attrName)) {
+    return ABSENT
+  }
+  const value = lookupDocAttr(attrs, attrName)
+  const text = attrValueToText(value)
+  if (text === undefined || text === "") {
+    return ABSENT
+  }
+  return coerceAttrValue(text, type)
+}
+
 /** 解析一个字符串取值：整个取值是占位符时保留原生类型，否则按文本替换 */
-const resolveString = (value: string, post: Post): unknown => {
+const resolveString = (value: string, post: Post, attrs: Record<string, unknown>): unknown => {
   const wholeDate = WHOLE_DATE_TOKEN.exec(value)
   if (wholeDate) {
     return resolveDate(wholeDate[1] as DateToken, wholeDate[2], post)
@@ -108,32 +192,56 @@ const resolveString = (value: string, post: Post): unknown => {
     return resolveTextArray(wholeText[1] as TextToken, post)
   }
 
+  const wholeAttr = WHOLE_ATTR_TOKEN.exec(value)
+  if (wholeAttr) {
+    return resolveAttrToken(wholeAttr[1], wholeAttr[2], attrs)
+  }
+
   return value
     .replace(DATE_TOKEN, (_match, token: string, format: string | undefined) =>
       resolveDate(token as DateToken, format, post)
     )
     .replace(TEXT_TOKEN, (_match, token: string) => resolveTextString(token as TextToken, post))
+    .replace(ATTR_TOKEN, (_match, name: string, type: string | undefined) => {
+      const resolved = resolveAttrToken(name, type, attrs)
+      return resolved === ABSENT ? "" : String(resolved)
+    })
 }
 
 /** 递归解析预设配置里的取值 */
-const resolveValue = (value: unknown, post: Post): unknown => {
+const resolveValue = (value: unknown, post: Post, attrs: Record<string, unknown>): unknown => {
   if (typeof value === "string") {
-    return resolveString(value, post)
+    return resolveString(value, post, attrs)
   }
   if (Array.isArray(value)) {
-    return value.map((item) => resolveValue(item, post))
+    const resolved: unknown[] = []
+    for (const item of value) {
+      const itemValue = resolveValue(item, post, attrs)
+      if (itemValue !== ABSENT) {
+        resolved.push(itemValue)
+      }
+    }
+    return resolved
   }
   if (isPlainRecord(value)) {
     const resolved: Record<string, unknown> = {}
     for (const [key, item] of Object.entries(value)) {
-      if (!FORBIDDEN_KEYS.has(key)) {
-        resolved[key] = resolveValue(item, post)
+      if (FORBIDDEN_KEYS.has(key)) {
+        continue
+      }
+      const itemValue = resolveValue(item, post, attrs)
+      if (itemValue !== ABSENT) {
+        resolved[key] = itemValue
       }
     }
     return resolved
   }
   return value
 }
+
+/** 当前文章可用的文档属性 */
+const postDocAttrs = (post: Post | undefined): Record<string, unknown> =>
+  parseDocAttrs((post as { attrs?: string } | undefined)?.attrs)
 
 /**
  * 把 YAML 预设配置的 JSON 文本解析成对象；非法 JSON 或非对象时返回空对象。
@@ -160,7 +268,7 @@ const parseDynYamlCfg = (raw: string | undefined): Record<string, unknown> => {
  * @returns 解析后的配置；非法 JSON 或非对象时为空对象
  */
 const resolveDynYamlCfg = (raw: string | undefined, post: Post): Record<string, unknown> =>
-  resolveValue(parseDynYamlCfg(raw), post) as Record<string, unknown>
+  resolveValue(parseDynYamlCfg(raw), post, postDocAttrs(post)) as Record<string, unknown>
 
 /**
  * 把 YAML 预设配置合并进 Front Matter。
@@ -179,18 +287,23 @@ const applyDynYamlCfg = (
   post: Post,
   platformDefaults: Record<string, any> = {}
 ): void => {
-  const resolved = resolveDynYamlCfg(raw, post)
-  const keys = Object.keys(resolved).filter((key) => !FORBIDDEN_KEYS.has(key))
+  const parsed = parseDynYamlCfg(raw)
+  const configuredKeys = Object.keys(parsed).filter((key) => !FORBIDDEN_KEYS.has(key))
+  const resolved = resolveValue(parsed, post, postDocAttrs(post)) as Record<string, unknown>
 
-  if (keys.length === 0) {
+  // 是否应用平台默认值按「用户是否配置了预设」判断，而不是按解析后的键数量：
+  // 预设里只写了缺失的文档属性时，解析结果虽然为空，也不应悄悄补上平台默认字段。
+  if (configuredKeys.length === 0) {
     for (const [key, value] of Object.entries(platformDefaults)) {
       yamlObj[key] = value
     }
     return
   }
 
-  for (const key of keys) {
-    yamlObj[key] = resolved[key]
+  for (const key of Object.keys(resolved)) {
+    if (!FORBIDDEN_KEYS.has(key)) {
+      yamlObj[key] = resolved[key]
+    }
   }
 }
 
