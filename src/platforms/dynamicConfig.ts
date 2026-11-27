@@ -593,6 +593,18 @@ export function getDynCoverKey(platformKey: string): string {
 }
 
 /**
+ * 获取详细发布元数据覆盖字段在平台元数据里的存储 key。
+ *
+ * 详细模式里用户主动改过的标题/摘要/标签/分类/时间等字段要记住，
+ * 再次打开时使用平台侧的覆盖值；没改过的字段继续跟随思源文档。
+ *
+ * @param platformKey 平台 key，例如 `github_Hexo-abc123`
+ */
+export function getDynMetadataOverridesKey(platformKey: string): string {
+  return ("custom-" + platformKey.replace(/_/g, "-") + "-metadata-overrides").toLowerCase()
+}
+
+/**
  * 规范化平台 key，用于消除「历史数据 key」与「当前平台配置 platformKey」的差异：
  * - 剥离尾部实例 id（由 getNewPlatformKey 生成，格式 `-<短字母数字>`）
  * - 统一分隔符 `-` 为 `_`

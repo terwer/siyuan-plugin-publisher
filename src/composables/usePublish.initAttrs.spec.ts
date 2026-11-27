@@ -11,8 +11,15 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { createPinia, setActivePinia } from "pinia"
 import { Post, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
 import { usePublish } from "~/src/composables/usePublish.ts"
-import { AuthMode, getDynCoverKey, PlatformType, SubPlatformType, type DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import {
+  AuthMode,
+  getDynCoverKey,
+  PlatformType,
+  SubPlatformType,
+  type DynamicConfig,
+} from "~/src/platforms/dynamicConfig.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { extractSiyuanMetadata, type PublishMetadataPost } from "~/src/utils/publishMetadata.ts"
 
 const mockGetBlockAttrs = vi.hoisted(() => vi.fn())
 const mockGetSingleBlockAttr = vi.hoisted(() => vi.fn())
@@ -93,6 +100,7 @@ const createDoc = () => {
   post.html = "<h1>标题</h1>"
   post.dateCreated = new Date("2026-01-01T00:00:00.000Z")
   post.dateUpdated = DOC_UPDATED
+  ;(post as PublishMetadataPost).siyuanMetadata = extractSiyuanMetadata(post)
   return post
 }
 
@@ -178,6 +186,17 @@ describe("usePublish.assignInitAttrs", () => {
     const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createPublishCfg())
 
     expect(post.dateUpdated?.getTime()).toBe(DOC_UPDATED.getTime())
+  })
+
+  it("用户主动改过更新时间时保留平台 YAML 里的时间，不被文档时间覆盖", async () => {
+    mockGetBlockAttrs.mockResolvedValue({ [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---" })
+    const doc = createDoc()
+    ;(doc as PublishMetadataPost).metadataOverrides = ["dateUpdated"]
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(doc, DOC_ID, createPublishCfg())
+
+    expect(post.dateUpdated?.getTime()).toBe(YAML_UPDATED.getTime())
   })
 
   it("把完整文档属性合并进 Post.attrs，供 YAML 预设读取", async () => {

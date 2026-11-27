@@ -41,6 +41,7 @@ import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStor
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
 import { isCoverEnabled } from "~/src/utils/coverImage.ts"
 import { isYamlCoverEnabled } from "~/src/utils/yamlCover.ts"
+import { markMetadataOverride } from "~/src/utils/publishMetadata.ts"
 import {
   isFeaturedImageEnabled,
   syncFeaturedImageYaml,
@@ -335,16 +336,19 @@ const syncAiSwitch = (val: boolean) => {
 
 const syncPublishTitle = (val: string) => {
   formData.mergedPost.title = val
+  markMetadataOverride(formData.mergedPost, "title")
 }
 
 const syncDesc = (val: string) => {
   formData.mergedPost.shortDesc = val
   formData.mergedPost.mt_text_more = val
   formData.mergedPost.mt_excerpt = val
+  markMetadataOverride(formData.mergedPost, "excerpt")
 }
 
 const syncTags = (val: string[]) => {
   formData.mergedPost.mt_keywords = val?.join(",")
+  markMetadataOverride(formData.mergedPost, "tags")
 }
 
 const syncTagSlugs = (val: string[]) => {
@@ -353,15 +357,21 @@ const syncTagSlugs = (val: string[]) => {
 
 const syncCates = (cates: string[]) => {
   formData.mergedPost.categories = cates
+  markMetadataOverride(formData.mergedPost, "categories")
 }
 
 const syncCateSlugs = (cateSlugs: string[]) => {
   formData.mergedPost.cate_slugs = cateSlugs
 }
 
-const syncPublishTime = (val1: Date, val2: Date) => {
+const syncPublishTime = (val1: Date, val2: Date, changedField?: "created" | "updated") => {
   formData.mergedPost.dateCreated = val1
   formData.mergedPost.dateUpdated = val2
+  if (changedField === "created") {
+    markMetadataOverride(formData.mergedPost, "dateCreated")
+  } else if (changedField === "updated") {
+    markMetadataOverride(formData.mergedPost, "dateUpdated")
+  }
 }
 
 const syncPublishStatus = (val1: PostStatusEnum, val2: string) => {

@@ -27,7 +27,7 @@ import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePublishRecords } from "~/src/composables/usePublishRecords.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { MethodEnum } from "~/src/models/methodEnum.ts"
-import { DynamicConfig, getDynCoverKey, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
+import { DynamicConfig, getDynCoverKey, getDynMetadataOverridesKey, getDynYamlKey } from "~/src/platforms/dynamicConfig.ts"
 import { pre } from "~/src/platforms/pre.ts"
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
@@ -45,6 +45,14 @@ import {
   type FeaturedImagePost,
 } from "~/src/utils/featuredImage.ts"
 import { isYamlCoverEnabled } from "~/src/utils/yamlCover.ts"
+import {
+  applyDocMetadataOverrides,
+  clearOverridesMatchingDoc,
+  extractSiyuanMetadata,
+  parseMetadataOverrides,
+  serializeMetadataOverrides,
+  type PublishMetadataPost,
+} from "~/src/utils/publishMetadata.ts"
 import { SypConfig } from "~/syp.config.ts"
 
 /**
@@ -251,6 +259,29 @@ const usePublish = () => {
         if ((coverValue !== "" || hasSavedCover) && (!hasSavedCover || coverMeta[coverKey] !== coverValue)) {
           coverMeta[coverKey] = coverValue
           setting[id] = coverMeta
+          await updateSetting(setting)
+        }
+      }
+
+      // 详细模式里用户主动改过的思源元数据字段：保存为平台覆盖，再次打开时优先使用
+      // 平台侧的值；没改过的字段继续跟随思源文档。改回文档值的字段自动移除覆盖。
+      if (!isSys) {
+        const overrides = clearOverridesMatchingDoc(finalPost)
+        const overridesKey = getDynMetadataOverridesKey(key)
+        const overridesMeta = ObjectUtil.getProperty(setting, id, {})
+        const previousOverrides = overridesMeta[overridesKey]
+        const nextOverrides = overrides.length > 0 ? serializeMetadataOverrides(overrides) : ""
+        const hasSavedOverrides = Object.prototype.hasOwnProperty.call(overridesMeta, overridesKey)
+
+        if (nextOverrides === "") {
+          if (hasSavedOverrides) {
+            delete overridesMeta[overridesKey]
+            setting[id] = overridesMeta
+            await updateSetting(setting)
+          }
+        } else if (previousOverrides !== nextOverrides) {
+          overridesMeta[overridesKey] = nextOverrides
+          setting[id] = overridesMeta
           await updateSetting(setting)
         }
       }
@@ -563,9 +594,6 @@ const usePublish = () => {
       // 其他属性初始化
       let post = _.cloneDeep(slugedPost) as Post
       if (!isSys) {
-        // 思源文档自身的更新时间，YAML 转换前先记下来（YAML 里的 updated 是上次发布时的值）
-        const docDateUpdated = post.dateUpdated
-
         // 读取一次文档属性：既用于平台 YAML，也合并进 Post.attrs 供 YAML 预设的
         // [attr:...] 读取任意文档属性（包括 custom-*）。
         const { yaml, docAttrs } = await readPlatformYamlWithDocAttrs(id, key)
@@ -602,14 +630,9 @@ const usePublish = () => {
         // 统一摘要/标签字段，兼容 Astro/Docsify 只写 mt_excerpt 或历史 YAML 的标签格式
         post = normalizePlatformPostMetadata(post)
 
-        // 更新时间以思源文档为准（issue #2054）：YAML 里的 updated 是上次发布时的快照，
-        // 直接沿用会让「更新时间」停在首次发布之后不再前进；文档时间更晚时采用文档时间。
-        if (
-          docDateUpdated instanceof Date &&
-          (!(post.dateUpdated instanceof Date) || docDateUpdated.getTime() > post.dateUpdated.getTime())
-        ) {
-          post.dateUpdated = docDateUpdated
-        }
+        // 详细模式的元数据覆盖策略：用户主动改过的字段保留平台侧的值，
+        // 没改过的字段跟随思源文档（标题/摘要/标签/分类/时间）。
+        post = applyDocMetadataOverrides(post)
 
         // 封面：静态站从平台元数据回填（封面最终写 Front Matter，不能混进平台 YAML）；
         // 原生封面平台仍从平台 YAML 的 featured_image 回填。
@@ -713,6 +736,15 @@ const usePublish = () => {
         // 更新预览链接
         postPreviewUrl = await getPostPreviewUrl(api, id, cfg)
       }
+
+      // 记录思源文档侧元数据快照，并在 assignInitAttrs 解析平台 YAML 之后按覆盖策略回填。
+      // 新增文章不继承历史覆盖；更新时读取该平台保存的覆盖字段集合。
+      const metadataPost = mergedPost as PublishMetadataPost
+      metadataPost.siyuanMetadata = extractSiyuanMetadata(siyuanPost)
+      metadataPost.metadataOverrides =
+        method === MethodEnum.METHOD_ADD
+          ? []
+          : [...parseMetadataOverrides(ObjectUtil.getProperty(postMeta, getDynMetadataOverridesKey(key), ""))]
 
       return {
         mergedPost,
