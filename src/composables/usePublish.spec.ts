@@ -22,6 +22,8 @@ const mockSetSingleBlockAttr = vi.hoisted(() => vi.fn())
 const mockPushErrMsg = vi.hoisted(() => vi.fn())
 const mockGetPublishApi = vi.hoisted(() => vi.fn())
 const mockSiyuanGetPost = vi.hoisted(() => vi.fn())
+const mockGetBlockAttrs = vi.hoisted(() => vi.fn())
+const mockGetSingleBlockAttr = vi.hoisted(() => vi.fn())
 
 vi.mock("~/src/stores/usePlatformMetadataStore.ts", () => ({
   usePlatformMetadataStore: () => ({
@@ -34,6 +36,8 @@ vi.mock("~/src/composables/useSiyuanApi.ts", () => ({
     isStorageViaSiyuanApi: vi.fn(() => false),
     kernelApi: {
       setSingleBlockAttr: mockSetSingleBlockAttr,
+      getBlockAttrs: mockGetBlockAttrs,
+      getSingleBlockAttr: mockGetSingleBlockAttr,
       pushErrMsg: mockPushErrMsg,
     },
     blogApi: {
@@ -492,5 +496,97 @@ describe("usePublish.doInitSinglePage", () => {
 
     // 专栏为空时回退到配置的默认专栏（配置存值、编辑只读）
     expect(mergedPost.cate_slugs).toEqual(["config-column-id"])
+  })
+})
+
+describe("usePublish.assignInitAttrs (metadata authority)", () => {
+  const DOC_ID = "20260822111111-cnblogs"
+  const OLD_YAML =
+    "---\ntitle: 旧标题\nslug: old-slug\ndesc: 旧摘要\ncreated: '2026-01-01 00:00:00'\ntags:\n  - 旧标签\n---\n\n# 旧标题\n\n旧正文"
+
+  const createCnblogsCfg = (postMeta: Record<string, any> = {}): IPublishCfg => {
+    const cfg = {
+      posidKey: "custom-metaweblog_Cnblogs-post-id",
+      blogName: "远方的灯塔",
+      home: "https://www.cnblogs.com/",
+    } as any
+
+    const dynCfg = {
+      platformType: PlatformType.Metaweblog,
+      subPlatformType: SubPlatformType.Metaweblog_Cnblogs,
+      platformKey: "metaweblog_Cnblogs",
+      platformName: "博客园",
+      authMode: AuthMode.API,
+      isSys: false,
+    } as unknown as DynamicConfig
+
+    return {
+      setting: {
+        [DOC_ID]: {
+          "custom-metaweblog_Cnblogs-post-id": "23808105",
+          [SiyuanAttr.Custom_slug]: "old-slug",
+          ...postMeta,
+        },
+      } as any,
+      cfg,
+      dynCfg,
+    } as IPublishCfg
+  }
+
+  const createDoc = () => {
+    const doc = new Post()
+    doc.title = "新标题"
+    doc.markdown = "# 新标题\n\n新正文"
+    doc.shortDesc = "新摘要"
+    doc.mt_excerpt = "新摘要"
+    doc.mt_keywords = "新标签"
+    doc.categories = ["新分类"]
+    doc.wp_slug = "old-slug"
+    return doc
+  }
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.clearAllMocks()
+    mockGetBlockAttrs.mockResolvedValue({ "custom-metaweblog-cnblogs-yaml": OLD_YAML })
+    mockGetSingleBlockAttr.mockResolvedValue("")
+  })
+
+  it("follows the siyuan title/summary when quick publish asks for doc metadata", async () => {
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createCnblogsCfg(), {
+      followDocMetadata: true,
+    })
+
+    // 平台 YAML 里是上次发布时的旧值，快速发布必须以思源当前文档为准
+    expect(post.title).toBe("新标题")
+    expect(post.shortDesc).toBe("新摘要")
+    expect(post.mt_keywords).toBe("新标签")
+    expect(post.categories).toEqual(["新分类"])
+  })
+
+  it("keeps the saved platform metadata when the caller does not ask for doc metadata (batch merge)", async () => {
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createCnblogsCfg())
+
+    // 批量「合并」模式沿用平台侧已有元数据，保持既有约定
+    expect(post.title).toBe("旧标题")
+  })
+
+  it("keeps a field the user explicitly overrode in detailed mode", async () => {
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(
+      createDoc(),
+      DOC_ID,
+      createCnblogsCfg({
+        "custom-metaweblog-cnblogs-metadata-overrides": JSON.stringify(["title"]),
+      }),
+      { followDocMetadata: true }
+    )
+
+    // 标题是用户主动设置过的平台覆盖值，快速发布不应把它改回文档标题
+    expect(post.title).toBe("旧标题")
+    // 其余字段仍跟随思源文档
+    expect(post.shortDesc).toBe("新摘要")
   })
 })

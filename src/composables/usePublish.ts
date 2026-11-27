@@ -580,7 +580,12 @@ const usePublish = () => {
     },
 
     // 分配平台相关的初始化属性
-    assignInitAttrs: async (doc: Post, id: string, publishCfg: IPublishCfg) => {
+    assignInitAttrs: async (
+      doc: Post,
+      id: string,
+      publishCfg: IPublishCfg,
+      options?: { followDocMetadata?: boolean }
+    ) => {
       const setting: typeof SypConfig = publishCfg.setting
       const cfg: BlogConfig = publishCfg.cfg
       const dynCfg: DynamicConfig = publishCfg.dynCfg
@@ -594,6 +599,18 @@ const usePublish = () => {
       // 其他属性初始化
       let post = _.cloneDeep(slugedPost) as Post
       if (!isSys) {
+        // 无表单的发布路径（快速发布）没有「平台文章」可读，文档本身就是元数据权威源：
+        // 平台 YAML 保存的只是上次发布时的快照，不能让旧快照反过来覆盖文档里改过的
+        // 标题/摘要/标签/分类。用户此前在详细模式里显式改过的字段仍按覆盖集合保留，
+        // 与详细模式共用同一套 applyDocMetadataOverrides 规则。
+        if (options?.followDocMetadata) {
+          const metadataPost = post as PublishMetadataPost
+          metadataPost.siyuanMetadata = extractSiyuanMetadata(doc)
+          metadataPost.metadataOverrides = [
+            ...parseMetadataOverrides(ObjectUtil.getProperty(postMeta, getDynMetadataOverridesKey(key), "")),
+          ]
+        }
+
         // 读取一次文档属性：既用于平台 YAML，也合并进 Post.attrs 供 YAML 预设的
         // [attr:...] 读取任意文档属性（包括 custom-*）。
         const { yaml, docAttrs } = await readPlatformYamlWithDocAttrs(id, key)
