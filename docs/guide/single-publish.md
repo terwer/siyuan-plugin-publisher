@@ -65,19 +65,29 @@
 - `[createDate]`、`[updateDate]`：创建时间、更新时间，默认格式为 `YYYY-MM-DD`。
 - `[createDate-YYYY-MM-DD HH:mm:ss]`、`[updateDate-YYYY-MM-DD]`：自定义日期格式；没有更新时间时使用创建时间。格式区分大小写。
 
-例如，为站点自动填写更新时间、标签与分类：
+2.5.0 起，预设还能读取思源文档属性（包括 `custom-*` 自定义属性，以及 `memo`、`alias` 等内置属性）：
+
+- `[attr:属性名]`：按当前文档写入属性值，例如 `[attr:custom-cover]`。属性名按思源中保存的完整名称填写；精确匹配优先，兼容历史大写属性名。
+- `[attr:属性名|int]`、`[attr:属性名|float]`、`[attr:属性名|bool]`：把属性值转换为数字/布尔。转换失败时保留原字符串，未知类型按字符串处理。
+- 整个值只有该占位符时写入转换后的原生类型；嵌在文本中时按文本替换。属性不存在或为空时：整个取值就是该占位符则不写该字段，嵌在文本中则替换为空字符串；数组中的缺失项会被跳过。
+- 采用显式映射：只有你列出的属性才会进入 Front Matter，不会自动带上全部文档属性。
+
+例如，为站点自动填写创建时间、封面与权重：
 
 ```json
 {
   "updatedDate": "[updateDate-YYYY-MM-DD]",
   "tags": "[tags]",
-  "categories": "[categories]"
+  "categories": "[categories]",
+  "cover": "[attr:custom-cover]",
+  "weight": "[attr:custom-weight|int]",
+  "draft": "[attr:custom-draft|bool]"
 }
 ```
 
 字段名需符合你的站点要求；同名字段会覆盖插件自动生成的值。占位符也可用于嵌套对象、数组中的字符串值；未知占位符保留原样。保存时会校验 JSON 格式，格式不合法时会提示修改。
 
-这一能力适用于 Astro、Hexo、Hugo、Jekyll、VuePress、VuePress 2、VitePress、Quartz、Docsify 的 YAML 转换，以及相应的 GitLab 平台；预设留空时仍沿用各平台原有默认值。
+这一能力适用于 Astro、Hexo、Hugo、Jekyll、VuePress、VuePress 2、VitePress、Quartz、Docsify 的 YAML 转换，以及相应的 GitLab 平台；预设留空时仍沿用各平台原有默认值。文档属性占位符同样适用于这些平台。
 
 ::: tip 修改预设不会重写已有文章的 YAML
 预设在文章尚未保存该平台 YAML、首次生成时应用。已发布文章的更新沿用文档中已保存的 YAML；需要修改已有文章时，请在详细发布的源码模式编辑 YAML，点「马上保存」后再更新。

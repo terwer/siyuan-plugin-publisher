@@ -35,6 +35,7 @@ import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
+import { mergeDocAttrs } from "~/src/utils/docAttrs.ts"
 import { normalizePlatformPostMetadata } from "~/src/adaptors/base/platformPostMetadata.ts"
 import {
   initFeaturedImageFromYaml,
@@ -420,30 +421,48 @@ const usePublish = () => {
   }
 
   /**
-   * 读取平台 YAML 自定义属性。
+   * 读取思源文档的全部属性。
+   *
+   * 发布前把完整属性合并进 `Post.attrs`，YAML 预设的 `[attr:...]` 才能读取
+   * 任意文档属性（包括 `custom-*`）；读取失败时返回 undefined，不阻断发布。
+   */
+  const readDocAttrs = async (id: string): Promise<Record<string, any> | undefined> => {
+    try {
+      return (await kernelApi.getBlockAttrs(id)) ?? undefined
+    } catch (e) {
+      logger.warn(`[publish] read document attrs failed: ${String(e)}`)
+      return undefined
+    }
+  }
+
+  /**
+   * 读取平台 YAML 自定义属性，并带回同一次读取的完整文档属性。
    *
    * 属性名以 `getDynYamlKey` 生成的小写形态为准（思源自定义属性名只允许小写，
    * 见 siyuan-note/siyuan#16447）；历史上写入过含大写字母的属性，读取时按
    * 大小写不敏感匹配兜底一次，避免被当成「还没有保存过 YAML」而重新生成默认值。
+   *
+   * 返回的 `docAttrs` 供发布前合并进 `Post.attrs`，让 YAML 预设的 `[attr:...]`
+   * 读取任意文档属性；只调用一次内核接口。
    */
-  const readPlatformYamlAttr = async (id: string, platformKey: string): Promise<string> => {
+  const readPlatformYamlWithDocAttrs = async (
+    id: string,
+    platformKey: string
+  ): Promise<{ yaml: string; docAttrs?: Record<string, any> }> => {
     const wantKey = getDynYamlKey(platformKey)
-    try {
-      const attrs = await kernelApi.getBlockAttrs(id)
-      if (attrs) {
-        // 精确命中优先：新旧 SiYuan 同时存在小写与历史大写属性时，取规范形态
-        if (attrs[wantKey] !== undefined) {
-          return attrs[wantKey] ?? ""
-        }
-        const matchedKey = Object.keys(attrs).find((name) => name.toLowerCase() === wantKey)
-        if (matchedKey) {
-          return attrs[matchedKey] ?? ""
-        }
+    const docAttrs = await readDocAttrs(id)
+    if (docAttrs) {
+      // 精确命中优先：新旧 SiYuan 同时存在小写与历史大写属性时，取规范形态
+      if (docAttrs[wantKey] !== undefined) {
+        return { yaml: docAttrs[wantKey] ?? "", docAttrs }
       }
-    } catch (e) {
-      // 此处失败不阻断主流程
+      const matchedKey = Object.keys(docAttrs).find((name) => name.toLowerCase() === wantKey)
+      if (matchedKey) {
+        return { yaml: docAttrs[matchedKey] ?? "", docAttrs }
+      }
     }
-    return (await kernelApi.getSingleBlockAttr(id, wantKey)) ?? ""
+    const yaml = (await kernelApi.getSingleBlockAttr(id, wantKey)) ?? ""
+    return { yaml, docAttrs }
   }
 
   /**
@@ -521,8 +540,10 @@ const usePublish = () => {
         // 思源文档自身的更新时间，YAML 转换前先记下来（YAML 里的 updated 是上次发布时的值）
         const docDateUpdated = post.dateUpdated
 
-        // 平台相关自定义属性（摘要、标签、分类）
-        const yaml = await readPlatformYamlAttr(id, key)
+        // 读取一次文档属性：既用于平台 YAML，也合并进 Post.attrs 供 YAML 预设的
+        // [attr:...] 读取任意文档属性（包括 custom-*）。
+        const { yaml, docAttrs } = await readPlatformYamlWithDocAttrs(id, key)
+        post.attrs = mergeDocAttrs(post.attrs, docAttrs)
         const checkYaml = YamlUtil.extractFrontmatter(yaml).trim()
 
         // YAML属性转换

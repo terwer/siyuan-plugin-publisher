@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest"
 import { BlogConfig, Post } from "zhi-blog-api"
 import dayjs from "dayjs"
 import { AstroYamlConverterAdaptor } from "~/src/adaptors/api/astro/astroYamlConverterAdaptor.ts"
+import { HugoYamlConverterAdaptor } from "~/src/adaptors/api/hugo/hugoYamlConverterAdaptor.ts"
 import { JekyllYamlConverterAdaptor } from "~/src/adaptors/api/jekyll/jekyllYamlConverterAdaptor.ts"
 import { VitepressYamlConverterAdaptor } from "~/src/adaptors/api/vitepress/vitepressYamlConverterAdaptor.ts"
 
@@ -67,5 +68,25 @@ describe("静态站 YAML 转换器接入 YAML 预设占位符", () => {
     const yamlObj = converter.convertToYaml(buildPost(), undefined, buildCfg('{"published": false}')).yamlObj
     expect(yamlObj.published).toBe(false)
     expect(yamlObj.layout).toBeUndefined()
+  })
+
+  it("Hugo 把文档属性占位符写入 Front Matter，并支持类型后缀", () => {
+    const post = buildPost()
+    post.attrs = JSON.stringify({
+      "custom-cover": "images/cover.png",
+      "custom-weight": "10",
+      "custom-draft": "false",
+    })
+    const converter = new HugoYamlConverterAdaptor()
+    const yamlObj = converter.convertToYaml(
+      post,
+      undefined,
+      buildCfg(
+        '{"cover": "[attr:custom-cover]", "weight": "[attr:custom-weight|int]", "draft": "[attr:custom-draft|bool]"}'
+      )
+    ).yamlObj
+    expect(yamlObj.cover).toBe("images/cover.png")
+    expect(yamlObj.weight).toBe(10)
+    expect(yamlObj.draft).toBe(false)
   })
 })

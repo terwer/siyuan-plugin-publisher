@@ -62,7 +62,7 @@ export const gitlabhugoHelpConfig: PageHelpConfig = {
       tip: "开启后把文章永久链接写入 Front Matter，供站点按自定义链接生成页面。单文件模式写入 .html 地址；页面目录模式按存储目录写入目录式地址（如 /posts/<slug>/）。",
     },
     dynYamlCfg: {
-      tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时 Hugo 默认写入 toc: true、isCJKLanguage: true。",
+      tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。取值支持 [title]、[createDate-格式]、[attr:属性名] 等占位符，例如 {\"cover\":\"[attr:custom-cover]\"}。留空时 Hugo 默认写入 toc: true、isCJKLanguage: true。",
       placeholder: "{\"toc\": true}",
     },
     defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },

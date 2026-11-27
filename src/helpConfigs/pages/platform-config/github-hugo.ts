@@ -51,7 +51,7 @@ export const hugoHelpConfig: PageHelpConfig = {
       placeholder: "/images",
     },
     dynYamlCfg: {
-      tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，用于补充主题需要的自定义字段；同名键会覆盖前面自动生成的字段。",
+      tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，用于补充主题需要的自定义字段；同名键会覆盖前面自动生成的字段。取值支持 [title]、[createDate-格式]、[attr:属性名] 等占位符，例如 {\"cover\":\"[attr:custom-cover]\"}。",
       placeholder: "{\"toc\": true}",
     },
     defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
