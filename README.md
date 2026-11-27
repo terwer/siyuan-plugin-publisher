@@ -8,6 +8,37 @@
 
 Publisher is built for people who write in SiYuan and also maintain blogs, knowledge bases, or static sites. Configure platform accounts once, publish from the current document, and update the published article later when the document changes.
 
+## Recent Changes
+
+- **v2.5.x**
+  - Covers resolved through one shared contract: featured image, first body image, or custom upload
+  - Math rendered per platform: MathJax SVG on WeChat, KaTeX on CSDN
+  - Mermaid, flowchart, Graphviz, PlantUML, ECharts, and ABC rendered to images
+  - Hugo leaf bundle layout
+  - YAML presets read SiYuan document attributes with `[attr:name]`
+  - Publishing records list only real records, with inline edit and unbind
+  - Detailed and quick publish follow the document per field, keeping explicit overrides
+  - Halo follows the site slug and attachment storage policy
+  - Notion publishes long articles in 100-block batches
+  - Zhihu keeps code languages and resolves columns from the logged-in account
+  - WordPress writes the SiYuan document ID as post meta
+  - Static-site dates use the local time zone; filenames keep spaces
+  - Same-origin images read with the browser session
+- **v2.4.x**
+  - Fixed active document detection with multiple tabs
+  - Image auto-upload controlled per document, directory, or notebook
+  - YAML presets accept date, title, slug, tag, and category placeholders
+  - Halo reports a disabled Basic Auth as an actionable error
+  - Cnblogs honors the selected post type and draft status
+  - Console output keeps errors only
+  - Upgraded `zhi-siyuan-picgo` to 3.1.3
+- **v2.3.x**
+  - WordPress featured images
+  - 2.3.1 restores plugin loading with a single self-contained `index.js`
+  - Image uploads aligned with `siyuan-plugin-picgo` 3.1.1
+
+See [CHANGELOG.md](./CHANGELOG.md) for the full history.
+
 ## Core features
 
 - **Quick publish** — open a SiYuan document, choose a platform, and publish.
