@@ -12,6 +12,7 @@ import { createPinia, setActivePinia } from "pinia"
 import { CoverSource, PageTypeEnum, PicbedServiceTypeEnum, Post } from "zhi-blog-api"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
+import { getLocalDateParts } from "~/src/utils/dateUtils.ts"
 import { getMediaCacheContext } from "~/src/utils/mediaCacheContext.ts"
 import type { FeaturedImagePost } from "~/src/utils/featuredImage.ts"
 
@@ -156,5 +157,19 @@ describe("BaseExtendApi 通用封面解析", () => {
 
     expect(result.markdown).toContain(card)
     expect(kernelApi.sql).not.toHaveBeenCalled()
+  })
+
+  it("文件名日期占位符使用作者本地日期，而不是固定 +8", async () => {
+    const { extendApi, cfg, publishCfg } = createExtendApi({})
+    cfg.mdFilenameRule = "[yyyy]-[mm]-[dd]-[slug].md"
+    const post = createPost("# 正文")
+    post.wp_slug = "local-date"
+    // UTC 18:30；东八区已是次日，西欧/美洲仍是当天
+    post.dateCreated = new Date("2026-11-18T18:30:00.000Z")
+
+    const result = await extendApi.preEditPost(post, "doc-1", publishCfg)
+
+    const { yyyy, MM, dd } = getLocalDateParts(post.dateCreated)
+    expect(result.mdFilename).toBe(`${yyyy}-${MM}-${dd}-local-date.md`)
   })
 })

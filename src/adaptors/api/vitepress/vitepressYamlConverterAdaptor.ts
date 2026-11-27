@@ -10,6 +10,7 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatDateTimeWithOffset, parsePublishedDate } from "~/src/utils/dateUtils.ts"
 import { normalizeTagValue } from "~/src/utils/tagValue.ts"
 
 /**
@@ -39,7 +40,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+    yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated)
 
     // head
     yamlFormatObj.yamlObj.head = []
@@ -94,7 +95,8 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
 
     // 摘要
