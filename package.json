@@ -32,6 +32,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "@iconify/json": "^2.2.557",
+    "@tryfabric/martian": "^1.2.4",
     "@vueuse/components": "^15.0.0",
     "@vueuse/core": "^14.0.0",
     "chatgpt": "^5.2.5",
@@ -64,7 +65,6 @@
     "zhi-github-middleware": "^0.10.0",
     "zhi-gitlab-middleware": "^0.17.0",
     "zhi-lib-base": "^0.14.0",
-    "zhi-notion-markdown": "^0.6.0",
     "zhi-siyuan-api": "^2.42.0",
     "zhi-siyuan-picgo": "^3.2.2",
     "zhi-xmlrpc-middleware": "^0.11.0"
