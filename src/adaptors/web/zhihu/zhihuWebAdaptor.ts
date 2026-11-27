@@ -48,8 +48,8 @@ class ZhihuWebAdaptor extends BaseWebApi {
       "https://www.zhihu.com/api/v4/me?include=account_status%2Cis_bind_phone%2Cis_force_renamed%2Cemail%2Crenamed_fullname%2Curl_token"
     )
     const flag = !!res.uid
-    // 专栏接口需要 url_token；用户名没填时用当前登录账号补齐，避免“无法获取专栏”（issue #1713）
-    if (flag && StrUtil.isEmptyString(this.cfg.username) && !StrUtil.isEmptyString(res.url_token)) {
+    // 用户名不再需要用户填写：读取登录态时用当前账号的 url_token 自动填充（隐藏字段，仅作兼容兜底）
+    if (flag && !StrUtil.isEmptyString(res.url_token)) {
       this.cfg.username = res.url_token
     }
     return {
@@ -87,6 +87,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
     //   result.push(useBlog)
     // })
     const columns = await this.getColumns()
+    // 用户名不再由用户填写：验证时把当前登录账号的 url_token 回填到配置（隐藏字段，仅作兼容兜底）
+    const resolvedUsername = this.resolvedColumnUsername ?? this.cfg.username
+    const metadataMap = StrUtil.isEmptyString(resolvedUsername) ? undefined : { username: resolvedUsername }
 
     columns.forEach((column: any) => {
       const useBlog = new UserBlog()
@@ -94,6 +97,9 @@ class ZhihuWebAdaptor extends BaseWebApi {
       useBlog.blogid = item.id
       useBlog.blogName = item.title
       useBlog.url = item.url
+      if (metadataMap) {
+        useBlog.metadataMap = metadataMap
+      }
       result.push(useBlog)
     })
 

@@ -679,7 +679,6 @@
   "setting.yuque.error.notfound": "语雀文档或知识库不存在，请确认 postid 与知识库配置。",
   "setting.yuque.error.generic": "语雀 API 请求失败，请稍后重试或检查 Token 与会员状态。",
   "setting.zhihu.home.tip": "知乎专栏首页地址，通常固定",
-  "setting.zhihu.username.tip": "知乎用户名，必须设置正确，否则无法获取专栏",
   "setting.zhihu.password.tip": "知乎Cookie，请勿修改",
   "setting.zhihu.apiUrl.tip": "通常固定，请勿修改",
   "setting.zhihu.previewUrl.tip": "知乎平台文章预览规则，通常是：/[postid]",

@@ -23,7 +23,8 @@ class ZhihuConfig extends CommonWebConfig {
     this.previewUrl = "/p/[postid]"
     this.pageType = PageTypeEnum.Html
     this.passwordType = PasswordType.PasswordType_Cookie
-    this.usernameEnabled = true
+    // 专栏归属按当前登录账号（/api/v4/me 的 url_token）解析，用户名不再需要用户填写
+    this.usernameEnabled = false
     this.tagEnabled = false
     this.cateEnabled = false
     this.knowledgeSpaceEnabled = true

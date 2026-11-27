@@ -669,7 +669,6 @@
   "setting.yuque.error.notfound": "Yuque document or repo was not found. Check postid and repo settings.",
   "setting.yuque.error.generic": "Yuque API request failed. Retry later or check token and membership.",
   "setting.zhihu.home.tip": "The address of the front page of the column, usually fixed",
-  "setting.zhihu.username.tip": "Zhihu username, must be set correctly, otherwise you cannot get the column",
   "setting.zhihu.password.tip": "Know cookies, please do not modify them",
   "setting.zhihu.apiUrl.tip": "Usually fixed, do not modify",
   "setting.zhihu.previewUrl.tip": "Zhihu platform article preview rules, usually: //[postid]",

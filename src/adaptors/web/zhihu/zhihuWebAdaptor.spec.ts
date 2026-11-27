@@ -71,6 +71,22 @@ describe("ZhihuWebAdaptor.getCategories", () => {
   })
 })
 
+describe("ZhihuWebAdaptor.getUsersBlogs", () => {
+  it("returns the resolved username as metadata so validation can auto-fill the hidden field", async () => {
+    const adaptor = createAdaptor("stale-username")
+    vi.spyOn(adaptor as any, "webFetch").mockImplementation(async (url: string) => {
+      if (url.includes("/api/v4/me?")) {
+        return { uid: "1", url_token: "terwer" }
+      }
+      return { data: [columnContribution("c1", "专栏一")] }
+    })
+
+    const userBlogs = await adaptor.getUsersBlogs()
+
+    expect(userBlogs[0].metadataMap).toEqual({ username: "terwer" })
+  })
+})
+
 describe("ZhihuWebAdaptor.getMetaData", () => {
   it("fills an empty username from the logged-in account's url_token", async () => {
     const adaptor = createAdaptor("")
@@ -87,8 +103,8 @@ describe("ZhihuWebAdaptor.getMetaData", () => {
     expect((adaptor as any).cfg.username).toBe("terwer")
   })
 
-  it("keeps an explicitly configured username", async () => {
-    const adaptor = createAdaptor("configured-user")
+  it("replaces a stale configured username with the logged-in account's url_token", async () => {
+    const adaptor = createAdaptor("stale-user")
     vi.spyOn(adaptor as any, "webFetch").mockResolvedValue({
       uid: "1",
       name: "唐有炜",
@@ -97,6 +113,6 @@ describe("ZhihuWebAdaptor.getMetaData", () => {
 
     await adaptor.getMetaData()
 
-    expect((adaptor as any).cfg.username).toBe("configured-user")
+    expect((adaptor as any).cfg.username).toBe("terwer")
   })
 })
