@@ -13,6 +13,7 @@ import {
   BlogConfig,
   CategoryInfo,
   CoverSource,
+  MathRenderModeEnum,
   MediaObject,
   PageEditMode,
   PageTypeEnum,
@@ -42,6 +43,7 @@ import { getLocalDateParts } from "~/src/utils/dateUtils.ts"
 import { BaseError } from "~/src/utils/BaseErrors.ts"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { FormulaRenderService } from "~/src/utils/formulaRenderService.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
@@ -160,6 +162,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     post = await this.handleYaml(post, id, publishCfg)
     // 处理其他
     post = await this.handleOther(post, id, publishCfg)
+    // 处理公式（必须放在 YAML/HTML 定稿之后，避免被再次生成的 HTML 覆盖）
+    post = await this.handleFormula(post, id, publishCfg)
     // 题头图/自定义都没有时，回退到正文首图
     post = this.resolveCoverFallbacks(post, publishCfg)
     // 媒体缓存上下文只在内存中传递，供平台适配器复用附件
@@ -582,10 +586,46 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     // 发布格式
     const md = YamlUtil.extractMarkdown(post.markdown)
-    post.html = LuteUtil.mdToHtml(md)
+    post.html = LuteUtil.mdToHtml(md, { mathMarkers: true })
     if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
     } else {
+      post.description = post.html
+    }
+    return post
+  }
+
+  /**
+   * 按平台配置渲染公式。
+   *
+   * 公式标记由 {@link LuteUtil.mdToHtml} 在发布链路中产出，这里统一消费；
+   * 必须放在 YAML/HTML 定稿之后，否则会被后面的 Lute 渲染覆盖。
+   *
+   * @param doc - 要处理公式的 Post 对象
+   * @param id - 思源笔记文档 ID（保留参数以便平台扩展）
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleFormula(doc: Post, id?: string, publishCfg?: any) {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const post = _.cloneDeep(doc) as Post
+    if (!post.html) {
+      return post
+    }
+
+    const mode = cfg?.mathRenderMode ?? MathRenderModeEnum.Native
+    if (mode === MathRenderModeEnum.Native) {
+      // 发布链路使用结构化标记，Native 模式需要还原成平台可自行渲染的原文
+      post.html = FormulaRenderService.restoreNative(post.html)
+    } else {
+      post.html = await FormulaRenderService.process(post.html, {
+        mode,
+        imageUrlTemplate: cfg?.mathImageUrlTemplate,
+      })
+    }
+
+    // HTML 平台的正文描述与 HTML 保持一致
+    if (cfg?.pageType === PageTypeEnum.Html) {
       post.description = post.html
     }
     return post
@@ -642,7 +682,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         const md = YamlUtil.extractMarkdown(post.markdown)
         post.yaml = yaml
         post.markdown = md
-        post.html = LuteUtil.mdToHtml(md)
+        post.html = LuteUtil.mdToHtml(md, { mathMarkers: true })
         break
       }
     }
@@ -972,8 +1012,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       }
     }
 
-    // 利用 lute 把 md 转换成 html
-    post.html = LuteUtil.mdToHtml(post.markdown)
+    // 利用 lute 把 md 转换成 html（公式先输出结构化标记，发布前按平台统一渲染）
+    post.html = LuteUtil.mdToHtml(post.markdown, { mathMarkers: true })
 
     return post
   }

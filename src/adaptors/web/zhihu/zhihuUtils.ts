@@ -8,7 +8,6 @@
  */
 
 import * as cheerio from "cheerio"
-import { HtmlMathUtils } from "~/src/utils/htmlMathUtils.ts"
 
 /**
  * 知乎代码块语言别名 → 知乎高亮语言标识。
@@ -74,18 +73,6 @@ class ZhihuUtils {
       .attr("data-row-style", "normal")
 
     return $.html()
-  }
-
-  public static processZHMath(html: string): string {
-    return HtmlMathUtils.replaceMath(html, (expression) => {
-      const src = `//www.zhihu.com/equation?tex=${encodeURIComponent(expression)}`
-      const alt = expression
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-      return `<img eeimg="1" src="${src}" alt="${alt}" />`
-    })
   }
 
   /**
