@@ -10,6 +10,8 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatLocalDate, parsePublishedDate } from "~/src/utils/dateUtils.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Astro平台的YAML解析器
@@ -27,25 +29,11 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       // title
       yamlFormatObj.yamlObj.title = post.title
 
-      // description
-      if (!StrUtil.isEmptyString(post.mt_excerpt)) {
-        yamlFormatObj.yamlObj.description = post.mt_excerpt
-      } else {
-        yamlFormatObj.yamlObj.description = ""
-      }
+      // description（表单绑定 shortDesc，发布前 BaseExtendApi 会同步到 mt_excerpt）
+      yamlFormatObj.yamlObj.description = post.shortDesc || post.mt_excerpt || ""
 
-      // pubDate
-      // let tzstr = "+00:00"
-      // const tz = new Date().getTimezoneOffset() / -60
-      // const sign = tz > 0 ? "+" : "-"
-      // if (tz.toString().length < 2) {
-      //   tzstr = `${sign}0${tz}:00`
-      // } else {
-      //   tzstr = `${sign}${tz}:00`
-      // }
-      // yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
-      // 精简格式：yyyy-MM-dd
-      yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
+      // pubDate（Astro 内容集合按 yyyy-MM-dd 使用，日期取本地日历日）
+      yamlFormatObj.yamlObj.pubDate = formatLocalDate(post.dateCreated)
 
       // heroImage
       // 暂不支持
@@ -55,8 +43,7 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
+        yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
       }
 
       // categories
@@ -66,7 +53,7 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // seo
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        yamlFormatObj.yamlObj.keywords = post.mt_keywords
+        yamlFormatObj.yamlObj.keywords = normalizeTagValue(post.mt_keywords).join(",")
       }
 
       // 上面是固定配置。下面是个性配置
@@ -94,17 +81,22 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.pubDate) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.pubDate)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.pubDate) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.pubDate)
     }
 
-    // 摘要
-    post.mt_excerpt = yamlFormatObj.yamlObj?.description
+    // 摘要：表单绑定 shortDesc，必须同时回填两个字段
+    const description = yamlFormatObj.yamlObj?.description
+    if (typeof description === "string" && description.trim() !== "") {
+      post.shortDesc = description
+      post.mt_excerpt = description
+    }
 
     // 题图
     // 暂不支持
 
-    // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    // 标签：兼容数组、字符串、单数 tag 与空值
+    post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj?.tags ?? yamlFormatObj.yamlObj?.tag)
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

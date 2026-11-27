@@ -13,6 +13,7 @@ import {
   BlogConfig,
   CategoryInfo,
   CoverSource,
+  MathRenderModeEnum,
   MediaObject,
   PageEditMode,
   PageTypeEnum,
@@ -27,7 +28,7 @@ import {
 } from "zhi-blog-api"
 import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
-import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
@@ -38,9 +39,11 @@ import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/d
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
+import { getLocalDateParts } from "~/src/utils/dateUtils.ts"
 import { BaseError } from "~/src/utils/BaseErrors.ts"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import ImageUtils from "~/src/utils/ImageUtils.ts"
+import { FormulaRenderService } from "~/src/utils/formulaRenderService.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { MdUtils } from "~/src/utils/mdUtils.ts"
 import { base64ToBuffer, path, remoteImageToBase64Info } from "~/src/utils/polyfillUtils.ts"
@@ -49,8 +52,18 @@ import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
 import { removeMarkdownHeadingNumbers, removeTitleNumber } from "~/src/utils/titleNumber.ts"
+import { removeHtmlBlocksFromSiyuanMarkdown } from "~/src/utils/siyuanHtmlBlockCleaner.ts"
 import { isCoverEnabled, resolveCoverLink, stripLeadingDocTitleImage } from "~/src/utils/coverImage.ts"
 import { getFeaturedImage, type FeaturedImagePost } from "~/src/utils/featuredImage.ts"
+import { toFeaturedImageMediaName } from "~/src/utils/featuredImageMedia.ts"
+import {
+  getYamlCoverKey,
+  isPlatformCoverPath,
+  isRemoteCoverUrl,
+  isYamlCoverEnabled,
+  needsCoverUpload,
+  removeYamlCoverKey,
+} from "~/src/utils/yamlCover.ts"
 import {
   getMediaCacheContext,
   normalizeMediaCacheEndpoint,
@@ -59,6 +72,29 @@ import {
 } from "~/src/utils/mediaCacheContext.ts"
 import { SypConfig } from "~/syp.config.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { DiagramRenderService } from "~/src/utils/diagram/diagramRenderService.ts"
+import { findDiagramFences } from "~/src/utils/diagram/diagramFenceParser.ts"
+import { SiyuanDiagramAssetWriter } from "~/src/utils/diagram/siyuanDiagramAssetWriter.ts"
+import {
+  readSiyuanDiagramEnvironment,
+  SiyuanDiagramRenderer,
+} from "~/src/utils/diagram/siyuanDiagramRenderer.ts"
+import {
+  DEFAULT_DIAGRAM_RENDER_SCALE,
+  DIAGRAM_RENDER_POLICY_ATTR,
+  normalizeDiagramRenderPolicy,
+  normalizeDiagramRenderScale,
+  type DiagramPreparedAsset,
+  type DiagramRenderTheme,
+} from "~/src/utils/diagram/diagramTypes.ts"
+
+interface DiagramRenderStage {
+  service: DiagramRenderService
+  assets: DiagramPreparedAsset[]
+  errors: string[]
+  converted: number
+  skipped: number
+}
 
 /**
  * 各种模式共享的扩展基类
@@ -110,14 +146,35 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     post = await this.handleDesc(post, id, publishCfg)
     // 处理路径分类
     post = await this.handleCategories(post, id, publishCfg)
-    // 处理图片
-    post = await this.handlePictures(post, id, publishCfg)
+
+    // 文本图转图片：先渲染为临时资产，再由统一图片阶段上传并替换。
+    // 上传失败时在 finally 中还原代码块，避免发布出指向临时资产的坏链接。
+    let diagramStage: DiagramRenderStage | undefined
+    try {
+      const prepared = await this.prepareDiagramImages(post, id, publishCfg)
+      post = prepared.post
+      diagramStage = prepared.stage
+      // 处理图片
+      post = await this.handlePictures(post, id, publishCfg)
+    } finally {
+      if (diagramStage) {
+        try {
+          post = await this.finalizeDiagramImages(post, diagramStage)
+        } finally {
+          await this.cleanupDiagramImages(diagramStage)
+        }
+      }
+    }
     // 处理Md
     post = await this.handleMd(post, id, publishCfg)
+    // 处理静态站 Front Matter 封面：上传图片并记录平台可用地址，供 YAML 生成使用
+    post = await this.handleYamlCover(post, publishCfg)
     // 处理YAML
     post = await this.handleYaml(post, id, publishCfg)
     // 处理其他
     post = await this.handleOther(post, id, publishCfg)
+    // 处理公式（必须放在 YAML/HTML 定稿之后，避免被再次生成的 HTML 覆盖）
+    post = await this.handleFormula(post, id, publishCfg)
     // 题头图/自定义都没有时，回退到正文首图
     post = this.resolveCoverFallbacks(post, publishCfg)
     // 媒体缓存上下文只在内存中传递，供平台适配器复用附件
@@ -139,7 +196,154 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * @param publishCfg - （可选）发布配置参数
    */
   public async previewImageProcess(doc: Post, id?: string, publishCfg?: any): Promise<Post> {
-    return await this.handlePictures(doc, id, publishCfg)
+    const prepared = await this.prepareDiagramImages(doc, id, publishCfg)
+    let post = prepared.post
+    const stage = prepared.stage
+    try {
+      post = await this.handlePictures(post, id, publishCfg)
+      if (stage) {
+        post = await this.finalizeDiagramImages(post, stage)
+      }
+      return post
+    } finally {
+      if (stage) {
+        await this.cleanupDiagramImages(stage)
+      }
+    }
+  }
+
+  /**
+   * 文本图转图片准备阶段。
+   *
+   * 渲染结果写入思源临时资产，并把代码块替换成 `assets/...` 图片标记；后续
+   * `handlePictures` 会按当前平台图床配置统一上传和替换。
+   */
+  private async prepareDiagramImages(
+    post: Post,
+    id?: string,
+    publishCfg?: any
+  ): Promise<{ post: Post; stage?: DiagramRenderStage }> {
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
+    const pref = getReadOnlyPublishPreferenceSetting()
+    if (pref.value.diagramRenderEnabled === false || StrUtil.isEmptyString(id)) {
+      return { post }
+    }
+    if (findDiagramFences(post.markdown).length === 0) {
+      return { post }
+    }
+
+    try {
+      const attrs = await this.kernelApi.getBlockAttrs(id)
+      if (normalizeDiagramRenderPolicy(attrs?.[DIAGRAM_RENDER_POLICY_ATTR]) === "skip") {
+        this.logger.info(`[diagram] skip by document policy doc=${id}`)
+        return { post }
+      }
+    } catch (e) {
+      this.logger.warn(`[diagram] read document policy failed doc=${id}`, e)
+    }
+
+    try {
+      const imageUploadPolicy = await resolveImageUploadPolicy({
+        kernelApi: this.kernelApi,
+        docId: id,
+        rules: pref.value.imageUploadExcludeDirs,
+      })
+      if (imageUploadPolicy.skip) {
+        this.logger.info(`[diagram] skip because image upload policy skipped doc=${id}`)
+        return { post }
+      }
+    } catch (e) {
+      this.logger.warn(`[diagram] resolve image upload policy failed doc=${id}`, e)
+    }
+
+    const cfg: BlogConfig = publishCfg?.cfg
+    if (!cfg) {
+      return { post }
+    }
+    let picbedService = cfg.picbedService
+    if (StrUtil.isEmptyString(picbedService)) {
+      picbedService = await this.picgoBridge.getPicbedServiceType(cfg)
+    }
+    if (picbedService === PicbedServiceTypeEnum.None) {
+      this.logger.info(`[diagram] skip because no picbed is available doc=${id}`)
+      return { post }
+    }
+
+    let service: DiagramRenderService | undefined
+    try {
+      const env = readSiyuanDiagramEnvironment()
+      const themeMode = pref.value.diagramRenderTheme ?? "light"
+      const theme: DiagramRenderTheme = themeMode === "follow" ? env.theme : themeMode === "dark" ? "dark" : "light"
+      const scale = normalizeDiagramRenderScale(pref.value.diagramRenderScale ?? DEFAULT_DIAGRAM_RENDER_SCALE)
+      const renderer = new SiyuanDiagramRenderer({
+        baseUrl: env.baseUrl,
+        plantUmlServePath: env.plantUmlServePath,
+        fetchImageBase64: (url: string) => this.readFileToBase64(url),
+      })
+      const writer = new SiyuanDiagramAssetWriter(this.kernelApi)
+      service = new DiagramRenderService(renderer, writer)
+      const result = await service.prepare(post.markdown, {
+        enabled: true,
+        skip: false,
+        theme,
+        scale,
+        plantUmlServePath: env.plantUmlServePath,
+      })
+      post.markdown = result.markdown
+      ;(post as any).diagramRenderErrors = result.errors
+      ;(post as any).diagramRenderErrorDetails = result.errors
+      ;(post as any).diagramRenderConvertedCount = result.converted
+      ;(post as any).diagramRenderSkippedCount = result.skipped
+
+      if (result.assets.length === 0) {
+        service.dispose()
+        return { post }
+      }
+
+      this.logger.info(`[diagram] prepared doc=${id} converted=${result.converted} skipped=${result.skipped}`)
+      return {
+        post,
+        stage: {
+          service,
+          assets: result.assets,
+          errors: result.errors,
+          converted: result.converted,
+          skipped: result.skipped,
+        },
+      }
+    } catch (e: any) {
+      service?.dispose()
+      const message = `文本图渲染失败：${e?.message || e}；已保留代码块`
+      this.logger.warn(`[diagram] prepare failed doc=${id}: ${message}`)
+      ;(post as any).diagramRenderErrors = [message]
+      ;(post as any).diagramRenderErrorDetails = [message]
+      return { post }
+    }
+  }
+
+  /**
+   * 图片阶段结束后核对文本图是否真正上传成功；失败的把图片标记还原为代码块。
+   */
+  private async finalizeDiagramImages(post: Post, stage: DiagramRenderStage): Promise<Post> {
+    const result = await stage.service.finalize(post.markdown, stage.assets)
+    post.markdown = result.markdown
+    if (result.reverted > 0) {
+      post.html = LuteUtil.mdToHtml(post.markdown)
+    }
+    const errors = [...stage.errors, ...result.errors]
+    ;(post as any).diagramRenderErrors = errors
+    ;(post as any).diagramRenderErrorDetails = errors
+    ;(post as any).diagramRenderConvertedCount = result.converted
+    ;(post as any).diagramRenderSkippedCount = stage.skipped + result.reverted
+    return post
+  }
+
+  private async cleanupDiagramImages(stage: DiagramRenderStage): Promise<void> {
+    try {
+      await stage.service.cleanup(stage.assets)
+    } finally {
+      stage.service.dispose()
+    }
   }
 
   /**
@@ -201,21 +405,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     if (cfg?.mdFilenameRule) {
       cfg.useMdFilename = !!cfg?.mdFilenameRule?.includes("[filename]")
-      // 处理文件规则
-      const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
-      const datearr = created.split(" ")[0]
-      const numarr = datearr.split("-")
-      const y = numarr[0]
-      const m = numarr[1]
-      const d = numarr[2]
+      // 处理文件规则：日期取作者本地日历日，与 Front Matter 的 date 保持一致
+      const { yyyy, MM, dd } = getLocalDateParts(post.dateCreated)
 
       let filename = cfg.mdFilenameRule
       // 年月日
       filename = filename
-        .replace(/\[yyyy]/g, y)
-        .replace(/\[MM]/g, m)
-        .replace(/\[mm]/g, m)
-        .replace(/\[dd]/g, d)
+        .replace(/\[yyyy]/g, yyyy)
+        .replace(/\[MM]/g, MM)
+        .replace(/\[mm]/g, MM)
+        .replace(/\[dd]/g, dd)
       // 分类
       if (cfg?.mdFilenameRule?.includes("category")) {
         const cat = post?.categories?.[0] ?? ""
@@ -368,6 +567,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     const outerLinkRegex = /\[(.+?)]\(siyuan:\/\/blocks\/(\d+-\w+)\)/g
     md = await this.replaceOuterLinks(md, outerLinkRegex, { pref, cfg, setting })
 
+    // 去除第三方插件写入的 HTML 块（issue #1905）。
+    // oembed/书签卡片等以 HTML 块形式存在，不能只依赖 zhi-siyuan-api 的挂件 iframe 正则。
+    if (pref.value.removeMdWidgetTag && id) {
+      try {
+        md = await removeHtmlBlocksFromSiyuanMarkdown(this.kernelApi, id, md)
+      } catch (e) {
+        this.logger.warn(`移除 HTML 块失败，保留原文继续发布 doc=${id}`, e)
+      }
+    }
+
     // 汇总结果
     post.markdown = md
 
@@ -388,10 +597,46 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     // 发布格式
     const md = YamlUtil.extractMarkdown(post.markdown)
-    post.html = LuteUtil.mdToHtml(md)
+    post.html = LuteUtil.mdToHtml(md, { mathMarkers: true })
     if (cfg?.pageType == PageTypeEnum.Markdown) {
       post.description = post.markdown
     } else {
+      post.description = post.html
+    }
+    return post
+  }
+
+  /**
+   * 按平台配置渲染公式。
+   *
+   * 公式标记由 {@link LuteUtil.mdToHtml} 在发布链路中产出，这里统一消费；
+   * 必须放在 YAML/HTML 定稿之后，否则会被后面的 Lute 渲染覆盖。
+   *
+   * @param doc - 要处理公式的 Post 对象
+   * @param id - 思源笔记文档 ID（保留参数以便平台扩展）
+   * @param publishCfg - （可选）发布配置参数
+   * @returns 一个 Promise，解析为处理后的 Post 对象
+   */
+  private async handleFormula(doc: Post, id?: string, publishCfg?: any) {
+    const cfg: BlogConfig = publishCfg?.cfg
+    const post = _.cloneDeep(doc) as Post
+    if (!post.html) {
+      return post
+    }
+
+    const mode = cfg?.mathRenderMode ?? MathRenderModeEnum.Native
+    if (mode === MathRenderModeEnum.Native) {
+      // 发布链路使用结构化标记，Native 模式需要还原成平台可自行渲染的原文
+      post.html = FormulaRenderService.restoreNative(post.html)
+    } else {
+      post.html = await FormulaRenderService.process(post.html, {
+        mode,
+        imageUrlTemplate: cfg?.mathImageUrlTemplate,
+      })
+    }
+
+    // HTML 平台的正文描述与 HTML 保持一致
+    if (cfg?.pageType === PageTypeEnum.Html) {
       post.description = post.html
     }
     return post
@@ -448,7 +693,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         const md = YamlUtil.extractMarkdown(post.markdown)
         post.yaml = yaml
         post.markdown = md
-        post.html = LuteUtil.mdToHtml(md)
+        post.html = LuteUtil.mdToHtml(md, { mathMarkers: true })
         break
       }
     }
@@ -570,6 +815,71 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         post.cover = resolveCoverLink(this.kernelApi, custom)
         post.coverSource = CoverSource.Custom
       }
+    }
+
+    return post
+  }
+
+  /**
+   * 处理静态站 Front Matter 封面。
+   *
+   * 与原生封面平台不同，静态站的封面是主题读取的 Front Matter 字段：
+   * 用户上传的思源资源需要先提交到平台图片仓库，再把平台可用地址交给 YAML 生成层。
+   * 用户主动清空时还要删掉已保存 YAML 里的旧封面，避免 mergeYamlObjs 把旧值合并回来。
+   *
+   * @param doc - 要处理的文章
+   * @param publishCfg - 发布配置
+   */
+  private async handleYamlCover(doc: Post, publishCfg?: any): Promise<Post> {
+    const cfg = publishCfg?.cfg as BlogConfig | undefined
+    if (!isYamlCoverEnabled(cfg)) {
+      return doc
+    }
+
+    const post = _.cloneDeep(doc) as Post
+    const featuredPost = post as FeaturedImagePost
+    const desired = featuredPost.featuredImage
+    const raw = (desired ?? "").trim()
+
+    if (raw === "") {
+      // 用户主动清空：删除已保存的封面字段；未触碰时保留源码模式里手写的封面
+      if (featuredPost.featuredImageTouched === true) {
+        post.yaml = removeYamlCoverKey(post.yaml, getYamlCoverKey(cfg))
+        post.cover = undefined
+        post.coverSource = undefined
+      }
+      return post
+    }
+
+    try {
+      if (isRemoteCoverUrl(raw) || isPlatformCoverPath(raw)) {
+        post.cover = raw
+      } else if (needsCoverUpload(raw)) {
+        if ((post as any).imageUploadSkipped === true) {
+          featuredPost.featuredImageError = "已按设置跳过图片自动上传，封面图未上传"
+          return post
+        }
+
+        const absoluteUrl = resolveCoverLink(this.kernelApi, raw)
+        const base64Info = await this.readFileToBase64(absoluteUrl)
+        const mediaObject = this.createMediaObject(
+          post,
+          toFeaturedImageMediaName(base64Info.imageName, base64Info.mimeType),
+          base64Info.mimeType,
+          base64ToBuffer(base64Info.imageBase64)
+        )
+        const attachment = await this.api.newMediaObject(mediaObject)
+        const platformUrl = attachment?.url ?? attachment?.link
+        if (StrUtil.isEmptyString(platformUrl)) {
+          throw new Error("平台未返回封面图片地址")
+        }
+        post.cover = platformUrl
+      }
+      post.coverSource = CoverSource.Custom
+    } catch (e: any) {
+      const message = e?.message || String(e)
+      featuredPost.featuredImageError = `封面图设置失败：${message}`
+      this.logger.error("封面图上传失败", e)
     }
 
     return post
@@ -700,8 +1010,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         for (const image of images) {
           try {
             const imageUrl = image.url
-            // 忽略在线图片
-            if (imageUrl.startsWith("http") && !imageUrl.startsWith(window.location.origin)) {
+            // 在线图片不重复上传；但图片缓存可能已把本地图片换成远端地址，
+            // 这时仍要把正文里的本地链接替换成缓存地址，否则切换图床后会留下本地链接。
+            const siyuanApiBaseUrl = this.getSiyuanApiBaseUrl()
+            const pageOrigin = typeof window !== "undefined" ? window.location?.origin : ""
+            const isSiyuanAsset =
+              Boolean(siyuanApiBaseUrl) && imageUrl.startsWith(siyuanApiBaseUrl) // 远程内核资源
+            if (imageUrl.startsWith("http") && !imageUrl.startsWith(pageOrigin) && !isSiyuanAsset) {
+              if (image.originUrl && image.originUrl !== imageUrl) {
+                urlMap[image.originUrl] = imageUrl
+              }
               continue
             }
             const base64Info = await this.readFileToBase64(imageUrl)
@@ -770,8 +1088,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
       }
     }
 
-    // 利用 lute 把 md 转换成 html
-    post.html = LuteUtil.mdToHtml(post.markdown)
+    // 利用 lute 把 md 转换成 html（公式先输出结构化标记，发布前按平台统一渲染）
+    post.html = LuteUtil.mdToHtml(post.markdown, { mathMarkers: true })
 
     return post
   }

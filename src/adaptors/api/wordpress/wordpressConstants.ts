@@ -14,6 +14,14 @@
  * @version 0.9.0
  * @since 0.9.0
  */
-class WordpressConstants {}
+class WordpressConstants {
+  /**
+   * WordPress 自定义字段名：保存来源思源文档 ID。
+   *
+   * 与 issue #1638 中用户期望的 `meta.siyuanid` 对应；XML-RPC 通过
+   * `custom_fields` 写入同一份 post meta。
+   */
+  public static readonly SIYUAN_ID_META_KEY = "siyuanid"
+}
 
 export { WordpressConstants }

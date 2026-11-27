@@ -16,13 +16,14 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PicbedServiceTypeEnum, Post, PostUtil, YamlConvertAdaptor, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
-import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
-import { resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
+import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
+import { formatLocalDateTime } from "~/src/utils/dateUtils.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useAppI18n()
@@ -179,7 +180,7 @@ const doSaveContentChange = () => {
     emit("emitSyncPost", formData.siyuanPost)
     emit("edmtSyncToSiyuan")
     formData.syncStatus = "success"
-    formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + DateUtil.formatIsoToZh(new Date().toISOString(), true)
+    formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + formatLocalDateTime(new Date())
     formData.isSaved = true
   } catch (e) {
     formData.syncStatus = "error"
@@ -256,29 +257,22 @@ const initImageNotice = async () => {
     formData.imageUploadSkipped = false
   }
 
+  // 以发布正文为准判断本地图片：数据库块、嵌入块中的图片不属于 blocks 图片块（issue #1999）
+  const localImageCount = countLocalMarkdownImages(formData.siyuanPost?.markdown)
+
   // 图床服务为「不使用」或策略跳过时，图片不会被上传或替换
   const picbedService = (formData.cfg as CommonBlogConfig)?.picbedService
   const noUpload = picbedService === PicbedServiceTypeEnum.None || formData.imageUploadSkipped
   if (noUpload) {
     if (formData.imageUploadSkipped) {
-      try {
-        const imageBlocks = await kernelApi.getImageBlocksByID(formData.pageId)
-        formData.showImageNotice = (imageBlocks?.length ?? 0) > 0
-      } catch (e) {
-        // 提示属于辅助信息，读取失败不阻断源码展示
-      }
+      formData.showImageNotice = localImageCount > 0
     }
     return
   }
 
-  try {
-    const imageBlocks = await kernelApi.getImageBlocksByID(formData.pageId)
-    formData.showImageNotice = (imageBlocks?.length ?? 0) > 0
-    // 单平台场景提供「上传并预览」入口（与发布链路同源处理图片）
-    formData.canPreviewUpload = formData.showImageNotice && !StrUtil.isEmptyString(formData.apiType)
-  } catch (e) {
-    // 提示属于辅助信息，读取失败不阻断源码展示
-  }
+  formData.showImageNotice = localImageCount > 0
+  // 单平台场景提供「上传并预览」入口（与发布链路同源处理图片）
+  formData.canPreviewUpload = formData.showImageNotice && !StrUtil.isEmptyString(formData.apiType)
 }
 
 /**
@@ -328,6 +322,10 @@ const toggleImagePreview = async () => {
     const imageUploadErrors = (previewedPost as any).imageUploadErrors as string[] | undefined
     if (imageUploadErrors?.length) {
       ElMessage.warning(imageUploadErrors.join("\n"))
+    }
+    const diagramRenderErrors = (previewedPost as any).diagramRenderErrors as string[] | undefined
+    if (diagramRenderErrors?.length) {
+      ElMessage.warning(diagramRenderErrors.join("\n"))
     }
   } catch (e) {
     ElMessage.error(e.message)

@@ -225,7 +225,9 @@ export const useQuickPublish = () => {
       }
 
       const siyuanPost = await blogApi.getPost(state.pageId)
-      const preparedPost = await initPublishMethods.assignInitAttrs(siyuanPost, state.pageId, publishCfg)
+      const preparedPost = await initPublishMethods.assignInitAttrs(siyuanPost, state.pageId, publishCfg, {
+        followDocMetadata: true,
+      })
 
       setPublishState({ status: "publishing" })
 

@@ -12,6 +12,8 @@ import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-ap
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatDateTimeWithOffset, parsePublishedDate } from "~/src/utils/dateUtils.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Jekyll平台的YAML解析器
@@ -35,31 +37,13 @@ class JekyllYamlConverterAdaptor extends YamlConvertAdaptor {
     yamlFormatObj.yamlObj.title = post.title
 
     // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+    yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated)
 
     // permalink
     let link = "/post/" + post.wp_slug + ".html"
     const githubCfg = cfg as CommonGithubConfig
     if (githubCfg.yamlLinkEnabled && !StrUtil.isEmptyString(githubCfg.previewPostUrl)) {
       link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-
-      // const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-      // const datearr = created.split(" ")[0]
-      // const numarr = datearr.split("-")
-      // this.logger.debug("created numarr=>", numarr)
-      // const y = numarr[0]
-      // const m = numarr[1]
-      // const d = numarr[2]
-      // link = link.replace(/\[yyyy]/g, y)
-      // link = link.replace(/\[MM]/g, m)
-      // link = link.replace(/\[mm]/g, m)
-      // link = link.replace(/\[dd]/g, d)
-      //
-      // if (yamlFormatObj.yamlObj?.categories?.length > 0) {
-      //   link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
-      // } else {
-      //   link = link.replace(/\/\[cats]/, "")
-      // }
     }
     yamlFormatObj.yamlObj.permalink = link
 
@@ -70,8 +54,7 @@ class JekyllYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // tags
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tags = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tags = tags
+      yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
     }
 
     // categories
@@ -107,14 +90,15 @@ class JekyllYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
 
     // 摘要
     post.shortDesc = yamlFormatObj.yamlObj?.tagline
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj?.tags ?? yamlFormatObj.yamlObj?.tag)
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

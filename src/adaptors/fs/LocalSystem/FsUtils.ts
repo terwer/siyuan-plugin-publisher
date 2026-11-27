@@ -23,6 +23,28 @@ import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/Loc
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 
 /**
+ * 把 mediaObject 的绝对路径转成相对于存储目录的 Markdown 链接。
+ *
+ * 配置里的存储目录可能混用 `\` 和 `/`，而 `path.join` 在 Windows 上统一输出 `\`；
+ * 直接 `replace(storePath, ".")` 会因分隔符不一致失败，导致正文写出绝对路径。
+ */
+export const toStoreRelativeMediaUrl = (absMediaFilePath: string, storePath: string): string => {
+  const normalize = (value: string) => String(value ?? "").replace(/\\/g, "/").replace(/\/+$/, "")
+  const absPath = normalize(absMediaFilePath)
+  const store = normalize(storePath)
+  if (!store) {
+    return absMediaFilePath
+  }
+  if (absPath === store) {
+    return "."
+  }
+  if (absPath.startsWith(`${store}/`)) {
+    return `./${absPath.slice(store.length + 1)}`
+  }
+  return absMediaFilePath
+}
+
+/**
  * 文件系统工具类
  *
  * @author terwer

@@ -79,6 +79,10 @@ const useHexoApi = async (key: string, newCfg?: HexoConfig) => {
   // picbed service
   cfg.picgoPicbedSupported = true
   cfg.bundledPicbedSupported = true
+  // 封面图：发布链路的配置是设置反序列化出来的普通对象，不能只靠构造器默认值；
+  // Hexo 的封面是主题读取的 Front Matter 字段，由共用发布层上传并写入。
+  cfg.featuredImageEnabled = true
+  cfg.yamlCoverEnabled = true
 
   // 创建 Hexo 的 yamlAdaptor
   const yamlAdaptor = new HexoYamlConverterAdaptor()

@@ -12,9 +12,13 @@ import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { NotionConfig } from "~/src/adaptors/api/notion/notionConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ObjectUtil } from "zhi-common"
-import { NotionMarkdownConverter } from "zhi-notion-markdown"
+import { chunkNotionBlocks, markdownToNotionBlocks } from "~/src/adaptors/api/notion/notionBlocks.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+
+/** Notion 限流（429）时的重试次数与基础等待时间 */
+const NOTION_RATE_LIMIT_MAX_RETRIES = 2
+const NOTION_RATE_LIMIT_RETRY_DELAY_MS = 1000
 
 /**
  * Notion API 适配器
@@ -148,8 +152,9 @@ class NotionApiAdaptor extends BaseBlogApi {
   private async createPage(title: string, markdownText: string, parentPageId?: string) {
     // 如果没传递过来就用默认的父页面
     const page_id = parentPageId ?? this.cfg.blogid
-    const notionObject = NotionMarkdownConverter.markdownToNotion(markdownText)
-    const params = {
+    // Notion 每次请求最多接收 100 个块，长文必须按批次写入。
+    const [firstBatch, ...remainingBatches] = chunkNotionBlocks(markdownToNotionBlocks(markdownText))
+    const params: any = {
       parent: { page_id: page_id },
       properties: {
         title: [
@@ -160,17 +165,60 @@ class NotionApiAdaptor extends BaseBlogApi {
           },
         ],
       },
-      children: notionObject,
+    }
+    if (firstBatch?.length) {
+      params.children = firstBatch
     }
     const resp = await this.notionRequest("/pages", params, "POST")
     if (resp.object !== "page") {
       throw new Error("Notion create page error")
     }
 
+    // 剩余块按顺序追加；任何一批失败都回滚整页，避免留下半篇文档。
+    try {
+      for (const batch of remainingBatches) {
+        await this.appendBlockChildren(resp.id, batch)
+      }
+    } catch (error) {
+      await this.archivePageQuietly(resp.id)
+      throw error
+    }
+
     // 保存url，否则后面打不开
     const url = resp.url
     const endUrl = url.split("/").slice(-1)[0]
     return `${resp.id}_${endUrl}`
+  }
+
+  /**
+   * 按 Notion 单次请求上限追加子块，遇到限流（429）时做有限次退避重试。
+   *
+   * @see https://developers.notion.com/reference/patch-block-children
+   */
+  private async appendBlockChildren(pageId: string, children: any[], retry = 0): Promise<void> {
+    try {
+      const resp = await this.notionRequest(`/blocks/${pageId}/children`, { children }, "PATCH")
+      if (resp?.object !== "list") {
+        throw new Error("Notion append block children error")
+      }
+    } catch (error) {
+      if (retry < NOTION_RATE_LIMIT_MAX_RETRIES && isNotionRateLimitError(error)) {
+        await sleep(NOTION_RATE_LIMIT_RETRY_DELAY_MS * (retry + 1))
+        return await this.appendBlockChildren(pageId, children, retry + 1)
+      }
+      throw error
+    }
+  }
+
+  /**
+   * 长文分块失败时尽力回滚已创建的页面；回滚失败不覆盖原始错误。
+   */
+  private async archivePageQuietly(pageId: string): Promise<void> {
+    try {
+      await this.deletePage(pageId)
+    } catch (error) {
+      this.logger.warn(`Notion 回滚未完成的页面失败：${error instanceof Error ? error.message : String(error)}`)
+    }
   }
 
   private async deletePage(pageId: string): Promise<boolean> {
@@ -254,11 +302,31 @@ class NotionApiAdaptor extends BaseBlogApi {
     const resJson = await this.apiFetch(apiUrl, [headers], body, method, contentType, true, "base64", "text")
 
     if (resJson?.status === 400 || resJson?.status === 401 || resJson?.status === 404 || resJson?.status === 429) {
-      throw new Error(resJson?.message)
+      const error = new Error(resJson?.message ?? `Notion request failed (${resJson?.status})`) as Error & {
+        status?: number
+      }
+      error.status = resJson.status
+      throw error
     }
 
     return resJson
   }
+}
+
+/**
+ * 判断是否为 Notion 的限流错误。不同传输通道可能只给出状态码或错误消息。
+ */
+function isNotionRateLimitError(error: unknown): boolean {
+  const status = (error as { status?: number })?.status
+  if (status === 429) {
+    return true
+  }
+  const message = error instanceof Error ? error.message : String(error ?? "")
+  return /rate.?limit|too many requests|请求过于频繁|429/i.test(message)
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export { NotionApiAdaptor }

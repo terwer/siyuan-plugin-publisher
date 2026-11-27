@@ -32,6 +32,9 @@ features:
   - icon: 🖼
     title: 图床可选
     details: 可用平台原生直传、内置的阿里云 OSS 与腾讯云 COS，或本机 PicGo，按平台分别指定；源码模式可预览图床替换效果。
+  - icon: 📐
+    title: 文本图转图片
+    details: Mermaid、Flowchart、Graphviz、PlantUML、ECharts、ABC 代码块在发布前自动渲染为图片并走当前平台图床；渲染或上传失败时保留代码块。
   - icon: 🤖
     title: AI 辅助
     details: 用思源内置 AI 或自定义的 OpenAI 兼容接口，自动生成标题、摘要、标签与分类。

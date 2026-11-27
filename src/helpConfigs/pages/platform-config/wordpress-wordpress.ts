@@ -38,6 +38,10 @@ export const wordpressHelpConfig: PageHelpConfig = {
       q: "怎么设置文章特色图片？",
       a: "发布页「详细模式」下的「特色图片」一栏：可点「上传图片」从本机选图（先存进思源资源库）、点「取正文首图」引用正文第一张图，或直接填思源资源路径/图片链接；图片会先上传到媒体库再设为该文章的特写图。",
     },
+    {
+      q: "发布后能在 WordPress 里看到思源文档 ID 吗？",
+      a: "会写入文章的 siyuanid 自定义字段（post meta）。新建时创建；再次发布时按已有 meta id 原地更新，不会重复，也不改动其他自定义字段。可用 get_post_meta($post_id, 'siyuanid', true) 读取；如需在 REST 响应中看到，需注册该 meta。WordPress.com 不写入此字段。",
+    },
   ],
   tour: [
     {

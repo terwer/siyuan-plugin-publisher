@@ -12,12 +12,14 @@ import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
-import { prompt, TagAIResult } from "~/src/ai/prompt.ts"
+import { StrUtil } from "zhi-common"
+import { prompt } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import Adaptors from "~/src/adaptors"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"
 import { TagInfo } from "zhi-blog-api"
+import { normalizeAiTags, parseAiJson, pickAiField } from "~/src/ai/aiResult.ts"
+import { aiErrorI18nKey, aiParseFailureI18nKey, classifyAiError } from "~/src/ai/aiError.ts"
 
 const logger = createAppLogger("publish-tags")
 const { t } = useAppI18n()
@@ -136,32 +138,34 @@ const tagMethods = {
       const chatText = await chat(inputWord, {
         name: "tags",
         systemMessage: getChatInput(formData?.md, formData.html),
+        timeoutMs: 2 * 60 * 1000,
+        silent: true,
+        throwOnError: true,
       })
-      if (StrUtil.isEmptyString(chatText)) {
-        ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+      const parsed = parseAiJson(chatText)
+      if (!parsed.ok) {
+        ElMessage.error(t(aiParseFailureI18nKey(parsed.reason ?? "invalid-json")))
         return
       }
-      const resJson = JsonUtil.safeParse<TagAIResult>(chatText, {} as TagAIResult)
-      if (!resJson?.tags || resJson?.tags.length == 0) {
-        throw new Error("文档信息量太少，未能抽取有效信息")
+
+      const tags = normalizeAiTags(pickAiField(parsed.value, "tags", "tag"))
+      if (tags.length === 0) {
+        ElMessage.error(t("ai.error.empty"))
+        return
       }
-      for (let i = 0; i < resJson.tags.length; i++) {
-        if (!formData.tag.dynamicTags.includes(resJson.tags[i])) {
-          formData.tag.dynamicTags.push(resJson.tags[i])
+
+      // 解析失败/字段为空时保留原有标签；这里只追加成功解析出的有效标签
+      for (const tag of tags) {
+        if (!formData.tag.dynamicTags.includes(tag)) {
+          formData.tag.dynamicTags.push(tag)
         }
       }
 
-      // const hotTags = await SmartUtil.autoTags(formData.html, 5)
-      // for (let i = 0; i < hotTags.length; i++) {
-      //   if (!formData.tag.dynamicTags.includes(hotTags[i])) {
-      //     formData.tag.dynamicTags.push(hotTags[i])
-      //   }
-      // }
       emit("emitSyncTags", formData.tag.dynamicTags)
       ElMessage.success("使用人工智能智能提取标签成功")
     } catch (e: any) {
       logger.error(t("main.opt.failure") + "=>", e)
-      ElMessage.error(t("main.opt.failure") + "=>" + e)
+      ElMessage.error(t(aiErrorI18nKey(classifyAiError(e))))
     } finally {
       formData.isTagLoading = false
     }
@@ -188,7 +192,12 @@ const initPage = async () => {
 }
 
 onMounted(async () => {
-  await initPage()
+  try {
+    await initPage()
+  } catch (e) {
+    // 平台标签列表读取失败不应阻断发布表单；标签仍可手动输入
+    logger.error("平台标签列表加载失败", e)
+  }
 })
 </script>
 

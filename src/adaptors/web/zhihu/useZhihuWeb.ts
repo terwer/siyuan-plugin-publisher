@@ -64,6 +64,8 @@ const useZhihuWeb = async (key?: string, newCfg?: ZhihuConfig) => {
   cfg.knowledgeSpaceEnabled = true
   cfg.knowledgeSpaceType = CategoryTypeEnum.CategoryType_Single
   cfg.allowKnowledgeSpaceChange = false
+  // 用户名按当前登录账号自动解析并回填，配置页不再展示该字段（兼容旧配置里的历史值）
+  cfg.usernameEnabled = false
   // fix error cfg arg
   if (!cfg.placeholder) {
     cfg.placeholder = new ZhihuPlaceholder()

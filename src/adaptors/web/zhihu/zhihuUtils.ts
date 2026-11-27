@@ -10,6 +10,37 @@
 import * as cheerio from "cheerio"
 
 /**
+ * 知乎代码块语言别名 → 知乎高亮语言标识。
+ *
+ * 知乎只识别 `<pre lang="<语言>">`；Lute 产出的 `<code class="language-xxx">`
+ * 会被知乎清洗成纯文本。这里把常见写法归一到知乎保留的取值。
+ */
+const ZHIHU_CODE_LANGUAGE_ALIASES: Record<string, string> = {
+  golang: "go",
+  "c#": "csharp",
+  cs: "csharp",
+  "c++": "cpp",
+  cplusplus: "cpp",
+  objc: "objective-c",
+  objectivec: "objective-c",
+  yml: "yaml",
+  markdown: "md",
+  plaintext: "text",
+}
+
+const normalizeCodeLanguage = (raw?: string): string => {
+  const language = (raw ?? "").trim().toLowerCase()
+  if (!language) {
+    return ""
+  }
+  // 只接受简单语言标识，避免把 CSS class 组合误当作语言
+  if (!/^[\w#+.-]+$/.test(language)) {
+    return ""
+  }
+  return ZHIHU_CODE_LANGUAGE_ALIASES[language] ?? language
+}
+
+/**
  * 知乎工具类
  *
  * @author terwer
@@ -44,85 +75,77 @@ class ZhihuUtils {
     return $.html()
   }
 
-  public static processZHMath(html: string): string {
-    // 使用Cheerio加载HTML
-    const $ = cheerio.load(html, {
-      xml: {
-        xmlMode: true,
-        decodeEntities: false,
-      },
+  /**
+   * 归一化代码块，保留语言以触发知乎语法高亮。
+   *
+   * 知乎正文只认 `<pre lang="go">`，而 Lute 输出的是
+   * `<div class="code-block">…<pre><code class="hljs language-go">…</code></pre></div>`；
+   * 直接把该结构交给知乎会被清洗成纯文本、语言丢失（issue #1713）。
+   * 这里把代码块收敛成 `<pre lang="<语言>">代码文本</pre>`，并去掉
+   * Lute 的 `protyle-*` 外壳（知乎编辑器不需要这些节点）。
+   *
+   * @param html - 包含代码块的 HTML 字符串
+   * @returns 处理后的 HTML 字符串（片段形式，不含 html/body 包裹）
+   */
+  public static processZHCodeBlock(html: string): string {
+    if (!html) {
+      return html
+    }
+
+    const $ = cheerio.load(html)
+
+    $("pre").each((_, element) => {
+      const pre = $(element)
+      const code = pre.find("code").first()
+      const language = ZhihuUtils.resolveCodeLanguage(pre, code)
+      const codeText = code.length > 0 ? code.text() : pre.text()
+
+      const normalized = $("<pre></pre>")
+      if (language) {
+        normalized.attr("lang", language)
+      }
+      normalized.text(codeText)
+
+      // Lute 的代码块带 protyle 操作栏；整块替换掉，避免语言标签混进正文
+      const codeBlock = pre.closest(".code-block")
+      if (codeBlock.length > 0) {
+        codeBlock.replaceWith(normalized)
+      } else {
+        pre.replaceWith(normalized)
+      }
     })
 
-    // 处理两个$符号和一个$符号包裹的公式
-    const mathRegex = /\$\$([^\$]+)\$\$|\$([^\$]+)\$/g
+    // 返回片段：前面步骤可能引入 html/body 包裹，知乎正文不需要
+    return $("body").html() ?? html
+  }
 
-    const elems = $("*:not(pre)")
-    elems.each((_index, element) => {
-      const content = $(element).html() ?? ""
-      const newContent = content.replace(mathRegex, (_match, doubleDollarContent, singleDollarContent) => {
-        const mathContent = doubleDollarContent || singleDollarContent
-        return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}" 
-            alt="${mathContent}" />`
-      })
-      $(element).html(newContent)
-    })
+  /**
+   * 从 Lute/通用 HTML 代码块结构里解析语言标识
+   */
+  private static resolveCodeLanguage(pre: cheerio.Cheerio<any>, code: cheerio.Cheerio<any>): string {
+    const attributes = ["data-language", "data-subtype", "data-info"]
+    for (const attribute of attributes) {
+      const language = normalizeCodeLanguage(code.attr(attribute)) || normalizeCodeLanguage(pre.attr(attribute))
+      if (language) {
+        return language
+      }
+    }
 
-    // 输出修改后的HTML
-    return $.html()
+    const declaredLanguage = normalizeCodeLanguage(pre.attr("lang"))
+    if (declaredLanguage) {
+      return declaredLanguage
+    }
 
-    //   // 使用Cheerio加载HTML
-    //   const $ = cheerio.load(html, { xmlMode: true })
-    //
-    //   // // 选择所有带有类名"language-math"的<span>元素
-    //   // $("span.language-math").each((index, element) => {
-    //   //   // 获取元素的文本内容
-    //   //   const mathContent = $(element).text()
-    //   //
-    //   //   // 创建替代的<img>标签
-    //   //   const imgTag = `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //   //     alt="${mathContent}" />`
-    //   //
-    //   //   // 用新的<img>标签替换原始元素
-    //   //   $(element).replaceWith(imgTag)
-    //   // })
-    //   //
-    //   // // 选择所有带有类名"language-math"的<div>元素
-    //   // $("div.language-math").each((index, element) => {
-    //   //   // 获取元素的文本内容
-    //   //   const mathContent = $(element).text()
-    //   //
-    //   //   // 创建替代的<img>标签
-    //   //   const imgTag = `<p><img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //   //     alt="${mathContent}"/></p>`
-    //   //
-    //   //   // 用新的<img>标签替换原始元素
-    //   //   $(element).replaceWith(imgTag)
-    //   // })
-    //
-    //   // 处理两个$符号包裹的公式
-    //   const doubleDollarRegex = /\$\$([^$]+)\$\$/g
-    //   $("*:not(pre)").each((index, element) => {
-    //     const content = $(element).html()
-    //     const newContent = content.replace(doubleDollarRegex, (match, mathContent) => {
-    //       return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //       alt="${mathContent}" />`
-    //     })
-    //     $(element).html(newContent)
-    //   })
-    //
-    //   // 处理一个$符号包裹的公式
-    //   const singleDollarRegex = /\$([^$]+)\$/g
-    //   $("*:not(pre)").each((index, element) => {
-    //     const content = $(element).html()
-    //     const newContent = content.replace(singleDollarRegex, (match, mathContent) => {
-    //       return `<img eeimg="1" src="//www.zhihu.com/equation?tex=${encodeURIComponent(mathContent)}"
-    //       alt="${mathContent}" />`
-    //     })
-    //     $(element).html(newContent)
-    //   })
-    //
-    //   // 输出修改后的HTML
-    //   return $.html()
+    for (const classHint of [code.attr("class"), pre.attr("class")]) {
+      const matched = classHint?.match(/(?:^|\s)language-([\w#+.-]+)/i)
+      const language = normalizeCodeLanguage(matched?.[1])
+      if (language) {
+        return language
+      }
+    }
+
+    const actionLanguage = pre.closest(".code-block").find(".protyle-action__language").first().text()
+    return normalizeCodeLanguage(actionLanguage)
   }
 }
 

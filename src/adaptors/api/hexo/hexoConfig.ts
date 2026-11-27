@@ -17,6 +17,16 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
  * @since 1.3.2
  */
 class HexoConfig extends CommonGithubConfig {
+  /**
+   * Hexo 的封面是主题读取的 Front Matter 字段，详细模式展示「封面图」。
+   */
+  public featuredImageEnabled = true
+
+  /**
+   * 发布时把封面图上传到仓库图片目录，并写入 Front Matter。
+   */
+  public yamlCoverEnabled = true
+
   constructor(
     githubUsername: string,
     githubAuthToken: string,

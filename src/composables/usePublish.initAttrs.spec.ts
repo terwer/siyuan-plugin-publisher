@@ -11,8 +11,15 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { createPinia, setActivePinia } from "pinia"
 import { Post, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
 import { usePublish } from "~/src/composables/usePublish.ts"
-import { AuthMode, PlatformType, SubPlatformType, type DynamicConfig } from "~/src/platforms/dynamicConfig.ts"
+import {
+  AuthMode,
+  getDynCoverKey,
+  PlatformType,
+  SubPlatformType,
+  type DynamicConfig,
+} from "~/src/platforms/dynamicConfig.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { extractSiyuanMetadata, type PublishMetadataPost } from "~/src/utils/publishMetadata.ts"
 
 const mockGetBlockAttrs = vi.hoisted(() => vi.fn())
 const mockGetSingleBlockAttr = vi.hoisted(() => vi.fn())
@@ -93,6 +100,7 @@ const createDoc = () => {
   post.html = "<h1>标题</h1>"
   post.dateCreated = new Date("2026-01-01T00:00:00.000Z")
   post.dateUpdated = DOC_UPDATED
+  ;(post as PublishMetadataPost).siyuanMetadata = extractSiyuanMetadata(post)
   return post
 }
 
@@ -149,6 +157,28 @@ describe("usePublish.assignInitAttrs", () => {
     expect(post.yamlType).toBe(YamlStrategy.Yaml_custom_hand)
   })
 
+  it("把不同 YAML 适配器写在不同字段的摘要/标签归一化", async () => {
+    const adaptor2 = {
+      convertToYaml: vi.fn(),
+      convertToAttr: vi.fn((post: Post) => {
+        post.mt_excerpt = "平台摘要"
+        post.mt_keywords = ["标签甲", "标签乙"] as unknown as string
+        return post
+      }),
+    }
+    mockGetYamlAdaptor.mockResolvedValue(adaptor2)
+    mockGetBlockAttrs.mockResolvedValue({
+      [`custom-github-hexo-t3st01-yaml`]: "---\ndescription: 平台摘要\n---",
+    })
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createPublishCfg())
+
+    expect(post.shortDesc).toBe("平台摘要")
+    expect(post.mt_excerpt).toBe("平台摘要")
+    expect(post.mt_keywords).toBe("标签甲,标签乙")
+  })
+
   it("更新时间不退回 YAML 里的旧值（文档时间更晚时以文档为准）", async () => {
     mockGetBlockAttrs.mockResolvedValue({ [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---" })
 
@@ -156,5 +186,76 @@ describe("usePublish.assignInitAttrs", () => {
     const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createPublishCfg())
 
     expect(post.dateUpdated?.getTime()).toBe(DOC_UPDATED.getTime())
+  })
+
+  it("用户主动改过更新时间时保留平台 YAML 里的时间，不被文档时间覆盖", async () => {
+    mockGetBlockAttrs.mockResolvedValue({ [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---" })
+    const doc = createDoc()
+    ;(doc as PublishMetadataPost).metadataOverrides = ["dateUpdated"]
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(doc, DOC_ID, createPublishCfg())
+
+    expect(post.dateUpdated?.getTime()).toBe(YAML_UPDATED.getTime())
+  })
+
+  it("把完整文档属性合并进 Post.attrs，供 YAML 预设读取", async () => {
+    mockGetBlockAttrs.mockResolvedValue({
+      "custom-cover": "cover.png",
+      "custom-publish-status": "publish",
+      [`custom-github-hexo-t3st01-yaml`]: "---\ntitle: stored\n---",
+    })
+    const doc = createDoc()
+    doc.attrs = JSON.stringify({ "custom-publish-status": "draft", "custom-publish-time": "2026-01-01" })
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(doc, DOC_ID, createPublishCfg())
+
+    expect(JSON.parse(post.attrs ?? "{}")).toMatchObject({
+      "custom-cover": "cover.png",
+      "custom-publish-status": "draft",
+      "custom-publish-time": "2026-01-01",
+    })
+  })
+
+  it("读取文档属性异常时保留已有 Post.attrs，并回退到单属性查询", async () => {
+    mockGetBlockAttrs.mockRejectedValue(new Error("kernel busy"))
+    mockGetSingleBlockAttr.mockResolvedValue("---\ntitle: fallback\n---")
+    const doc = createDoc()
+    doc.attrs = JSON.stringify({ "custom-publish-status": "publish" })
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(doc, DOC_ID, createPublishCfg())
+
+    expect(post.attrs).toBe(doc.attrs)
+    expect(post.yamlType).toBe(YamlStrategy.Yaml_custom_hand)
+    expect(mockGetBlockAttrs).toHaveBeenCalledTimes(1)
+  })
+
+  it("静态站封面从平台元数据回填，更新时能继续使用", async () => {
+    mockGetBlockAttrs.mockResolvedValue({})
+    const publishCfg = createPublishCfg()
+    ;(publishCfg.cfg as any).yamlCoverEnabled = true
+    ;(publishCfg.cfg as any).featuredImageEnabled = true
+    ;(publishCfg.setting as any)[DOC_ID] = {
+      [getDynCoverKey(PLATFORM_KEY)]: "assets/cover.png",
+    }
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, publishCfg)
+
+    expect((post as any).featuredImage).toBe("assets/cover.png")
+  })
+
+  it("静态站未设置封面时保持空值，不用题头图/正文首图自动补", async () => {
+    mockGetBlockAttrs.mockResolvedValue({})
+    const publishCfg = createPublishCfg()
+    ;(publishCfg.cfg as any).yamlCoverEnabled = true
+    ;(publishCfg.cfg as any).featuredImageEnabled = true
+
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, publishCfg)
+
+    expect((post as any).featuredImage).toBeUndefined()
   })
 })

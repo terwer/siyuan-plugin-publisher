@@ -12,9 +12,11 @@ import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { reactive, watch } from "vue"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { ElMessage } from "element-plus"
-import { HtmlUtil, JsonUtil, StrUtil } from "zhi-common"
-import { prompt, ShortDescAIResult } from "~/src/ai/prompt.ts"
+import { HtmlUtil, StrUtil } from "zhi-common"
+import { prompt } from "~/src/ai/prompt.ts"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
+import { normalizeAiDescription } from "~/src/ai/aiResult.ts"
+import { aiErrorI18nKey, classifyAiError } from "~/src/ai/aiError.ts"
 
 const logger = createAppLogger("publish-description")
 const { t } = useAppI18n()
@@ -76,57 +78,63 @@ watch(
 
 const emit = defineEmits(["emitSyncDesc"])
 
+const fallbackDesc = (): string => {
+  const source = !StrUtil.isEmptyString(formData.html) ? formData.html : formData.md || ""
+  return HtmlUtil.parseHtml(source, MAX_PREVIEW_LENGTH, true)
+}
+
+const applyDescFallback = (messageKey: string) => {
+  // 有原摘要时优先保留，不用本地截取覆盖用户的既有内容
+  if (!StrUtil.isEmptyString(formData.desc)) {
+    ElMessage.error(t(messageKey))
+    return
+  }
+
+  const fallback = fallbackDesc()
+  if (StrUtil.isEmptyString(fallback)) {
+    ElMessage.error(t(messageKey))
+    return
+  }
+
+  formData.desc = fallback
+  emit("emitSyncDesc", formData.desc)
+  ElMessage.warning(t("ai.fallback.descLocal"))
+}
+
 const handleMakeDesc = async () => {
   formData.isDescLoading = true
-  const isStream = true
   try {
-    if (isStream) {
-      const inputWord = prompt.shortDescPromptStream.content
-      const { chat, getChatInput } = useChatGPT()
-      formData.desc = ""
-      await chat(inputWord, {
-        name: "desc",
-        systemMessage: getChatInput(formData?.md, formData.html),
-        stream: true,
-        onProgress: (partialResponse) => {
-          const text = partialResponse?.text
-          if (!StrUtil.isEmptyString(text)) {
-            formData.desc = text
-          }
-        },
-        timeoutMs: 2 * 60 * 1000,
-        silent: true,
-      })
-    } else {
-      const inputWord = prompt.shortDescPrompt.content
-      const { chat, getChatInput } = useChatGPT()
-      const chatText = await chat(inputWord, {
-        name: "desc",
-        systemMessage: getChatInput(formData?.md, formData.html),
-        silent: true,
-      })
-      const resJson = JsonUtil.safeParse<ShortDescAIResult>(chatText, {} as ShortDescAIResult)
-      if (!StrUtil.isEmptyString(resJson?.desc)) {
-        formData.desc = resJson.desc
-      }
+    const { chat, getChatInput } = useChatGPT()
+    const inputWord = prompt.shortDescPromptStream.content
+    // 流式输出先写入局部变量，成功收尾后才提交到表单；失败时不会残留半截摘要
+    let streamedText = ""
+    const result = await chat(inputWord, {
+      name: "desc",
+      systemMessage: getChatInput(formData?.md, formData.html),
+      stream: true,
+      onProgress: (partialResponse) => {
+        const text = partialResponse?.text
+        if (!StrUtil.isEmptyString(text)) {
+          streamedText = text
+        }
+      },
+      timeoutMs: 2 * 60 * 1000,
+      silent: true,
+      throwOnError: true,
+    })
+    const aiText = normalizeAiDescription(streamedText || result?.text)
+
+    if (!StrUtil.isEmptyString(aiText)) {
+      formData.desc = aiText
+      emit("emitSyncDesc", formData.desc)
+      ElMessage.success("使用人工智能提取摘要成功")
+      return
     }
 
-    // AI 未产生有效摘要（未配置 / 请求失败 / 正文过少）时，回退为本地截取摘要，避免空摘要与误导性报错
-    if (StrUtil.isEmptyString(formData.desc)) {
-      const fallback = !StrUtil.isEmptyString(formData.html)
-        ? HtmlUtil.parseHtml(formData.html, MAX_PREVIEW_LENGTH, true)
-        : HtmlUtil.parseHtml(formData.md || "", MAX_PREVIEW_LENGTH, true)
-      if (StrUtil.isEmptyString(fallback)) {
-        throw new Error("文档信息量太少，未能抽取有效信息")
-      }
-      formData.desc = fallback
-    }
-
-    emit("emitSyncDesc", formData.desc)
-    ElMessage.success("使用人工智能提取摘要成功")
+    applyDescFallback("ai.error.empty")
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
-    ElMessage.error(t("main.opt.failure") + "=>" + e)
+    applyDescFallback(aiErrorI18nKey(classifyAiError(e)))
   } finally {
     formData.isDescLoading = false
   }

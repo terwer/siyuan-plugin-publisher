@@ -10,11 +10,13 @@
 <script setup lang="ts">
 import { reactive, watch } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { JsonUtil, StrUtil } from "zhi-common"
+import { StrUtil } from "zhi-common"
 import { ElMessage } from "element-plus"
 import { useChatGPT } from "~/src/composables/useChatGPT.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
-import { prompt, TitleAIResult } from "~/src/ai/prompt.ts"
+import { prompt } from "~/src/ai/prompt.ts"
+import { normalizeAiTitle, parseAiJson, pickAiField } from "~/src/ai/aiResult.ts"
+import { aiErrorI18nKey, aiParseFailureI18nKey, classifyAiError } from "~/src/ai/aiError.ts"
 
 const logger = createAppLogger("publish-title")
 const { t } = useAppI18n()
@@ -89,22 +91,29 @@ const handleMakeTitle = async () => {
     const chatText = await chat(inputWord, {
       name: "title",
       systemMessage: getChatInput(formData?.md, formData.html),
+      timeoutMs: 2 * 60 * 1000,
+      silent: true,
+      throwOnError: true,
     })
-    if (StrUtil.isEmptyString(chatText)) {
-      ElMessage.error("请求错误，请在偏好设置配置请求地址和ChatGPT key！")
+    const parsed = parseAiJson(chatText)
+    if (!parsed.ok) {
+      ElMessage.error(t(aiParseFailureI18nKey(parsed.reason ?? "invalid-json")))
       return
     }
-    const resJson = JsonUtil.safeParse<TitleAIResult>(chatText, {} as TitleAIResult)
-    if (StrUtil.isEmptyString(resJson?.title)) {
-      throw new Error("文档信息量太少，未能抽取有效信息")
+
+    const title = normalizeAiTitle(pickAiField(parsed.value, "title"))
+    if (StrUtil.isEmptyString(title)) {
+      ElMessage.error(t("ai.error.empty"))
+      return
     }
 
-    formData.postTitle = resJson.title
+    // 失败时保留原标题；只有解析出有效标题才覆盖
+    formData.postTitle = title
     emit("emitSyncPublishTitle", formData.postTitle)
     ElMessage.success("使用人工智能提取标题成功")
   } catch (e) {
     logger.error(t("main.opt.failure") + "=>", e)
-    ElMessage.error(t("main.opt.failure") + "=>" + e)
+    ElMessage.error(t(aiErrorI18nKey(classifyAiError(e))))
   } finally {
     formData.isLoading = false
   }

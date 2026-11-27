@@ -23,7 +23,6 @@
  * questions.
  */
 
-declare module "zhi-notion-markdown"
 declare module "uuid"
 declare module "cookie-parse"
 declare module "telegraph.md"

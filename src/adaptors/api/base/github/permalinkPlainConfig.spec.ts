@@ -9,11 +9,11 @@
 
 import { describe, expect, it } from "vitest"
 import { Post } from "zhi-blog-api"
-import { DateUtil } from "zhi-common"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
 import { QuartzConfig } from "~/src/adaptors/api/quartz/quartzConfig.ts"
 import { QuartzYamlConverterAdaptor } from "~/src/adaptors/api/quartz/quartzYamlConverterAdaptor.ts"
+import { getLocalDateParts } from "~/src/utils/dateUtils.ts"
 
 // 发布链路里的 cfg 来自设置的反序列化结果，是普通对象而不是配置类实例（issue #2054）。
 // 这里用 JSON 往返模拟这一形态，钉住「自定义预览规则必须生效」的契约。
@@ -30,10 +30,10 @@ const buildPost = () => {
   return post
 }
 
-// 日期占位符使用本地时间，按同一格式化函数推算期望值，避免测试依赖运行环境时区
+// 日期占位符使用本地日期，按同一格式化函数推算期望值，避免测试依赖运行环境时区
 const localDateParts = () => {
-  const formatted = DateUtil.formatIsoToZh(buildPost().dateCreated.toISOString(), true)
-  return formatted.split(" ")[0].split("-")
+  const { yyyy, MM, dd } = getLocalDateParts(buildPost().dateCreated)
+  return [yyyy, MM, dd]
 }
 
 const PLATFORMS = [

@@ -22,6 +22,8 @@ const mockSetSingleBlockAttr = vi.hoisted(() => vi.fn())
 const mockPushErrMsg = vi.hoisted(() => vi.fn())
 const mockGetPublishApi = vi.hoisted(() => vi.fn())
 const mockSiyuanGetPost = vi.hoisted(() => vi.fn())
+const mockGetBlockAttrs = vi.hoisted(() => vi.fn())
+const mockGetSingleBlockAttr = vi.hoisted(() => vi.fn())
 
 vi.mock("~/src/stores/usePlatformMetadataStore.ts", () => ({
   usePlatformMetadataStore: () => ({
@@ -34,6 +36,8 @@ vi.mock("~/src/composables/useSiyuanApi.ts", () => ({
     isStorageViaSiyuanApi: vi.fn(() => false),
     kernelApi: {
       setSingleBlockAttr: mockSetSingleBlockAttr,
+      getBlockAttrs: mockGetBlockAttrs,
+      getSingleBlockAttr: mockGetSingleBlockAttr,
       pushErrMsg: mockPushErrMsg,
     },
     blogApi: {
@@ -149,6 +153,44 @@ describe("usePublish.doSinglePublish", () => {
     expect(mockSetSingleBlockAttr).toHaveBeenCalled()
   })
 
+  it("returns text diagram fallback warnings without failing the publish", async () => {
+    const setting: Record<string, any> = {
+      "20260511000000-test": {},
+    }
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue(setting as any)
+    store.updateSetting = vi.fn().mockImplementation(async (nextSetting: any) => {
+      Object.assign(setting, nextSetting)
+    })
+
+    mockGetPublishApi.mockResolvedValue({
+      preEditPost: vi.fn(async (post: Post) => {
+        ;(post as any).diagramRenderErrors = ["mermaid 文本图渲染失败：UnknownDiagramError；已保留代码块"]
+        ;(post as any).diagramRenderErrorDetails = ["mermaid 文本图渲染失败：UnknownDiagramError；已保留代码块"]
+        ;(post as any).diagramRenderSkippedCount = 1
+        return post
+      }),
+      newPost: vi.fn(async () => "diagram-post-id"),
+      getPreviewUrl: vi.fn(async () => "https://example.com/diagram-test"),
+    })
+
+    const doc = new Post()
+    doc.title = "文本图测试"
+    doc.wp_slug = "diagram-test"
+    doc.markdown = "```mermaid\ninvalid\n```"
+
+    const result = await usePublish().doSinglePublish(
+      "custom_Yuqueweb",
+      "20260511000000-test",
+      createPublishCfg(setting),
+      doc
+    )
+
+    expect(result.status).toBe(true)
+    expect(result.errMsg).toContain("mermaid 文本图渲染失败")
+    expect(result.errDetails).toContain("UnknownDiagramError")
+  })
+
   it("returns user-friendly image warnings and diagnostic details separately", async () => {
     const setting: Record<string, any> = {
       "20260511000000-test": {},
@@ -249,6 +291,39 @@ describe("usePublish.doInitSinglePage", () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
+  })
+
+  it("normalizes platform summary/tags before merging", async () => {
+    const siyuanPost = new Post()
+    siyuanPost.title = "思源标题"
+    siyuanPost.markdown = "# 正文"
+    mockSiyuanGetPost.mockResolvedValue(siyuanPost)
+
+    // Astro/Docsify 的 YAML 适配器把摘要写在 mt_excerpt，标签可能是数组
+    const platformPost = new Post()
+    platformPost.mt_excerpt = "平台摘要"
+    platformPost.mt_keywords = ["标签甲", "标签乙"] as unknown as string
+    mockGetPublishApi.mockResolvedValue({
+      getPost: vi.fn(async () => platformPost),
+      getPreviewUrl: vi.fn(async () => "https://platform.local/view/1"),
+    })
+
+    const { initPublishMethods } = usePublish()
+    const publishCfg = createPublishCfg({
+      "20260822111111-m260uak": { "custom-custom_Yuqueweb-post-id": "post-1" },
+    })
+    publishCfg.cfg.posidKey = "custom-custom_Yuqueweb-post-id"
+
+    const { mergedPost } = await initPublishMethods.doInitSinglePage(
+      "custom_Yuqueweb",
+      "20260822111111-m260uak",
+      MethodEnum.METHOD_EDIT,
+      publishCfg
+    )
+
+    expect(mergedPost.shortDesc).toBe("平台摘要")
+    expect(mergedPost.mt_excerpt).toBe("平台摘要")
+    expect(mergedPost.mt_keywords).toBe("标签甲,标签乙")
   })
 
   it("backs up the siyuan title when platform getPost returns an empty title (web platforms)", async () => {
@@ -421,5 +496,97 @@ describe("usePublish.doInitSinglePage", () => {
 
     // 专栏为空时回退到配置的默认专栏（配置存值、编辑只读）
     expect(mergedPost.cate_slugs).toEqual(["config-column-id"])
+  })
+})
+
+describe("usePublish.assignInitAttrs (metadata authority)", () => {
+  const DOC_ID = "20260822111111-cnblogs"
+  const OLD_YAML =
+    "---\ntitle: 旧标题\nslug: old-slug\ndesc: 旧摘要\ncreated: '2026-01-01 00:00:00'\ntags:\n  - 旧标签\n---\n\n# 旧标题\n\n旧正文"
+
+  const createCnblogsCfg = (postMeta: Record<string, any> = {}): IPublishCfg => {
+    const cfg = {
+      posidKey: "custom-metaweblog_Cnblogs-post-id",
+      blogName: "远方的灯塔",
+      home: "https://www.cnblogs.com/",
+    } as any
+
+    const dynCfg = {
+      platformType: PlatformType.Metaweblog,
+      subPlatformType: SubPlatformType.Metaweblog_Cnblogs,
+      platformKey: "metaweblog_Cnblogs",
+      platformName: "博客园",
+      authMode: AuthMode.API,
+      isSys: false,
+    } as unknown as DynamicConfig
+
+    return {
+      setting: {
+        [DOC_ID]: {
+          "custom-metaweblog_Cnblogs-post-id": "23808105",
+          [SiyuanAttr.Custom_slug]: "old-slug",
+          ...postMeta,
+        },
+      } as any,
+      cfg,
+      dynCfg,
+    } as IPublishCfg
+  }
+
+  const createDoc = () => {
+    const doc = new Post()
+    doc.title = "新标题"
+    doc.markdown = "# 新标题\n\n新正文"
+    doc.shortDesc = "新摘要"
+    doc.mt_excerpt = "新摘要"
+    doc.mt_keywords = "新标签"
+    doc.categories = ["新分类"]
+    doc.wp_slug = "old-slug"
+    return doc
+  }
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.clearAllMocks()
+    mockGetBlockAttrs.mockResolvedValue({ "custom-metaweblog-cnblogs-yaml": OLD_YAML })
+    mockGetSingleBlockAttr.mockResolvedValue("")
+  })
+
+  it("follows the siyuan title/summary when quick publish asks for doc metadata", async () => {
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createCnblogsCfg(), {
+      followDocMetadata: true,
+    })
+
+    // 平台 YAML 里是上次发布时的旧值，快速发布必须以思源当前文档为准
+    expect(post.title).toBe("新标题")
+    expect(post.shortDesc).toBe("新摘要")
+    expect(post.mt_keywords).toBe("新标签")
+    expect(post.categories).toEqual(["新分类"])
+  })
+
+  it("keeps the saved platform metadata when the caller does not ask for doc metadata (batch merge)", async () => {
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(createDoc(), DOC_ID, createCnblogsCfg())
+
+    // 批量「合并」模式沿用平台侧已有元数据，保持既有约定
+    expect(post.title).toBe("旧标题")
+  })
+
+  it("keeps a field the user explicitly overrode in detailed mode", async () => {
+    const { initPublishMethods } = usePublish()
+    const post = await initPublishMethods.assignInitAttrs(
+      createDoc(),
+      DOC_ID,
+      createCnblogsCfg({
+        "custom-metaweblog-cnblogs-metadata-overrides": JSON.stringify(["title"]),
+      }),
+      { followDocMetadata: true }
+    )
+
+    // 标题是用户主动设置过的平台覆盖值，快速发布不应把它改回文档标题
+    expect(post.title).toBe("旧标题")
+    // 其余字段仍跟随思源文档
+    expect(post.shortDesc).toBe("新摘要")
   })
 })

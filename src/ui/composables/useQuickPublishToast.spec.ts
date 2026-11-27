@@ -49,7 +49,7 @@ describe("buildQuickPublishToast", () => {
       errMsg: "image.png 同步失败(使用平台图床)",
     })
     expect(payload?.type).toBe("warning")
-    expect(payload?.message).toBe("已在「语雀」更新，部分图片未上传")
+    expect(payload?.message).toBe("已在「语雀」更新，部分内容未处理")
     expect(payload?.message).not.toContain("image.png")
   })
 

@@ -40,6 +40,34 @@ WordPress 后台 → 用户 → 编辑 → 滚动到「应用程序密码」→ 
 
 设置会被记在文档的 WordPress 平台属性里（`featured_image`），下次打开发布页会自动回填；清空后重新发布会移除已设置的特写图。
 
+## 六、思源文档 ID（siyuanid）
+
+发布到自建 WordPress 时，插件会把**来源思源文档 ID** 写入文章的 `siyuanid` 自定义字段（post meta），方便外部工具把 WordPress 文章和思源文档对应起来。
+
+- **新建文章**：随 `metaWeblog.newPost` 创建该字段。
+- **再次发布/更新**：读取文章已有的 `custom_fields`，按已有 meta 的 `id` 原地更新；不会重复添加同名字段，也不会改动其他自定义字段。
+- **没有来源文档 ID 时**：不写入该字段，不会伪造空值。
+- **权限要求**：账号需要有编辑文章和 post meta 的权限；XML-RPC 需开启（与发布本身的要求一致）。
+- **WordPress.com**：走独立的适配器，不写入该字段。
+
+读取方式（WordPress 侧）：
+
+```php
+$siyuanId = get_post_meta($post_id, 'siyuanid', true);
+```
+
+如果需要在 REST API 响应里看到 `meta.siyuanid`，需要在 WordPress 侧注册该 meta：
+
+```php
+register_post_meta('post', 'siyuanid', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+]);
+```
+
+> 该字段只用于**关联来源文档**，本身不会自动去重、查找既有文章或阻止重复发布；这些需要额外的匹配/唯一性逻辑。
+
 ## 常见问题
 
 - **XML-RPC 被禁用**：检查 WordPress 是否开启 XML-RPC，安全插件是否拦截 `/xmlrpc.php`。
