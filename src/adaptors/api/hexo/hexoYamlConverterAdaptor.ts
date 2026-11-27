@@ -13,6 +13,7 @@ import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubC
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 import { formatDateTimeWithOffset, getLocalDateParts, parsePublishedDate } from "~/src/utils/dateUtils.ts"
 import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
+import { getYamlCoverKey, hasCoverPlaceholder, isYamlCoverEnabled } from "~/src/utils/yamlCover.ts"
 
 /**
  * Hexo平台的YAML解析器
@@ -47,6 +48,12 @@ class HexoYamlConverterAdaptor extends YamlConvertAdaptor {
     // excerpt
     if (!StrUtil.isEmptyString(post.shortDesc)) {
       yamlFormatObj.yamlObj.excerpt = post.shortDesc
+    }
+
+    // cover：静态站封面由发布层上传后写入 Front Matter。
+    // 用户在 YAML 预设里显式使用 [cover] 时，由预设决定写到哪个主题字段，这里不再写默认 cover。
+    if (isYamlCoverEnabled(cfg) && !StrUtil.isEmptyString(post.cover) && !hasCoverPlaceholder(cfg?.dynYamlCfg)) {
+      yamlFormatObj.yamlObj[getYamlCoverKey(cfg)] = post.cover
     }
 
     // tags

@@ -122,6 +122,32 @@ describe("YAML 预设配置的占位符", () => {
   })
 })
 
+describe("YAML 预设配置的封面占位符", () => {
+  it("整个值就是 [cover] 时输出封面地址", () => {
+    const post = buildPost()
+    post.cover = "../images/cover.png"
+
+    const resolved = resolveDynYamlCfg('{"index_img": "[cover]", "banner_img": "[cover]"}', post)
+
+    expect(resolved.index_img).toBe("../images/cover.png")
+    expect(resolved.banner_img).toBe("../images/cover.png")
+  })
+
+  it("封面为空时省略整个取值", () => {
+    const resolved = resolveDynYamlCfg('{"index_img": "[cover]", "draft": false}', buildPost())
+
+    expect(resolved).toEqual({ draft: false })
+  })
+
+  it("句子中的 [cover] 按文本替换，空封面替换为空字符串", () => {
+    const post = buildPost()
+    post.cover = "/images/cover.png"
+
+    expect(resolveDynYamlCfg('{"comment": "封面：[cover]"}', post).comment).toBe("封面：/images/cover.png")
+    expect(resolveDynYamlCfg('{"comment": "封面：[cover]"}', buildPost()).comment).toBe("封面：")
+  })
+})
+
 describe("YAML 预设配置的合并", () => {
   it("预设配置为空时写入平台默认字段", () => {
     const yamlObj: Record<string, any> = {}

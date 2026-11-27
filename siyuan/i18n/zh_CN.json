@@ -748,6 +748,7 @@
   "publisher.post.password.tip": "请输入文章密码，留空则不设置",
   "publisher.post.featuredImage": "封面图",
   "publisher.post.featuredImage.tip": "默认依次使用思源题头图、正文首图；也可填写链接或上传自定义图片",
+  "publisher.post.featuredImage.tipYaml": "上传图片或填写图片地址，发布时随文章上传到博客；留空则不设置封面",
   "publisher.post.featuredImage.useBodyImage": "取正文首图",
   "publisher.post.featuredImage.upload": "上传图片",
   "publisher.post.featuredImage.uploadSuccess": "图片已上传",

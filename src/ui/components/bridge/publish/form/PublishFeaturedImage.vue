@@ -28,15 +28,39 @@ const props = defineProps({
     type: Object,
     default: {} as Post,
   },
+  /**
+   * 平台是否会在没有自定义封面时自动使用题头图/正文首图。
+   * 原生封面平台为 true；静态站 Front Matter 封面为 false，留空即不设置封面。
+   */
+  autoResolve: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits(["emitSyncFeaturedImage"])
 
 const post = computed(() => props.modelValue as Post)
+const hint = computed(() =>
+  t(props.autoResolve ? "publisher.post.featuredImage.tip" : "publisher.post.featuredImage.tipYaml")
+)
 
 const formData = reactive({
   url: getFeaturedImage(post.value),
 })
+
+// 切换发布平台或重新打开表单时，父级会替换 modelValue；把已保存的封面同步到输入框。
+// 用户输入时父级回写的值与当前值一致，不会打断编辑。
+watch(
+  () => getFeaturedImage(post.value),
+  (value) => {
+    const next = value ?? ""
+    if (next !== formData.url) {
+      formData.url = next
+    }
+  },
+  { immediate: true }
+)
 
 const previewBroken = ref(false)
 const uploading = ref(false)
@@ -116,7 +140,7 @@ const onPreviewError = () => {
         <el-input
           v-model="formData.url"
           clearable
-          :placeholder="t('publisher.post.featuredImage.tip')"
+          :placeholder="hint"
           @input="syncValue"
         />
         <el-button
