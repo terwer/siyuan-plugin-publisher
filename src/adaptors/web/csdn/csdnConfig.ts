@@ -8,7 +8,7 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, MathRenderModeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * CSDN配置
@@ -32,5 +32,7 @@ export class CsdnConfig extends CommonWebConfig {
     this.picgoPicbedSupported = false
     this.bundledPicbedSupported = true
     this.picbedService = PicbedServiceTypeEnum.Bundled
+    // CSDN 正文使用 KaTeX 渲染公式
+    this.mathRenderMode = MathRenderModeEnum.KaTeX
   }
 }

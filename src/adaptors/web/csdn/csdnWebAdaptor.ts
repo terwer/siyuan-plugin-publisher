@@ -131,8 +131,7 @@ class CsdnWebAdaptor extends BaseWebApi {
     const html = updatedPost.html
     let updatedHtml = html
 
-    // 处理数学公式
-    updatedHtml = CsdnUtils.processCsdnMath(updatedHtml)
+    // 公式由公共 FormulaRenderService 按平台配置统一处理
 
     // 处理完毕
     updatedPost.html = updatedHtml

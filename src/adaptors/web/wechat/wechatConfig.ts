@@ -8,7 +8,7 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
+import { MathRenderModeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
 
 /**
  * 微信公众号配置
@@ -32,5 +32,7 @@ export class WechatConfig extends CommonWebConfig {
     this.picgoPicbedSupported = false
     this.bundledPicbedSupported = true
     this.picbedService = PicbedServiceTypeEnum.Bundled
+    // 公众号不执行 LaTeX，使用 MathJax 内联 SVG
+    this.mathRenderMode = MathRenderModeEnum.Svg
   }
 }

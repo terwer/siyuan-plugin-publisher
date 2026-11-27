@@ -118,8 +118,7 @@ class ZhihuWebAdaptor extends BaseWebApi {
 
     // 处理表格
     updatedHtml = ZhihuUtils.processZHTable(updatedHtml)
-    // 处理数学公式
-    updatedHtml = ZhihuUtils.processZHMath(updatedHtml)
+    // 公式由公共 FormulaRenderService 按平台配置统一处理
     // 处理代码块（保留语言，触发知乎语法高亮）
     updatedHtml = ZhihuUtils.processZHCodeBlock(updatedHtml)
 

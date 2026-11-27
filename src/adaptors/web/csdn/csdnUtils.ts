@@ -7,8 +7,6 @@
  *  of this license document, but changing it is not allowed.
  */
 
-import KatexUtils from "~/src/utils/katexUtils.ts"
-import { HtmlMathUtils } from "~/src/utils/htmlMathUtils.ts"
 import { SHARED_SERVICE_API } from "~/src/utils/constants.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
 import { hmacSha256Base64 } from "~/src/utils/cryptoUtils.ts"
@@ -99,20 +97,6 @@ class CsdnUtils {
     // console.log(uuid)
     // console.log(sign)
     return sign
-  }
-
-  public static processCsdnMath(html: string): string {
-    return HtmlMathUtils.replaceMath(html, (expression, display) => {
-      try {
-        const mathHtml = KatexUtils.renderToString(expression)
-        return display
-          ? `<span class="katex--display">${mathHtml}</span>`
-          : `<span class="katex--inline">${mathHtml}</span>`
-      } catch {
-        // KaTeX 无法解析的 $...$ 保留原文，避免一条坏公式中断整篇发布
-        return null
-      }
-    })
   }
 
   /**
