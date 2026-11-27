@@ -162,6 +162,15 @@ const usePreferenceSettingStore = () => {
     cfg.value.showBatchMenu = Utils.emptyBooleanOrDefault(cfg.value.showBatchMenu, true)
     cfg.value.showAIMenu = Utils.emptyBooleanOrDefault(cfg.value.showAIMenu, true)
     cfg.value.showExtendMenu = Utils.emptyBooleanOrDefault(cfg.value.showExtendMenu, true)
+
+    // 文本图转图片（issue #2111）：旧配置缺省时默认开启，清晰度默认 2x，主题默认浅色
+    cfg.value.diagramRenderEnabled = Utils.emptyBooleanOrDefault(cfg.value.diagramRenderEnabled, true)
+    if (!Number.isFinite(Number(cfg.value.diagramRenderScale))) {
+      cfg.value.diagramRenderScale = 2
+    }
+    if (!["light", "dark", "follow"].includes(String(cfg.value.diagramRenderTheme ?? ""))) {
+      cfg.value.diagramRenderTheme = "light"
+    }
     return cfg
   }
 

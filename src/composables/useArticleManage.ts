@@ -8,7 +8,7 @@
  */
 
 import { computed, reactive } from "vue"
-import { DateUtil, JsonUtil, StrUtil } from "zhi-common"
+import { JsonUtil, StrUtil } from "zhi-common"
 import { useNotebookOptions, NotebookOption } from "~/src/composables/useNotebookOptions.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
@@ -21,6 +21,7 @@ import { useSiyuanDevice } from "~/src/composables/useSiyuanDevice.ts"
 import { getSiyuanPageId } from "~/src/utils/siyuanUtils.ts"
 import { DYNAMIC_CONFIG_KEY, MAX_TITLE_LENGTH } from "~/src/utils/constants.ts"
 import { removeTitleNumber } from "~/src/utils/titleNumber.ts"
+import { formatLocalDate } from "~/src/utils/dateUtils.ts"
 
 /**
  * 文章管理某一行（供共享组件渲染）。
@@ -116,7 +117,7 @@ export const useArticleManage = () => {
       shortTitle,
       content,
       shortDesc: Utils.emptyOrDefault(shortDesc, "暂无内容"),
-      dateCreated: DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true),
+      dateCreated: formatLocalDate(post.dateCreated),
       mt_keywords: post.mt_keywords,
       isShared: isPublished && !isExpired,
       yamlCount: Object.keys(yamlAttrs).length,

@@ -8,10 +8,11 @@
   -->
 
 <script setup lang="ts">
-import { reactive } from "vue"
+import { reactive, watch } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { Post } from "zhi-blog-api"
 import { DateUtil } from "zhi-common"
+import { formatLocalDateTime } from "~/src/utils/dateUtils.ts"
 
 const { t } = useAppI18n()
 
@@ -22,17 +23,34 @@ const props = defineProps({
   },
 })
 
+const formatForPicker = (date?: Date) => (date ? formatLocalDateTime(date) : "")
+
 const formData = reactive({
-  dateCreatedString: DateUtil.formatIsoToZh(props.modelValue?.dateCreated?.toISOString(), true),
-  dateUpdatedString: DateUtil.formatIsoToZh((props.modelValue?.dateUpdated ?? new Date()).toISOString(), true),
+  dateCreatedString: formatForPicker(props.modelValue?.dateCreated),
+  dateUpdatedString: formatLocalDateTime(props.modelValue?.dateUpdated ?? new Date()),
 })
 
 const emit = defineEmits(["emitSyncPublishTime"])
 
-const handleDateChange = () => {
+// 切换平台或重新打开表单时，父级会替换 modelValue；把最新时间同步到选择器。
+watch(
+  () => [props.modelValue?.dateCreated, props.modelValue?.dateUpdated] as const,
+  ([dateCreated, dateUpdated]) => {
+    const createdString = formatForPicker(dateCreated)
+    const updatedString = formatLocalDateTime(dateUpdated ?? new Date())
+    if (createdString !== formData.dateCreatedString) {
+      formData.dateCreatedString = createdString
+    }
+    if (updatedString !== formData.dateUpdatedString) {
+      formData.dateUpdatedString = updatedString
+    }
+  }
+)
+
+const emitTime = (changedField: "created" | "updated") => {
   const dt1 = DateUtil.convertStringToDate(formData.dateCreatedString)
   const dt2 = DateUtil.convertStringToDate(formData.dateUpdatedString)
-  emit("emitSyncPublishTime", dt1, dt2)
+  emit("emitSyncPublishTime", dt1, dt2, changedField)
 }
 </script>
 
@@ -45,7 +63,7 @@ const handleDateChange = () => {
         format="YYYY-MM-DD HH:mm:ss"
         type="datetime"
         value-format="YYYY-MM-DD HH:mm:ss"
-        @change="handleDateChange"
+        @change="emitTime('created')"
       />
     </el-form-item>
     <el-form-item :label="t('main.update.time')">
@@ -55,7 +73,7 @@ const handleDateChange = () => {
         format="YYYY-MM-DD HH:mm:ss"
         type="datetime"
         value-format="YYYY-MM-DD HH:mm:ss"
-        @change="handleDateChange"
+        @change="emitTime('updated')"
       />
     </el-form-item>
   </div>

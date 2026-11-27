@@ -10,6 +10,9 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { resolveHugoBundleUrl, usesLeafBundleForPost } from "~/src/adaptors/api/base/contentLayout.ts"
+import { formatDateTimeWithOffset, parsePublishedDate } from "~/src/utils/dateUtils.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Hugo平台的YAML解析器
@@ -31,31 +34,32 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
       yamlFormatObj.yamlObj.slug = post.wp_slug
 
       // url
+      // 页面目录（Leaf Bundle）使用目录式地址；单文件保持原有 .html 约定，避免改变既有站点链接。
       if (cfg.yamlLinkEnabled) {
-        yamlFormatObj.yamlObj.url = "/post/" + post.wp_slug + ".html"
+        // 本地系统导出没有仓库 content/ 的相对位置，无法可靠推导目录式 URL；
+        // 页面目录模式留给 Hugo 按实际导出路径生成，避免写死错误 url。
+        const isLocalSystemExport = typeof (cfg as any).fsYamlType === "string"
+        if (usesLeafBundleForPost(cfg as any, post)) {
+          if (!isLocalSystemExport) {
+            yamlFormatObj.yamlObj.url = resolveHugoBundleUrl(cfg as any, post.wp_slug)
+          }
+        } else {
+          yamlFormatObj.yamlObj.url = "/post/" + post.wp_slug + ".html"
+        }
       }
 
       // date
-      let tzstr = "+00:00"
-      const tz = new Date().getTimezoneOffset() / -60
-      const sign = tz > 0 ? "+" : "-"
-      if (tz.toString().length < 2) {
-        tzstr = `${sign}0${tz}:00`
-      } else {
-        tzstr = `${sign}${tz}:00`
-      }
-      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
+      yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated)
 
       // lastmod
       if (!post.dateUpdated) {
         post.dateUpdated = new Date()
       }
-      yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true) + tzstr
+      yamlFormatObj.yamlObj.lastmod = formatDateTimeWithOffset(post.dateUpdated)
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
+        yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
       }
 
       // categories
@@ -65,7 +69,7 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // seo
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        yamlFormatObj.yamlObj.keywords = post.mt_keywords
+        yamlFormatObj.yamlObj.keywords = normalizeTagValue(post.mt_keywords).join(",")
       }
       if (!StrUtil.isEmptyString(post.shortDesc)) {
         yamlFormatObj.yamlObj.description = post.shortDesc
@@ -120,17 +124,19 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
     if (yamlFormatObj.yamlObj?.lastmod) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.lastmod)
+      post.dateUpdated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.lastmod) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.lastmod)
     }
 
     // 摘要
     post.shortDesc = yamlFormatObj.yamlObj?.description
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj?.tags ?? yamlFormatObj.yamlObj?.tag)
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

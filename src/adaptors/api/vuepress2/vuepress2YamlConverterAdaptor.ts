@@ -11,6 +11,7 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Vuepress2 平台的YAML解析器
@@ -55,8 +56,7 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
 
     // tag
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
-      const tag = post.mt_keywords.split(",")
-      yamlFormatObj.yamlObj.tag = tag
+      yamlFormatObj.yamlObj.tag = normalizeTagValue(post.mt_keywords)
     }
 
     // category
@@ -143,11 +143,7 @@ class Vuepress2YamlConverterAdaptor extends YamlConvertAdaptor {
 
       // 标签 - 兼容tag和tags两种格式
       try {
-        if (Array.isArray(yamlFormatObj.yamlObj.tags) && yamlFormatObj.yamlObj.tags.length > 0) {
-          post.mt_keywords = yamlFormatObj.yamlObj.tags.join(",")
-        } else if (Array.isArray(yamlFormatObj.yamlObj.tag) && yamlFormatObj.yamlObj.tag.length > 0) {
-          post.mt_keywords = yamlFormatObj.yamlObj.tag.join(",")
-        }
+        post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj.tags ?? yamlFormatObj.yamlObj.tag)
       } catch (e) {
         this.logger.error("标签解析失败", e)
       }

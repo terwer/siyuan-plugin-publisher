@@ -11,6 +11,8 @@ import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-ap
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatDateTimeWithOffset, getLocalDateParts, parsePublishedDate } from "~/src/utils/dateUtils.ts"
+import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
  * Quartz平台的YAML解析器
@@ -29,13 +31,13 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
       yamlFormatObj.yamlObj.title = post.title
 
       // date
-      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+      yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated)
 
       // updated
       if (!post.dateUpdated) {
         post.dateUpdated = new Date()
       }
-      yamlFormatObj.yamlObj.updated = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true)
+      yamlFormatObj.yamlObj.updated = formatDateTimeWithOffset(post.dateUpdated)
 
       // excerpt
       if (!StrUtil.isEmptyString(post.shortDesc)) {
@@ -44,8 +46,7 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
-        const tags = post.mt_keywords.split(",")
-        yamlFormatObj.yamlObj.tags = tags
+        yamlFormatObj.yamlObj.tags = normalizeTagValue(post.mt_keywords)
       }
 
       // categories
@@ -61,16 +62,11 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
         let link = "/post/" + post.wp_slug + ".html"
         if (!StrUtil.isEmptyString(githubCfg?.previewPostUrl)) {
           link = githubCfg.previewPostUrl.replace("[postid]", post.wp_slug)
-          const created = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
-          const datearr = created.split(" ")[0]
-          const numarr = datearr.split("-")
-          const y = numarr[0]
-          const m = numarr[1]
-          const d = numarr[2]
-          link = link.replace(/\[yyyy]/g, y)
-          link = link.replace(/\[MM]/g, m)
-          link = link.replace(/\[mm]/g, m)
-          link = link.replace(/\[dd]/g, d)
+          const { yyyy, MM, dd } = getLocalDateParts(post.dateCreated)
+          link = link.replace(/\[yyyy]/g, yyyy)
+          link = link.replace(/\[MM]/g, MM)
+          link = link.replace(/\[mm]/g, MM)
+          link = link.replace(/\[dd]/g, dd)
 
           if (yamlFormatObj.yamlObj.categories?.length > 0) {
             link = link.replace(/\[cats]/, yamlFormatObj.yamlObj.categories.join("/"))
@@ -110,17 +106,19 @@ class QuartzYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
     if (yamlFormatObj.yamlObj?.updated) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.updated)
+      post.dateUpdated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.updated) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.updated)
     }
 
     // 摘要
     post.shortDesc = yamlFormatObj.yamlObj?.description
 
     // 标签
-    post.mt_keywords = yamlFormatObj.yamlObj?.tags?.join(",")
+    post.mt_keywords = tagValueToKeywords(yamlFormatObj.yamlObj?.tags ?? yamlFormatObj.yamlObj?.tag)
 
     // 分类
     post.categories = yamlFormatObj.yamlObj?.categories

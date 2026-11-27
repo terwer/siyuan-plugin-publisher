@@ -10,6 +10,8 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatDateTimeWithOffset, parsePublishedDate } from "~/src/utils/dateUtils.ts"
+import { normalizeTagValue } from "~/src/utils/tagValue.ts"
 
 /**
  * Vitepress 平台的YAML解析器
@@ -38,14 +40,14 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
     }
 
     // date
-    yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true)
+    yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated)
 
     // head
     yamlFormatObj.yamlObj.head = []
     if (!StrUtil.isEmptyString(post.mt_keywords)) {
       yamlFormatObj.yamlObj.head.push({
         name: "keywords",
-        content: post.mt_keywords.split(",").join(" "),
+        content: normalizeTagValue(post.mt_keywords).join(" "),
       })
     }
     if (!StrUtil.isEmptyString(post.shortDesc)) {
@@ -93,7 +95,8 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
 
     // 摘要
@@ -107,7 +110,7 @@ class VitepressYamlConverterAdaptor extends YamlConvertAdaptor {
       for (let i = 0; i < head.length; i++) {
         const m = head[i]
         if (m?.name === "keywords" && !StrUtil.isEmptyString(m.content)) {
-          post.mt_keywords = m.content?.split(" ").join(",")
+          post.mt_keywords = typeof m.content === "string" ? m.content.split(/\s+/).filter(Boolean).join(",") : ""
           break
         }
       }

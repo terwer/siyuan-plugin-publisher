@@ -39,6 +39,9 @@ import PageUtils from "~/common/pageUtils.ts"
 import { ITagConfig } from "~/src/types/ITagConfig.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
+import { isCoverEnabled } from "~/src/utils/coverImage.ts"
+import { isYamlCoverEnabled } from "~/src/utils/yamlCover.ts"
+import { markMetadataOverride } from "~/src/utils/publishMetadata.ts"
 import {
   isFeaturedImageEnabled,
   syncFeaturedImageYaml,
@@ -266,8 +269,9 @@ const handleSyncSiyuanAttrToSiyuan = async () => {
 
 const handleSyncPlatformAttrToSiyuan = async () => {
   const cfg = formData.publishCfg.cfg as BlogConfig
-  // 特色图片也只保存在平台属性里，随「同步修改到思源笔记」一并写回
-  if (featuredImageEnabled.value) {
+  // 原生封面平台把选择保存在平台 YAML 里，随「同步修改到思源笔记」一并写回；
+  // 静态站的封面最终写 Front Matter，选择由发布流程保存，不能混进平台 YAML。
+  if (featuredImageEnabled.value && !isYamlCoverEnabled(cfg)) {
     syncFeaturedImageYaml(formData.mergedPost)
   }
   let yaml = formData.mergedPost.yaml
@@ -332,16 +336,19 @@ const syncAiSwitch = (val: boolean) => {
 
 const syncPublishTitle = (val: string) => {
   formData.mergedPost.title = val
+  markMetadataOverride(formData.mergedPost, "title")
 }
 
 const syncDesc = (val: string) => {
   formData.mergedPost.shortDesc = val
   formData.mergedPost.mt_text_more = val
   formData.mergedPost.mt_excerpt = val
+  markMetadataOverride(formData.mergedPost, "excerpt")
 }
 
 const syncTags = (val: string[]) => {
   formData.mergedPost.mt_keywords = val?.join(",")
+  markMetadataOverride(formData.mergedPost, "tags")
 }
 
 const syncTagSlugs = (val: string[]) => {
@@ -350,15 +357,21 @@ const syncTagSlugs = (val: string[]) => {
 
 const syncCates = (cates: string[]) => {
   formData.mergedPost.categories = cates
+  markMetadataOverride(formData.mergedPost, "categories")
 }
 
 const syncCateSlugs = (cateSlugs: string[]) => {
   formData.mergedPost.cate_slugs = cateSlugs
 }
 
-const syncPublishTime = (val1: Date, val2: Date) => {
+const syncPublishTime = (val1: Date, val2: Date, changedField?: "created" | "updated") => {
   formData.mergedPost.dateCreated = val1
   formData.mergedPost.dateUpdated = val2
+  if (changedField === "created") {
+    markMetadataOverride(formData.mergedPost, "dateCreated")
+  } else if (changedField === "updated") {
+    markMetadataOverride(formData.mergedPost, "dateUpdated")
+  }
 }
 
 const syncPublishStatus = (val1: PostStatusEnum, val2: string) => {
@@ -588,10 +601,11 @@ onMounted(async () => {
                     @emitSyncDesc="syncDesc"
                   />
 
-                  <!-- 特色图片（仅对声明支持该能力的平台展示） -->
+                  <!-- 封面图（仅对声明支持该能力的平台展示） -->
                   <publish-featured-image
                     v-if="featuredImageEnabled"
                     :model-value="formData.mergedPost"
+                    :auto-resolve="isCoverEnabled(formData.publishCfg?.cfg)"
                     @emitSyncFeaturedImage="syncFeaturedImage"
                   />
 

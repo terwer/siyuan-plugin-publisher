@@ -9,6 +9,17 @@
 
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { resolvePlatformImagePath } from "~/src/adaptors/api/base/platformImagePath.ts"
+import {
+  dirnameRepoPath,
+  isLeafBundleLayout,
+  isLeafBundlePostPath,
+  resolveLeafBundleImageLink,
+  resolveLeafBundleImagePathForPost,
+  usesLeafBundleForPost,
+  resolveLeafBundlePostPath,
+  resolvePostMdFilename,
+  resolvePreviewSlug,
+} from "~/src/adaptors/api/base/contentLayout.ts"
 import { PublisherAppInstance } from "~/src/publisherAppInstance.ts"
 import { CommonGitlabConfig } from "~/src/adaptors/api/base/gitlab/commonGitlabConfig.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -95,7 +106,9 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     // 路径处理
     const savePath = post.cate_slugs?.[0] ?? cfg.blogid
     const filename = post.mdFilename ?? "auto-" + sypIdUtil.newID() + ".md"
-    let docPath = StrUtil.pathJoin(savePath, filename)
+    let docPath = isLeafBundleLayout(cfg as any)
+      ? resolveLeafBundlePostPath(savePath, resolvePostMdFilename(post))
+      : StrUtil.pathJoin(savePath, filename)
     if (docPath.startsWith("/")) {
       docPath = docPath.substring(1)
     }
@@ -113,9 +126,10 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
 
       finalRes = res
     } catch (e) {
-      // 失败之后尝试删除旧数据再发一次
+      // 失败之后尝试删除旧数据再发一次。
+      // 只删目标 md 文件，避免页面目录模式连带清理已上传的图片。
       try {
-        await this.deletePost(docPath)
+        await this.gitlabClient.deleteRepositoryFile(docPath)
       } catch (e) {
       }
       const res2 = await this.gitlabClient.createRepositoryFile(docPath, post.description)
@@ -171,6 +185,10 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
   }
 
   public async deletePost(postid: string, id?: string, publishCfg?: IPublishCfg): Promise<boolean> {
+    if (isLeafBundleLayout(this.cfg as any) && isLeafBundlePostPath(postid)) {
+      return await this.deleteLeafBundle(postid)
+    }
+
     try {
       await this.gitlabClient.deleteRepositoryFile(postid)
     } catch (e) {
@@ -178,6 +196,45 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     }
 
     return true
+  }
+
+  /**
+   * 删除页面目录（Leaf Bundle）
+   *
+   * GitLab 没有“删除目录”接口，先列目录再逐文件删除。
+   * 图片按设计位于 bundle 根目录；子目录条目删除失败不阻断 index.md 的删除。
+   */
+  private async deleteLeafBundle(postid: string): Promise<boolean> {
+    const bundleDir = dirnameRepoPath(postid)
+    const paths = new Set<string>([postid])
+
+    try {
+      const nodes = await this.gitlabClient.getRepositoryTree(bundleDir)
+      nodes.forEach((node: any) => {
+        if (node?.value) {
+          paths.add(node.value)
+        }
+      })
+    } catch (e) {
+      this.logger.warn("list bundle dir failed, fallback to delete index.md only", e)
+    }
+
+    let indexDeleted = false
+    for (const filePath of paths) {
+      try {
+        await this.gitlabClient.deleteRepositoryFile(filePath)
+        if (filePath === postid) {
+          indexDeleted = true
+        }
+      } catch (e) {
+        if (filePath === postid) {
+          throw new Error("Gitlab 调用API异常 =>" + e)
+        }
+        this.logger.warn(`delete bundle asset failed: ${filePath}`, e)
+      }
+    }
+
+    return indexDeleted
   }
 
   public async getCategoryTreeNodes(docPath: string): Promise<any[]> {
@@ -203,7 +260,7 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     if (!postid) {
       throw new Error("postid 不能为空")
     }
-    const newPostid = postid.substring(postid.lastIndexOf("/") + 1).replace(".md", "")
+    const newPostid = resolvePreviewSlug(postid)
     previewUrl = this.cfg.previewPostUrl.replace("[postid]", newPostid)
     // 路径组合
     // previewUrl = StrUtil.pathJoin(this.cfg.postHome, previewUrl)
@@ -215,33 +272,49 @@ class CommonGitlabApiAdaptor extends BaseBlogApi {
     try {
       const bits = mediaObject.bits
       const base64 = Base64.fromUint8Array(bits)
-      // 与 GitHub 族共用同一套图片路径规则（见 platformImagePath）：
-      // 支持 [docpath]/images 就近目录、./ 与 ../ 相对链接、以及仓库根目录
-      const { imagePath } = resolvePlatformImagePath(
-        this.cfg.imageStorePath ?? "images",
-        mediaObject,
-        "images",
-        this.cfg.blogid
-      )
-      let imageFullPath = imagePath
+      const isBundle = usesLeafBundleForPost(this.cfg as any, mediaObject.post)
+      let imageFullPath: string
+      if (isBundle) {
+        // 页面目录：图片与 index.md 同目录，正文用相对文件名引用
+        const mediaPost = mediaObject.post
+        imageFullPath = resolveLeafBundleImagePathForPost(mediaPost, mediaObject.name, this.cfg.blogid)
+      } else {
+        // 与 GitHub 族共用同一套图片路径规则（见 platformImagePath）：
+        // 支持 [docpath]/images 就近目录、./ 与 ../ 相对链接、以及仓库根目录
+        const { imagePath } = resolvePlatformImagePath(
+          this.cfg.imageStorePath ?? "images",
+          mediaObject,
+          "images",
+          this.cfg.blogid
+        )
+        imageFullPath = imagePath
+      }
       const res = await this.gitlabClient.createRepositoryFile(imageFullPath, base64, "base64")
 
       const siteImgId = mediaObject.name
       const siteArticleId = mediaObject.name
-      // http://localhost:8002/terwer/terwer-github-io/-/raw/test/images/image-20240331110420-v181nvl.png
-      let toImagePath = StrUtil.pathJoin(this.cfg.home, this.cfg.username)
-      toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubRepo)
-      toImagePath = StrUtil.pathJoin(toImagePath, "-/raw")
-      toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubBranch)
-      if (res?.exist) {
-        toImagePath = StrUtil.pathJoin(toImagePath, imageFullPath)
-      } else {
-        if (StrUtil.isEmptyString(res.file_path)) {
+      let siteImgUrl: string
+      if (isBundle) {
+        if (!res?.exist && StrUtil.isEmptyString(res?.file_path)) {
           throw new Error("Gitlab 调用API异常")
         }
-        toImagePath = StrUtil.pathJoin(toImagePath, res.file_path)
+        siteImgUrl = resolveLeafBundleImageLink(mediaObject.name)
+      } else {
+        // http://localhost:8002/terwer/terwer-github-io/-/raw/test/images/image-20240331110420-v181nvl.png
+        let toImagePath = StrUtil.pathJoin(this.cfg.home, this.cfg.username)
+        toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubRepo)
+        toImagePath = StrUtil.pathJoin(toImagePath, "-/raw")
+        toImagePath = StrUtil.pathJoin(toImagePath, this.gitlabCfg.githubBranch)
+        if (res?.exist) {
+          toImagePath = StrUtil.pathJoin(toImagePath, imageFullPath)
+        } else {
+          if (StrUtil.isEmptyString(res.file_path)) {
+            throw new Error("Gitlab 调用API异常")
+          }
+          toImagePath = StrUtil.pathJoin(toImagePath, res.file_path)
+        }
+        siteImgUrl = toImagePath
       }
-      const siteImgUrl = toImagePath
       return {
         attachment_id: siteImgId,
         date_created_gmt: new Date(),

@@ -8,13 +8,38 @@
  */
 
 import { CommonWebConfig } from "~/src/adaptors/web/base/commonWebConfig.ts"
-import { CategoryTypeEnum, PageTypeEnum, PasswordType, PicbedServiceTypeEnum } from "zhi-blog-api"
+import {
+  CategoryTypeEnum,
+  CoverMode,
+  MathRenderModeEnum,
+  PageTypeEnum,
+  PasswordType,
+  PicbedServiceTypeEnum,
+} from "zhi-blog-api"
 
 /**
  * CSDN配置
  */
 export class CsdnConfig extends CommonWebConfig {
   public logoutUrl: string
+
+  /**
+   * 是否支持原生封面字段。
+   *
+   * 发布层按「题头图 → 正文首图 → 自定义」解析，适配器再把图片换成
+   * CSDN 图床地址写入 `cover_images`。
+   */
+  public coverEnabled = true
+
+  /**
+   * `cover_images` 接收图片 URL（不是附件 ID）。
+   */
+  public coverMode = CoverMode.Url
+
+  /**
+   * 允许在发布表单中自定义封面（上传/填写链接）。
+   */
+  public featuredImageEnabled = true
 
   constructor(username: string, password: string, middlewareUrl?: string) {
     super("https://blog.csdn.net", "https://bizapi.csdn.net", username, password, middlewareUrl)
@@ -32,5 +57,7 @@ export class CsdnConfig extends CommonWebConfig {
     this.picgoPicbedSupported = false
     this.bundledPicbedSupported = true
     this.picbedService = PicbedServiceTypeEnum.Bundled
+    // CSDN 正文使用 KaTeX 渲染公式
+    this.mathRenderMode = MathRenderModeEnum.KaTeX
   }
 }

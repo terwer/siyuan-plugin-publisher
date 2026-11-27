@@ -17,6 +17,7 @@ import {
   formatPublisherPicgoError,
   getPublisherPicgoManager,
 } from "~/src/composables/usePublisherPicgoManager.ts"
+import { countLocalMarkdownImages } from "~/src/utils/imageUploadPolicy.ts"
 
 type SiyuanConfigBridge = {
   apiUrl?: string
@@ -52,33 +53,24 @@ const usePicgoBridge = () => {
         md = siyuanPost.markdown
       }
 
-      // 文章中没有图片时直接返回：无需初始化图床内核，也无需校验 uploader 配置（issue #2050）
-      const imageBlocks = await kernelApi.getImageBlocksByID(pageId)
-      if (imageBlocks.length === 0) {
+      // 以发布正文判断是否有本地图片：数据库块、嵌入块中的图片不属于思源的图片块，
+      // 不能再用 getImageBlocksByID 判断，否则会误判为无图片而跳过上传（issue #1999）。
+      // 无本地图片时无需初始化图床内核，也无需校验 uploader 配置（issue #2050）。
+      const localImageCount = countLocalMarkdownImages(md)
+      if (localImageCount === 0) {
         return md
       }
 
       const attrs = await kernelApi.getBlockAttrs(pageId)
-      const siyuanData = {
-        pageId: pageId,
-        meta: attrs,
-      }
-
       const picgoManager = await getPublisherPicgoManager()
-      const picgoPostResult = await picgoManager.uploadMarkdownImages(siyuanData.pageId, siyuanData.meta, md)
-      // 有图片才上传
+      // 图片发现、上传与链接替换统一由 zhi-siyuan-picgo 处理（3.2.1+ 已支持数据库图片）
+      const picgoPostResult = await picgoManager.uploadMarkdownImages(pageId, attrs, md)
       if (picgoPostResult.hasImages) {
-        // const picgoImageTip = `检测到图片，将使用 PicGo 自动上传图片，若图片较多可能会较慢请耐心等待`
-        // await kernelApi.pushMsg({
-        //   msg: picgoImageTip,
-        //   timeout: 3000,
-        // })
         if (picgoPostResult.flag) {
           md = picgoPostResult.mdContent
         } else {
           throw new Error(picgoPostResult.errmsg || "PicGo headless upload failed")
         }
-      } else {
       }
     } catch (e) {
       const formatted = formatPublisherPicgoError(e)

@@ -15,7 +15,9 @@ import {
   type MediaCacheContext,
 } from "~/src/utils/mediaCacheContext.ts"
 
-const CACHE_VERSION = 1
+// v2：Halo 附件开始跟随站点存储策略；旧版本缓存里的本地地址必须失效，
+// 否则用户升级后重发同一篇文章仍会复用本地 URL，看起来像没修复。
+const CACHE_VERSION = 2
 const MAX_CACHE_ITEMS = 200
 
 /**

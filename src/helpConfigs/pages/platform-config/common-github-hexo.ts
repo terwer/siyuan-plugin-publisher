@@ -48,7 +48,7 @@ export const hexoHelpConfig: PageHelpConfig = {
       placeholder: "../images",
     },
     dynYamlCfg: {
-      tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，用于补充主题需要的自定义字段；同名键会覆盖前面自动生成的字段。",
+      tip: "YAML 预设配置（JSON 片段），发布时最后合并进文章 Front Matter，用于补充主题需要的自定义字段；同名键会覆盖前面自动生成的字段。详细发布设置封面后可用 [cover] 映射主题封面字段，例如 {\"index_img\":\"[cover]\"}。",
       placeholder: "{\"comments\": true}",
     },
     defaultMsg: { tip: "提交到仓库的 commit message，文章与图片的每次提交都会带上它。", placeholder: "auto published by siyuan-plugin-publisher" },
@@ -67,6 +67,14 @@ export const hexoHelpConfig: PageHelpConfig = {
     {
       q: "图片要怎么发布？",
       a: "选择「当前平台」图床，图片会上传到仓库的 source/images 目录（默认），文章中引用为相对路径 ../images/<图片名> 地址，保证源码与构建产物都能正确显示。",
+    },
+    {
+      q: "封面图怎么设置？",
+      a: "详细发布模式填写「封面图」后发布即可，图片与正文图片走同一套上传通道，Front Matter 默认写 cover。主题使用其它字段（如 index_img、banner_img）时，用「YAML 预设配置」的 [cover] 映射到主题字段。",
+    },
+    {
+      q: "详细模式里改了标题/标签/更新时间，重新打开又变回文档内容？",
+      a: "详细模式默认跟随思源文档；手动改过并更新后，插件会把该字段记为该平台的覆盖值，之后打开优先显示覆盖值。把字段改回文档值并发布后，覆盖会自动移除；源码模式直接编辑 YAML，以编辑器为准。",
     },
     {
       q: "查看链接打不开？",
