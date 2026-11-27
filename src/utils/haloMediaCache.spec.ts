@@ -120,6 +120,26 @@ describe("haloMediaCache", () => {
     expect(upload).toHaveBeenCalledTimes(2)
   })
 
+  it("ignores caches written before storage-policy-aware uploads", async () => {
+    const { attrs, context } = createContext()
+    attrs[getHaloCacheAttrKey(context.platformKey, context.endpoint, "media-cache")] = JSON.stringify({
+      version: 1,
+      endpoint: context.endpoint,
+      items: {
+        "legacy-hash": {
+          name: "image.png",
+          url: "http://localhost:8091/upload/image.png",
+          attachmentId: "legacy-attachment",
+          updatedAt: Date.now(),
+        },
+      },
+    })
+
+    const cache = await readHaloMediaCache(context)
+
+    expect(cache.items).toEqual({})
+  })
+
   it("builds stable cache keys per platform and endpoint", () => {
     expect(getHaloCacheAttrKey("common_Halo", "http://localhost:8091", "media-cache")).toBe(
       "custom-halo-common-halo-media-cache"

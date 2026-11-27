@@ -16,8 +16,13 @@ import { Base64 } from "js-base64"
 import sypIdUtil from "~/src/utils/sypIdUtil.ts"
 import { PostRequest } from "@halo-dev/api-client"
 import { HaloPostMeta } from "~/src/adaptors/api/halo/HaloPostMeta.ts"
-import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import HaloUtils from "~/src/adaptors/api/halo/haloUtils.ts"
+import {
+  createHaloAttachment,
+  HALO_CONSOLE_ATTACHMENT_UPLOAD_PATH,
+  HALO_POST_ATTACHMENT_UPLOAD_PATH,
+  HaloAttachmentUploader,
+} from "~/src/utils/haloAttachment.ts"
 import { uploadHaloMediaWithCache } from "~/src/utils/haloMediaCache.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
 
@@ -46,10 +51,17 @@ function isHaloBasicAuthDisabledError(error: unknown): boolean {
  */
 class HaloApiAdaptor extends BaseBlogApi {
   private haloGlobalInfoPromise?: Promise<any>
+  private readonly attachmentUploader: HaloAttachmentUploader
 
   constructor(appInstance: any, cfg: HaloConfig) {
     super(appInstance, cfg)
     this.logger = createAppLogger("halo-api-adaptor-v29")
+    this.attachmentUploader = new HaloAttachmentUploader({
+      uploadToPostAttachments: (formData) =>
+        this.haloFormFetch(`${this.cfg.apiUrl}${HALO_POST_ATTACHMENT_UPLOAD_PATH}`, formData),
+      uploadToConsoleAttachments: (formData) =>
+        this.haloFormFetch(`${this.cfg.apiUrl}${HALO_CONSOLE_ATTACHMENT_UPLOAD_PATH}`, formData),
+    })
   }
 
   /**
@@ -329,60 +341,18 @@ class HaloApiAdaptor extends BaseBlogApi {
    * @param mediaObject - 媒体对象
    */
   private async uploadMediaObject(mediaObject: MediaObject): Promise<Attachment> {
-    let res: any
     try {
-      const bits = mediaObject.bits
-
-      // get formData and Blob
-      const { FormData, Blob } = FormDataHostUtil.getFormData(this.appInstance)
-
-      // uploadUrl
-      const uploadUrl = `${this.cfg.apiUrl}/apis/api.console.halo.run/v1alpha1/attachments/upload`
-
-      // formData
-      const blob = new Blob([bits], { type: mediaObject.type })
-      const formData = new FormData()
-      formData.append("file", blob, mediaObject.name)
-      formData.append("policyName", "default-policy")
-      formData.append("groupName", "")
-
-      // 发送请求
-      res = await this.haloFormFetch(uploadUrl, formData)
-
-      if (!res.metadata) {
+      const res = await this.attachmentUploader.upload(this.appInstance, mediaObject)
+      if (!res?.metadata) {
         throw new Error("Halo图片上传失败 =>" + mediaObject.name)
       }
+      return createHaloAttachment(this.cfg.home || this.cfg.apiUrl, mediaObject, res)
     } catch (e) {
       this.logger.error("Error uploading image to halo:", e)
       if (isHaloBasicAuthDisabledError(e)) {
         throw e
       }
       throw new Error("Error uploading image to halo:" + e.toString())
-    }
-
-    const siteImgId = res?.spec?.displayName
-    const siteArticleId = res?.metadata?.name
-    const siteImgUrl = this.cfg.home + (res?.metadata?.annotations["storage.halo.run/uri"] ?? "")
-    return {
-      attachment_id: siteImgId,
-      date_created_gmt: new Date(),
-      parent: 0,
-      link: siteImgUrl,
-      title: mediaObject.name,
-      caption: "",
-      description: "",
-      metadata: {
-        width: 0,
-        height: 0,
-        file: "",
-        filesize: 0,
-        sizes: [],
-      },
-      type: mediaObject.type,
-      thumbnail: "",
-      id: siteArticleId,
-      file: mediaObject.name,
-      url: siteImgUrl,
     }
   }
 
