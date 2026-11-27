@@ -61,6 +61,29 @@ import {
 } from "~/src/utils/mediaCacheContext.ts"
 import { SypConfig } from "~/syp.config.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { DiagramRenderService } from "~/src/utils/diagram/diagramRenderService.ts"
+import { findDiagramFences } from "~/src/utils/diagram/diagramFenceParser.ts"
+import { SiyuanDiagramAssetWriter } from "~/src/utils/diagram/siyuanDiagramAssetWriter.ts"
+import {
+  readSiyuanDiagramEnvironment,
+  SiyuanDiagramRenderer,
+} from "~/src/utils/diagram/siyuanDiagramRenderer.ts"
+import {
+  DEFAULT_DIAGRAM_RENDER_SCALE,
+  DIAGRAM_RENDER_POLICY_ATTR,
+  normalizeDiagramRenderPolicy,
+  normalizeDiagramRenderScale,
+  type DiagramPreparedAsset,
+  type DiagramRenderTheme,
+} from "~/src/utils/diagram/diagramTypes.ts"
+
+interface DiagramRenderStage {
+  service: DiagramRenderService
+  assets: DiagramPreparedAsset[]
+  errors: string[]
+  converted: number
+  skipped: number
+}
 
 /**
  * 各种模式共享的扩展基类
@@ -112,8 +135,25 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
     post = await this.handleDesc(post, id, publishCfg)
     // 处理路径分类
     post = await this.handleCategories(post, id, publishCfg)
-    // 处理图片
-    post = await this.handlePictures(post, id, publishCfg)
+
+    // 文本图转图片：先渲染为临时资产，再由统一图片阶段上传并替换。
+    // 上传失败时在 finally 中还原代码块，避免发布出指向临时资产的坏链接。
+    let diagramStage: DiagramRenderStage | undefined
+    try {
+      const prepared = await this.prepareDiagramImages(post, id, publishCfg)
+      post = prepared.post
+      diagramStage = prepared.stage
+      // 处理图片
+      post = await this.handlePictures(post, id, publishCfg)
+    } finally {
+      if (diagramStage) {
+        try {
+          post = await this.finalizeDiagramImages(post, diagramStage)
+        } finally {
+          await this.cleanupDiagramImages(diagramStage)
+        }
+      }
+    }
     // 处理Md
     post = await this.handleMd(post, id, publishCfg)
     // 处理YAML
@@ -141,7 +181,154 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
    * @param publishCfg - （可选）发布配置参数
    */
   public async previewImageProcess(doc: Post, id?: string, publishCfg?: any): Promise<Post> {
-    return await this.handlePictures(doc, id, publishCfg)
+    const prepared = await this.prepareDiagramImages(doc, id, publishCfg)
+    let post = prepared.post
+    const stage = prepared.stage
+    try {
+      post = await this.handlePictures(post, id, publishCfg)
+      if (stage) {
+        post = await this.finalizeDiagramImages(post, stage)
+      }
+      return post
+    } finally {
+      if (stage) {
+        await this.cleanupDiagramImages(stage)
+      }
+    }
+  }
+
+  /**
+   * 文本图转图片准备阶段。
+   *
+   * 渲染结果写入思源临时资产，并把代码块替换成 `assets/...` 图片标记；后续
+   * `handlePictures` 会按当前平台图床配置统一上传和替换。
+   */
+  private async prepareDiagramImages(
+    post: Post,
+    id?: string,
+    publishCfg?: any
+  ): Promise<{ post: Post; stage?: DiagramRenderStage }> {
+    const { getReadOnlyPublishPreferenceSetting } = usePreferenceSettingStore()
+    const pref = getReadOnlyPublishPreferenceSetting()
+    if (pref.value.diagramRenderEnabled === false || StrUtil.isEmptyString(id)) {
+      return { post }
+    }
+    if (findDiagramFences(post.markdown).length === 0) {
+      return { post }
+    }
+
+    try {
+      const attrs = await this.kernelApi.getBlockAttrs(id)
+      if (normalizeDiagramRenderPolicy(attrs?.[DIAGRAM_RENDER_POLICY_ATTR]) === "skip") {
+        this.logger.info(`[diagram] skip by document policy doc=${id}`)
+        return { post }
+      }
+    } catch (e) {
+      this.logger.warn(`[diagram] read document policy failed doc=${id}`, e)
+    }
+
+    try {
+      const imageUploadPolicy = await resolveImageUploadPolicy({
+        kernelApi: this.kernelApi,
+        docId: id,
+        rules: pref.value.imageUploadExcludeDirs,
+      })
+      if (imageUploadPolicy.skip) {
+        this.logger.info(`[diagram] skip because image upload policy skipped doc=${id}`)
+        return { post }
+      }
+    } catch (e) {
+      this.logger.warn(`[diagram] resolve image upload policy failed doc=${id}`, e)
+    }
+
+    const cfg: BlogConfig = publishCfg?.cfg
+    if (!cfg) {
+      return { post }
+    }
+    let picbedService = cfg.picbedService
+    if (StrUtil.isEmptyString(picbedService)) {
+      picbedService = await this.picgoBridge.getPicbedServiceType(cfg)
+    }
+    if (picbedService === PicbedServiceTypeEnum.None) {
+      this.logger.info(`[diagram] skip because no picbed is available doc=${id}`)
+      return { post }
+    }
+
+    let service: DiagramRenderService | undefined
+    try {
+      const env = readSiyuanDiagramEnvironment()
+      const themeMode = pref.value.diagramRenderTheme ?? "light"
+      const theme: DiagramRenderTheme = themeMode === "follow" ? env.theme : themeMode === "dark" ? "dark" : "light"
+      const scale = normalizeDiagramRenderScale(pref.value.diagramRenderScale ?? DEFAULT_DIAGRAM_RENDER_SCALE)
+      const renderer = new SiyuanDiagramRenderer({
+        baseUrl: env.baseUrl,
+        plantUmlServePath: env.plantUmlServePath,
+        fetchImageBase64: (url: string) => this.readFileToBase64(url),
+      })
+      const writer = new SiyuanDiagramAssetWriter(this.kernelApi)
+      service = new DiagramRenderService(renderer, writer)
+      const result = await service.prepare(post.markdown, {
+        enabled: true,
+        skip: false,
+        theme,
+        scale,
+        plantUmlServePath: env.plantUmlServePath,
+      })
+      post.markdown = result.markdown
+      ;(post as any).diagramRenderErrors = result.errors
+      ;(post as any).diagramRenderErrorDetails = result.errors
+      ;(post as any).diagramRenderConvertedCount = result.converted
+      ;(post as any).diagramRenderSkippedCount = result.skipped
+
+      if (result.assets.length === 0) {
+        service.dispose()
+        return { post }
+      }
+
+      this.logger.info(`[diagram] prepared doc=${id} converted=${result.converted} skipped=${result.skipped}`)
+      return {
+        post,
+        stage: {
+          service,
+          assets: result.assets,
+          errors: result.errors,
+          converted: result.converted,
+          skipped: result.skipped,
+        },
+      }
+    } catch (e: any) {
+      service?.dispose()
+      const message = `文本图渲染失败：${e?.message || e}；已保留代码块`
+      this.logger.warn(`[diagram] prepare failed doc=${id}: ${message}`)
+      ;(post as any).diagramRenderErrors = [message]
+      ;(post as any).diagramRenderErrorDetails = [message]
+      return { post }
+    }
+  }
+
+  /**
+   * 图片阶段结束后核对文本图是否真正上传成功；失败的把图片标记还原为代码块。
+   */
+  private async finalizeDiagramImages(post: Post, stage: DiagramRenderStage): Promise<Post> {
+    const result = await stage.service.finalize(post.markdown, stage.assets)
+    post.markdown = result.markdown
+    if (result.reverted > 0) {
+      post.html = LuteUtil.mdToHtml(post.markdown)
+    }
+    const errors = [...stage.errors, ...result.errors]
+    ;(post as any).diagramRenderErrors = errors
+    ;(post as any).diagramRenderErrorDetails = errors
+    ;(post as any).diagramRenderConvertedCount = result.converted
+    ;(post as any).diagramRenderSkippedCount = stage.skipped + result.reverted
+    return post
+  }
+
+  private async cleanupDiagramImages(stage: DiagramRenderStage): Promise<void> {
+    try {
+      await stage.service.cleanup(stage.assets)
+    } finally {
+      stage.service.dispose()
+    }
   }
 
   /**
@@ -707,8 +894,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         for (const image of images) {
           try {
             const imageUrl = image.url
-            // 忽略在线图片
-            if (imageUrl.startsWith("http") && !imageUrl.startsWith(window.location.origin)) {
+            // 在线图片不重复上传；但图片缓存可能已把本地图片换成远端地址，
+            // 这时仍要把正文里的本地链接替换成缓存地址，否则切换图床后会留下本地链接。
+            const siyuanApiBaseUrl = this.getSiyuanApiBaseUrl()
+            const pageOrigin = typeof window !== "undefined" ? window.location?.origin : ""
+            const isSiyuanAsset =
+              Boolean(siyuanApiBaseUrl) && imageUrl.startsWith(siyuanApiBaseUrl) // 远程内核资源
+            if (imageUrl.startsWith("http") && !imageUrl.startsWith(pageOrigin) && !isSiyuanAsset) {
+              if (image.originUrl && image.originUrl !== imageUrl) {
+                urlMap[image.originUrl] = imageUrl
+              }
               continue
             }
             const base64Info = await this.readFileToBase64(imageUrl)

@@ -111,6 +111,13 @@ class PublishPreferenceCfg extends PreferenceConfig {
   // 图片自动上传的目录排除规则（issue #2040）：命中的目录默认不上传图片
   public imageUploadExcludeDirs?: ImageUploadExcludeDirRule[]
 
+  // 文本图转图片（issue #2111）：发布前把 mermaid/flowchart 等代码块渲染为图片
+  public diagramRenderEnabled?: boolean
+  /** 图片清晰度：1x / 2x / 3x */
+  public diagramRenderScale?: number
+  /** 图片主题：light=浅色，dark=深色，follow=跟随思源外观 */
+  public diagramRenderTheme?: "light" | "dark" | "follow"
+
   constructor() {
     super()
     this.experimentalUseSiyuanNoteAIConfig = true
@@ -130,6 +137,9 @@ class PublishPreferenceCfg extends PreferenceConfig {
 
     this.publishSourceNotebooks = []
     this.imageUploadExcludeDirs = []
+    this.diagramRenderEnabled = true
+    this.diagramRenderScale = 2
+    this.diagramRenderTheme = "light"
   }
 }
 

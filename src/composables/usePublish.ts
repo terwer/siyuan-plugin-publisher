@@ -167,7 +167,17 @@ const usePublish = () => {
         logger.warn(`图片上传存在${imageErrors.length}个错误，已记录到errMsg`)
       }
       const imageErrorDetails = (finalPost as any).imageUploadErrorDetails as string[] | undefined
-      publishErrorDetails = sanitizePublishText(imageErrorDetails?.join("\n\n") || singleFormData.errMsg)
+      // 文本图渲染/上传失败：保留代码块，作为发布警告返回，不阻断发布
+      const diagramErrors = (finalPost as any).diagramRenderErrors as string[] | undefined
+      if (diagramErrors && diagramErrors.length > 0) {
+        singleFormData.errMsg = [singleFormData.errMsg, ...diagramErrors].filter(Boolean).join("\n")
+        logger.warn(`文本图处理存在${diagramErrors.length}个问题，已记录到errMsg`)
+      }
+      const diagramErrorDetails = (finalPost as any).diagramRenderErrorDetails as string[] | undefined
+      publishErrorDetails = sanitizePublishText(
+        [imageErrorDetails?.join("\n\n") ?? "", diagramErrorDetails?.join("\n\n") ?? ""].filter(Boolean).join("\n\n") ||
+          singleFormData.errMsg
+      )
 
       // 特色图片：只有声明该能力的平台才把发布参数同步进平台 YAML 属性，
       // 其它平台的属性内容保持不变。

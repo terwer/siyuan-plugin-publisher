@@ -30,6 +30,7 @@ import { FsYamlType } from "~/src/adaptors/fs/LocalSystem/FsYamlType.ts"
 import { isLeafBundlePostPath, stripMarkdownExtension, usesLeafBundleForPost } from "~/src/adaptors/api/base/contentLayout.ts"
 import { LocalSystemConfig } from "~/src/adaptors/fs/LocalSystem/LocalSystemConfig.ts"
 import { LocalSystemYamlConvertAdaptor } from "~/src/adaptors/fs/LocalSystem/LocalSystemYamlConvertAdaptor.ts"
+import { toStoreRelativeMediaUrl } from "~/src/adaptors/fs/LocalSystem/FsUtils.ts"
 import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -300,7 +301,7 @@ class LocalSystemApiAdaptor extends BaseBlogApi {
     } else {
       const absImagePath = EnvUtil.joinPath(storePath, localFsCfg.imageStorePath ?? "assets")
       absMediaFilePath = EnvUtil.joinPath(absImagePath, mediaObject.name)
-      url = absMediaFilePath.replace(storePath, ".")
+      url = toStoreRelativeMediaUrl(absMediaFilePath, storePath)
       link = storePath
     }
 
