@@ -360,7 +360,7 @@
   "preference.item.fixTitle.desc": "发布前移除标题中的自动编号和冗余后缀。",
   "preference.item.keepTitle.desc": "尽量保留文档原始标题，不额外覆盖标题内容。",
   "preference.item.removeFirstH1.desc": "导出正文时去掉首个一级标题，避免重复标题。",
-  "preference.item.removeMdWidgetTag.desc": "发布前移除 Markdown 中的挂件标记内容。",
+  "preference.item.removeMdWidgetTag.desc": "发布前移除思源挂件与 HTML 块（含 oembed、书签等第三方卡片）。",
   "preference.item.ignoreBlockRef.desc": "发布时忽略块引用，减少跨文档依赖内容进入正文。",
   "preference.item.allowChangeSlug.desc": "开启后允许修改文章别名。首次开启时会弹出确认提醒。",
   "preference.confirm.allowChangeSlug.title": "确认开启别名修改",
