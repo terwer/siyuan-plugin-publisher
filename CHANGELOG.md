@@ -1,5 +1,42 @@
 # Changelog
 
+## [2.5.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.4.0...siyuan-plugin-publisher-v2.5.0) (2026-11-27)
+
+
+### Features
+
+* **cover:** resolve covers through the shared zhi contract ([#2092](https://github.com/terwer/siyuan-plugin-publisher/issues/2092)) ([7cd63a9](https://github.com/terwer/siyuan-plugin-publisher/commit/7cd63a965b33a4ec69ac6933899ae33e234e5874))
+* **csdn:** publish article covers ([#1393](https://github.com/terwer/siyuan-plugin-publisher/issues/1393)) ([#2121](https://github.com/terwer/siyuan-plugin-publisher/issues/2121)) ([25198d9](https://github.com/terwer/siyuan-plugin-publisher/commit/25198d9434a833dc3cee0559c0807d78c363263e))
+* **hexo:** add optional front matter cover to detailed publish ([#1699](https://github.com/terwer/siyuan-plugin-publisher/issues/1699)) ([#2117](https://github.com/terwer/siyuan-plugin-publisher/issues/2117)) ([93c2250](https://github.com/terwer/siyuan-plugin-publisher/commit/93c22509e74f4655e4e34d1df30026f81cdf48a8))
+* **hugo:** support leaf bundle content layout ([#2109](https://github.com/terwer/siyuan-plugin-publisher/issues/2109)) ([ed2e1dc](https://github.com/terwer/siyuan-plugin-publisher/commit/ed2e1dc6fd8925b4200ee2c12d0790f14c8bbbbe))
+* **publish:** render math formulas per platform capability ([#2116](https://github.com/terwer/siyuan-plugin-publisher/issues/2116)) ([2029901](https://github.com/terwer/siyuan-plugin-publisher/commit/202990160e95a4a4c1b51d5f5d9c3f949f311a06))
+* **publish:** render text diagrams as images ([#2111](https://github.com/terwer/siyuan-plugin-publisher/issues/2111)) ([#2114](https://github.com/terwer/siyuan-plugin-publisher/issues/2114)) ([e04b495](https://github.com/terwer/siyuan-plugin-publisher/commit/e04b495ec0618bc4ef4ff6402ad21102f1ba67a8))
+* **ui:** redesign published article records management ([#2097](https://github.com/terwer/siyuan-plugin-publisher/issues/2097)) ([#2100](https://github.com/terwer/siyuan-plugin-publisher/issues/2100)) ([2be13a0](https://github.com/terwer/siyuan-plugin-publisher/commit/2be13a052d0893d387a35e41b218f963d819efb9))
+* **wordpress:** write siyuan document id as post meta ([#1638](https://github.com/terwer/siyuan-plugin-publisher/issues/1638)) ([#2119](https://github.com/terwer/siyuan-plugin-publisher/issues/2119)) ([455ded1](https://github.com/terwer/siyuan-plugin-publisher/commit/455ded10f6dcc2dac4b13b7c5350ea1a86d4eafe))
+* **yaml:** read SiYuan document attributes in YAML presets ([#1908](https://github.com/terwer/siyuan-plugin-publisher/issues/1908)) ([#2110](https://github.com/terwer/siyuan-plugin-publisher/issues/2110)) ([091af8c](https://github.com/terwer/siyuan-plugin-publisher/commit/091af8ca02540b154a7b37737e0cbe5bc7773605))
+
+
+### Bug Fixes
+
+* **deps:** bump @vueuse/components from 14.0.0 to 15.0.0 ([#2103](https://github.com/terwer/siyuan-plugin-publisher/issues/2103)) ([0ebb0ad](https://github.com/terwer/siyuan-plugin-publisher/commit/0ebb0adcc7a71744936e85476b3d6d878aa75cf5))
+* **deps:** bump unplugin-icons from 22.5.0 to 24.0.0 ([#2107](https://github.com/terwer/siyuan-plugin-publisher/issues/2107)) ([e2560ef](https://github.com/terwer/siyuan-plugin-publisher/commit/e2560efeba2aa1d31e2f94ab7fcfdad4c82c1bb9))
+* **deps:** bump uuid from 13.0.0 to 14.0.3 ([#2106](https://github.com/terwer/siyuan-plugin-publisher/issues/2106)) ([3fb77a0](https://github.com/terwer/siyuan-plugin-publisher/commit/3fb77a064bc0c4df856055cb5b8d18f06453349a))
+* **deps:** bump vue-i18n from 11.4.22 to 11.4.23 ([#2101](https://github.com/terwer/siyuan-plugin-publisher/issues/2101)) ([68ce0ee](https://github.com/terwer/siyuan-plugin-publisher/commit/68ce0eeb83fc0abbc0744f06d9f6196a2fca6e5c))
+* detect the active document by the focused tab ([#2087](https://github.com/terwer/siyuan-plugin-publisher/issues/2087)) ([#2098](https://github.com/terwer/siyuan-plugin-publisher/issues/2098)) ([2e430ee](https://github.com/terwer/siyuan-plugin-publisher/commit/2e430ee8799754990fd2d762d26ab3dc506e1e18))
+* **halo:** follow the site slug generation strategy ([#1596](https://github.com/terwer/siyuan-plugin-publisher/issues/1596)) ([#2090](https://github.com/terwer/siyuan-plugin-publisher/issues/2090)) ([08009c7](https://github.com/terwer/siyuan-plugin-publisher/commit/08009c7130e69be40010d4ed99f29a2afd025698))
+* **halo:** follow the site's attachment storage policy for images ([#2123](https://github.com/terwer/siyuan-plugin-publisher/issues/2123)) ([fe98cfe](https://github.com/terwer/siyuan-plugin-publisher/commit/fe98cfe52dea7f893eda9cccacb6876359f36bc3)), closes [#1621](https://github.com/terwer/siyuan-plugin-publisher/issues/1621)
+* **image:** read same-origin assets with the browser session ([#2028](https://github.com/terwer/siyuan-plugin-publisher/issues/2028)) ([#2093](https://github.com/terwer/siyuan-plugin-publisher/issues/2093)) ([2c11a78](https://github.com/terwer/siyuan-plugin-publisher/commit/2c11a7849f0d8dd9b9d9037b2fb270a63f78c797))
+* **image:** upload database resource images with the fixed picgo library ([#1999](https://github.com/terwer/siyuan-plugin-publisher/issues/1999)) ([#2096](https://github.com/terwer/siyuan-plugin-publisher/issues/2096)) ([58d09e9](https://github.com/terwer/siyuan-plugin-publisher/commit/58d09e9bfc9c50085ea2269a94fc620d52f856e2))
+* **math:** ignore code blocks when converting $ formulas ([#1724](https://github.com/terwer/siyuan-plugin-publisher/issues/1724)) ([#2094](https://github.com/terwer/siyuan-plugin-publisher/issues/2094)) ([f8d3647](https://github.com/terwer/siyuan-plugin-publisher/commit/f8d3647a2fdacaf7056de654ad805db6f8743086))
+* **notion:** publish long articles in 100-block batches ([#2122](https://github.com/terwer/siyuan-plugin-publisher/issues/2122)) ([d4f3853](https://github.com/terwer/siyuan-plugin-publisher/commit/d4f3853caaae31fda8cb26f35099306b9498e36e))
+* **publish:** follow the siyuan document metadata on quick publish ([#2120](https://github.com/terwer/siyuan-plugin-publisher/issues/2120)) ([15d4dd9](https://github.com/terwer/siyuan-plugin-publisher/commit/15d4dd9b4e00a7680ab3f7e35994a05c49044f0e)), closes [#1533](https://github.com/terwer/siyuan-plugin-publisher/issues/1533)
+* **publish:** honor per-field SiYuan metadata overrides in detailed mode ([#1699](https://github.com/terwer/siyuan-plugin-publisher/issues/1699)) ([#2118](https://github.com/terwer/siyuan-plugin-publisher/issues/2118)) ([850bb2e](https://github.com/terwer/siyuan-plugin-publisher/commit/850bb2e0e71f52daa83877dde01328abd3df979d))
+* **publish:** keep spaces as separators in md filenames ([#1628](https://github.com/terwer/siyuan-plugin-publisher/issues/1628)) ([#2095](https://github.com/terwer/siyuan-plugin-publisher/issues/2095)) ([8b1bacb](https://github.com/terwer/siyuan-plugin-publisher/commit/8b1bacb615a76c2f50f7b5d79bd7ec17df2b097f))
+* **publish:** remove plugin HTML cards with widget cleanup ([#1905](https://github.com/terwer/siyuan-plugin-publisher/issues/1905)) ([#2112](https://github.com/terwer/siyuan-plugin-publisher/issues/2112)) ([4b8e16d](https://github.com/terwer/siyuan-plugin-publisher/commit/4b8e16d154ef8dffc2a3216558e2c41e8ffdd2a6))
+* **publish:** use local timezone offset for static site dates ([#2113](https://github.com/terwer/siyuan-plugin-publisher/issues/2113)) ([0bcb003](https://github.com/terwer/siyuan-plugin-publisher/commit/0bcb0034263040c6b29716ae52aea7afe1063be4))
+* restore platform metadata on reopen and harden AI output fallback ([#2108](https://github.com/terwer/siyuan-plugin-publisher/issues/2108)) ([304d2ba](https://github.com/terwer/siyuan-plugin-publisher/commit/304d2bafeb50049c7c0ccfa4ee5bebe09bbd3a14))
+* **zhihu:** preserve code language and resolve columns from the logged-in account ([#1713](https://github.com/terwer/siyuan-plugin-publisher/issues/1713)) ([#2115](https://github.com/terwer/siyuan-plugin-publisher/issues/2115)) ([504f425](https://github.com/terwer/siyuan-plugin-publisher/commit/504f42519f88dfb43d10163c715876ace652ec62))
+
 ## [2.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.1...siyuan-plugin-publisher-v2.4.0) (2026-11-18)
 ### Features
 * **image:** control automatic image upload per directory and document ([#2040](https://github.com/terwer/siyuan-plugin-publisher/issues/2040)) ([#2085](https://github.com/terwer/siyuan-plugin-publisher/issues/2085)) ([575b20a](https://github.com/terwer/siyuan-plugin-publisher/commit/575b20a2807010d0a8065789076abac767180063))
