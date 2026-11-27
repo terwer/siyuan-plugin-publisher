@@ -8,6 +8,8 @@
  */
 
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
+import { CONTENT_LAYOUT_SINGLE } from "~/src/adaptors/api/base/contentLayout.ts"
+import type { ContentLayout } from "~/src/adaptors/api/base/contentLayout.ts"
 import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
 
 /**
@@ -17,6 +19,20 @@ import { CategoryTypeEnum, PageTypeEnum, PasswordType } from "zhi-blog-api"
  * @since 1.14.0
  */
 class HugoConfig extends CommonGithubConfig {
+  /**
+   * 内容组织方式：单文件（默认）或页面目录（Leaf Bundle）。
+   *
+   * 该字段由 Hugo 族适配器消费；默认值保证唤醒旧配置时行为不变。
+   */
+  public contentLayout: ContentLayout
+
+  /**
+   * 当前平台是否支持页面目录（Leaf Bundle）。
+   *
+   * 只作为配置页渲染开关：非 Hugo 族不应出现「内容组织方式」选项。
+   */
+  public pageBundleSupported: boolean
+
   constructor(
     githubUsername: string,
     githubAuthToken: string,
@@ -34,6 +50,8 @@ class HugoConfig extends CommonGithubConfig {
     this.mdFilenameRule = "[slug].md"
     this.imageStorePath = "static/images"
     this.imageLinkPath = "images"
+    this.contentLayout = CONTENT_LAYOUT_SINGLE
+    this.pageBundleSupported = true
     this.pageType = PageTypeEnum.Markdown
     this.passwordType = PasswordType.PasswordType_Token
     this.allowPreviewUrlChange = false

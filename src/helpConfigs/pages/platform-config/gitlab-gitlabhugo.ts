@@ -14,7 +14,7 @@ export const gitlabhugoHelpConfig: PageHelpConfig = {
   pageId: "platform-config/gitlab_Gitlabhugo",
   helpUrl: platformDocUrl("gitlab-gitlabhugo"),
   summary:
-    "通过 GitLab API 将文章发布到 GitLab 上的 Hugo 站点仓库。账号使用 GitLab 访问令牌（Personal Access Token）；仓库地址由「平台首页 + 用户名 + 仓库名」拼出，平台首页与 API 地址均为你的 GitLab 实例地址；文章默认写入 content/post（文件名 [slug].md）；图片提交到仓库 static/images，文章中引用 images/<图片名>；查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），该规则固定不可修改。",
+    "通过 GitLab API 将文章发布到 GitLab 上的 Hugo 站点仓库。账号使用 GitLab 访问令牌（Personal Access Token）；仓库地址由「平台首页 + 用户名 + 仓库名」拼出；默认按单文件发布（content/post/[slug].md + static/images），也可在「内容组织方式」选择页面目录（Leaf Bundle），把 index.md 与图片放进同一目录。查看链接为仓库 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），该规则固定不可修改。",
   fields: {
     home: {
       tip: "你的 GitLab 实例首页地址（自建实例填自己的域名，如 https://gitlab.example.com），用于拼出仓库地址；修改后 API 地址与令牌地址会同步更新。",
@@ -31,9 +31,12 @@ export const gitlabhugoHelpConfig: PageHelpConfig = {
     githubRepo: { tip: "Hugo 站点仓库名，与用户名组成 <user>/<repo>，例如 hugo-blog。", placeholder: "gitlab-hugo-blog" },
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "main" },
     defaultPath: { tip: "Hugo 文章存储目录，默认 content/post。发布后的 .md 会写入该目录。", placeholder: "content/post" },
-    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md（文章别名）。", placeholder: "[slug].md" },
+    contentLayout: {
+      tip: "内容组织方式：单文件写入「存储目录/<文件名>.md」，图片按下面的图片存储目录上传；页面目录（Leaf Bundle）写入「存储目录/<目录名>/index.md」，图片自动放入同一目录并在正文中相对引用。默认单文件；切换只影响之后新发布的文章；已发布文章更新时保持原路径与图片方式，不会自动搬迁或改造。",
+    },
+    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md（文章别名）。页面目录模式下，去掉 .md 后的名称会作为文章目录名（如 my-post/index.md）。", placeholder: "[slug].md" },
     previewPostUrl: {
-      tip: "站点文章预览规则，默认 /post/[postid].html。Hugo 站点地址由站点配置的永久链接规则决定，此规则仅作查看参考。",
+      tip: "站点文章预览规则，默认 /post/[postid].html。页面目录模式的文章地址通常是目录形式（如 /post/[postid]/ 或 /posts/[postid]/），请按站点实际地址配置。",
       placeholder: "/post/[postid].html",
     },
     previewUrl: {
@@ -42,21 +45,21 @@ export const gitlabhugoHelpConfig: PageHelpConfig = {
     },
     pageType: { tip: "Hugo 默认按 Markdown 内容发布。" },
     picbedService: {
-      tip: "默认选「当前平台」图床：图片提交到仓库 static/images，文章中引用为 images/<图片名>（构建时 static 下的资源原样输出到站点根目录）。",
+      tip: "默认选「当前平台」图床。单文件模式图片提交到仓库 static/images，正文引用 images/<图片名>；页面目录模式图片写入 index.md 同目录并使用相对文件名。",
     },
     blogid: {
       tip: "发布目录：验证通过后下拉列出仓库中的可选目录，文章 .md 提交到所选目录（默认 content/post）；该平台不支持修改发布目录，如需更换请删除账号后重新发布。",
     },
     imageStorePath: {
-      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 static/images（仓库根目录下）。",
+      tip: "单文件模式下，选「当前平台」图床时图片提交到仓库的位置，默认 static/images（仓库根目录下）。页面目录模式不使用该设置，图片固定写入 index.md 同目录。",
       placeholder: "static/images",
     },
     imageLinkPath: {
-      tip: "文章内图片引用前缀，默认 images（Hugo 构建时 static 内容输出到站点根，故引用站点根下的 images）。",
+      tip: "单文件模式下文章内图片引用前缀，默认 images。页面目录模式不使用该设置，正文直接使用同目录的相对文件名。",
       placeholder: "/images",
     },
     yamlLinkEnabled: {
-      tip: "开启后把文章永久链接写入 Front Matter，供站点按自定义链接生成页面；Hugo 构建器会读取该字段。",
+      tip: "开启后把文章永久链接写入 Front Matter，供站点按自定义链接生成页面。单文件模式写入 .html 地址；页面目录模式按存储目录写入目录式地址（如 /posts/<slug>/）。",
     },
     dynYamlCfg: {
       tip: "YAML 预设配置（JSON 片段），发布时逐键合并进文章 Front Matter。留空时 Hugo 默认写入 toc: true、isCJKLanguage: true。",
@@ -81,15 +84,19 @@ export const gitlabhugoHelpConfig: PageHelpConfig = {
     },
     {
       q: "图片要怎么发布？",
-      a: "默认使用「当前平台」图床，图片提交到仓库 static/images，文章中引用 images/<图片名>；Hugo 构建时 static 下的资源会输出到站点根目录，引用即可正确显示。",
+      a: "单文件模式：使用「当前平台」图床，图片提交到仓库 static/images，正文引用 images/<图片名>。页面目录（Leaf Bundle）模式：图片自动写入 index.md 同目录，正文使用相对文件名，由 Hugo 作为 page resource 发布。",
+    },
+    {
+      q: "怎么启用 Leaf Bundle？",
+      a: "在「内容组织方式」选择「页面目录（Leaf Bundle）」后保存。文章会写到「存储目录/<目录名>/index.md」，图片放同目录；建议同时把「文章预览规则」改为站点实际使用的目录式地址（如 /post/[postid]/）。已有文章不会自动搬迁。",
     },
     {
       q: "查看链接打不开？",
-      a: "查看链接为仓库中该 .md 的 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），仓库中存在该文件即可打开，需已登录 GitLab 且对该仓库有访问权限。Hugo 站点线上地址由构建决定。",
+      a: "查看链接为仓库中该 .md 的 blob 地址（/[user]/[repo]/blob/[branch]/[docpath]），仓库中存在该文件即可打开，需已登录 GitLab 且对该仓库有访问权限。Hugo 站点线上地址由构建决定；页面目录文章在线上通常是目录形式。",
     },
     {
       q: "更新与删除会怎样？",
-      a: "点「更新」会重新提交该文章并产生一次新提交；「删除」会从仓库移除对应 .md 文件，站点需重新构建后才同步下线。",
+      a: "点「更新」会重新提交该文章并产生一次新提交；「删除」会从仓库移除对应 .md 文件。页面目录模式下会同时清理该文章目录内的图片；站点需重新构建后才同步下线。",
     },
   ],
   tour: [

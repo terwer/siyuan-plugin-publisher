@@ -14,6 +14,10 @@ import { reactive } from "vue"
 import { PicbedServiceTypeEnum } from "zhi-blog-api"
 import FieldGuide from "~/src/ui/components/bridge/common/help/FieldGuide.vue"
 import { useFieldPlaceholder } from "~/src/composables/useFieldPlaceholder.ts"
+import {
+  CONTENT_LAYOUT_LEAF_BUNDLE as ContentLayoutLeafBundle,
+  CONTENT_LAYOUT_SINGLE as ContentLayoutSingle,
+} from "~/src/adaptors/api/base/contentLayout.ts"
 
 const props = defineProps({
   apiType: {
@@ -90,6 +94,30 @@ const syncDefaultPath = (cfg: any) => {
         </field-guide>
       </el-form-item>
 
+      <!-- 内容组织方式：仅 Hugo 族（支持页面目录/Leaf Bundle）展示 -->
+      <el-form-item
+        v-if="(main.cfg as any).pageBundleSupported === true"
+        :label="t('setting.blog.contentLayout')"
+      >
+        <field-guide field="contentLayout">
+          <el-select v-model="(main.cfg as any).contentLayout" style="width: 100%">
+            <el-option
+              :label="t('setting.blog.contentLayout.single')"
+              :value="ContentLayoutSingle"
+            />
+            <el-option
+              :label="t('setting.blog.contentLayout.leafBundle')"
+              :value="ContentLayoutLeafBundle"
+            />
+          </el-select>
+        </field-guide>
+      </el-form-item>
+      <div
+        v-if="(main.cfg as any).contentLayout === ContentLayoutLeafBundle"
+        class="bundle-image-tip"
+      >
+        {{ t("setting.blog.contentLayout.bundleImageTip") }}
+      </div>
       <!-- 文件规则 -->
       <el-form-item :label="t('setting.blog.mdFilenameRule')">
         <field-guide field="mdFilenameRule">
@@ -144,7 +172,10 @@ const syncDefaultPath = (cfg: any) => {
       </el-form-item>
       <!-- 图片存储路径 -->
       <el-form-item
-        v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
+        v-if="
+          (main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled &&
+          (main.cfg as any).contentLayout !== ContentLayoutLeafBundle
+        "
         :label="t('setting.blog.type.github.images.path')"
       >
         <field-guide field="imageStorePath">
@@ -156,7 +187,10 @@ const syncDefaultPath = (cfg: any) => {
       </el-form-item>
       <!-- 图片访问链接 -->
       <el-form-item
-        v-if="(main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled"
+        v-if="
+          (main.cfg as any).picbedService === PicbedServiceTypeEnum.Bundled &&
+          (main.cfg as any).contentLayout !== ContentLayoutLeafBundle
+        "
         :label="t('setting.blog.type.github.image.link.path')"
       >
         <field-guide field="imageLinkPath">
@@ -178,4 +212,10 @@ const syncDefaultPath = (cfg: any) => {
 <style scoped lang="stylus">
 .top-tip
   margin 4px 0
+
+.bundle-image-tip
+  margin -8px 0 12px
+  font-size 12px
+  line-height 18px
+  color var(--el-text-color-secondary)
 </style>

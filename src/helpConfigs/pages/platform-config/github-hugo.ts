@@ -14,7 +14,7 @@ export const hugoHelpConfig: PageHelpConfig = {
   pageId: "platform-config/github_Hugo",
   helpUrl: platformDocUrl("github-hugo"),
   summary:
-    "通过 GitHub API 将文章发布到 Hugo 静态博客仓库。账号使用 GitHub Token（PAT）；图片选「当前平台」图床上传到仓库 static/images，文章内引用为绝对路径 /images/<图片名>（Hugo 构建时把 static/ 原样复制到站点根，构建产物即可正确显示，这是官方推荐的引用方式）；查看链接为站点文章地址（/post/<slug>.html）。",
+    "通过 GitHub API 将文章发布到 Hugo 静态博客仓库。账号使用 GitHub Token（PAT）；默认按单文件发布（.md + static/images），也可在「内容组织方式」选择页面目录（Leaf Bundle），把 index.md 与图片放进同一目录。查看链接为站点文章地址（/post/<slug>.html 或目录式 /post/<slug>/）。",
   fields: {
     home: { tip: "GitHub 首页地址，默认 https://github.com。", placeholder: "https://github.com" },
     apiUrl: { tip: "GitHub API 地址，默认 https://api.github.com，通常无需修改。", placeholder: "https://api.github.com" },
@@ -28,23 +28,26 @@ export const hugoHelpConfig: PageHelpConfig = {
     githubRepo: { tip: "Hugo 博客仓库名，与用户名组成 <user>/<repo>，例如 hugo-blog。", placeholder: "hugo-blog" },
     githubBranch: { tip: "发布到的分支，默认 main，需与仓库实际分支一致。", placeholder: "main" },
     defaultPath: { tip: "Hugo 文章存储目录，默认 content/post。发布后的 .md 会写入该目录。", placeholder: "content/post" },
-    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md。", placeholder: "[slug].md" },
-    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html，发布后「查看文章」链接按此合成。注意：「YAML永久链接」写入的 url 是固定的 /post/<文章别名>.html，不读这条规则。", placeholder: "/post/[postid].html" },
+    contentLayout: {
+      tip: "内容组织方式：单文件写入「存储目录/<文件名>.md」，图片按下面的图片存储目录上传；页面目录（Leaf Bundle）写入「存储目录/<目录名>/index.md」，图片自动放入同一目录并在正文中相对引用。默认单文件；切换只影响之后新发布的文章；已发布文章更新时保持原路径与图片方式，不会自动搬迁或改造。",
+    },
+    mdFilenameRule: { tip: "文章文件名规则，默认 [slug].md。页面目录模式下，去掉 .md 后的名称会作为文章目录名（如 my-post/index.md）。", placeholder: "[slug].md" },
+    previewPostUrl: { tip: "站点文章预览规则，默认 /post/[postid].html。页面目录模式的文章地址通常是目录形式（如 /post/[postid]/ 或 /posts/[postid]/），请按站点实际地址配置；开启「YAML永久链接」时 front matter 的 url 也会使用目录形式。", placeholder: "/post/[postid].html" },
     previewUrl: { tip: "GitHub blob 预览规则，默认 /[user]/[repo]/blob/[branch]/[docpath]。", placeholder: "/[user]/[repo]/blob/[branch]/[docpath]" },
     pageType: { tip: "Hugo 默认按 Markdown 内容发布。" },
-    picbedService: { tip: "Hugo 图片会提交到博客仓库。选择「当前平台」图床，图片上传到仓库 static/images，文章中引用为绝对路径 /images/<图片名>（Hugo 构建时 static/ 原样复制到站点根）。" },
+    picbedService: { tip: "Hugo 图片会提交到博客仓库。页面目录模式下请保持「当前平台」图床，图片会写入文章目录；单文件模式下默认上传到 static/images，正文引用 /images/<图片名>。" },
     yamlLinkEnabled: {
-      tip: "开启后在 Front Matter 写入 url 字段，取值固定为 /post/<文章别名>.html，用于锁定文章在站点的访问地址。关闭则不写 url，文章地址由主题的 permalink 配置与文件路径决定。",
+      tip: "开启后在 Front Matter 写入 url 字段以锁定文章地址。单文件模式固定为 /post/<文章别名>.html；页面目录模式按存储目录推导为目录形式（如 /posts/<文章别名>/）。关闭则不写 url，地址由文件路径与主题 permalink 决定。",
     },
     blogid: {
       tip: "发布目录：验证通过后下拉列出仓库中的可选目录，文章 .md 提交到所选目录（默认 content/post）；改动「存储目录」会同步覆盖这里。要改选目录请回本页调整，快速发布页里该目录为只读。",
     },
     imageStorePath: {
-      tip: "选「当前平台」图床时图片提交到仓库的位置，默认 static/images。",
+      tip: "单文件模式下，选「当前平台」图床时图片提交到仓库的位置，默认 static/images。页面目录模式不使用该设置，图片固定写入 index.md 同目录。",
       placeholder: "static/images",
     },
     imageLinkPath: {
-      tip: "文章内图片引用前缀，默认 images，即引用为 /images/<图片名> 的站点根绝对路径（Hugo 构建时把 static/ 原样复制到站点根）；填 ./images 或 ../images 则改为相对文章路径引用。",
+      tip: "单文件模式下文章内图片引用前缀，默认 images，即引用为 /images/<图片名> 的站点根绝对路径；填 ./images 或 ../images 则改为相对文章路径引用。页面目录模式不使用该设置，正文直接使用同目录的相对文件名。",
       placeholder: "/images",
     },
     dynYamlCfg: {
@@ -66,15 +69,19 @@ export const hugoHelpConfig: PageHelpConfig = {
     },
     {
       q: "图片要怎么发布？",
-      a: "选择「当前平台」图床，图片会上传到仓库的 static/images 目录（默认），文章中引用为绝对路径 /images/<图片名> 地址。Hugo 构建时把 static/ 目录原样复制到站点根，因此构建产物中该绝对路径能正确显示，这也是官方推荐的引用方式。",
+      a: "单文件模式：选择「当前平台」图床，图片上传到仓库 static/images（默认），正文引用 /images/<图片名>；Hugo 构建时把 static/ 原样复制到站点根。页面目录（Leaf Bundle）模式：图片自动写入 index.md 同目录，正文使用相对文件名，由 Hugo 作为 page resource 发布。",
+    },
+    {
+      q: "怎么启用 Leaf Bundle？",
+      a: "在「内容组织方式」选择「页面目录（Leaf Bundle）」后保存即可。文章会写到「存储目录/<目录名>/index.md」，同目录放图片；建议同时把「文章预览规则」改为站点实际使用的目录式地址（如 /post/[postid]/）。已有文章不会自动搬迁。",
     },
     {
       q: "查看链接打不开？",
-      a: "查看链接为站点文章地址（默认 /post/<postid>.html）。开启「YAML 永久链接」会在 front matter 写入 url 字段锁定地址，取值固定为 /post/<文章别名>.html，不跟随「文章预览规则」；若关闭，则地址由主题的 permalink 配置与文章在 content 下的路径决定。确认预览规则与主题实际生成的地址一致，不一致时按主题规则修改预览规则即可。",
+      a: "查看链接为站点文章地址（默认 /post/<postid>.html）。页面目录模式应使用目录形式（如 /post/[postid]/ 或 /posts/[postid]/）。开启「YAML 永久链接」会在 front matter 写入 url 字段锁定地址；单文件模式取 /post/<文章别名>.html，页面目录模式取按存储目录推导的目录地址。若关闭，则地址由主题的 permalink 配置与文章在 content 下的路径决定。",
     },
     {
       q: "更新与删除会怎样？",
-      a: "点「更新」会重新提交该文章并产生一次新提交；「删除」会从仓库移除对应 .md 文件，需要重新发布才能再次出现在站点。",
+      a: "点「更新」会重新提交该文章并产生一次新提交；「删除」会从仓库移除对应 .md。页面目录模式下会同时清理该文章目录内的图片；单文件模式仍只删除 .md（static/images 下的图片保留）。",
     },
   ],
   tour: [
