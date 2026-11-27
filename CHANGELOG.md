@@ -1,10 +1,7 @@
 # Changelog
 
 ## [2.5.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.4.0...siyuan-plugin-publisher-v2.5.0) (2026-11-27)
-
-
 ### Features
-
 * **cover:** resolve covers through the shared zhi contract ([#2092](https://github.com/terwer/siyuan-plugin-publisher/issues/2092)) ([7cd63a9](https://github.com/terwer/siyuan-plugin-publisher/commit/7cd63a965b33a4ec69ac6933899ae33e234e5874))
 * **csdn:** publish article covers ([#1393](https://github.com/terwer/siyuan-plugin-publisher/issues/1393)) ([#2121](https://github.com/terwer/siyuan-plugin-publisher/issues/2121)) ([25198d9](https://github.com/terwer/siyuan-plugin-publisher/commit/25198d9434a833dc3cee0559c0807d78c363263e))
 * **hexo:** add optional front matter cover to detailed publish ([#1699](https://github.com/terwer/siyuan-plugin-publisher/issues/1699)) ([#2117](https://github.com/terwer/siyuan-plugin-publisher/issues/2117)) ([93c2250](https://github.com/terwer/siyuan-plugin-publisher/commit/93c22509e74f4655e4e34d1df30026f81cdf48a8))
@@ -14,10 +11,7 @@
 * **ui:** redesign published article records management ([#2097](https://github.com/terwer/siyuan-plugin-publisher/issues/2097)) ([#2100](https://github.com/terwer/siyuan-plugin-publisher/issues/2100)) ([2be13a0](https://github.com/terwer/siyuan-plugin-publisher/commit/2be13a052d0893d387a35e41b218f963d819efb9))
 * **wordpress:** write siyuan document id as post meta ([#1638](https://github.com/terwer/siyuan-plugin-publisher/issues/1638)) ([#2119](https://github.com/terwer/siyuan-plugin-publisher/issues/2119)) ([455ded1](https://github.com/terwer/siyuan-plugin-publisher/commit/455ded10f6dcc2dac4b13b7c5350ea1a86d4eafe))
 * **yaml:** read SiYuan document attributes in YAML presets ([#1908](https://github.com/terwer/siyuan-plugin-publisher/issues/1908)) ([#2110](https://github.com/terwer/siyuan-plugin-publisher/issues/2110)) ([091af8c](https://github.com/terwer/siyuan-plugin-publisher/commit/091af8ca02540b154a7b37737e0cbe5bc7773605))
-
-
 ### Bug Fixes
-
 * **deps:** bump @vueuse/components from 14.0.0 to 15.0.0 ([#2103](https://github.com/terwer/siyuan-plugin-publisher/issues/2103)) ([0ebb0ad](https://github.com/terwer/siyuan-plugin-publisher/commit/0ebb0adcc7a71744936e85476b3d6d878aa75cf5))
 * **deps:** bump unplugin-icons from 22.5.0 to 24.0.0 ([#2107](https://github.com/terwer/siyuan-plugin-publisher/issues/2107)) ([e2560ef](https://github.com/terwer/siyuan-plugin-publisher/commit/e2560efeba2aa1d31e2f94ab7fcfdad4c82c1bb9))
 * **deps:** bump uuid from 13.0.0 to 14.0.3 ([#2106](https://github.com/terwer/siyuan-plugin-publisher/issues/2106)) ([3fb77a0](https://github.com/terwer/siyuan-plugin-publisher/commit/3fb77a064bc0c4df856055cb5b8d18f06453349a))
@@ -36,12 +30,9 @@
 * **publish:** use local timezone offset for static site dates ([#2113](https://github.com/terwer/siyuan-plugin-publisher/issues/2113)) ([0bcb003](https://github.com/terwer/siyuan-plugin-publisher/commit/0bcb0034263040c6b29716ae52aea7afe1063be4))
 * restore platform metadata on reopen and harden AI output fallback ([#2108](https://github.com/terwer/siyuan-plugin-publisher/issues/2108)) ([304d2ba](https://github.com/terwer/siyuan-plugin-publisher/commit/304d2bafeb50049c7c0ccfa4ee5bebe09bbd3a14))
 * **zhihu:** preserve code language and resolve columns from the logged-in account ([#1713](https://github.com/terwer/siyuan-plugin-publisher/issues/1713)) ([#2115](https://github.com/terwer/siyuan-plugin-publisher/issues/2115)) ([504f425](https://github.com/terwer/siyuan-plugin-publisher/commit/504f42519f88dfb43d10163c715876ace652ec62))
-
 ## [2.4.0](https://github.com/terwer/siyuan-plugin-publisher/compare/siyuan-plugin-publisher-v2.3.1...siyuan-plugin-publisher-v2.4.0) (2026-11-18)
-### Features
 * **image:** control automatic image upload per directory and document ([#2040](https://github.com/terwer/siyuan-plugin-publisher/issues/2040)) ([#2085](https://github.com/terwer/siyuan-plugin-publisher/issues/2085)) ([575b20a](https://github.com/terwer/siyuan-plugin-publisher/commit/575b20a2807010d0a8065789076abac767180063))
 * **yaml:** resolve placeholders in the YAML preset configuration ([#2035](https://github.com/terwer/siyuan-plugin-publisher/issues/2035)) ([#2086](https://github.com/terwer/siyuan-plugin-publisher/issues/2086)) ([551f2bd](https://github.com/terwer/siyuan-plugin-publisher/commit/551f2bda1e9420249af94ad4b7f1aa4d992a3196))
-### Bug Fixes
 * **cnblogs:** honor the selected post type and draft status ([#2080](https://github.com/terwer/siyuan-plugin-publisher/issues/2080)) ([685ad08](https://github.com/terwer/siyuan-plugin-publisher/commit/685ad08f2b7eb236d65819186cea5dd060538ae7))
 * **deps:** bump @iconify/json from 2.2.408 to 2.2.557 ([#2079](https://github.com/terwer/siyuan-plugin-publisher/issues/2079)) ([5883019](https://github.com/terwer/siyuan-plugin-publisher/commit/5883019bf0b3e1bf60fe20dc69f59017e7499c40))
 * **deps:** bump actions/setup-node from 4 to 7 ([#2082](https://github.com/terwer/siyuan-plugin-publisher/issues/2082)) ([4364b84](https://github.com/terwer/siyuan-plugin-publisher/commit/4364b84244cd8c0d7ef3ed0f004c34819926b908))
