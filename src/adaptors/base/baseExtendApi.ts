@@ -883,6 +883,8 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
         }
         // 批量处理图片上传
         const urlMap = {}
+        // 缓存命中的远端图片要按普通 Markdown 图片替换，不能和 Confluence 宏共用一个替换出口
+        const cachedRemoteMap = {}
         const picbedName = this.getPicbedServiceName(cfg)
         for (const image of images) {
           try {
@@ -895,7 +897,7 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
               Boolean(siyuanApiBaseUrl) && imageUrl.startsWith(siyuanApiBaseUrl) // 远程内核资源
             if (imageUrl.startsWith("http") && !imageUrl.startsWith(pageOrigin) && !isSiyuanAsset) {
               if (image.originUrl && image.originUrl !== imageUrl) {
-                urlMap[image.originUrl] = imageUrl
+                cachedRemoteMap[image.originUrl] = imageUrl
               }
               continue
             }
@@ -957,6 +959,17 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
             return urlMap[match] || match
           }
           post.markdown = post.markdown.replace(pictureReplacePattern, replaceUrl)
+        }
+
+        // 图片缓存已换成远端地址的本地图片：保留图片语法，只替换 URL
+        for (const key in cachedRemoteMap) {
+          if (!cachedRemoteMap.hasOwnProperty(key)) {
+            continue
+          }
+          const remoteUrl = cachedRemoteMap[key]
+          post.markdown = post.markdown.replace(ImageUtils.genMdImageRegex(key), (match) =>
+            match.replace(key, remoteUrl)
+          )
         }
         break
       }
