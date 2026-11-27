@@ -15,7 +15,7 @@ import { safeMergeConfig } from "~/src/adaptors/api/base/configMergeUtil.ts"
 import { Utils } from "~/src/utils/utils.ts"
 import { getDynPostidKey } from "~/src/platforms/dynamicConfig.ts"
 import { CsdnWebAdaptor } from "~/src/adaptors/web/csdn/csdnWebAdaptor.ts"
-import { CategoryTypeEnum } from "zhi-blog-api"
+import { CategoryTypeEnum, CoverMode } from "zhi-blog-api"
 import { SHARED_PROXY_MIDDLEWARE } from "~/src/utils/constants.ts"
 
 /**
@@ -62,14 +62,16 @@ const useCsdnWeb = async (key?: string, newCfg?: CsdnConfig) => {
   cfg.categoryType = CategoryTypeEnum.CategoryType_Multi
   cfg.allowCateChange = true
   cfg.knowledgeSpaceEnabled = false
+  // 封面：发布层按「题头图 → 正文首图 → 自定义」解析，CSDN 的封面字段接收图片 URL。
+  // 已保存的配置里可能带着旧的默认值，能力位必须在运行时显式声明。
+  cfg.coverEnabled = true
+  cfg.coverMode = CoverMode.Url
+  cfg.featuredImageEnabled = true
   // picbed service
   cfg.picgoPicbedSupported = false
   cfg.bundledPicbedSupported = true
   // 退出登录
   cfg.logoutUrl = "https://passport.csdn.net/account/logout"
-  // picbed service
-  cfg.picgoPicbedSupported = false
-  cfg.bundledPicbedSupported = true
 
   const webApi = new CsdnWebAdaptor(appInstance, cfg)
   return {

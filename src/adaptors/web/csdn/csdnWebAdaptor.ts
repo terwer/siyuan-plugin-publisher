@@ -10,10 +10,20 @@
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
 import CsdnUtils from "~/src/adaptors/web/csdn/csdnUtils.ts"
 import { BlogConfig, CategoryInfo, MediaObject, PageTypeEnum, Post, UserBlog } from "zhi-blog-api"
+import { StrUtil } from "zhi-common"
 import WebUtils from "~/src/adaptors/web/base/webUtils.ts"
 import * as _ from "lodash-es"
 import FormDataHostUtil from "~/src/utils/FormDataHostUtil.ts"
 import type { IPublishCfg } from "~/src/types/IPublishCfg.ts"
+import { getFeaturedImage, type FeaturedImagePost } from "~/src/utils/featuredImage.ts"
+import { readFeaturedImageMedia } from "~/src/utils/featuredImageMedia.ts"
+
+/**
+ * CSDN 图片上传通道。
+ *
+ * 正文图与封面图走两条互不通用的通道：用错通道不会报错，只是图片不显示。
+ */
+type CsdnImageKind = "body" | "cover"
 
 /**
  * CSDN网页授权适配器
@@ -152,7 +162,8 @@ class CsdnWebAdaptor extends BaseWebApi {
     csdnHtml = await CsdnUtils.processPrismjs(this, csdnHtml)
 
     // 仅支持MD
-    const params = JSON.stringify({
+    const coverImages = await this.resolveCoverImages(post)
+    const params: Record<string, any> = {
       title: post.title,
       markdowncontent: post.markdown,
       content: csdnHtml,
@@ -167,18 +178,22 @@ class CsdnWebAdaptor extends BaseWebApi {
       Description: post.shortDesc,
       not_auto_saved: "1",
       source: "pc_mdeditor",
-      cover_images: [],
-      cover_type: 1,
       is_new: 1,
       vote_id: 0,
       resource_id: "",
       pubStatus: "publish",
-    })
+    }
+    // cover_type=1 表示使用 cover_images 中的封面；没有封面时不下发这两个字段，
+    // 避免把空封面当成“自定义封面”提交。
+    if (coverImages.length > 0) {
+      params.cover_images = coverImages
+      params.cover_type = 1
+    }
 
     const res = await this.csdnFetch(
       "https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle",
       [],
-      params,
+      JSON.stringify(params),
       "POST"
     )
 
@@ -200,7 +215,21 @@ class CsdnWebAdaptor extends BaseWebApi {
     csdnHtml = await CsdnUtils.processPrismjs(this, csdnHtml)
 
     // 仅支持MD
-    const params = JSON.stringify({
+    const coverImages = await this.resolveCoverImages(post)
+    const coverCleared = (post as FeaturedImagePost).featuredImageCleared === true
+    if (coverImages.length === 0 && !coverCleared) {
+      // saveArticle 不带封面字段会清空平台封面；本地没有新的封面来源时，
+      // 回读并重发平台已有封面，避免正文更新顺手把封面删掉。
+      try {
+        const existingCover = await this.getPostCover(postid)
+        if (!StrUtil.isEmptyString(existingCover)) {
+          coverImages.push(existingCover)
+        }
+      } catch (e: any) {
+        this.logger.warn(`CSDN 回读已有封面失败，本次更新可能清空封面 => ${e?.message ?? e}`)
+      }
+    }
+    const params: Record<string, any> = {
       id: postid,
       title: post.title,
       markdowncontent: post.markdown,
@@ -217,18 +246,24 @@ class CsdnWebAdaptor extends BaseWebApi {
       resource_url: "",
       not_auto_saved: "1",
       source: "pc_mdeditor",
-      cover_images: [],
-      cover_type: 1,
       is_new: 1,
       vote_id: 0,
       resource_id: "",
       pubStatus: "publish",
-    })
+    }
+    if (coverImages.length > 0) {
+      params.cover_images = coverImages
+      params.cover_type = 1
+    } else if (coverCleared) {
+      // 用户清空了封面且没有可回退的题头图/正文首图：显式清除平台侧封面。
+      params.cover_images = []
+      params.cover_type = 0
+    }
 
     const res = await this.csdnFetch(
       "https://bizapi.csdn.net/blog-console-api/v3/mdeditor/saveArticle",
       [],
-      params,
+      JSON.stringify(params),
       "POST"
     )
 
@@ -249,6 +284,10 @@ class CsdnWebAdaptor extends BaseWebApi {
       post.title = csdnPost.title
       post.mt_keywords = csdnPost?.tags ?? ""
       post.categories = csdnPost?.categories.split(",") ?? []
+      // 回读平台已有封面：更新时若本地没有新的封面来源，重发这张图即可保留封面。
+      // （saveArticle 不带封面字段会清空平台封面）
+      const coverImages = Array.isArray(csdnPost?.cover_images) ? csdnPost.cover_images : []
+      post.cover = typeof coverImages[0] === "string" ? coverImages[0].trim() : ""
     }
     return post
   }
@@ -305,24 +344,159 @@ class CsdnWebAdaptor extends BaseWebApi {
   // ================
   // private methods
   // ================
-  private async csdnUploadImage2025(file: any, filename: string) {
+
+  /**
+   * 解析本次发布要提交给 CSDN 的封面地址。
+   *
+   * 发布层已经按「题头图 → 正文首图 → 自定义」解析出 `post.cover`：
+   * - CSDN 图床地址直接使用；
+   * - 思源内核资源先经封面专用通道上传到 CSDN 图床；
+   * - 其它公网图片原样使用。
+   *
+   * 封面是正文之外的附加能力：失败时记录原因并继续发布正文。
+   */
+  private async resolveCoverImages(post: Post): Promise<string[]> {
+    const cover = (StrUtil.isEmptyString(post.cover) ? getFeaturedImage(post) : (post.cover ?? "")).trim()
+    if (StrUtil.isEmptyString(cover)) {
+      return []
+    }
+
+    if (this.isCsdnImageUrl(cover)) {
+      return [cover]
+    }
+
+    if (this.isSiyuanAssetUrl(cover)) {
+      if ((post as any).imageUploadSkipped === true) {
+        this.recordCoverError(post, "已按设置跳过图片自动上传，封面图未上传")
+        return []
+      }
+
+      try {
+        return [await this.uploadCoverImage(cover, post)]
+      } catch (e: any) {
+        const message = e?.message || String(e)
+        this.recordCoverError(post, `封面图上传失败：${message}`)
+        this.logger.warn(`CSDN 封面图上传失败，正文继续发布 => ${message}`)
+        return []
+      }
+    }
+
+    if (/^https?:\/\//i.test(cover)) {
+      // 公网图片 CSDN 可直接引用，避免重复上传
+      return [cover]
+    }
+
+    this.recordCoverError(post, "封面图地址无法访问，请填写图片链接或思源资源")
+    return []
+  }
+
+  /**
+   * 读取平台文章当前封面地址。
+   *
+   * `saveArticle` 更新时若不带封面字段会清空平台封面，因此更新前需要回读并重发。
+   */
+  private async getPostCover(postid: string): Promise<string> {
+    const res = await this.csdnFetch(`https://bizapi.csdn.net/blog-console-api/v3/editor/getArticle?id=${postid}`)
+    if (res?.code !== 200) {
+      return ""
+    }
+    const coverImages = Array.isArray(res?.data?.cover_images) ? res.data.cover_images : []
+    return typeof coverImages[0] === "string" ? coverImages[0].trim() : ""
+  }
+
+  /**
+   * 上传封面到 CSDN 图床，返回可用于 `cover_images` 的公网地址。
+   *
+   * @param cover - 封面地址（思源内核资源或相对路径）
+   * @param post - 文章，用于共享媒体缓存上下文
+   */
+  private async uploadCoverImage(cover: string, post: Post): Promise<string> {
+    const baseUrl = this.baseExtendApi.getSiyuanApiBaseUrl()
+    const media = await readFeaturedImageMedia(this.baseExtendApi, cover, baseUrl || undefined)
+    const mediaObject = this.baseExtendApi.createMediaObject(post, media.name, media.mimeType, media.bits)
+    const { Blob } = FormDataHostUtil.getFormData(this.appInstance)
+    const file = new Blob([mediaObject.bits], { type: mediaObject.type })
+
+    const uploaded = await this.csdnUploadImage2025(file, mediaObject.name, "cover")
+    const url = (uploaded?.url ?? "").trim()
+    if (StrUtil.isEmptyString(url)) {
+      throw new Error("CSDN 未返回封面图片地址")
+    }
+    return url
+  }
+
+  /**
+   * 记录封面处理失败原因，供发布层提示用户；不覆盖已有错误。
+   */
+  private recordCoverError(post: Post, message: string) {
+    const featuredPost = post as FeaturedImagePost
+    if (StrUtil.isEmptyString(featuredPost.featuredImageError)) {
+      featuredPost.featuredImageError = message
+    }
+  }
+
+  /**
+   * 是否已经是 CSDN 图床地址。
+   */
+  private isCsdnImageUrl(url: string): boolean {
+    try {
+      const { hostname } = new URL(url)
+      return /(^|\.)csdnimg\.cn$/i.test(hostname) || /(^|\.)csdn\.net$/i.test(hostname)
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * 是否为思源内核资源（本机地址，CSDN 无法直接访问）。
+   */
+  private isSiyuanAssetUrl(url: string): boolean {
+    if (!/^https?:\/\//i.test(url)) {
+      return true
+    }
+    const baseUrl = (this.baseExtendApi.getSiyuanApiBaseUrl() ?? "").replace(/\/+$/, "")
+    if (!StrUtil.isEmptyString(baseUrl) && url.startsWith(`${baseUrl}/`)) {
+      return true
+    }
+    // 内核地址未声明时，本机地址同样不能直接交给 CSDN
+    try {
+      const { hostname } = new URL(url)
+      return /^(localhost|127(?:\.\d{1,3}){3}|0\.0\.0\.0|\[?::1]?)$/i.test(hostname)
+    } catch {
+      return false
+    }
+  }
+
+  private async csdnUploadImage2025(file: any, filename: string, kind: CsdnImageKind = "body") {
     const signUrl = "https://bizapi.csdn.net/resource-api/v1/image/direct/upload/signature"
-    const fileExt = filename.split(".").pop()
-    if (!this.validateFileExt(fileExt)) {
+    const fileExt = filename.split(".").pop() ?? ""
+    if (!this.validateFileExt(fileExt, kind)) {
+      if (kind === "cover") {
+        throw new Error(`不支持的封面图片格式：.${fileExt}`)
+      }
       return null
     }
+
+    // 正文图与封面图必须使用各自的 appName / imageTemplate，两条通道不通用。
+    const channel =
+      kind === "cover"
+        ? { appName: "direct_blog_coverimage", imageTemplate: "" }
+        : { appName: "direct_blog_markdown", imageTemplate: "standard" }
     const res = await this.csdnMediaFetch(
       signUrl,
       {},
       JSON.stringify({
-        imageTemplate: "standard",
-        appName: "direct_blog_markdown",
+        imageTemplate: channel.imageTemplate,
+        appName: channel.appName,
         imageSuffix: fileExt,
       }),
       "POST"
     )
     if (res.code !== 200) {
       this.logger.error("图片上传签名错误，信息如下", res)
+      if (kind === "cover") {
+        throw new Error(`封面图上传签名失败 => ${res?.msg ?? res?.code ?? "未知错误"}`)
+      }
       return null
     }
     const uploadData = res.data
@@ -339,28 +513,32 @@ class CsdnWebAdaptor extends BaseWebApi {
     formData.append("signature", uploadData.signature)
     formData.append("callbackBody", uploadData.callbackBody)
     formData.append("callbackBodyType", uploadData.callbackBodyType)
-    formData.append("callbackUrl", uploadData.callbackUrl)
-    formData.append("AccessKeyId", uploadData.accessId)
-    formData.append("x:rtype", uploadData.customParam.rtype)
-    formData.append("x:watermark", uploadData.customParam.watermark)
-    formData.append("x:templateName", uploadData.customParam.templateName)
-    formData.append("x:filePath", uploadData.customParam.filePath)
-    formData.append("x:isAudit", uploadData.customParam.isAudit)
-    formData.append("x:x-image-app", uploadData.customParam["x-image-app"])
-    formData.append("x:type", uploadData.customParam.type)
-    formData.append("x:x-image-suffix", uploadData.customParam["x-image-suffix"])
-    formData.append("x:username", uploadData.customParam.username)
+    // 对象存储按 provider 区分凭据字段名；发错只会得到没有说明的空 400。
+    // 未返回 provider 时沿用旧的 obs 字段名，保持既有上传行为。
+    if (!uploadData.provider || uploadData.provider === "obs") {
+      formData.append("AccessKeyId", uploadData.accessId)
+      formData.append("callbackUrl", uploadData.callbackUrl)
+    } else {
+      formData.append("OSSAccessKeyId", uploadData.accessId)
+      formData.append("callback", uploadData.callbackUrl)
+    }
+    for (const [key, value] of Object.entries(uploadData.customParam ?? {})) {
+      if (value !== undefined && value !== null) {
+        formData.append(`x:${key}`, String(value))
+      }
+    }
     formData.append("file", file)
     const headers = {}
     const resJson = await this.csdnFormFetch(uploadUrl, formData, headers)
-    if (resJson.code !== 200) {
+    const imageUrl = resJson?.data?.imageUrl ?? resJson?.imageUrl
+    if (StrUtil.isEmptyString(imageUrl)) {
       this.logger.error("CSDN图片上传失败，信息如下", resJson)
       throw new Error("CSDN图片上传失败 =>" + filename)
     }
     return {
-      id: resJson.data.targetObjectKey,
-      object_key: resJson.data.targetObjectKey,
-      url: resJson.data.imageUrl,
+      id: resJson?.data?.targetObjectKey ?? "",
+      object_key: resJson?.data?.targetObjectKey ?? "",
+      url: imageUrl,
     }
   }
 
@@ -410,13 +588,17 @@ class CsdnWebAdaptor extends BaseWebApi {
     }
   }
 
-  private validateFileExt(ext: string): boolean {
+  private validateFileExt(ext: string, kind: CsdnImageKind = "body"): boolean {
     switch (ext.toLowerCase()) {
       case "jpg":
       case "png":
       case "jpeg":
       case "gif":
         return true
+      // 封面图床额外支持 webp/bmp；正文通道维持原有格式范围
+      case "webp":
+      case "bmp":
+        return kind === "cover"
       default:
         return false
     }
