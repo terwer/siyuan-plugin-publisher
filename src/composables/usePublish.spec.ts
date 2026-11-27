@@ -245,6 +245,23 @@ describe("usePublish.doSinglePublish", () => {
   })
 })
 
+describe("usePublish batch merge", () => {
+  it("preserves the source document id when merging batch posts", () => {
+    const sourcePost = new Post()
+    sourcePost.title = "思源标题"
+    sourcePost.originalId = "20261128003520-g179y1f"
+
+    const platformPost = new Post()
+    platformPost.title = "平台标题"
+
+    const { initPublishMethods } = usePublish()
+    const mergedPost = initPublishMethods.doMergeBatchPost(sourcePost, platformPost)
+
+    // 批量发布与单发/快速发布共用 WordpressApiAdaptor.editPost，来源 ID 必须保留。
+    expect(mergedPost.originalId).toBe(sourcePost.originalId)
+  })
+})
+
 describe("usePublish.doInitSinglePage", () => {
   beforeEach(() => {
     setActivePinia(createPinia())
