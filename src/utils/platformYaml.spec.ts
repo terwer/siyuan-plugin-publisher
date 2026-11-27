@@ -11,8 +11,10 @@ import { describe, expect, it } from "vitest"
 import { Post } from "zhi-blog-api"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
+import { HugoConfig } from "~/src/adaptors/api/hugo/hugoConfig.ts"
+import { HugoYamlConverterAdaptor } from "~/src/adaptors/api/hugo/hugoYamlConverterAdaptor.ts"
 import { formatDateTimeWithOffset } from "~/src/utils/dateUtils.ts"
-import { buildPlatformYamlFormatObj, mergeYamlObjs } from "~/src/utils/platformYaml.ts"
+import { buildPlatformYamlFormatObj, buildSourceModeYamlPost, mergeYamlObjs } from "~/src/utils/platformYaml.ts"
 
 const buildPost = () => {
   const post = new Post()
@@ -68,5 +70,51 @@ describe("buildPlatformYamlFormatObj", () => {
 
     expect(yfmObj.yamlObj.title).toBe("同步修改")
     expect(yfmObj.yamlObj.sticky).toBeUndefined()
+  })
+})
+
+describe("buildPlatformYamlFormatObj 应用 YAML 预设", () => {
+  it("保留已有 YAML 的平台重建时也会合并预设（Hugo）", async () => {
+    const post = buildPost()
+    post.attrs = JSON.stringify({ "custom-weight": "10" })
+    const cfg = new HugoConfig("terwer", "token", "blog", "main")
+    cfg.dynYamlCfg = JSON.stringify({ sticky: true, weight: "[attr:custom-weight|int]" })
+
+    const yfmObj = await buildPlatformYamlFormatObj(new HugoYamlConverterAdaptor(), post, cfg)
+
+    // 平台适配器保留原文的字段不变
+    expect(yfmObj.yamlObj.title).toBe("旧标题")
+    // 预设逐键合并，占位符按当前文章解析
+    expect(yfmObj.yamlObj.sticky).toBe(true)
+    expect(yfmObj.yamlObj.weight).toBe(10)
+    expect(yfmObj.formatter).toContain("sticky: true")
+  })
+
+  it("重算 YAML 的平台应用预设，手写字段仍保留（Hexo）", async () => {
+    const post = buildPost()
+    const cfg = buildCfg()
+    cfg.dynYamlCfg = JSON.stringify({ sticky: true })
+
+    const yfmObj = await buildPlatformYamlFormatObj(new HexoYamlConverterAdaptor(), post, cfg)
+
+    expect(yfmObj.yamlObj.title).toBe("同步修改")
+    expect(yfmObj.yamlObj.sticky).toBe(true)
+  })
+})
+
+describe("buildSourceModeYamlPost", () => {
+  it("把含预设的有效 YAML 写回 Post，源码模式展示与发布内容一致", async () => {
+    const post = buildPost()
+    const cfg = buildCfg()
+    cfg.dynYamlCfg = JSON.stringify({ sticky: true })
+
+    const { yamlFormatObj, post: syncedPost } = await buildSourceModeYamlPost(
+      new HexoYamlConverterAdaptor(),
+      post,
+      cfg
+    )
+
+    expect(syncedPost.yaml).toBe(yamlFormatObj.formatter)
+    expect(syncedPost.yaml).toContain("sticky: true")
   })
 })

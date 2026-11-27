@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
-import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
+import { buildSourceModeYamlPost } from "~/src/utils/platformYaml.ts"
 import { computed, onMounted, reactive } from "vue"
 import { SourceContentShowType } from "~/src/models/sourceContentShowType.ts"
 import { createAppLogger } from "~/src/utils/appLogger.ts"
@@ -207,12 +207,16 @@ const initYaml = async (yaml: string) => {
  */
 const handlePostToHoHtml = async (post: Post) => {
   let yfmObj: YamlFormatObj = new YamlFormatObj()
+  // 按平台适配器重建出的 Post（含 YAML 预设），用于把展示内容同步回表单模型
+  let syncedPost: Post | undefined
 
   switch (post.yamlType) {
     case YamlStrategy.Yaml_custom_auto:
     case YamlStrategy.Yaml_custom_hand: {
       // 按平台适配器重新生成 YAML，并保留已保存 YAML 里适配器不负责的字段（issue #2054）
-      yfmObj = await buildPlatformYamlFormatObj(formData.yamlAdaptor, post, formData.cfg)
+      const built = await buildSourceModeYamlPost(formData.yamlAdaptor, post, formData.cfg)
+      yfmObj = built.yamlFormatObj
+      syncedPost = built.post
       break
     }
 
@@ -232,6 +236,13 @@ const handlePostToHoHtml = async (post: Post) => {
   // 初始化
   formData.yamlFormatObj = yfmObj
   onYamlShowTypeChange(formData.stype)
+
+  // 单平台源码模式下发布链路以编辑器内容为准，不会再次重建 YAML；
+  // 把刚生成的有效 YAML（含预设）同步回表单模型，保证看到的 YAML 就是发布出去的
+  // YAML（issue #1667）。批量分发没有单平台上下文，不在此处理。
+  if (syncedPost && !formData.readonlyMode && !StrUtil.isEmptyString(formData.apiType)) {
+    emit("emitSyncPost", syncedPost)
+  }
 }
 
 /**
