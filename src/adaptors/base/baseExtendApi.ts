@@ -49,6 +49,7 @@ import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
 import { buildPlatformYamlFormatObj } from "~/src/utils/platformYaml.ts"
 import { removeMarkdownHeadingNumbers, removeTitleNumber } from "~/src/utils/titleNumber.ts"
+import { removeHtmlBlocksFromSiyuanMarkdown } from "~/src/utils/siyuanHtmlBlockCleaner.ts"
 import { isCoverEnabled, resolveCoverLink, stripLeadingDocTitleImage } from "~/src/utils/coverImage.ts"
 import { getFeaturedImage, type FeaturedImagePost } from "~/src/utils/featuredImage.ts"
 import {
@@ -367,6 +368,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     const outerLinkRegex = /\[(.+?)]\(siyuan:\/\/blocks\/(\d+-\w+)\)/g
     md = await this.replaceOuterLinks(md, outerLinkRegex, { pref, cfg, setting })
+
+    // 去除第三方插件写入的 HTML 块（issue #1905）。
+    // oembed/书签卡片等以 HTML 块形式存在，不能只依赖 zhi-siyuan-api 的挂件 iframe 正则。
+    if (pref.value.removeMdWidgetTag && id) {
+      try {
+        md = await removeHtmlBlocksFromSiyuanMarkdown(this.kernelApi, id, md)
+      } catch (e) {
+        this.logger.warn(`移除 HTML 块失败，保留原文继续发布 doc=${id}`, e)
+      }
+    }
 
     // 汇总结果
     post.markdown = md

@@ -360,7 +360,7 @@
   "preference.item.fixTitle.desc": "Remove automatic numbering and redundant suffixes from titles before publishing.",
   "preference.item.keepTitle.desc": "Keep the original document title as much as possible without overriding it.",
   "preference.item.removeFirstH1.desc": "Remove the first H1 from exported content to avoid duplicate titles.",
-  "preference.item.removeMdWidgetTag.desc": "Remove widget-related markup from Markdown before publishing.",
+  "preference.item.removeMdWidgetTag.desc": "Remove SiYuan widgets and HTML blocks (including third-party cards such as oembed and bookmarks) before publishing.",
   "preference.item.ignoreBlockRef.desc": "Ignore block references during publishing to reduce cross-document dependency content in the final body.",
   "preference.item.allowChangeSlug.desc": "Allow the article slug to be changed. A confirmation dialog is shown the first time it is enabled.",
   "preference.confirm.allowChangeSlug.title": "Confirm slug editing",

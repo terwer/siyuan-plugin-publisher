@@ -11,6 +11,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { createPinia, setActivePinia } from "pinia"
 import { CoverSource, PageTypeEnum, PicbedServiceTypeEnum, Post } from "zhi-blog-api"
 import { BaseExtendApi } from "~/src/adaptors/base/baseExtendApi.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { getMediaCacheContext } from "~/src/utils/mediaCacheContext.ts"
 import type { FeaturedImagePost } from "~/src/utils/featuredImage.ts"
 
@@ -37,6 +38,7 @@ const createExtendApi = (attrs: Record<string, any> = {}) => {
     getBlockAttrs: vi.fn(async () => ({ ...attrs })),
     getBlockByID: vi.fn(async () => ({ box: "box-1", path: "/demo.sy" })),
     setSingleBlockAttr: vi.fn(),
+    sql: vi.fn(async () => []),
     resolveDocTitleImageUrl: (path?: string) => `http://siyuan/${(path ?? "").replace(/^\.?\//, "")}`,
   }
   ;(extendApi as any).kernelApi = kernelApi
@@ -62,6 +64,7 @@ describe("BaseExtendApi 通用封面解析", () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     localStorage.clear()
+    usePreferenceSettingStore().getPublishPreferenceSetting().value.removeMdWidgetTag = false
   })
 
   it("优先使用题头图链接，并从正文开头剔除题头图", async () => {
@@ -120,5 +123,38 @@ describe("BaseExtendApi 通用封面解析", () => {
 
     expect(result.cover).toBeUndefined()
     expect(result.markdown).toContain("![image](assets/cover.png)")
+  })
+
+  it("开启去除挂件HTML时清理第三方插件写入的 HTML 块", async () => {
+    const { extendApi, publishCfg, kernelApi } = createExtendApi({})
+    const card = [
+      "<div>",
+      '  <style>.kg-card { color: red; }</style>',
+      '  <main class="kg-card-main">Example card</main>',
+      "</div>",
+    ].join("\n")
+    kernelApi.sql.mockResolvedValue([{ content: card }])
+    usePreferenceSettingStore().getPublishPreferenceSetting().value.removeMdWidgetTag = true
+    const post = createPost(["# 标题", "", "前面", "", card, "", "后面"].join("\n"))
+
+    const result = await extendApi.preEditPost(post, "doc-1", publishCfg)
+
+    expect(result.markdown).not.toContain("kg-card")
+    expect(result.markdown).not.toContain("<style>")
+    expect(result.markdown).toContain("前面")
+    expect(result.markdown).toContain("后面")
+    expect(kernelApi.sql).toHaveBeenCalledTimes(1)
+  })
+
+  it("关闭去除挂件HTML时保留 HTML 块", async () => {
+    const { extendApi, publishCfg, kernelApi } = createExtendApi({})
+    const card = "<div>Example card</div>"
+    kernelApi.sql.mockResolvedValue([{ content: card }])
+    const post = createPost(["前面", "", card, "", "后面"].join("\n"))
+
+    const result = await extendApi.preEditPost(post, "doc-1", publishCfg)
+
+    expect(result.markdown).toContain(card)
+    expect(kernelApi.sql).not.toHaveBeenCalled()
   })
 })
