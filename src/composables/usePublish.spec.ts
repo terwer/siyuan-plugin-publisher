@@ -149,6 +149,44 @@ describe("usePublish.doSinglePublish", () => {
     expect(mockSetSingleBlockAttr).toHaveBeenCalled()
   })
 
+  it("returns text diagram fallback warnings without failing the publish", async () => {
+    const setting: Record<string, any> = {
+      "20260511000000-test": {},
+    }
+    const store = usePublishSettingStore()
+    store.getSetting = vi.fn().mockResolvedValue(setting as any)
+    store.updateSetting = vi.fn().mockImplementation(async (nextSetting: any) => {
+      Object.assign(setting, nextSetting)
+    })
+
+    mockGetPublishApi.mockResolvedValue({
+      preEditPost: vi.fn(async (post: Post) => {
+        ;(post as any).diagramRenderErrors = ["mermaid 文本图渲染失败：UnknownDiagramError；已保留代码块"]
+        ;(post as any).diagramRenderErrorDetails = ["mermaid 文本图渲染失败：UnknownDiagramError；已保留代码块"]
+        ;(post as any).diagramRenderSkippedCount = 1
+        return post
+      }),
+      newPost: vi.fn(async () => "diagram-post-id"),
+      getPreviewUrl: vi.fn(async () => "https://example.com/diagram-test"),
+    })
+
+    const doc = new Post()
+    doc.title = "文本图测试"
+    doc.wp_slug = "diagram-test"
+    doc.markdown = "```mermaid\ninvalid\n```"
+
+    const result = await usePublish().doSinglePublish(
+      "custom_Yuqueweb",
+      "20260511000000-test",
+      createPublishCfg(setting),
+      doc
+    )
+
+    expect(result.status).toBe(true)
+    expect(result.errMsg).toContain("mermaid 文本图渲染失败")
+    expect(result.errDetails).toContain("UnknownDiagramError")
+  })
+
   it("returns user-friendly image warnings and diagnostic details separately", async () => {
     const setting: Record<string, any> = {
       "20260511000000-test": {},

@@ -322,6 +322,10 @@ const toggleImagePreview = async () => {
     if (imageUploadErrors?.length) {
       ElMessage.warning(imageUploadErrors.join("\n"))
     }
+    const diagramRenderErrors = (previewedPost as any).diagramRenderErrors as string[] | undefined
+    if (diagramRenderErrors?.length) {
+      ElMessage.warning(diagramRenderErrors.join("\n"))
+    }
   } catch (e) {
     ElMessage.error(e.message)
     logger.error(t("main.opt.failure") + "=>", e)

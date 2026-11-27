@@ -240,6 +240,36 @@
         </template>
       </article>
 
+      <!-- 文本图转图片（issue 2111） -->
+      <article class="syp-settings-group">
+        <div class="syp-settings-group__title">{{ t("picbed.diagramRender.title") }}</div>
+        <div class="syp-settings-group__desc">{{ t("picbed.diagramRender.desc") }}</div>
+
+        <label class="syp-picgo-field__checkbox">
+          <input v-model="diagramEnabled" type="checkbox" />
+          <span>{{ t("picbed.diagramRender.enabled") }}</span>
+        </label>
+
+        <div class="syp-diagram-options" :class="{ 'is-disabled': !diagramEnabled }">
+          <div class="syp-picgo-field">
+            <label class="syp-picgo-field__label">{{ t("picbed.diagramRender.scale") }}</label>
+            <select v-model.number="diagramScale" class="syp-input" :disabled="!diagramEnabled">
+              <option v-for="scale in diagramScaleOptions" :key="scale" :value="scale">{{ scale }}x</option>
+            </select>
+          </div>
+
+          <div class="syp-picgo-field">
+            <label class="syp-picgo-field__label">{{ t("picbed.diagramRender.theme") }}</label>
+            <select v-model="diagramTheme" class="syp-input" :disabled="!diagramEnabled">
+              <option value="light">{{ t("picbed.diagramRender.theme.light") }}</option>
+              <option value="follow">{{ t("picbed.diagramRender.theme.follow") }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="syp-picgo-field__help">{{ t("picbed.diagramRender.docTip") }}</div>
+      </article>
+
       <!-- 按目录排除自动上传（issue 2040） -->
       <image-upload-exclude-dirs-settings />
     </div>
@@ -265,6 +295,7 @@ import { usePicgoBridge } from "~/src/composables/usePicgoBridge.ts"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { DynamicConfig, DynamicJsonCfg, PlatformType } from "~/src/platforms/dynamicConfig.ts"
 import { usePublishSettingStore } from "~/src/stores/usePublishSettingStore.ts"
+import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { DYNAMIC_CONFIG_KEY } from "~/src/utils/constants.ts"
 import { sanitizeSensitiveForLog } from "~/src/utils/sensitiveLogSanitizer.ts"
 import ImageUploadExcludeDirsSettings from "~/src/ui/components/settings/ImageUploadExcludeDirsSettings.vue"
@@ -296,7 +327,29 @@ interface PicgoRuntimeState {
 
 const { getSetting, updateSetting } = usePublishSettingStore()
 const { getPicbedServiceType: getPicBedServiceType } = usePicgoBridge()
+const { getPublishPreferenceSetting } = usePreferenceSettingStore()
 const { t } = useAppI18n()
+
+const diagramPref = getPublishPreferenceSetting()
+const diagramScaleOptions = [1, 2, 3]
+const diagramEnabled = computed({
+  get: () => diagramPref.value.diagramRenderEnabled !== false,
+  set: (value: boolean) => {
+    diagramPref.value.diagramRenderEnabled = value
+  },
+})
+const diagramScale = computed({
+  get: () => Number(diagramPref.value.diagramRenderScale ?? 2),
+  set: (value: number) => {
+    diagramPref.value.diagramRenderScale = Number(value)
+  },
+})
+const diagramTheme = computed({
+  get: () => diagramPref.value.diagramRenderTheme ?? "light",
+  set: (value: "light" | "dark" | "follow") => {
+    diagramPref.value.diagramRenderTheme = value
+  },
+})
 const showErrorDetailsGlobally = inject<(title: string, summary: string, details?: string) => void>("show-error-details", () => {})
 
 let picgoManager: ISiyuanPicGoHeadlessManager | null = null
@@ -850,6 +903,15 @@ function stringifyDetails(input: unknown) {
   align-items center
   gap 8px
   color $syp-text-primary
+
+.syp-diagram-options
+  display flex
+  flex-wrap wrap
+  gap 20px
+  margin-top 14px
+
+  &.is-disabled
+    opacity .55
 
 .syp-picgo-actions
   display flex
