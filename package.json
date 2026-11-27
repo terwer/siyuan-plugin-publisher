@@ -55,7 +55,7 @@
     "unplugin-icons": "^24.0.0",
     "uuid": "^14.0.3",
     "vue": "^3.5.45",
-    "vue-i18n": "^11.4.22",
+    "vue-i18n": "^11.4.23",
     "vue-router": "^4.6.3",
     "xmlbuilder2": "4.0.3",
     "zhi-blog-api": "^1.87.0",
