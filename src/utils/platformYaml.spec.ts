@@ -9,9 +9,9 @@
 
 import { describe, expect, it } from "vitest"
 import { Post } from "zhi-blog-api"
-import { DateUtil } from "zhi-common"
 import { HexoConfig } from "~/src/adaptors/api/hexo/hexoConfig.ts"
 import { HexoYamlConverterAdaptor } from "~/src/adaptors/api/hexo/hexoYamlConverterAdaptor.ts"
+import { formatDateTimeWithOffset } from "~/src/utils/dateUtils.ts"
 import { buildPlatformYamlFormatObj, mergeYamlObjs } from "~/src/utils/platformYaml.ts"
 
 const buildPost = () => {
@@ -53,7 +53,7 @@ describe("buildPlatformYamlFormatObj", () => {
     const yfmObj = await buildPlatformYamlFormatObj(new HexoYamlConverterAdaptor(), post, buildCfg())
 
     expect(yfmObj.yamlObj.title).toBe("同步修改")
-    const expectedUpdated = DateUtil.formatIsoToZh(post.dateUpdated!.toISOString(), true)
+    const expectedUpdated = formatDateTimeWithOffset(post.dateUpdated!)
     expect(yfmObj.yamlObj.updated).toBe(expectedUpdated)
     // 手写在已保存 YAML 里的字段不能丢
     expect(yfmObj.yamlObj.sticky).toBe(1)

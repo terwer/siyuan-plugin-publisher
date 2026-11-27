@@ -11,6 +11,7 @@ import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-ap
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
 import { resolveHugoBundleUrl, usesLeafBundleForPost } from "~/src/adaptors/api/base/contentLayout.ts"
+import { formatDateTimeWithOffset, parsePublishedDate } from "~/src/utils/dateUtils.ts"
 import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
@@ -48,21 +49,13 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
       }
 
       // date
-      let tzstr = "+00:00"
-      const tz = new Date().getTimezoneOffset() / -60
-      const sign = tz > 0 ? "+" : "-"
-      if (tz.toString().length < 2) {
-        tzstr = `${sign}0${tz}:00`
-      } else {
-        tzstr = `${sign}${tz}:00`
-      }
-      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
+      yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated)
 
       // lastmod
       if (!post.dateUpdated) {
         post.dateUpdated = new Date()
       }
-      yamlFormatObj.yamlObj.lastmod = DateUtil.formatIsoToZh(post.dateUpdated.toISOString(), true) + tzstr
+      yamlFormatObj.yamlObj.lastmod = formatDateTimeWithOffset(post.dateUpdated)
 
       // tags
       if (!StrUtil.isEmptyString(post.mt_keywords)) {
@@ -131,10 +124,12 @@ class HugoYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
     if (yamlFormatObj.yamlObj?.lastmod) {
-      post.dateUpdated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.lastmod)
+      post.dateUpdated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.lastmod) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.lastmod)
     }
 
     // 摘要

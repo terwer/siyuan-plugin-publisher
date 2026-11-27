@@ -12,6 +12,7 @@ import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-ap
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { CommonGithubConfig } from "~/src/adaptors/api/base/github/commonGithubConfig.ts"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatDateTimeWithOffset, parsePublishedDate } from "~/src/utils/dateUtils.ts"
 import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
@@ -47,10 +48,10 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // date
     try {
-      yamlFormatObj.yamlObj.date = post.dateCreated ? DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) : new Date().toISOString()
+      yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(post.dateCreated ?? new Date())
     } catch (e) {
       this.logger.error("日期格式化失败", e)
-      yamlFormatObj.yamlObj.date = new Date().toISOString()
+      yamlFormatObj.yamlObj.date = formatDateTimeWithOffset(new Date())
     }
 
     // meta
@@ -161,7 +162,9 @@ class VuepressYamlConverterAdaptor extends YamlConvertAdaptor {
       try {
         if (!StrUtil.isEmptyString(yamlFormatObj.yamlObj.date)) {
           try {
-            post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj.date)
+            post.dateCreated =
+              parsePublishedDate(yamlFormatObj.yamlObj.date) ??
+              DateUtil.convertStringToDate(yamlFormatObj.yamlObj.date)
           } catch (e) {
             this.logger.error("日期解析失败", e)
             // 使用当前日期作为后备

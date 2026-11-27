@@ -27,7 +27,7 @@ import {
 } from "zhi-blog-api"
 import { IBlogApi } from "zhi-blog-api/dist/lib/IBlogApi"
 import { IWebApi } from "zhi-blog-api/dist/lib/IWebApi"
-import { DateUtil, HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
+import { HtmlUtil, ObjectUtil, StrUtil, YamlUtil } from "zhi-common"
 import { SiyuanAttr, SiyuanKernelApi } from "zhi-siyuan-api"
 import { BaseBlogApi } from "~/src/adaptors/api/base/baseBlogApi.ts"
 import { BaseWebApi } from "~/src/adaptors/web/base/baseWebApi.ts"
@@ -38,6 +38,7 @@ import { DynamicConfig, getDynPlatformKeyFromPostidKey } from "~/src/platforms/d
 import { usePlatformMetadataStore } from "~/src/stores/usePlatformMetadataStore.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { createAppLogger, ILogger } from "~/src/utils/appLogger.ts"
+import { getLocalDateParts } from "~/src/utils/dateUtils.ts"
 import { BaseError } from "~/src/utils/BaseErrors.ts"
 import { CATE_AUTO_NAME } from "~/src/utils/constants.ts"
 import ImageUtils from "~/src/utils/ImageUtils.ts"
@@ -202,21 +203,16 @@ class BaseExtendApi extends WebApi implements IBlogApi, IWebApi {
 
     if (cfg?.mdFilenameRule) {
       cfg.useMdFilename = !!cfg?.mdFilenameRule?.includes("[filename]")
-      // 处理文件规则
-      const created = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
-      const datearr = created.split(" ")[0]
-      const numarr = datearr.split("-")
-      const y = numarr[0]
-      const m = numarr[1]
-      const d = numarr[2]
+      // 处理文件规则：日期取作者本地日历日，与 Front Matter 的 date 保持一致
+      const { yyyy, MM, dd } = getLocalDateParts(post.dateCreated)
 
       let filename = cfg.mdFilenameRule
       // 年月日
       filename = filename
-        .replace(/\[yyyy]/g, y)
-        .replace(/\[MM]/g, m)
-        .replace(/\[mm]/g, m)
-        .replace(/\[dd]/g, d)
+        .replace(/\[yyyy]/g, yyyy)
+        .replace(/\[MM]/g, MM)
+        .replace(/\[mm]/g, MM)
+        .replace(/\[dd]/g, dd)
       // 分类
       if (cfg?.mdFilenameRule?.includes("category")) {
         const cat = post?.categories?.[0] ?? ""

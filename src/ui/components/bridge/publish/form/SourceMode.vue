@@ -16,13 +16,14 @@ import { createAppLogger } from "~/src/utils/appLogger.ts"
 import { PicbedServiceTypeEnum, Post, PostUtil, YamlConvertAdaptor, YamlFormatObj, YamlStrategy } from "zhi-blog-api"
 import { BrowserUtil } from "zhi-device"
 import { ElMessage } from "element-plus"
-import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
+import { StrUtil, YamlUtil } from "zhi-common"
 import { CommonBlogConfig } from "~/src/adaptors/api/base/commonBlogConfig.ts"
 import Adaptors from "~/src/adaptors"
 import { useSiyuanApi } from "~/src/composables/useSiyuanApi.ts"
 import { usePreferenceSettingStore } from "~/src/stores/usePreferenceSettingStore.ts"
 import { LuteUtil } from "~/src/utils/luteUtil.ts"
 import { countLocalMarkdownImages, resolveImageUploadPolicy } from "~/src/utils/imageUploadPolicy.ts"
+import { formatLocalDateTime } from "~/src/utils/dateUtils.ts"
 
 const logger = createAppLogger("source-mode")
 const { t } = useAppI18n()
@@ -179,7 +180,7 @@ const doSaveContentChange = () => {
     emit("emitSyncPost", formData.siyuanPost)
     emit("edmtSyncToSiyuan")
     formData.syncStatus = "success"
-    formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + DateUtil.formatIsoToZh(new Date().toISOString(), true)
+    formData.syncMessage = "YAML已解析成功并同步。同步时间 =>" + formatLocalDateTime(new Date())
     formData.isSaved = true
   } catch (e) {
     formData.syncStatus = "error"

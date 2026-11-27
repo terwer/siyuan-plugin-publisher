@@ -12,6 +12,7 @@ import { reactive } from "vue"
 import { useAppI18n } from "~/src/ui/composables/useAppI18n.ts"
 import { Post } from "zhi-blog-api"
 import { DateUtil } from "zhi-common"
+import { formatLocalDateTime } from "~/src/utils/dateUtils.ts"
 
 const { t } = useAppI18n()
 
@@ -22,9 +23,11 @@ const props = defineProps({
   },
 })
 
+const formatForPicker = (date?: Date) => (date ? formatLocalDateTime(date) : "")
+
 const formData = reactive({
-  dateCreatedString: DateUtil.formatIsoToZh(props.modelValue?.dateCreated?.toISOString(), true),
-  dateUpdatedString: DateUtil.formatIsoToZh((props.modelValue?.dateUpdated ?? new Date()).toISOString(), true),
+  dateCreatedString: formatForPicker(props.modelValue?.dateCreated),
+  dateUpdatedString: formatLocalDateTime(props.modelValue?.dateUpdated ?? new Date()),
 })
 
 const emit = defineEmits(["emitSyncPublishTime"])

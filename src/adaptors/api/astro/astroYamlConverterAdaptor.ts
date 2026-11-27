@@ -10,6 +10,7 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatLocalDate, parsePublishedDate } from "~/src/utils/dateUtils.ts"
 import { normalizeTagValue, tagValueToKeywords } from "~/src/utils/tagValue.ts"
 
 /**
@@ -31,18 +32,8 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
       // description（表单绑定 shortDesc，发布前 BaseExtendApi 会同步到 mt_excerpt）
       yamlFormatObj.yamlObj.description = post.shortDesc || post.mt_excerpt || ""
 
-      // pubDate
-      // let tzstr = "+00:00"
-      // const tz = new Date().getTimezoneOffset() / -60
-      // const sign = tz > 0 ? "+" : "-"
-      // if (tz.toString().length < 2) {
-      //   tzstr = `${sign}0${tz}:00`
-      // } else {
-      //   tzstr = `${sign}${tz}:00`
-      // }
-      // yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZh(post.dateCreated.toISOString(), true) + tzstr
-      // 精简格式：yyyy-MM-dd
-      yamlFormatObj.yamlObj.pubDate = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
+      // pubDate（Astro 内容集合按 yyyy-MM-dd 使用，日期取本地日历日）
+      yamlFormatObj.yamlObj.pubDate = formatLocalDate(post.dateCreated)
 
       // heroImage
       // 暂不支持
@@ -90,7 +81,8 @@ class AstroYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.pubDate) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.pubDate)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.pubDate) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.pubDate)
     }
 
     // 摘要：表单绑定 shortDesc，必须同时回填两个字段

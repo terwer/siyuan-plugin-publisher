@@ -10,6 +10,7 @@
 import { BlogConfig, Post, YamlConvertAdaptor, YamlFormatObj } from "zhi-blog-api"
 import { DateUtil, StrUtil, YamlUtil } from "zhi-common"
 import { applyDynYamlCfg } from "~/src/adaptors/api/base/dynYamlConfig.ts"
+import { formatLocalDate, parsePublishedDate } from "~/src/utils/dateUtils.ts"
 
 /**
  * Docsify平台的YAML解析器
@@ -34,7 +35,7 @@ class DocsifyYamlConverterAdaptor extends YamlConvertAdaptor {
       yamlFormatObj.yamlObj.description = post.shortDesc || post.mt_excerpt || ""
 
       // date - Docsify 使用简单的日期格式
-      yamlFormatObj.yamlObj.date = DateUtil.formatIsoToZhDate(post.dateCreated.toISOString(), true)
+      yamlFormatObj.yamlObj.date = formatLocalDate(post.dateCreated)
 
       // 上面是固定配置。下面是个性配置
       applyDynYamlCfg(yamlFormatObj.yamlObj, cfg?.dynYamlCfg, post)
@@ -61,7 +62,8 @@ class DocsifyYamlConverterAdaptor extends YamlConvertAdaptor {
 
     // 发布时间
     if (yamlFormatObj.yamlObj?.date) {
-      post.dateCreated = DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
+      post.dateCreated =
+        parsePublishedDate(yamlFormatObj.yamlObj?.date) ?? DateUtil.convertStringToDate(yamlFormatObj.yamlObj?.date)
     }
 
     // 摘要：表单绑定 shortDesc，必须同时回填两个字段
